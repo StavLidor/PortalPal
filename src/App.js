@@ -2,7 +2,11 @@ import Topbar from "./components/topbar/Topbar";
 import Sidebar from "./components/sidebar/Sidebar";
 import Patient from "./pages/patient/Patient"
 
-import React, { useState,Component }  from 'react';
+import db from './firebase';
+import { doc,getDocs , onSnapshot, collection, query, where } from "firebase/firestore";
+
+
+import React, { useState, useEffect, Component }  from 'react';
 import LoginFrom from "./components/login/LoginFrom";
 import "./app.css"
 import {
@@ -12,24 +16,49 @@ import {
 } from 'react-router-dom';
 import NewUser from "./components/login/NewUser";
 
-// const somting=()=> (
-//     <div>
-//         <Patient />
-//     </div>
-//
-// )
-
 function App() {
+    const collection_query = collection(db,"institutes");
+    const [institutes, setInstitutes] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const [user,setUser] = useState({email:"",password:""});
+    const [error,setError] = useState("");
+    const [newUser,setNewUser]=useState(false);
+
+    function getInstitutes() {
+        setLoading(true);
+        // const querySnapshot = await getDocs(collection(db, "users"));
+        // querySnapshot.forEach((doc) => {
+        //     console.log(`${doc.id} => ${doc.data()}`);
+        // });
+        onSnapshot(collection_query,(querySnapshot)=>{
+            const items = [];
+            querySnapshot.forEach((doc) => {
+                items.push(doc.data());
+            });
+            setInstitutes(items);
+        setLoading(false);
+        })
+    }
+
+    useEffect(()=> {
+        getInstitutes();
+    }, []);
+
+    if (loading){
+        return <h1>Loading...</h1>
+    }
+
+
+
     const adminUser={
         email:"admin@admin.com",
         password:"admin123"
     }
-    const [user,setUser] = useState({email:"",password:""});
-    const [error,setError] = useState("");
-    const [newUser,setNewUser]=useState(false);
+
     const Login = details=>{
         console.log(details);
-        if (details.email == adminUser.email && details.password == adminUser.password){
+        if (details.email === adminUser.email && details.password === adminUser.password){
             console.log("Logged in")
             setUser({
                 name:"Stav",
@@ -52,8 +81,11 @@ function App() {
   return (
 
     <div className="App">
-
-        {(user.email!="") ? (
+        {/*<h1>Blah Blah</h1>*/}
+        {/*{institutes.map((institute)=>(*/}
+        {/*    <h2>{institute.hello}</h2>*/}
+        {/*    ))}*/}
+        {(user.email!=="") ? (
             <div className="welcome">
                 <h2>Welcome,<span>{user.name}</span></h2>
                 <button onClick={Logout}>Logout</button>

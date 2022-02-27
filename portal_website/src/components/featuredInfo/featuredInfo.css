@@ -1,0 +1,30 @@
+.featured{
+    flex: 1;
+    /*height:10vh;*/
+    height: calc(100vh - 50px);
+    background-color: #7ca69c;
+    position: sticky;
+    top: 50px;
+}
+.featuredWrapper{
+    padding: 3px;
+    color:#555;
+}
+.featuredMenu{
+    margin-bottom: 10px;
+}
+.featuredList{
+    list-style: none;
+    padding: -5px;
+}
+.featuredListItem{
+    padding: -10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+
+}
+.featuredListItem.active,.featuredListItem:hover{
+    background-color: rgb(228,228,250);
+}

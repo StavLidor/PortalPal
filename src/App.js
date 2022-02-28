@@ -2,21 +2,26 @@ import Topbar from "./components/topbar/Topbar";
 import Sidebar from "./components/sidebar/Sidebar";
 import Patient from "./pages/patient/Patient"
 
-import db from './firebase';
-// import { doc,getDocs , onSnapshot, collection, query, where } from "firebase/firestore";
-import { collection, doc, setDoc,getDoc ,where,query, getDocs} from "firebase/firestore";
-// import {  doc,getDocFromCache} from "firebase/firestore";
+import {db,auth} from './firebase';
 
-
+import { collection, doc, setDoc,getDoc ,where,query, getDocs, addDoc} from "firebase/firestore";
 import React, { useState, useEffect, Component }  from 'react';
 import LoginFrom from "./components/login/LoginFrom";
+import {
+    GoogleAuthProvider,
+    getAuth,
+    signInWithPopup,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
+    signOut,
+} from "firebase/auth";
 import "./app.css"
 import {
     BrowserRouter as Router,
     Routes,
     Route
 } from 'react-router-dom';
-import NewUser from "./components/login/NewUser";
 
 function App() {
     const collection_query_users = collection(db,"users");
@@ -64,38 +69,21 @@ function App() {
     const Login = async details=>{
         // later check before if this in Cache
         console.log(details);
-        const docRef = doc(db, "users", details.email);
         try {
-            const doc = await getDoc(docRef);
-                if (doc.data().password === details.password){
-                    console.log("Logged in")
-                    setUser({
-                        name:doc.data().name,
-                        email: details.email
-                    })
+            const res= await signInWithEmailAndPassword(auth, details.email, details.password);
+            console.log( res.user.uid)
+            const docRef = doc(db, "users", res.user.uid);
+            const d = await getDoc(docRef);
 
-                }
-                else {
-                    console.log("Details do not match")
-                }
-            // Document was found in the cache. If no cached document exists,
-            // an error will be returned to the 'catch' block below.
-
-            console.log("Cached document data:", doc.data());
-        } catch (e) {
-            console.log("Details do not match")
+            setUser({
+                name:d.data().name,
+                email: details.email
+            })
+        } catch (err) {
+            console.log('the user not exsist')
+            console.error(err);
+            //alert(err.message);
         }
-
-        // if (details.email === adminUser.email && details.password === adminUser.password){
-        //     console.log("Logged in")
-        //     setUser({
-        //         name:"Stav",
-        //         email: details.email
-        //     })
-        // }
-        // else{
-        //     console.log("Details do not match")
-        // }
 
     }
     const Logout = ()=>{
@@ -104,55 +92,46 @@ function App() {
     }
 
     const new_user=async details=>{
-        //setNewUserFlag(true);
-        // setNewUser({
-        //     name:details.name,type:details.type,email:details.email,password:details.password,patients:[]
-        //
-        // })
-        let arr_ids =details.ids.split(",");
+        let arr_ids = details.ids.split(",");
+        try {
+            const res = await createUserWithEmailAndPassword(auth, details.email, details.password);
+            const user = res.user;
+            await setDoc(doc(collection_query_users , user.uid), {
+                name:details.name,type:details.type,email:details.email,password:details.password,ids:arr_ids});
+            console.log("HI user",details.name.toString(),details.type.toString(),details.password.toString());
+        } catch (err) {
+            console.log('user with this mail exsist')
+        }
 
-        await setDoc(doc(collection_query_users, details.email), {
+        // await addDoc(collection(db, "users"), {
+        //     uid: user.uid,name:details.name,type:details.type,email:details.email,password:details.password,ids:arr_ids
+        // });
 
-            name:details.name,type:details.type,email:details.email,password:details.password,ids:arr_ids});
-        // collection_query_users.doc("1")
-        //     .set({name:details.name,type:details.type,email:details.email,password:details.password,createdAt: db.firestore.FieldValue.serverTimestamp(),
-        //         lastUpdate: db._firestoreClient.serverTimestamp()}).catch((err)=>{alert(err)
-        // console.log(err)})
-        // await Promise.all([
-        //     setDoc(doc(citiesRef, 'SF', 'landmarks'), {
-        //         name: 'Golden Gate Bridge',
-        //         type: 'bridge'
-        //     })]);
-        console.log("HI user",details.name.toString(),details.type.toString(),details.password.toString());
 
     }
     const new_patients= async details=>{
         //setNewUserFlag(true);
-        // const q = query(collection_query_users, where("ids", "in", details.id));
-        //const querySnapshot = await getDocs(q);
-        let mail_parents=[]
-        let mail_Therapist=[]
-        // querySnapshot.forEach((doc) => {
-        //     if (doc.data().type)
-        //     // doc.data() is never undefined for query doc snapshots
-        //     //console.log(doc.id, " => ", doc.data());
-        // });
+        const q = query(collection_query_users, where("ids","array-contains",details.id));
+        const querySnapshot = await getDocs(q);
+        let id_parents=[]
+        let id_Therapists=[]
+        querySnapshot.forEach((doc) => {
+            if (doc.data().type =="therapist"){
+                id_Therapists.push(doc.id)
+            }
+            else {
+                id_parents.push(doc.id)
+            }
+        });
 
         await setDoc(doc(collection_query_patients, details.id), {
 
-            id:details.id,name:details.name});
-        // setNewUser({
-        //     id:details.id,name:details.name
-        // })
+            id:details.id,name:details.name,parents:id_parents,therapists:id_Therapists});
         console.log("HI",details.id.toString(),details.name.toString());
     }
   return (
 
     <div className="App">
-        {/*<h1>Blah Blah</h1>*/}
-        {/*{institutes.map((institute)=>(*/}
-        {/*    <h2>{institute.hello}</h2>*/}
-        {/*    ))}*/}
         {(user.email!=="") ? (
             <div className="welcome">
                 <h2>Welcome,<span>{user.name}</span></h2>
@@ -192,30 +171,6 @@ function App() {
             <LoginFrom Login={Login} error={error} new_user={new_user} new_patients={new_patients}/>
         )
         }
-
-      {/*<Topbar/>*/}
-
-      {/* <div className="container">*/}
-      {/*      <div className="patients">*/}
-
-      {/*      </div>*/}
-
-      {/*     /!*<span></span>*!/*/}
-
-      {/*     <div className="containerRight">*/}
-      {/*         <div className="Sidebar">*/}
-
-      {/*             <Router>*/}
-      {/*                 <Sidebar/>*/}
-      {/*                 <Routes>*/}
-      {/*                 <Route path="/dana_barger" element={<Patient />} />*/}
-      {/*                 </Routes>*/}
-      {/*             </Router>*/}
-
-
-      {/*         </div>*/}
-      {/*     </div>*/}
-      {/* </div>*/}
 
 
     </div>

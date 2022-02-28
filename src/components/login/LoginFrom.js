@@ -2,7 +2,7 @@
 import React,{useState} from "react";
 
 
-export default function LoginFrom({Login,error,new_user,new_patients}){
+export default function LoginFrom({Login,new_user,new_patients}){
     const [details,setDetails] = useState({email:"",password:""});
     const [detailsNewUser,setDetailsNewUser] = useState({name:"",type:"therapist",email:"",password:"",patients:""});
     const [detailsPatients,setDetailsPatients] = useState({id:"",name:""});

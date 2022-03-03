@@ -15,6 +15,7 @@ import {
 } from "firebase/auth";
 import { getDatabase, ref, push, set } from "firebase/database";
 import firebase from "firebase/compat";
+import makePassword from "./useFunction"
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -43,20 +44,36 @@ export const addUser = async details=>{
         const user = res.user;
         await setDoc(doc(collection_query_users , user.uid), details/*{
             name:details.name,type:details.type,email:details.email,password:details.password,ids:details.ids}*/);
-        return true;
+        return user.uid;
     } catch (err) {
         console.log(err)
-        return false;
+        return null;
     }
 }
 
 
+
+const ifPatientExists = async id=>{
+    if ((await getDocs(query(collection_query_patients, where("id", "==", id)))).docs.length>0){
+        return true
+    }
+    return false
+
+}
 export const addPatient = async details=>{
     // need to check if the patient in the portal
 
     if ((await getDocs(query(collection_query_patients, where("id", "==", details.id)))).docs.length>0){
         return false
     }
+
+
+    const uid_user=await addUser({name:details.nameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id]})
+    if (!uid_user){
+        console.log('user exist parent')
+        await updateAccordingEmail(details.email, {idsMangeParents: details.id.toString()})
+    }
+    console.log('2222244')
     const q = query(collection_query_users, where("idsMangeParents","array-contains",details.id));
     const querySnapshot = await getDocs(q);
     let id_parents=[]
@@ -64,7 +81,6 @@ export const addPatient = async details=>{
     querySnapshot.forEach((doc) => {
         id_parents.push(doc.id)
     });
-
     await setDoc(doc(collection_query_patients, details.id), {
         id:details.id,
         name:details.name,
@@ -141,53 +157,38 @@ const updateIDDoc  = async (id,name_path,data)=>{
     await updateDoc(doc(db, name_path, id.toString()), data);
 
 }
-// const addPatientBYKind = async(doc,data,job)=>{
-//     if(job in data){
-//         const patient_data={[job]:firebase.firestore.FieldValue.arrayUnion(doc.id)}
-//         // update one patient doc about job user for him
-//         await updateIDDoc(data['idsMange'+job], 'patients', patient_data)
-//         data['idsMange'+job] = firebase.firestore.FieldValue.arrayUnion(data['idsMange'+job])
-//         console.log(data['idsMange'+job])
-//
-//     }
-//     return data
-//
-// }
-// const dataArray  = async (doc, data)=>{
-//     if('idsMangeParents' in data){
-//         const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(doc.id)}
-//         await updateIDDoc(data.idsMangeParents, 'patients', patient_data)
-//         data.idsMangeParents = firebase.firestore.FieldValue.arrayUnion(data.idsMangeParents)
-//
-//     }
-//     if('idsMangeTherapist' in data){
-//         const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(doc.id)}
-//         await updateIDDoc(data.idsMangeTherapist, 'patients', patient_data)
-//         data.idsMangeTherapist = firebase.firestore.FieldValue.arrayUnion(data.idsMangeTherapist)
-//
-//     }
-//
-// }
 export const updateDocUser  = async (doc, data)=>{
     if('idsMangeParents' in data){
-        const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(doc.id)}
-        await updateIDDoc(data.idsMangeParents, 'patients', patient_data)
+        console.log('in idsMangeParents')
+        if (await ifPatientExists(data.idsMangeParents)){
+            const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(doc.id)}
+            await updateIDDoc(data.idsMangeParents, 'patients', patient_data)
+        }
+
         data.idsMangeParents = firebase.firestore.FieldValue.arrayUnion(data.idsMangeParents)
 
     }
     if('idsMangeTherapist' in data){
-        const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(doc.id)}
-        await updateIDDoc(data.idsMangeTherapist, 'patients', patient_data)
+        if (await ifPatientExists(data.idsMangeParents)){
+            const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(doc.id)}
+            await updateIDDoc(data.idsMangeTherapist, 'patients', patient_data)
+        }
+
         data.idsMangeTherapist = firebase.firestore.FieldValue.arrayUnion(data.idsMangeTherapist)
 
     }
+    console.log('before update doc')
     await updateIDDoc(doc.id, 'users', data)
 
 }
 export const updateAccordingEmail  = async (email, data)=>{
+    console.log('in update by email')
     const q = query(collection_query_users, where("email","==",email));
+    console.log('find email')
     const querySnapshot = await getDocs(q);
+    console.log('find doc')
     await updateDocUser(querySnapshot.docs[0], data)
+
 
     // querySnapshot.forEach((doc) => {
     //     // need to see how to do this.
@@ -264,6 +265,8 @@ export const deletePatient = async id=>{
     await deleteFrom(id,'idsMangeParents')
 
 }
+//TODO: to check how remove user and when
+
 // export const deleteUser = async id=>{
 //     await deleteDoc(doc(db, "users", id.toString()));
 //
@@ -281,5 +284,5 @@ export const deletePatient = async id=>{
 //     });
 //
 // }
-// TODO: delete user and patient
+
 export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient};

@@ -2,9 +2,7 @@ import React,{useState} from "react";
 
 
 export default function RegistrationFromPatient({new_patients}){
-    const [details,setDetails] = useState({email:"",password:""});
-    const [detailsNewUser,setDetailsNewUser] = useState({name:"",type:"therapist",email:"",password:"",patients:""});
-    const [detailsPatients,setDetailsPatients] = useState({id:"",name:""});
+    const [detailsPatients,setDetailsPatients] = useState({id:"",name:"",email:"",nameParent:""});
     const submitNewPatient=e=>{
         e.preventDefault();
         new_patients(detailsPatients);
@@ -23,6 +21,14 @@ export default function RegistrationFromPatient({new_patients}){
                 <div className="form-group" >
                     <label htmlFor="name">שם:</label>
                     <input type="text" name="name" id="name" onChange={e=>setDetailsPatients({...detailsPatients,name:e.target.value})} value={detailsPatients.name}/>
+                </div>
+                <div className="form-group" >
+                    <label htmlFor="name">שם הורה:</label>
+                    <input type="text" name="name" id="nameParent" onChange={e=>setDetailsPatients({...detailsPatients,nameParent:e.target.value})} value={detailsPatients.nameParent}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="email">איימיל של הורה:</label>
+                    <input type="email" name="email" id="email" onChange={e=>setDetailsPatients({...detailsPatients,email:e.target.value})} value={detailsPatients.email}/>
                 </div>
 
                 <input type="submit" value="מטופל חדש"/>

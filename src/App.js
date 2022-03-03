@@ -1,7 +1,8 @@
 import React from 'react';
 import "./app.css"
 import Secretary from "./pages/secretary/Secretary";
-import {newUser,findUser,newPatients} from './pepole/users/user'
+import {newUser,signUser,newPatients} from './pepole/users/user'
+import {updates} from "./firebase";
 
 function App() {
     // function getInstitutes() {
@@ -30,7 +31,7 @@ function App() {
   return (
 
     <div className="App">
-        <Secretary findUser={findUser}  new_user={newUser} new_patients={newPatients}/>
+        <Secretary signUser={signUser}  new_user={newUser} new_patients={newPatients}/>
     </div>
 
   );

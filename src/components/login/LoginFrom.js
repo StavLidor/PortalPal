@@ -1,16 +1,16 @@
 
 import React,{useState} from "react";
 import Home from "../../pages/home/Home";
-import {findUser} from "../../pepole/users/user";
+import {signUser, unSignUser} from "../../pepole/users/user";
 
 
-export default function LoginFrom({findUser}){
+export default function LoginFrom(){
     const [details,setDetails] = useState({email:"",password:""});
     const [isMovePage,setIsMovePage] = useState(false);
     const [info,setInfo] = useState({name:""});
     const submitHandler=async e=>{
         e.preventDefault();
-        const infor = await  findUser(details)
+        const infor = await  signUser(details)
         console.log("infor:",infor.name)
         if(infor.name!==""){
             setInfo({name:infor.name} )
@@ -20,9 +20,11 @@ export default function LoginFrom({findUser}){
     }
     const Logout = ()=>{
         // console.log('logout');
+
         setDetails({email:"",password:""});
         setIsMovePage(false)
         setInfo({name:""})
+        unSignUser()
     }
     return(
         (isMovePage == true) ? (

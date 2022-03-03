@@ -1,25 +1,29 @@
-import {addPatient, addUser, ifUserExists} from "../../firebase";
+import {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient} from "../../firebase";
+
 
 export const newUser=async details=>{
     let arr_ids = details.ids.split(",");
+
     if (await addUser({
         name: details.name,
-        type: details.type,
+        /*type: details.type,*/
         email: details.email,
         password: details.password,
-        ids: arr_ids
+        idsMangeParents: arr_ids,
+        // idsMangeTherapist: []
+        /*ids: arr_ids*/
     })){
-        console.log("HI user",details.name.toString(),details.type.toString(),details.password.toString());
+        console.log("HI user",details.name.toString(),details.password.toString());
     }
     else{
         console.log('user with this mail exsist')
     }
 
 }
-export const findUser = async details=>{
+export const signUser = async details=>{
     // later check before if this in Cache
     console.log('d',details);
-    const  more_details =  await ifUserExists(details);
+    const  more_details =  await signIfUserExists(details);
     console.log('more',more_details)
     if( more_details){
         console.log('yesss');
@@ -32,12 +36,14 @@ export const findUser = async details=>{
         email: ""}
 }
 export const newPatients= async details=>{
-    //setNewUserFlag(true);
     if (await addPatient(details)){
-        console.log("HI",details.id.toString(),details.name.toString());
+        console.log("HI",details.id,details.name.toString());
     }
     else {
-        console.log('patient with this mail exsist')
+        console.log('patient with this id exsist')
     }
 }
-export default {newUser,findUser,newPatients}
+export const unSignUser= function (){
+    signOutFrom()
+}
+export default {newUser,signUser,unSignUser,newPatients}

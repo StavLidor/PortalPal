@@ -2,7 +2,7 @@ import React,{useState} from "react";
 
 
 export default function LoginFrom({new_user}){
-    const [detailsNewUser,setDetailsNewUser] = useState({name:"",type:"therapist",email:"",password:"",patients:""});
+    const [detailsNewUser,setDetailsNewUser] = useState({name:"",/*type:"therapist",*/email:"",password:"",patients:""});
     const submitNewUser=e=>{
         e.preventDefault();
         new_user(detailsNewUser);
@@ -18,17 +18,6 @@ export default function LoginFrom({new_user}){
                     <label htmlFor="name">שם:</label>
                     <input type="text" name="name1" id="name1"onChange={e=>setDetailsNewUser({...detailsNewUser,name:e.target.value})} value={detailsNewUser.name}/>
                 </div>
-                {/*<select id="type" onChange={e=>setDetailsNewUser({...detailsNewUser,type:e.target.value})} value={details.type}>*/}
-                {/*    <label htmlFor="name">סוג:</label>*/}
-                {/*    <option value="0">מטפל</option>*/}
-                {/*    <option value="1">הורה</option>*/}
-                {/*</select>*/}
-                <label>סוג:
-                    <select type="text" name="type" id="type" onChange={e=>setDetailsNewUser({...detailsNewUser,type:e.target.value})} value={detailsNewUser.type} >
-                        <option value="therapist">מטפל</option>
-                        <option value="parent">הורה</option>
-                    </select>
-                </label>
                 <div className="form-group">
                     <label htmlFor="email">איימיל:</label>
                     <input type="email" name="email" id="email" onChange={e=>setDetailsNewUser({...detailsNewUser,email:e.target.value})} value={detailsNewUser.email}/>

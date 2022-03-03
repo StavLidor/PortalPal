@@ -1,8 +1,8 @@
 import React,{useState} from "react";
 
 
-export default function LoginFrom({new_user}){
-    const [detailsNewUser,setDetailsNewUser] = useState({name:"",/*type:"therapist",*/email:"",password:"",patients:""});
+export default function RegistrationFromUser({new_user}){
+    const [detailsNewUser,setDetailsNewUser] = useState({name:"",/*type:"therapist",*/email:"",password:"",/*patients:""*/});
     const submitNewUser=e=>{
         e.preventDefault();
         new_user(detailsNewUser);
@@ -12,7 +12,7 @@ export default function LoginFrom({new_user}){
 
             <form onSubmit={submitNewUser}>
                 <h2>
-                    מטפל או הורה חדש
+                    מטפל
                 </h2>
                 <div className="form-group" >
                     <label htmlFor="name">שם:</label>
@@ -26,10 +26,10 @@ export default function LoginFrom({new_user}){
                     <label htmlFor="password">סיסמא:</label>
                     <input type="password" name="password" id="password" onChange={e=>setDetailsNewUser({...detailsNewUser,password:e.target.value})} value={detailsNewUser.password}/>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="ids">תעודות זהות של הילדים:</label>
-                    <input type="text" name="ids" id="ids" onChange={e=>setDetailsNewUser({...detailsNewUser,ids:e.target.value})} value={detailsNewUser.ids}/>
-                </div>
+                {/*<div className="form-group">*/}
+                {/*    <label htmlFor="ids">תעודות זהות של הילדים:</label>*/}
+                {/*    <input type="text" name="ids" id="ids" onChange={e=>setDetailsNewUser({...detailsNewUser,ids:e.target.value})} value={detailsNewUser.ids}/>*/}
+                {/*</div>*/}
                 <input type="submit" value="משתמש חדש"/>
             </form>
 

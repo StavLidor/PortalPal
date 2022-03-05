@@ -28,10 +28,11 @@ function App() {
     // if (loading){
     //     return <h1>Loading...</h1>
     // }
+
   return (
 
     <div className="App">
-        <Secretary signUser={signUser}  new_user={newUser} new_patients={newPatients}/>
+        <Secretary signUser={signUser}  new_user={newUser} new_patients={newPatients} variant={false}/>
     </div>
 
   );

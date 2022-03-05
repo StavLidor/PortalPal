@@ -4,17 +4,21 @@ import Home from "../../pages/home/Home";
 import {signUser, unSignUser} from "../../pepole/users/user";
 
 
-export default function LoginFrom(){
+export default function LoginFrom({onSignin,onSignout,data}){
     const [details,setDetails] = useState({email:"",password:""});
     const [isMovePage,setIsMovePage] = useState(false);
     const [info,setInfo] = useState({name:""});
+    // if (login){
+    //     setIsMovePage(true)
+    // }
     const submitHandler=async e=>{
         e.preventDefault();
         const infor = await  signUser(details)
         console.log("infor:",infor.name)
         if(infor.name!==""){
-            setInfo({name:infor.name} )
+            setInfo({name:infor.name,role:'parent'} )
             setIsMovePage(true)
+            onSignin({name:infor.name,role:'parent'})
             console.log(info)
         }
     }
@@ -25,12 +29,13 @@ export default function LoginFrom(){
         setIsMovePage(false)
         setInfo({name:""})
         unSignUser()
+        onSignout()
     }
     return(
         (isMovePage == true) ? (
             <div>
-                <button onClick={Logout}>Logout</button>
-                <Home user={info}/>
+                <button  onClick={Logout} >Logout</button>
+                <Home user={data}/>
             </div>
         ):
 

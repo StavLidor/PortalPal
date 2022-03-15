@@ -60,6 +60,30 @@ const ifPatientExists = async id=>{
     return false
 
 }
+export const  details_users= async arr_id =>{
+    // console.log(arr_id)
+    let arr_data =[]
+
+
+    for (const id of arr_id) {
+        // console.log(id)
+        try {
+            let docRef = doc(db, "patients", id);
+            let d =  await getDoc(docRef);
+            arr_data.push(d.data())
+        }
+        catch (err){
+
+        }
+
+
+        // console.log(d.data())
+
+
+    }
+    console.log('ALL',arr_data)
+    return arr_data
+}
 export const addPatient = async details=>{
     // need to check if the patient in the portal
 
@@ -105,7 +129,7 @@ export const signIfUserExists = async details=>{
         const docRef = doc(db, "users", res.user.uid);
         const d = await getDoc(docRef);
         // need to add details that need
-        return {name:d.data().name}
+        return d.data() /*{name:d.data().name}*/
 
     } catch (err) {
         return null
@@ -285,4 +309,4 @@ export const deletePatient = async id=>{
 //
 // }
 
-export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient};
+export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient,details_users};

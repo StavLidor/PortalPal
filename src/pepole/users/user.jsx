@@ -1,4 +1,4 @@
-import {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient} from "../../firebase";
+import {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient,details_users} from "../../firebase";
 
 
 export const newUser=async details=>{
@@ -25,11 +25,14 @@ export const signUser = async details=>{
     console.log('d',details);
     const  more_details =  await signIfUserExists(details);
     console.log('more',more_details)
+    // more_details.then(function (object){
+    //     console.log('not a promise')
+    // })
     if( more_details){
         console.log('yesss');
         console.log('more_d',more_details);
-        return {name:more_details.name,
-            email: details.email}
+        return more_details /*{name:more_details.name,
+            email: details.email}*/
     }
     console.log('not found');
     return {name:"",
@@ -46,4 +49,4 @@ export const newPatients= async details=>{
 export const unSignUser= function (){
     signOutFrom()
 }
-export default {newUser,signUser,unSignUser,newPatients}
+export default {newUser,signUser,unSignUser,newPatients,details_users}

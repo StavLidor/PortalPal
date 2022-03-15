@@ -3,6 +3,8 @@ import "./app.css"
 import Secretary from "./pages/secretary/Secretary";
 import {newUser,signUser,newPatients} from './pepole/users/user'
 import {updates} from "./firebase";
+import {signOut} from "firebase/auth";
+import LoginFrom from "./components/login/LoginFrom";
 
 function App() {
     // function getInstitutes() {
@@ -32,7 +34,8 @@ function App() {
   return (
 
     <div className="App">
-        <Secretary signUser={signUser}  new_user={newUser} new_patients={newPatients} variant={false}/>
+        {/*<Secretary signUser={signUser}  new_user={newUser} new_patients={newPatients} variant={false}/>*/}
+      <LoginFrom />
     </div>
 
   );

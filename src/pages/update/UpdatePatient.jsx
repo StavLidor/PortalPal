@@ -3,7 +3,7 @@
 import React, { useState, Fragment } from "react";
 import ReadOnlyRow from "../../components/ReadOnlyRow";
 import EditableRow from "../../components/EditableRow";
-import {details_users} from "../../firebase"
+import {deletePatient, details_users, updatesPatients} from "../../firebase"
 import Secretary from "../secretary/Secretary";
 import {signUser} from "../../pepole/users/user";
 import "./UpdatePatient.css"
@@ -20,15 +20,15 @@ export default  function UpdatePatient({data}) {
     //
     //
     // }
-    const arr =  details_users(data.students_arr)
-    const [contacts, setContacts] = useState([]);
-    console.log(contacts)
-    if(contacts.length == 0){
-        const p1 = Promise.resolve(arr)
-        p1.then(value => {
-            setContacts(value)
-        });
-    }
+    // const arr =  details_users(data.students_arr)
+    const [contacts, setContacts] = useState(data.students_arr);
+    //console.log(contacts)
+    // if(contacts.length === 0){
+    //     const p1 = Promise.resolve(data.students_arr)
+    //     p1.then(value => {
+    //         setContacts(value)
+    //     });
+    // }
     // const p1 = Promise.resolve(arr)
     // p1.then(value => {
     //     setContacts(value)
@@ -56,7 +56,8 @@ export default  function UpdatePatient({data}) {
 
         const newFormData = {...editFormData};
         newFormData[fieldName] = fieldValue;
-
+        //editContactId
+        updatesPatients(editContactId,{[fieldName]:fieldValue})
         setEditFormData(newFormData);
     };
     const handleCancelClick = () => {
@@ -77,17 +78,31 @@ export default  function UpdatePatient({data}) {
     };
     const handleDeleteClick = (contactId) => {
         const newContacts = [...contacts];
-
+        console.log(contacts)
         const index = contacts.findIndex((contact) => contact.id === contactId);
-
+        deletePatient(contactId, 'admin',data.id)
         newContacts.splice(index, 1);
-
+        console.log(newContacts)
         setContacts(newContacts);
-    };
+        console.log(data.id)
+        console.log(contactId)
 
+    };
+    const handleEditFormSubmit = (event) => {
+        event.preventDefault();
+
+        const editedContact = {
+            id: editContactId,
+            firstName: editFormData.fullName,
+            lastName: editFormData.address,
+        };
+
+    }
     return (
           (contacts.length > 0 ) ? (
+
                 <div className="secretary">
+                    <form onSubmit={handleEditFormSubmit}>
                     <table>
                         <thead>
                         <tr>
@@ -127,6 +142,7 @@ export default  function UpdatePatient({data}) {
                             ))}
                         </tbody>
                     </table>
+                    </form>
 
                 </div>
              ) :

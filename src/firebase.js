@@ -14,7 +14,9 @@ import {
     updateEmail,updatePassword
 } from "firebase/auth";
 import { getDatabase, ref, push, set } from "firebase/database";
-import firebase from "firebase/compat";
+import firebase from "firebase/compat/app";
+import 'firebase/compat/firestore';
+// import firebase from "firebase/compat";
 import makePassword from "./useFunction"
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -129,7 +131,7 @@ export const signIfUserExists = async details=>{
         const docRef = doc(db, "users", res.user.uid);
         const d = await getDoc(docRef);
         // need to add details that need
-        return d.data() /*{name:d.data().name}*/
+        return [d.id,d.data()] /*{name:d.data().name}*/
 
     } catch (err) {
         return null
@@ -270,23 +272,39 @@ export const signOutFrom = function (){
         console.log('not signOutFrom')
     });
 }
-const deleteFrom= async (id,type) =>{
+const deleteFrom= async (id,type,removeFrom) =>{
     const q = query(collection_query_users, where(type,"array-contains",id));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach( (doc) => {
+        console.log('id',doc.id)
+        if (doc.id == removeFrom){
+            // const washingtonRef = db.collection("users").doc(id.toString());
+            console.log(id)
+            try{
+                const deleteId = firebase.firestore.FieldValue.arrayRemove(id)
 
-        // const washingtonRef = db.collection("users").doc(id.toString());
-        const deleteId = firebase.firestore.FieldValue.arrayRemove(id.toString())
-        updateIDDoc(doc.id, 'users', {[type]: deleteId,
-        })
+                updateIDDoc(doc.id, 'users', {[type]: deleteId,
+                })
+            } catch (err){
+                console.log(err)
+            }
+
+
+        }
+
 
     });
 
 }
-export const deletePatient = async id=>{
-    await deleteDoc(doc(db, "patients", id.toString()));
-    await deleteFrom(id,'idsMangeTherapist')
-    await deleteFrom(id,'idsMangeParents')
+export const deletePatient = async (id,type,idRemoveFrom)=>{
+    // await deleteDoc(doc(db, "patients", id.toString()));
+    if (type == 'admin'){
+       //students_arr
+        console.log('remove from',idRemoveFrom)
+        await deleteFrom(id,'students_arr',idRemoveFrom)
+    }
+    // await deleteFrom(id,'idsMangeTherapist')
+    // await deleteFrom(id,'idsMangeParents')
 
 }
 //TODO: to check how remove user and when

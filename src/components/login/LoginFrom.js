@@ -3,7 +3,7 @@ import React,{useState} from "react";
 import Home from "../../pages/home/Home";
 import {signUser, unSignUser,newUser} from "../../pepole/users/user";
 import {signOut} from "firebase/auth";
-import {auth} from "../../firebase";
+import {auth, details_users} from "../../firebase";
 
 
 export default function LoginFrom(){
@@ -19,9 +19,22 @@ export default function LoginFrom(){
         e.preventDefault();
         const infor = await  signUser(details)
         const p1=Promise.resolve(infor)
-        p1.then(value => {
+        p1.then(value1 => {
             console.log('lalalala')
-            setInfo({name:value.name,students_arr:value.students_arr})
+            if (details.type === 'admin'){
+                const arr=details_users(value1[1].students_arr)
+                const p1 = Promise.resolve(arr)
+                p1.then(value2 => {
+
+                    setInfo({id:value1[0],name:value1[1].name,students_arr:value2})
+
+                });
+            }
+            else{
+                setInfo({name:value1[1].name})
+            }
+
+
         });
 
 

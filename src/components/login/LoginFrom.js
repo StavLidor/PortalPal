@@ -31,7 +31,7 @@ export default function LoginFrom(){
                 });
             }
             else{
-                setInfo({name:value1[1].name})
+                setInfo({name:value1[1].name,patients:[{id:'207299785',name:'יוסי'}]})
             }
 
 
@@ -114,6 +114,7 @@ export default function LoginFrom(){
                 <label>סוג:
                     <select type="text" name="type" id="type" onChange={e=>setDetails({...details,type:e.target.value})} value={details.type} >
                         <option value="therapist">מטפל</option>
+                        <option value="teacher">מורה</option>
                         <option value="admin">ניהול</option>
                         <option value="parent">הורה</option>
                     </select>

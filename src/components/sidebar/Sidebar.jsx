@@ -2,59 +2,60 @@ import "./sidebar.css"
 import {LineStyle} from '@mui/icons-material';
 // import Patient from "./pages/patient/Patient"
 import React from "react";
-import { Link } from "react-router-dom";
+import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
+import Patient from "../../pages/patient/Patient";
 
 
-export default function Sidebar(){
+export default function Sidebar({type,arr_data}){
     return(
         <div className='sidebar'>
-            <div className="sidebarWrapper">
+            {
 
-                <div className="topLeft">
+                arr_data.map((p) => (
+                    <div >
+                        <div className="sidebarWrapper">
+
+                            <div className="topLeft">
 
 
-                </div>
-                <div className='sidebarMenu'>
-                    <h1>רשימת מטופלים</h1>
+                            </div>
+                            <Router>
+                                <div className='sidebarMenu'>
+                                    {
+                                        type ==="therapist"?(
+                                            <h1>רשימת מטופלים</h1>
+                                        ): (type ==="parents")?(
+                                                <h1>רשימת ילדים</h1>
+                                            ):
+                                            <h1>רשימת תלמידים</h1>
 
-                    <ul className="sidebarList">
-                        <Link to="/dana_barger" className="link">
+                                    }
 
-                        <ul className="sidebarListItem">
-                            דנה ברגר
-                            &nbsp;
 
-                        </ul>
-                        </Link>
-                        &nbsp;
-                        <ul className="sidebarListItem">
-                            קשת מור
-                            &nbsp;
+                                    <ul className="sidebarList">
+                                        <Link to={"/"+p.id} className="link">
 
-                        </ul>
-                        &nbsp;
-                        <ul className="sidebarListItem">
-                            רונלי דלומי
-                            &nbsp;
+                                            <ul className="sidebarListItem">
+                                                {p.name}
+                                                &nbsp;
 
-                        </ul>
+                                            </ul>
+                                        </Link>
 
-                        {/*<li className="sidebarListItem">*/}
-                        {/*    עמוד הבית*/}
-                        {/*    /!*&nbsp;*!/*/}
-                        {/*    /!*<LineStyle/>*!/*/}
+                                        &nbsp;
 
-                        {/*</li>*/}
-                        {/*<li className="sidebarListItem">*/}
-                        {/*    אחר*/}
-                        {/*    &nbsp;*/}
-                        {/*    <LineStyle/>*/}
-                        {/*</li>*/}
-                    </ul>
-                    {/*sidebar*/}
-                </div>
+                                    </ul>
+                                    <Routes>
+                                        <Route path={"/"+p.id} element={<Patient />} />
+                                    </Routes>
+                                </div>
+                            </Router>
+                        </div>
 
-            </div>
+                    </div>
+
+                ))
+            }
 
 
         </div>

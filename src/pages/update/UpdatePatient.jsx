@@ -1,8 +1,8 @@
 
 
 import React, { useState, Fragment } from "react";
-import ReadOnlyRow from "../../components/ReadOnlyRow";
-import EditableRow from "../../components/EditableRow";
+import ReadOnlyRow from "./ReadOnlyRow";
+import EditableRow from "./EditableRow";
 import {deletePatient, details_users, updatesPatients} from "../../firebase"
 import Secretary from "../secretary/Secretary";
 import {signUser} from "../../pepole/users/user";
@@ -93,11 +93,22 @@ export default  function UpdatePatient({data}) {
 
         const editedContact = {
             id: editContactId,
-            firstName: editFormData.fullName,
-            lastName: editFormData.address,
+            firstName: editFormData.firstName,
+            lastName: editFormData.lastName,
+            // phoneNumber: editFormData.phoneNumber,
+            // email: editFormData.email,
         };
 
-    }
+        const newContacts = [...contacts];
+
+        const index = contacts.findIndex((contact) => contact.id === editContactId);
+
+        newContacts[index] = editedContact;
+
+        setContacts(newContacts);
+        setEditContactId(null);
+        console.log('change',contacts)
+    };
     return (
           (contacts.length > 0 ) ? (
 
@@ -106,12 +117,9 @@ export default  function UpdatePatient({data}) {
                     <table>
                         <thead>
                         <tr>
-                            {/*<th>מייל הורה</th>*/}
                             <th>תעודת זהות</th>
                             <th>שם</th>
                             <th>שם משפחה</th>
-
-                            {/*<th>תעודת זהות</th>*/}
                         </tr>
                         </thead>
                         <tbody>
@@ -122,6 +130,7 @@ export default  function UpdatePatient({data}) {
                                 <Fragment>
                                     { contact!==undefined && editContactId === contact.id ? (
                                         <EditableRow
+                                            contact={contact}
                                             editFormData={editFormData}
                                             handleEditFormChange={handleEditFormChange}
                                             handleCancelClick={handleCancelClick}

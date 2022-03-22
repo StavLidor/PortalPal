@@ -1,7 +1,9 @@
 import "./featuredInfo.css"
 import React from "react";
+import ListMeeting from "../../meetingSummaries/listMeetingSummries/ListMeeting"
+import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
 
-export default function FeaturedInfo(){
+export default function FeaturedInfo({id}){
     return(
         <div className="featured">
             <div className="featuredWrapper">
@@ -31,28 +33,16 @@ export default function FeaturedInfo(){
                             &nbsp;
 
                         </ul>
-
-
-                        {/*<li className="sidebarListItem">*/}
-                        {/*    עמוד הבית*/}
-                        {/*    /!*&nbsp;*!/*/}
-                        {/*    /!*<LineStyle/>*!/*/}
-
-                        {/*</li>*/}
-                        {/*<li className="sidebarListItem">*/}
-                        {/*    אחר*/}
-                        {/*    &nbsp;*/}
-                        {/*    <LineStyle/>*/}
-                        {/*</li>*/}
                     </ul>
                     <h1>טיפול אישי</h1>
                     <ul className="featuredList">
-
+                        <Link to={"/"+id+"/"+"meetings/*"} className="link">
                         <ul className="featuredListItem">
                             סיכומי מפגשים
                             &nbsp;
 
                         </ul>
+                        </Link>
                         &nbsp;
                         <ul className="featuredListItem">
                             תרגילים
@@ -66,6 +56,10 @@ export default function FeaturedInfo(){
 
                         </ul>
                     </ul>
+{/*                     <Routes> */}
+{/*                     <Route path={"/"+id +"/meetings/*"} element={<ListMeeting id={id} arr_data={[ */}
+{/*                     {date:"03/02/2022 12:00 AM",summaries:"123"}]} />} /> */}
+{/*                     </Routes> */}
                     {/*sidebar*/}
                 </div>
             </div>

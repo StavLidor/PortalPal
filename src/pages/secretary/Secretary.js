@@ -21,8 +21,8 @@ export default function Secretary({data}){
                     עמוד מזכירה!
                 </h2>
                 {/*<RegistrationFromUser new_user={newUser}/>*/}
-                <UpdatePatient data={data}/>
-                <RegistrationFromPatient new_patients={newPatients}/>
+                <UpdatePatient data={data} new_patients={newPatients}/>
+                {/*<RegistrationFromPatient data={data} new_patients={newPatients}/>*/}
             </div>
         </div>
 

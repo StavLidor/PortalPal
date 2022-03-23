@@ -88,17 +88,21 @@ export const  details_users= async arr_id =>{
 }
 export const addPatient = async details=>{
     // need to check if the patient in the portal
+    console.log('add a patient')
 
     if ((await getDocs(query(collection_query_patients, where("id", "==", details.id)))).docs.length>0){
         return false
     }
 
 
-    const uid_user=await addUser({name:details.nameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id]})
+    const uid_user=await addUser({name:details.nameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],idSecretary:details.idSecretary})
     if (!uid_user){
         console.log('user exist parent')
         await updateAccordingEmail(details.email, {idsMangeParents: details.id.toString()})
+
     }
+    await updatesCurrentUser(details.idSecretary,{students_arr: details.id.toString()})
+
     console.log('2222244')
     const q = query(collection_query_users, where("idsMangeParents","array-contains",details.id));
     const querySnapshot = await getDocs(q);
@@ -111,7 +115,9 @@ export const addPatient = async details=>{
         id:details.id,
         name:details.name,
         parents:id_parents,
-        therapists:[]});
+        therapists:[],
+        idSecretary:[details.idSecretary]
+    });
     return true;
 }
 // export const doc_by_id = async (id,name_path)=>{
@@ -131,7 +137,7 @@ export const signIfUserExists = async details=>{
         const docRef = doc(db, "users", res.user.uid);
         const d = await getDoc(docRef);
         // need to add details that need
-        return [d.id,d.data()] /*{name:d.data().name}*/
+        return  d/*[d.id,d.data()]*/ /*{name:d.data().name}*/
 
     } catch (err) {
         return null
@@ -146,7 +152,7 @@ export const updatesPatients = async (id,data)=>{
 }
 // this moment current user don't can to add patient
 // look that is ok but need to check in ...
-export const updatesCurrentUser = async (data,doc)=>{
+export const updatesCurrentUser = async (id,data)=>{
     if ('email' in data){
         const auth = getAuth();
         updateEmail(auth.currentUser, data.email).then(() => {
@@ -174,8 +180,8 @@ export const updatesCurrentUser = async (data,doc)=>{
         });
 
     }
-    await updateDocUser(doc, data)
-    await updateIDDoc(auth.currentUser.uid, 'users', data)
+    await updateDocUser(id, data)
+    // await updateIDDoc(auth.currentUser.uid, 'users', data)
     return true;
 }
 const updateIDDoc  = async (id,name_path,data)=>{
@@ -183,11 +189,11 @@ const updateIDDoc  = async (id,name_path,data)=>{
     await updateDoc(doc(db, name_path, id.toString()), data);
 
 }
-export const updateDocUser  = async (doc, data)=>{
+export const updateDocUser  = async (id,data)=>{
     if('idsMangeParents' in data){
         console.log('in idsMangeParents')
         if (await ifPatientExists(data.idsMangeParents)){
-            const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(doc.id)}
+            const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(id)}
             await updateIDDoc(data.idsMangeParents, 'patients', patient_data)
         }
 
@@ -196,15 +202,24 @@ export const updateDocUser  = async (doc, data)=>{
     }
     if('idsMangeTherapist' in data){
         if (await ifPatientExists(data.idsMangeParents)){
-            const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(doc.id)}
+            const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(id)}
             await updateIDDoc(data.idsMangeTherapist, 'patients', patient_data)
         }
 
         data.idsMangeTherapist = firebase.firestore.FieldValue.arrayUnion(data.idsMangeTherapist)
 
     }
+    if('students_arr' in data){
+        if (await ifPatientExists(data.students_arr)){
+            const patient_data={'admin':firebase.firestore.FieldValue.arrayUnion(id)}
+            await updateIDDoc(data.students_arr, 'patients', patient_data)
+        }
+
+        data.students_arr= firebase.firestore.FieldValue.arrayUnion(data.students_arr)
+
+    }
     console.log('before update doc')
-    await updateIDDoc(doc.id, 'users', data)
+    await updateIDDoc(id, 'users', data)
 
 }
 export const updateAccordingEmail  = async (email, data)=>{
@@ -213,7 +228,7 @@ export const updateAccordingEmail  = async (email, data)=>{
     console.log('find email')
     const querySnapshot = await getDocs(q);
     console.log('find doc')
-    await updateDocUser(querySnapshot.docs[0], data)
+    await updateDocUser(querySnapshot.docs[0].id, data)
 
 
     // querySnapshot.forEach((doc) => {

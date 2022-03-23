@@ -19,19 +19,29 @@ export default function LoginFrom(){
         e.preventDefault();
         const infor = await  signUser(details)
         const p1=Promise.resolve(infor)
-        p1.then(value1 => {
+        p1.then(doc => {
+            const data = doc.data()
+            const id = doc.id
             console.log('lalalala')
             if (details.type === 'admin'){
-                const arr=details_users(value1[1].students_arr)
+                const arr=details_users(data.students_arr)
                 const p1 = Promise.resolve(arr)
                 p1.then(value2 => {
 
-                    setInfo({id:value1[0],name:value1[1].name,students_arr:value2})
+                    setInfo({id:id,name:data.name,students_arr:value2,myDoc:doc})
 
                 });
             }
+            else if (details.type === 'therapist'){
+                //Therapist
+                setInfo({name:data.name,patients:data.idsMangeTherapist,myDoc:doc})
+            }
+            else if (details.type === 'parent'){
+                setInfo({name:data.name,patients:data.idsMangeParents,myDoc:doc})
+            }
             else{
-                setInfo({name:value1[1].name,patients:[{id:'207299785',name:'יוסי'}]})
+                //teacher
+                setInfo({name:data.name,patients:data.idsMangeTeacher,myDoc:doc})
             }
 
 

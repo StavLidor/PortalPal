@@ -35,8 +35,8 @@ export const signUser = async details=>{
             email: details.email}*/
     }
     console.log('not found');
-    return {name:"",
-        email: ""}
+    return  null/*{name:"",
+        email: ""}*/
 }
 export const newPatients= async details=>{
     if (await addPatient(details)){

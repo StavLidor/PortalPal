@@ -120,6 +120,7 @@ export const addPatient = async details=>{
     });
     return true;
 }
+
 // export const doc_by_id = async (id,name_path)=>{
 //     try {
 //         const docRef = doc(db, name_path, id);
@@ -152,7 +153,7 @@ export const updatesPatients = async (id,data)=>{
 }
 // this moment current user don't can to add patient
 // look that is ok but need to check in ...
-export const updatesCurrentUser = async (id,data)=>{
+export const updatesCurrentUser = async (data)=>{
     if ('email' in data){
         const auth = getAuth();
         updateEmail(auth.currentUser, data.email).then(() => {
@@ -180,11 +181,15 @@ export const updatesCurrentUser = async (id,data)=>{
         });
 
     }
-    await updateDocUser(id, data)
+    await updateDocUser(auth.currentUser.uid, data)
     // await updateIDDoc(auth.currentUser.uid, 'users', data)
     return true;
 }
-const updateIDDoc  = async (id,name_path,data)=>{
+export const deleteCurrentUser = async (type,idRemove)=>{
+    await deleteFrom(auth.currentUser.uid,type,idRemove)
+
+}
+export const updateIDDoc  = async (id,name_path,data)=>{
     //await updateDoc(doc(db, name_path, id), data,{marge:true});
     await updateDoc(doc(db, name_path, id.toString()), data);
 
@@ -218,10 +223,16 @@ export const updateDocUser  = async (id,data)=>{
         data.students_arr= firebase.firestore.FieldValue.arrayUnion(data.students_arr)
 
     }
+    if('meetings' in data){
+
+        data.meetings= firebase.firestore.FieldValue.arrayUnion(data.meetings)
+
+    }
     console.log('before update doc')
     await updateIDDoc(id, 'users', data)
 
 }
+
 export const updateAccordingEmail  = async (email, data)=>{
     console.log('in update by email')
     const q = query(collection_query_users, where("email","==",email));
@@ -311,6 +322,10 @@ const deleteFrom= async (id,type,removeFrom) =>{
     });
 
 }
+export const deleteDocFrom = async (id,type)=>{
+     await deleteDoc(doc(db, type, id.toString()));
+
+}
 export const deletePatient = async (id,type,idRemoveFrom)=>{
     // await deleteDoc(doc(db, "patients", id.toString()));
     if (type == 'admin'){
@@ -342,4 +357,4 @@ export const deletePatient = async (id,type,idRemoveFrom)=>{
 //
 // }
 
-export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient,details_users};
+export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient,details_users,updateIDDoc,deleteDocFrom,deleteCurrentUser};

@@ -2,6 +2,7 @@ import "./featuredInfo.css"
 import React from "react";
 import ListMeeting from "../../meetingSummaries/listMeetingSummries/ListMeeting"
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
+// import {Container} from "@mui/material";
 
 export default function FeaturedInfo({id}){
     return(
@@ -36,7 +37,7 @@ export default function FeaturedInfo({id}){
                     </ul>
                     <h1>טיפול אישי</h1>
                     <ul className="featuredList">
-                        <Link to={"/"+id+"/"+"meetings/*"} className="link">
+                        <Link to={":meetings"} className="link">
                         <ul className="featuredListItem">
                             סיכומי מפגשים
                             &nbsp;
@@ -56,6 +57,10 @@ export default function FeaturedInfo({id}){
 
                         </ul>
                     </ul>
+                         <Routes>
+                         <Route path={":meetings/*"} element={<ListMeeting id={id}  />} />
+                         </Routes>
+
 {/*                     <Routes> */}
 {/*                     <Route path={"/"+id +"/meetings/*"} element={<ListMeeting id={id} arr_data={[ */}
 {/*                     {date:"03/02/2022 12:00 AM",summaries:"123"}]} />} /> */}

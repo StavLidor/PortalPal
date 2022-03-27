@@ -86,6 +86,25 @@ export const  details_users= async arr_id =>{
     console.log('ALL',arr_data)
     return arr_data
 }
+export const allDetailsMeetings = async (id)=>{
+    console.log('allDetailsMeetings')
+    const q= query(collection(db,"summaries"), where("therapist", '==',auth.currentUser));
+    // const q=query(q1,where("client", '==',id))
+    console.log('allDetailsMeetings222')
+    const querySnapshot = await getDocs(q);
+    const arr =[]
+    querySnapshot.forEach( (doc) => {
+        if (doc.data().client == id){
+            console.log('id',doc.id)
+        }
+
+        arr.push(doc.data())
+
+    });
+    console.log(arr)
+    return arr
+
+}
 export const addPatient = async details=>{
     // need to check if the patient in the portal
     console.log('add a patient')
@@ -189,9 +208,17 @@ export const deleteCurrentUser = async (type,idRemove)=>{
     await deleteFrom(auth.currentUser.uid,type,idRemove)
 
 }
+// only exist doc
 export const updateIDDoc  = async (id,name_path,data)=>{
     //await updateDoc(doc(db, name_path, id), data,{marge:true});
+    //auth.currentUser.uid
     await updateDoc(doc(db, name_path, id.toString()), data);
+
+}
+export const setIDDoc  = async (id,name_path,data)=>{
+    //await updateDoc(doc(db, name_path, id), data,{marge:true});
+    //auth.currentUser.uid
+    await setDoc(doc(db, name_path, id.toString()), data);
 
 }
 export const updateDocUser  = async (id,data)=>{
@@ -357,4 +384,4 @@ export const deletePatient = async (id,type,idRemoveFrom)=>{
 //
 // }
 
-export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient,details_users,updateIDDoc,deleteDocFrom,deleteCurrentUser};
+export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient,details_users,updateIDDoc,deleteDocFrom,deleteCurrentUser,allDetailsMeetings};

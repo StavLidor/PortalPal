@@ -9,6 +9,7 @@ import ViewMeetingSummaries from "../../meetingSummaries/viewMeetingSummaries/Vi
 
 
 export default function Sidebar({type,arr_data}){
+
     return(
         <div className='sidebar'>
         {
@@ -57,11 +58,13 @@ export default function Sidebar({type,arr_data}){
 
                                     </ul>
                                     <Routes>
-                                        <Route path={"/"+p.id+"/*"} element={<Patient id={p.id} />} />
-                                        <Route path={"/"+p.id +"/meetings/*"} element={<ListMeeting id={p.id} arr_data={[
-                                                            {date:"03/02/2022 12:00 AM",summaries:"123"}]} />} />
-                                        <Route path={"/"+p.id+"/meetings"+"/"+"1"} element={<ViewMeetingSummaries dataMeeting={
-                                                               {date:"03/02/2022 12:00 AM",summaries:"123"}} />} />
+                                        <Route path={"/"+p.id+"/*"} element={<Patient id={p.id} />}/>
+{/*                                                <Route path={"/meetings/*"} element={<ListMeeting id={p.id}  />} /> */}
+
+{/*                                          <Route> */}
+
+{/*                                         <Route path={"/"+p.id+"/meetings"+"/"+"1"} element={<ViewMeetingSummaries dataMeeting={ */}
+{/*                                                                {date:"03/02/2022 12:00 AM",summaries:"123"}} />} /> */}
                                     </Routes>
                                 </div>
                             </Router>

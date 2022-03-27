@@ -1,17 +1,23 @@
 import {
-    updateIDDoc, deleteDocFrom, updatesCurrentUser, deleteCurrentUser
+    updateIDDoc, deleteDocFrom, updatesCurrentUser, deleteCurrentUser, allDetailsMeetings, auth, setIDDoc
 } from "../../firebase";
 
 
 export const updateMeeting=async details=>{
-    await updateIDDoc(details.client.toString()+details.data.toString(), 'summaries', details)
+    // const str = details.client.toString()+ details.date.substring(0, details.date.indexOf("("))
+    await setIDDoc( details.idDoc, 'summaries', Object.assign({}, {therapist:auth.currentUser.uid},details))
+
     // Maybe another case is needed if an array does not exist at all to the user?
-    await updatesCurrentUser({meetings:details.client.toString()+details.data.toString()})
+    // await updatesCurrentUser({meetings:details.client.toString()+details.data.toString()})
 }
 export const removeMeeting=async details=>{
     await deleteDocFrom(details.client.toString()+details.time.toString(),'summaries')
     await deleteCurrentUser('meetings',details.client.toString()+details.time.toString())
 }
+export const allMeetingOf=async(idClient)=>{
+    return allDetailsMeetings(idClient)
+
+}
 
 
-export default {updateMeeting,removeMeeting}
+export default {updateMeeting,removeMeeting,allMeetingOf}

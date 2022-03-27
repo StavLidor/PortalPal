@@ -23,26 +23,28 @@ export default function LoginFrom(){
             const data = doc.data()
             const id = doc.id
             console.log('lalalala')
-            if (details.type === 'admin'){
+            if (details.type === 'admin'||details.type === 'therapist'){
                 const arr=details_users(data.students_arr)
                 const p1 = Promise.resolve(arr)
                 p1.then(value2 => {
 
-                    setInfo({id:id,name:data.name,students_arr:value2,myDoc:doc})
+                    // setInfo({id:id,name:data.name,students_arr:value2,myDoc:doc})
+                    setInfo({id:id,name:data.name,patients:value2,myDoc:doc})
 
                 });
             }
-            else if (details.type === 'therapist'){
-                //Therapist
-                setInfo({name:data.name,patients:data.idsMangeTherapist,myDoc:doc})
-            }
-            else if (details.type === 'parent'){
-                setInfo({name:data.name,patients:data.idsMangeParents,myDoc:doc})
-            }
-            else{
-                //teacher
-                setInfo({name:data.name,patients:data.idsMangeTeacher,myDoc:doc})
-            }
+            // else if (details.type === 'therapist'){
+            //     //Therapist
+            //     setInfo({name:data.name,patients:data.idsMangeTherapist,myDoc:doc})
+            //
+            // }
+            // else if (details.type === 'parent'){
+            //     setInfo({name:data.name,patients:data.idsMangeParents,myDoc:doc})
+            // }
+            // else{
+            //     //teacher
+            //     setInfo({name:data.name,patients:data.idsMangeTeacher,myDoc:doc})
+            // }
 
 
         });

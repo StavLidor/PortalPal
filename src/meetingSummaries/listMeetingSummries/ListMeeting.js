@@ -4,7 +4,7 @@ import "./listMeeting.css"
 // import Patient from "./pages/patient/Patient"
 import React,{useState,useEffect} from "react";
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
-import  {allMeetingOf} from "../database/Database";
+import {allMeetingOf, removeMeeting} from "../database/Database";
 import ViewMeetingSummaries from "../viewMeetingSummaries/ViewMeetingSummaries"
 
 
@@ -22,11 +22,28 @@ export default function ListMeeting({id}){
     //
     // }
      console.log('ListMeeting')
-     const submitNewMeeting=e=>{
-            e.preventDefault();
-            // new_patients(detailsPatients);
-            // Login(details);
-        }
+     // const submitNewMeeting=e=>{
+     //        e.preventDefault();
+     //        // new_patients(detailsPatients);
+     //        // Login(details);
+     //    }
+    function removeMeeting (id){
+        const newData = [...data]
+        const index = data.findIndex((d) => d.idDoc === id)
+        newData.splice(index, 1)
+        setData(newData)
+    }
+    function addMeeting (details) {
+        const newData = [...data]
+        newData.push(details)
+        setData(newData)
+    }
+    function updateMeeting (details){
+        const newData = [...data]
+        const index = data.findIndex((d) => d.idDoc === details.idDoc)
+        newData[index]= details
+        setData(newData)
+    }
     return(
         <div className='sidebar'>
              {/*<form onSubmit={submitNewMeeting} >*/}
@@ -46,7 +63,8 @@ export default function ListMeeting({id}){
 
             </ul>
             <Routes>
-                <Route path={ "newMeeting"} element={<ViewMeetingSummaries client_id={id} last_data={{date:"",summary:""}} />} />
+                <Route path={ "newMeeting"} element={<ViewMeetingSummaries client_id={id} last_data={{date:"",summary:""}}
+                                                                           addMeeting ={addMeeting} />} />
             </Routes>
               <h1>רשימת מפגשים</h1>
             {
@@ -75,7 +93,10 @@ export default function ListMeeting({id}){
 
                                     </ul>
                                      <Routes>
-                                         <Route path={p.idDoc} element={<ViewMeetingSummaries client_id={id} last_data={p} />} />
+                                         <Route path={p.idDoc} element={<ViewMeetingSummaries client_id={id} last_data={p}
+                                                                                              addMeeting={addMeeting}
+                                                                                              removeMeetingView={removeMeeting}
+                                                                                              updateMeetingView={updateMeeting}/>} />
                                      </Routes>
                                 </div>
                         </div>

@@ -7,7 +7,7 @@ import Datetime from 'react-datetime';
 import {updateMeeting, removeMeeting, newMeeting} from "../database/Database";
 import TimeInput from 'react-time-input';
 
-export default function ViewMeetingSummaries({client_id,last_data}){
+export default function ViewMeetingSummaries({client_id,last_data,addMeeting,removeMeetingView, updateMeetingView}){
     console.log('viewMeeting')
     console.log(last_data)
     const [startDate, setStartDate] = useState(new Date());
@@ -25,13 +25,16 @@ export default function ViewMeetingSummaries({client_id,last_data}){
             console.log('add meeting op')
 
             newMeeting({idDoc:fullData.idDoc,client: fullData.client,summary:fullData.summary,date:fullData.date}).then(r => {})
+            addMeeting({idDoc:fullData.idDoc,client: fullData.client,summary:fullData.summary,date:fullData.date})
         }
         else if(last_data.summary !== data.summary){
             updateMeeting({idDoc:last_data.idDoc,summary:data.summary})
 
+            updateMeetingView({idDoc:last_data.idDoc,client: last_data.client,summary:data.summary,date:last_data.date})
         }
     }
     function deleteMeeting (){
+        removeMeetingView(last_data.idDoc)
         removeMeeting(last_data)
     }
     return(

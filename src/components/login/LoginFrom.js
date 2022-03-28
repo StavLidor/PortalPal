@@ -28,8 +28,9 @@ export default function LoginFrom(){
                 const p1 = Promise.resolve(arr)
                 p1.then(value2 => {
 
-                    // setInfo({id:id,name:data.name,students_arr:value2,myDoc:doc})
-                    setInfo({id:id,name:data.name,patients:value2,myDoc:doc})
+                    setInfo({id:id,name:data.name,students_arr:value2,myDoc:doc,emailCurrent:details.email,
+                        passwordCurrent:details.password})
+                    // setInfo({id:id,name:data.name,patients:value2,myDoc:doc})
 
                 });
             }

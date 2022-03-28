@@ -11,7 +11,7 @@ import {
     onAuthStateChanged,
     sendPasswordResetEmail,
     signOut,
-    updateEmail,updatePassword
+    updateEmail,updatePassword, sendSignInLinkToEmail
 } from "firebase/auth";
 import { getDatabase, ref, push, set } from "firebase/database";
 import firebase from "firebase/compat/app";
@@ -40,8 +40,42 @@ export const auth = getAuth(firebaseApp);
 export const db = getFirestore();
 const collection_query_users = collection(db,"users");
 const collection_query_patients = collection(db,"patients");
+const actionCodeSettings = {
+    // URL you want to redirect back to. The domain (www.example.com) for this
+    // URL must be in the authorized domains list in the Firebase Console.
+    url: 'https://www.example.com/finishSignUp?cartId=1234',
+    // This must be true.
+    handleCodeInApp: true,
+    iOS: {
+        bundleId: 'com.example.ios'
+    },
+    android: {
+        packageName: 'com.example.android',
+        installApp: true,
+        minimumVersion: '12'
+    },
+    dynamicLinkDomain: 'example.page.link'
+};
+const sentToEmail=details=>{
+
+    sendSignInLinkToEmail(auth, details.email, actionCodeSettings)
+    .then(() => {
+        // The link was successfully sent. Inform the user.
+        // Save the email locally so you don't need to ask the user for it again
+        // if they open the link on the same device.
+        window.localStorage.setItem( 'ברוך הבא לפורטל'+details.name+'היי ', details.email);
+        // ...
+    })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ...
+        });
+
+}
 export const addUser = async details=>{
     try {
+        sentToEmail(details)
         const res = await createUserWithEmailAndPassword(auth, details.email, details.password);
         const user = res.user;
         await setDoc(doc(collection_query_users , user.uid), details/*{
@@ -116,12 +150,25 @@ export const addPatient = async details=>{
 
 
     const uid_user=await addUser({name:details.nameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],idSecretary:details.idSecretary})
+    // need to think what to do beacuse is connect from secretry
+    console.log(auth.currentUser.uid)
+    // need to think what to do beacuse is connect from secretry
+    signOutFrom()
+    await signIfUserExists({email:details.emailCurrent,
+        password:details.passwordCurrent})
+    ///////////////////////////////////////////////////////
+    console.log(auth.currentUser.uid)
     if (!uid_user){
         console.log('user exist parent')
         await updateAccordingEmail(details.email, {idsMangeParents: details.id.toString()})
 
     }
-    await updatesCurrentUser(details.idSecretary,{students_arr: details.id.toString()})
+    //
+    // else{
+    //     signOutFrom()
+    //
+    // }
+    await updatesCurrentUser(/*details.idSecretary,*/{students_arr: details.id.toString()})
 
     console.log('2222244')
     const q = query(collection_query_users, where("idsMangeParents","array-contains",details.id));
@@ -257,6 +304,7 @@ export const updateDocUser  = async (id,data)=>{
 
     }
     console.log('before update doc')
+    console.log('id',id)
     await updateIDDoc(id, 'users', data)
 
 }

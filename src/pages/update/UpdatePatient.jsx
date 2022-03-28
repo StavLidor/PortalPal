@@ -122,7 +122,8 @@ export default  function UpdatePatient({data,new_patients}) {
 
 
         if(index<0){
-            new_patients(Object.assign({}, {idSecretary:data.id}, detailsPatients));
+            new_patients(Object.assign({}, {idSecretary:data.id,emailCurrent:data.emailCurrent,
+                                                                                        passwordCurrent:data.passwordCurrent}, detailsPatients));
              newContacts[contacts.length]= detailsPatients
         }
         else {

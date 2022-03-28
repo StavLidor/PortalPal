@@ -37,7 +37,7 @@ export default function FeaturedInfo({id}){
                     </ul>
                     <h1>טיפול אישי</h1>
                     <ul className="featuredList">
-                        <Link to={":meetings"} className="link">
+                        <Link to={"meetings/*"} className="link">
                         <ul className="featuredListItem">
                             סיכומי מפגשים
                             &nbsp;
@@ -58,7 +58,7 @@ export default function FeaturedInfo({id}){
                         </ul>
                     </ul>
                          <Routes>
-                         <Route path={":meetings/*"} element={<ListMeeting id={id}  />} />
+                         <Route path={"meetings/*"} element={<ListMeeting id={id}  />} />
                          </Routes>
 
 {/*                     <Routes> */}

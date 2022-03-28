@@ -9,17 +9,31 @@ import TimeInput from 'react-time-input';
 
 export default function ViewMeetingSummaries({client_id,last_data}){
     console.log('viewMeeting')
+    console.log(last_data)
     const [startDate, setStartDate] = useState(new Date());
 //     const [startTime, setStartTime] = useState("00:00");
     const [data, setData] = useState(last_data/*{date:"",summary:""}*//*{date:"03/02/2022 12:00 AM",summaries:"123"}*/)
     const submit=e=>{
 
         e.preventDefault();
-        console.log('sumbit')
-        const fullData =Object.assign({}, {client:client_id,idDoc:client_id +data.date._d.toJSON() }, data)
-        console.log('add meeting op')
-        console.log(fullData.date._d.toJSON())
-        updateMeeting({idDoc:fullData.idDoc,client: fullData.client,summary:fullData.summary,date:fullData.date._d.toString()}).then(r => {})
+        if(last_data.date===""){
+            console.log('sumbit')
+            const fullData =Object.assign({}, {client:client_id,/*idDoc:client_id +data.date._d.toJSON()*/ }, data)
+            console.log('add meeting op')
+            console.log(fullData.date._d.toJSON())
+            updateMeeting({idDoc:fullData.idDoc,client: fullData.client,summary:fullData.summary,date:fullData.date}).then(r => {})
+        }
+        else if(last_data.date === data.date){
+            if(last_data.summary !== data.summary){
+                updateMeeting({idDoc:last_data.idDoc,summary:data.summary})
+            }
+
+        }
+        else {
+            console.log('change date')
+            deleteMeeting()
+        }
+
         // if (.btn === 'add'){
         //     console.log('add meeting op')
         //     updateMeeting(data).then(r => {})
@@ -43,7 +57,7 @@ export default function ViewMeetingSummaries({client_id,last_data}){
 
                 <div className="form-group">
                     <label htmlFor="date">תאריך ושעת מפגש:</label>
-                    <Datetime value={data.date} selected={startDate}  onChange={d=>setData({...data,date:d})} />
+                    <Datetime value={data.date} selected={data.date}  onChange={d=>setData({...data,date:d._d.toString(),idDoc:client_id +d._d.toJSON()})} />
 
 
                 </div>
@@ -51,7 +65,7 @@ export default function ViewMeetingSummaries({client_id,last_data}){
                 <div className="form-group" >
 
 
-                    <input  value={data.summaries} type="text"   className="summaries" name="summaries" id="Meeting summaries"
+                    <input  value={data.summary} type="text"   className="summaries" name="summaries" id="Meeting summaries"
                             onChange={e=>setData({...data,summary:e.target.value})}/>
                     <label htmlFor="name">סיכום פגישה </label>
                 </div>

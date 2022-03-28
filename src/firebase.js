@@ -88,17 +88,18 @@ export const  details_users= async arr_id =>{
 }
 export const allDetailsMeetings = async (id)=>{
     console.log('allDetailsMeetings')
-    const q= query(collection(db,"summaries"), where("therapist", '==',auth.currentUser));
+    const q= query(collection(db,"summaries"), where("therapist", '==',auth.currentUser.uid));
     // const q=query(q1,where("client", '==',id))
     console.log('allDetailsMeetings222')
     const querySnapshot = await getDocs(q);
     const arr =[]
     querySnapshot.forEach( (doc) => {
-        if (doc.data().client == id){
+        if (doc.data().client === id){
+            arr.push(doc.data())
             console.log('id',doc.id)
         }
 
-        arr.push(doc.data())
+
 
     });
     console.log(arr)

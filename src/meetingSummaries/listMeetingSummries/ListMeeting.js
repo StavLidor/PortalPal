@@ -13,6 +13,7 @@ export default function ListMeeting({id}){
     useEffect(()=>{
         console.log('useEffect')
         allMeetingOf(id).then(arr => {
+            console.log('then',arr)
             setData(arr)
         })
 
@@ -32,7 +33,7 @@ export default function ListMeeting({id}){
              {/*<input type="submit" name="add" value="הוספת פגישה חדשה"/>*/}
              {/*</form>*/}
             <ul className="sidebarList">
-                <Link to={":newMeeting"} className="link">
+                <Link to={ "newMeeting"} className="link">
 
                     <ul className="sidebarListItem">
                         הוספה פגישה חדשה
@@ -45,7 +46,7 @@ export default function ListMeeting({id}){
 
             </ul>
             <Routes>
-                <Route path={ ":newMeeting"} element={<ViewMeetingSummaries client_id={id} last_data={{date:"",summary:""}} />} />
+                <Route path={ "newMeeting"} element={<ViewMeetingSummaries client_id={id} last_data={{date:"",summary:""}} />} />
             </Routes>
               <h1>רשימת מפגשים</h1>
             {
@@ -61,7 +62,7 @@ export default function ListMeeting({id}){
 
                                 <div className='sidebarMenu'>
                                     <ul className="sidebarList">
-                                        <Link to={":"+p.date} className="link">
+                                        <Link to={p.idDoc} className="link">
 
                                             <ul className="sidebarListItem">
                                                 {p.date}
@@ -74,7 +75,7 @@ export default function ListMeeting({id}){
 
                                     </ul>
                                      <Routes>
-                                         <Route path={":"+p.date} element={<ViewMeetingSummaries client_id={id} last_data={p} />} />
+                                         <Route path={p.idDoc} element={<ViewMeetingSummaries client_id={id} last_data={p} />} />
                                      </Routes>
                                 </div>
                         </div>

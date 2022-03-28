@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datetime/css/react-datetime.css";
 import "./viewMeetingSummaries.css"
 import Datetime from 'react-datetime';
-import  {updateMeeting,removeMeeting} from "../database/Database";
+import {updateMeeting, removeMeeting, newMeeting} from "../database/Database";
 import TimeInput from 'react-time-input';
 
 export default function ViewMeetingSummaries({client_id,last_data}){
@@ -16,37 +16,23 @@ export default function ViewMeetingSummaries({client_id,last_data}){
     const submit=e=>{
 
         e.preventDefault();
-        if(last_data.date===""){
+        if(last_data.date==="" ||last_data.date !== data.date){
+            if(last_data.date !== data.date){
+                deleteMeeting()
+            }
             console.log('sumbit')
             const fullData =Object.assign({}, {client:client_id,/*idDoc:client_id +data.date._d.toJSON()*/ }, data)
             console.log('add meeting op')
-            console.log(fullData.date._d.toJSON())
-            updateMeeting({idDoc:fullData.idDoc,client: fullData.client,summary:fullData.summary,date:fullData.date}).then(r => {})
+
+            newMeeting({idDoc:fullData.idDoc,client: fullData.client,summary:fullData.summary,date:fullData.date}).then(r => {})
         }
-        else if(last_data.date === data.date){
-            if(last_data.summary !== data.summary){
-                updateMeeting({idDoc:last_data.idDoc,summary:data.summary})
-            }
+        else if(last_data.summary !== data.summary){
+            updateMeeting({idDoc:last_data.idDoc,summary:data.summary})
 
         }
-        else {
-            console.log('change date')
-            deleteMeeting()
-        }
-
-        // if (.btn === 'add'){
-        //     console.log('add meeting op')
-        //     updateMeeting(data).then(r => {})
-        // }
-
-        // else {
-        //     removeMeeting(data).then(r => {})
-        // }
-        // new_patients(detailsPatients);
-        // Login(details);
     }
     function deleteMeeting (){
-
+        removeMeeting(last_data)
     }
     return(
         <form onSubmit={submit} >

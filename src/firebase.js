@@ -11,7 +11,7 @@ import {
     onAuthStateChanged,
     sendPasswordResetEmail,
     signOut,
-    updateEmail,updatePassword, sendSignInLinkToEmail
+    updateEmail,updatePassword, sendSignInLinkToEmail,sendEmailVerification
 } from "firebase/auth";
 import { getDatabase, ref, push, set } from "firebase/database";
 import firebase from "firebase/compat/app";
@@ -43,7 +43,7 @@ const collection_query_patients = collection(db,"patients");
 const actionCodeSettings = {
     // URL you want to redirect back to. The domain (www.example.com) for this
     // URL must be in the authorized domains list in the Firebase Console.
-    url: 'https://www.example.com/finishSignUp?cartId=1234',
+    url: 'http://localhost:3000',
     // This must be true.
     handleCodeInApp: true,
     iOS: {
@@ -73,13 +73,38 @@ const sentToEmail=details=>{
         });
 
 }
+export const resetPassword=email=>{
+    sendPasswordResetEmail(auth, email)
+        .then(() => {
+            // Password reset email sent!
+            console.log('Reset password')
+            // ..
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ..
+        });
+
+}
 export const addUser = async details=>{
     try {
-        sentToEmail(details)
-        const res = await createUserWithEmailAndPassword(auth, details.email, details.password);
+        //sentToEmail(details)
+        const res = await createUserWithEmailAndPassword(auth, details.email, details.password)
+
+
         const user = res.user;
         await setDoc(doc(collection_query_users , user.uid), details/*{
             name:details.name,type:details.type,email:details.email,password:details.password,ids:details.ids}*/);
+        // Maybe just to a new Therapist?
+        sendEmailVerification(auth.currentUser/*,actionCodeSettings*/)
+            .then(() => {
+                // Email verification sent!
+                // ...
+                console.log('sent the email now')
+            });
+        await auth.signOut()
+
         return user.uid;
     } catch (err) {
         console.log(err)
@@ -153,7 +178,7 @@ export const addPatient = async details=>{
     // need to think what to do beacuse is connect from secretry
     console.log(auth.currentUser.uid)
     // need to think what to do beacuse is connect from secretry
-    signOutFrom()
+    // signOutFrom()
     await signIfUserExists({email:details.emailCurrent,
         password:details.passwordCurrent})
     ///////////////////////////////////////////////////////

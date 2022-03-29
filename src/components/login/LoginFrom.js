@@ -3,7 +3,7 @@ import React,{useState} from "react";
 import Home from "../../pages/home/Home";
 import {signUser, unSignUser,newUser} from "../../pepole/users/user";
 import {signOut} from "firebase/auth";
-import {auth, details_users} from "../../firebase";
+import {auth, details_users,resetPassword} from "../../firebase";
 
 
 export default function LoginFrom(){
@@ -69,6 +69,10 @@ export default function LoginFrom(){
      const submitLink = function (){
         setFormNewUser(true)
         console.log('new user')
+    }
+    const submitForgetPassword= e=>{
+        e.preventDefault();
+        resetPassword(details.email)
     }
     const submitNewUser=e=>{
         e.preventDefault();
@@ -137,9 +141,13 @@ export default function LoginFrom(){
 
             </div>
         </form >
-            <form onSubmit={submitLink}>
-                <input type="submit" value="מטפל חדש"/>
+        <form onSubmit={submitLink}>
+            <input type="submit" value="מטפל חדש"/>
+        </form >
+            <form onSubmit={submitForgetPassword}>
+                <input type="submit" value="שכחתי סיסמא"/>
             </form >
+
         </div>
 
 

@@ -7,6 +7,7 @@ import {deletePatient, details_users, updatesPatients} from "../../firebase"
 import Secretary from "../secretary/Secretary";
 import {signUser} from "../../pepole/users/user";
 import "./UpdatePatient.css"
+import CsvFile from "./CsvFile";
 
 export default  function UpdatePatient({data,new_patients}) {
 
@@ -147,6 +148,8 @@ export default  function UpdatePatient({data,new_patients}) {
 //             }
     return (
            <div>
+               <CsvFile/>
+               {/*<input type="file" name="learnCSV" accept="text/csv"/>*/}
            {contacts.length > 0  &&
 
                            <div className="secretary">

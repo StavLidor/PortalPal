@@ -40,7 +40,7 @@ export const signUser = async details=>{
 }
 export const newPatients= async details=>{
     if (await addPatient(details)){
-        console.log("HI",details.id,details.name.toString());
+//         console.log("HI",details.id,details.name.toString());
     }
     else {
         console.log('patient with this id exsist')

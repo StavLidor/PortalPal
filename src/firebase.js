@@ -126,12 +126,13 @@ export const  details_users= async arr_id =>{
     let arr_data =[]
 
 
-    for (const id of arr_id) {
+    for (const c of arr_id) {
         // console.log(id)
         try {
-            let docRef = doc(db, "patients", id);
+            let docRef = doc(db, "patients", c.id);
             let d =  await getDoc(docRef);
-            arr_data.push(d.data())
+            // maybe add the job
+            arr_data.push(Object.assign({},d.data(),{jobs:c.jobs}))
         }
         catch (err){
 
@@ -169,14 +170,15 @@ export const addPatient = async details=>{
     // need to check if the patient in the portal
     console.log('add a patient')
 
+    // maybe in this case update details? add more institute?
     if ((await getDocs(query(collection_query_patients, where("id", "==", details.id)))).docs.length>0){
         return false
     }
 
 
-    const uid_user=await addUser({name:details.nameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],idSecretary:details.idSecretary})
+    const uid_user=await addUser({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
     // need to think what to do beacuse is connect from secretry
-    console.log(auth.currentUser.uid)
+    //console.log(auth.currentUser.uid)
     // need to think what to do beacuse is connect from secretry
     // signOutFrom()
     await signIfUserExists({email:details.emailCurrent,
@@ -193,9 +195,9 @@ export const addPatient = async details=>{
     //     signOutFrom()
     //
     // }
-    await updatesCurrentUser(/*details.idSecretary,*/{students_arr: details.id.toString()})
+    await updatesCurrentUser(/*details.idSecretary,*/{students_arr: {id:details.id.toString(),jobs:['secretary']}})
 
-    console.log('2222244')
+    //console.log('2222244')
     const q = query(collection_query_users, where("idsMangeParents","array-contains",details.id));
     const querySnapshot = await getDocs(q);
     let id_parents=[]
@@ -203,12 +205,16 @@ export const addPatient = async details=>{
     querySnapshot.forEach((doc) => {
         id_parents.push(doc.id)
     });
+    console.log('institutionNumber nnn ',details.institutionNumber)
     await setDoc(doc(collection_query_patients, details.id), {
         id:details.id,
-        name:details.name,
+        dateOfBirth:details.dateOfBirth,
+        firstName:details.firstName,
+        lastName:details.lastName,
         parents:id_parents,
-        therapists:[],
-        idSecretary:[details.idSecretary]
+        therapistsOutside:[],
+        institutes:{[details.institutionNumber]:[{[details.idSecretary]:'secretary'}]},
+        /*idSecretary:[details.idSecretary]*/
     });
     return true;
 }

@@ -29,10 +29,11 @@ export default function LoginFrom(){
                 p1.then(value2 => {
 
                     setInfo({id:id,name:data.name,students_arr:value2,myDoc:doc,emailCurrent:details.email,
-                        passwordCurrent:details.password})
+                        passwordCurrent:details.password,institutionNumber:data.institutionNumber})
                     // setInfo({id:id,name:data.name,patients:value2,myDoc:doc})
 
                 });
+                console.log('institutionNumber',data.institutionNumber)
             }
             // else if (details.type === 'therapist'){
             //     //Therapist

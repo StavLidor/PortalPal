@@ -1,5 +1,5 @@
 import React from "react";
-
+import DatePicker from "react-datepicker";
 const EditableRow = ({
                             contact,
                          editFormData,
@@ -29,6 +29,19 @@ const EditableRow = ({
                     onChange={handleEditFormChange}
                 ></input>
             </td>
+{/*             <td> */}
+{/*                  <DatePicker selected={editFormData.dateOfBirth} onChange={handleEditFormChange} /> */}
+{/*                     <input */}
+{/*                                         type="date" */}
+{/*                                         required="required" */}
+{/*                                         placeholder="Enter a birth day..." */}
+{/*                                         name="DateOfBirth" */}
+{/*                                         value={editFormData.dateOfBirth} */}
+{/*                                         onChange={handleEditFormChange} */}
+{/*                                     ></input> */}
+
+{/*              </td> */}
+
             {/*<td>*/}
             {/*    /!*<input*!/*/}
             {/*    /!*    type="text"*!/*/}

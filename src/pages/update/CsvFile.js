@@ -1,44 +1,54 @@
-import React from "react";
-function Parser(file){
+import React, {useState} from "react";
 
-    let data = file.data.toString()
 
-    let arr= data.split("\n");
-
-    let keys=arr[0].split(',');
-    let rows=arr.length;
-    let cols=keys.length;
-
-    let obj = {};
-
-    let i,j=0;
-    for (i = 1; i < rows-1; i++) {
-        let line = arr[i].split(',');
-        for (j = 0; j < cols; j++) {
-
-            let header =keys[j].substring(0, keys[j].length);
-            let value = parseFloat(line[j]);
-            if (!obj[header]){
-                obj[header] = [];
-            }
-            obj[header].push(value);
+export default function CsvFile({addNewPatient}){
+    const [file, editFile] = useState(null)
+    const submit = (event) => {
+        event.preventDefault();
+        if(file){
+            parser(file,addNewPatient)
         }
+
+
+    }
+    function parser(file,f){
+
+        let data = file.data.toString()
+
+        let arr= data.split("\n");
+
+        let keys=arr[0].split(',');
+        let rows=arr.length;
+        let cols=keys.length;
+
+
+
+        let i,j=0;
+        for (i = 1; i < rows-1; i++) {
+            let line = arr[i].split(',');
+            let obj = {};
+            for (j = 0; j < cols; j++) {
+
+                let header =keys[j]
+                let value = line[j]
+                obj[header]=value
+            }
+            f(obj)
+
+        }
+
+
     }
 
-    return obj;
-
-}
-export default function CsvFile(){
-
     return(
-        <form>
+        <form onSubmit={submit}>
             <table>
                 <tr>
                     <td>
                         <table className="menu">
                             <tr>
                                 <td>
-                                    <input type="file" name="learnCSV" accept="text/csv"/>
+                                    <input type="file" name="learnCSV" accept="text/csv" onChange={e=>editFile(e.target.value)}/>
                                 </td>הכנס/הסר תלמידים
 
                             </tr>
@@ -49,12 +59,12 @@ export default function CsvFile(){
                             </tr>
                         </table>
                     </td>
-                    <td>
-                        <select datatype="sel" name="algorithmSelect">
-                            <option value="simple" selected>תלמדים חדשים</option>
-                            <option value="hybrid">הסרת תלמידים</option>
-                        </select>
-                    </td>
+                    {/*<td>*/}
+                    {/*    <select datatype="sel" name="algorithmSelect">*/}
+                    {/*        <option value="newStudent" selected>תלמדים חדשים</option>*/}
+                    {/*        <option value="newEmployee">עובד חדש</option>*/}
+                    {/*    </select>*/}
+                    {/*</td>*/}
                     {/*<td>*/}
                     {/*    <div style="margin-left: 50px">*/}
                     {/*        <p id="instructionsText"><u>Instructions:</u></p>*/}

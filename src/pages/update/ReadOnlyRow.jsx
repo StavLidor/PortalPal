@@ -1,13 +1,17 @@
 import React from "react";
 
 const ReadOnlyRow = ({ contact, handleEditClick, handleDeleteClick }) => {
-    console.log('ReadOnlyRow',contact)
+//     console.log('ReadOnlyRow',contact)
   return (
     <tr>
       <td>{contact.id}</td>
       <td>{contact.firstName}</td>
-        <td>{contact.lastName}</td>
-        <td>{contact.dateOfBirth}</td>
+      <td>{contact.lastName}</td>
+      <td>{contact.dateOfBirth}</td>
+
+      <td>{contact.city}</td>
+      <td>{contact.street}</td>
+      <td>{contact.buildingNumber}</td>
       {/*<td>{contact.phoneNumber}</td>*/}
       {/*<td>{contact.email}</td>*/}
       <td>

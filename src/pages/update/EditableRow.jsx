@@ -29,18 +29,49 @@ const EditableRow = ({
                     onChange={handleEditFormChange}
                 ></input>
             </td>
-{/*             <td> */}
+            <td>
 {/*                  <DatePicker selected={editFormData.dateOfBirth} onChange={handleEditFormChange} /> */}
-{/*                     <input */}
-{/*                                         type="date" */}
-{/*                                         required="required" */}
-{/*                                         placeholder="Enter a birth day..." */}
-{/*                                         name="DateOfBirth" */}
-{/*                                         value={editFormData.dateOfBirth} */}
-{/*                                         onChange={handleEditFormChange} */}
-{/*                                     ></input> */}
+                    <input
+                                        type="date"
+                                        required="required"
+                                        placeholder="Enter a birth day..."
+                                        name="dateOfBirth"
+                                        value={editFormData.dateOfBirth}
+                                        onChange={handleEditFormChange}
+                                    >
+                                    </input>
 
-{/*              </td> */}
+             </td>
+             <td>
+                             <input
+                                 type="text"
+                                 required="required"
+                                 placeholder="Enter a last city..."
+                                 name="city"
+                                 value={editFormData.city}
+                                 onChange={handleEditFormChange}
+                             ></input>
+             </td>
+             <td>
+                                          <input
+                                              type="text"
+                                              required="required"
+                                              placeholder="Enter a last street..."
+                                              name="street"
+                                              value={editFormData.street}
+                                              onChange={handleEditFormChange}
+                                          ></input>
+              </td>
+              <td>
+                                                        <input
+                                                            type="text"
+                                                            required="required"
+                                                            placeholder="Enter a last buildingNumber..."
+                                                            name="buildingNumber"
+                                                            value={editFormData.buildingNumber}
+                                                            onChange={handleEditFormChange}
+                                                        ></input>
+              </td>
 
             {/*<td>*/}
             {/*    /!*<input*!/*/}

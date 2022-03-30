@@ -1,58 +1,25 @@
 
 
 import React, { useState, Fragment } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ReadOnlyRow from "./ReadOnlyRow";
 import EditableRow from "./EditableRow";
 import {deletePatient, details_users, updatesPatients} from "../../firebase"
-import Secretary from "../secretary/Secretary";
-import {signUser} from "../../pepole/users/user";
 import "./UpdatePatient.css"
 import CsvFile from "./CsvFile";
 
 export default  function UpdatePatient({data,new_patients}) {
 
     console.log(data)
-    const [detailsPatients,setDetailsPatients] = useState({id:"",firstName:"",lastName:"",dateOfBirth:new Date(),firstNameParent:"",lastNameParent:"",email:""});
-
-    // function t() {
-    //     const arr =  details_users(data.ids)
-    //     const p1 = Promise.resolve(arr)
-    //     p1.then(value => {
-    //         setContacts(value)
-    //     });
-    //     return []
-    //
-    //
-    // }
-    // const arr =  details_users(data.students_arr)
+    const [detailsPatients,setDetailsPatients] = useState({id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:""});
     const [contacts, setContacts] = useState(data.students_arr);
-    //console.log(contacts)
-    // if(contacts.length === 0){
-    //     const p1 = Promise.resolve(data.students_arr)
-    //     p1.then(value => {
-    //         setContacts(value)
-    //     });
-    // }
-    // const p1 = Promise.resolve(arr)
-    // p1.then(value => {
-    //     setContacts(value)
-    // });
-    // t()
-    // const [promise, setPromise] = useState(true);
-    // console.log(contacts)
-    // // contacts.map((contact) => {
-    // //     console.log(contact)
-    // //
-    // // })
-    // console.log('Contacts', typeof (contacts))
-    //
+
     const [editContactId, setEditContactId] = useState(null);
     const [editFormData, setEditFormData] = useState({
         firstName: "",
         lastName: "",
         dateOfBirth:new Date()
+        ,city:"",street:"",buildingNumber:"",
         //email: "",
     });
     const handleEditFormChange = (event) => {
@@ -63,10 +30,11 @@ export default  function UpdatePatient({data,new_patients}) {
 
         const newFormData = {...editFormData};
         newFormData[fieldName] = fieldValue;
-        console.log('change',fieldName,fieldValue)
+        console.log('Changeeeeeeeeeeee',fieldName,fieldValue)
         //editContactId
         // updatesPatients(editContactId,{[fieldName]:fieldValue})
         setEditFormData(newFormData)
+        console.log('Changeeeeeeeeeeee',newFormData)
     };
     const handleCancelClick = () => {
         setEditContactId(null);
@@ -89,7 +57,8 @@ export default  function UpdatePatient({data,new_patients}) {
         const formValues = {
             firstName: contact.firstName,
             lastName: contact.lastName,
-            dateOfBirth: contact.dateOfBirth
+            dateOfBirth: contact.dateOfBirth,
+            city:contact.city,street:contact.street,buildingNumber:contact.buildingNumber,
             // phoneNumber: contact.phoneNumber,
             // email: contact.email,
         };
@@ -108,6 +77,7 @@ export default  function UpdatePatient({data,new_patients}) {
         console.log(contactId)
 
     };
+
     const handleEditFormSubmit = (event) => {
         event.preventDefault();
 
@@ -115,6 +85,9 @@ export default  function UpdatePatient({data,new_patients}) {
             id: editContactId,
             firstName: editFormData.firstName,
             lastName: editFormData.lastName,
+            dateOfBirth:editFormData.dateOfBirth
+            ,
+            city:editFormData.city,street:editFormData.street,buildingNumber:editFormData.buildingNumber,
             // phoneNumber: editFormData.phoneNumber,
             // email: editFormData.email,
         };
@@ -130,18 +103,17 @@ export default  function UpdatePatient({data,new_patients}) {
         updatesPatients(editContactId,editedContact)
         console.log('change',contacts)
     };
+    const addNewPatient =details =>{
+        const newContacts = [...contacts]
+        new_patients(Object.assign({}, {institutionNumber:data.institutionNumber,idSecretary:data.id,emailCurrent:data.emailCurrent,
+            passwordCurrent:data.passwordCurrent}, details));
+        newContacts[contacts.length]= details
+        setContacts(newContacts)
+
+    }
     const submitNewPatient = (event) => {
         console.log('submitNewPatient')
         event.preventDefault();
-
-//         const editedContact = {
-//             id: editContactId,
-//             firstName: editFormData.firstName,
-//             lastName: editFormData.lastName,
-//             // phoneNumber: editFormData.phoneNumber,
-//             // email: editFormData.email,
-//         };
-
 
         const newContacts = [...contacts];
 
@@ -163,21 +135,12 @@ export default  function UpdatePatient({data,new_patients}) {
         setContacts(newContacts);
         setEditContactId(null);
         console.log('change',contacts)
-        setDetailsPatients({id:"",firstName:"",lastName:"",dateOfBirth:new Date(),firstNameParent:"",lastNameParent:"",email:""})
+        setDetailsPatients({id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:""})
     };
-//       const submitNewPatient=e=>{
-//                 e.preventDefault();
-//                 console.log('add a patient')
-//         //         const myMap=new Map({idSecretary:data.id},detailsPatients)
-//         //         console.log('mymap',myMap)
-//         //         _.merge(data1, _.map(data2, x => ({ myNewAttribute: x })))
-//
-//                 new_patients(Object.assign({}, {idSecretary:data.id}, detailsPatients));
-//                 // Login(details);
-//             }
+
     return (
            <div>
-               <CsvFile/>
+               <CsvFile addNewPatient={addNewPatient}/>
                {/*<input type="file" name="learnCSV" accept="text/csv"/>*/}
            {contacts.length > 0  &&
 
@@ -190,6 +153,9 @@ export default  function UpdatePatient({data,new_patients}) {
                                        <th>שם פרטי</th>
                                        <th>שם משפחה</th>
                                        <th>תאריך לידה</th>
+                                       <th>עיר</th>
+                                       <th>רחוב</th>
+                                       <th>מספר רחוב</th>
                                        {/*<th> שם פרטי הורה</th>*/}
                                        {/*<th> שם משפחה הורה</th>*/}
                                        {/*<th> מייל הורה</th>*/}
@@ -241,7 +207,7 @@ export default  function UpdatePatient({data,new_patients}) {
                                        </div>
                                        <div className="form-group">
                                            <label htmlFor="DateOfBirth">תאריך לידה מטופל:</label>
-                                           <input type="date" name="DateOfBirth" id="DateOfBirth" onChange={e=>setDetailsPatients({...detailsPatients,dateOfBirth:e.target.value})} value={detailsPatients.dateOfBirth}/>
+                                           <input type="date" name="dateOfBirth" id="DateOfBirth" onChange={e=>setDetailsPatients({...detailsPatients,dateOfBirth:e.target.value})} value={detailsPatients.dateOfBirth}/>
                                            {/*<DatePicker selected={detailsPatients.dateOfBirth} onChange={(date) =>setDetailsPatients({...detailsPatients,dateOfBirth:date})} />*/}
                                        </div>
 
@@ -252,6 +218,18 @@ export default  function UpdatePatient({data,new_patients}) {
                                        <div className="form-group" >
                                            <label htmlFor="lastName">שם משפחה:</label>
                                            <input type="text" name="lastName" id="lastName" onChange={e=>setDetailsPatients({...detailsPatients,lastName:e.target.value})} value={detailsPatients.lastName}/>
+                                       </div>
+                                       <div className="form-group" >
+                                           <label htmlFor="city">עיר</label>
+                                           <input type="text" name="city" id="city" onChange={e=>setDetailsPatients({...detailsPatients,city:e.target.value})} value={detailsPatients.city}/>
+                                       </div>
+                                       <div className="form-group" >
+                                           <label htmlFor="street">רחוב</label>
+                                           <input type="text" name="street" id="street" onChange={e=>setDetailsPatients({...detailsPatients,street:e.target.value})} value={detailsPatients.street}/>
+                                       </div>
+                                       <div className="form-group" >
+                                           <label htmlFor="buildingNumber">מספר רחוב</label>
+                                           <input type="text" name="buildingNumber" id="buildingNumber" onChange={e=>setDetailsPatients({...detailsPatients,buildingNumber:e.target.value})} value={detailsPatients.buildingNumber}/>
                                        </div>
                                        <div className="form-group" >
                                            <label htmlFor="name">שם פרטי הורה:</label>

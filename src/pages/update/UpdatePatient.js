@@ -4,7 +4,7 @@ import React, { useState, Fragment } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import ReadOnlyRow from "./ReadOnlyRow";
 import EditableRow from "./EditableRow";
-import { deletePatientFromInstitute, details_users, updatesPatients} from "../../firebase"
+import {addUserFromAdmin, deletePatientFromInstitute, details_users, updatesPatients} from "../../firebase"
 import "./UpdatePatient.css"
 import CsvFile from "./CsvFile";
 
@@ -13,7 +13,7 @@ export default  function UpdatePatient({data,new_patients}) {
     console.log(data)
     const [detailsPatients,setDetailsPatients] = useState({id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:""});
     const [contacts, setContacts] = useState(data.students_arr);
-
+    const [detailsTherapist,setDetailsTherapist]=useState({firstName:"",lastName:"",email:"",jobs:"",institutes:[data.institutionNumber]})
     const [editContactId, setEditContactId] = useState(null);
     const [editFormData, setEditFormData] = useState({
         firstName: "",
@@ -154,7 +154,11 @@ export default  function UpdatePatient({data,new_patients}) {
         console.log('change',contacts)
         setDetailsPatients({id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:""})
     };
-
+    const submitNewTherapist = (event) => {
+        event.preventDefault()
+        addUserFromAdmin(detailsTherapist,data.emailCurrent,
+            data.passwordCurrent,"works")
+    }
     return (
            <div>
                <CsvFile addNewPatient={addNewPatient}/>
@@ -263,29 +267,25 @@ export default  function UpdatePatient({data,new_patients}) {
 
                                        <input type="submit" value="מטופל חדש"/>
                                    </form>
-               <form >
+               <form onSubmit={submitNewTherapist}>
                    <h2>
                        מטפל בית ספרי
                    </h2>
                    <div className="form-group" >
                        <label htmlFor="firstName">שם פרטי:</label>
-                       <input type="text" name="firstName" id="firstName" />
+                       <input type="text" name="firstName" id="firstName" onChange={e=>setDetailsTherapist({...detailsTherapist,firstName:e.target.value})} value={detailsTherapist.firstName}/>
                    </div>
                    <div className="form-group" >
                        <label htmlFor="lastName">שם משפחה:</label>
-                       <input type="text" name="lastName" id="lastName" />
+                       <input type="text" name="lastName" id="lastName" onChange={e=>setDetailsTherapist({...detailsTherapist,lastName:e.target.value})} value={detailsTherapist.lastName} />
                    </div>
                    <div className="form-group">
                        <label htmlFor="email">איימיל:</label>
-                       <input type="email" name="email" id="email" />
+                       <input type="email" name="email" id="email" onChange={e=>setDetailsTherapist({...detailsTherapist,email:e.target.value})} value={detailsTherapist.email} />
                    </div>
                    <div className="form-group">
                        <label htmlFor="jobs">תפקידים</label>
-                       <input type="jobs" name="jobs" id="jobs" />
-                   </div>
-                   <div className="form-group">
-                       <label htmlFor="password">סיסמא:</label>
-                       <input type="password" name="password" id="password" />
+                       <input type="jobs" name="jobs" id="jobs" onChange={e=>setDetailsTherapist({...detailsTherapist,jobs:e.target.value})} value={detailsTherapist.jobs}/>
                    </div>
                    <input type="submit" value="מטפל בית ספרי הוספה"/>
                </form>

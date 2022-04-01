@@ -111,7 +111,17 @@ export const addUser = async details=>{
         return null;
     }
 }
+export const addUserFromAdmin= async (details,emailCurrent,passwordCurrent,nameFiled)=>{
+    const uid_user=await addUser(Object.assign({},{password: makePassword(7)},details))
+    const p=Promise.resolve(uid_user)
+    await signIfUserExists({email:emailCurrent,
+        password:passwordCurrent})
+    p.then(async id => {
+        await updatesCurrentUser({[nameFiled]:id})
+    })
 
+
+}
 
 
 const ifPatientExists = async id=>{
@@ -340,6 +350,10 @@ export const updateDocUser  = async (id,data)=>{
         data.students_arr= firebase.firestore.FieldValue.arrayUnion(data.students_arr)
 
     }
+    if('works' in data){
+        data.works= firebase.firestore.FieldValue.arrayUnion(data.works)
+
+    }
     if('meetings' in data){
 
         data.meetings= firebase.firestore.FieldValue.arrayUnion(data.meetings)
@@ -473,4 +487,5 @@ export const deletePatientFromInstitute = async (institute,removeOb,id)=>{
 //
 // }
 
-export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail, deletePatientFromInstitute,details_users,updateIDDoc,deleteDocFrom,deleteCurrentUser,allDetailsMeetings};
+export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail, deletePatientFromInstitute,details_users,updateIDDoc,deleteDocFrom,
+    deleteCurrentUser,allDetailsMeetings,addUserFromAdmin};

@@ -4,7 +4,7 @@ import React, { useState, Fragment } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import ReadOnlyRow from "./ReadOnlyRow";
 import EditableRow from "./EditableRow";
-import {deletePatient, details_users, updatesPatients} from "../../firebase"
+import { deletePatientFromInstitute, details_users, updatesPatients} from "../../firebase"
 import "./UpdatePatient.css"
 import CsvFile from "./CsvFile";
 
@@ -69,7 +69,7 @@ export default  function UpdatePatient({data,new_patients}) {
         const newContacts = [...contacts];
         console.log(contacts)
         const index = contacts.findIndex((contact) => contact.id === contactId);
-        deletePatient(contactId, 'admin',data.id)
+        deletePatientFromInstitute(data.institutionNumber,{id:contactId,jobs:['secretary']},data.id,)
         newContacts.splice(index, 1);
         console.log(newContacts)
         setContacts(newContacts);
@@ -103,12 +103,29 @@ export default  function UpdatePatient({data,new_patients}) {
         updatesPatients(editContactId,editedContact)
         console.log('change',contacts)
     };
-    const addNewPatient =details =>{
+    const addNewPatient =allDetails => {
+        //console.log('new patinet for csv')
         const newContacts = [...contacts]
-        new_patients(Object.assign({}, {institutionNumber:data.institutionNumber,idSecretary:data.id,emailCurrent:data.emailCurrent,
-            passwordCurrent:data.passwordCurrent}, details));
-        newContacts[contacts.length]= details
+        let i=0
+        allDetails.map(async (details) => {
+                newContacts[contacts.length+i] = details
+                i++
+                await new_patients(Object.assign({}, {
+                    institutionNumber: data.institutionNumber, idSecretary: data.id, emailCurrent: data.emailCurrent,
+                    passwordCurrent: data.passwordCurrent
+                }, details));
+
+                console.log('new contacts', newContacts)
+
+
+            }
+
+        )
         setContacts(newContacts)
+
+        //details.dateOfBirth= new Date(details.dateOfBirth)
+        //console.log('add',details)
+
 
     }
     const submitNewPatient = (event) => {
@@ -246,6 +263,32 @@ export default  function UpdatePatient({data,new_patients}) {
 
                                        <input type="submit" value="מטופל חדש"/>
                                    </form>
+               <form >
+                   <h2>
+                       מטפל בית ספרי
+                   </h2>
+                   <div className="form-group" >
+                       <label htmlFor="firstName">שם פרטי:</label>
+                       <input type="text" name="firstName" id="firstName" />
+                   </div>
+                   <div className="form-group" >
+                       <label htmlFor="lastName">שם משפחה:</label>
+                       <input type="text" name="lastName" id="lastName" />
+                   </div>
+                   <div className="form-group">
+                       <label htmlFor="email">איימיל:</label>
+                       <input type="email" name="email" id="email" />
+                   </div>
+                   <div className="form-group">
+                       <label htmlFor="jobs">תפקידים</label>
+                       <input type="jobs" name="jobs" id="jobs" />
+                   </div>
+                   <div className="form-group">
+                       <label htmlFor="password">סיסמא:</label>
+                       <input type="password" name="password" id="password" />
+                   </div>
+                   <input type="submit" value="מטפל בית ספרי הוספה"/>
+               </form>
            </div>
 
 

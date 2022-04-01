@@ -168,58 +168,66 @@ export const allDetailsMeetings = async (id)=>{
 }
 export const addPatient = async details=>{
     // need to check if the patient in the portal
-    console.log('add a patient')
+    try {
+        console.log('add a patient')
 
-    // maybe in this case update details? add more institute?
-    if ((await getDocs(query(collection_query_patients, where("id", "==", details.id)))).docs.length>0){
+        // maybe in this case update details? add more institute?
+        if ((await getDocs(query(collection_query_patients, where("id", "==", details.id)))).docs.length>0){
+            return false
+        }
+
+
+        const uid_user=await addUser({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
+        // need to think what to do beacuse is connect from secretry
+        //console.log(auth.currentUser.uid)
+        // need to think what to do beacuse is connect from secretry
+        // signOutFrom()
+        await signIfUserExists({email:details.emailCurrent,
+            password:details.passwordCurrent})
+        ///////////////////////////////////////////////////////
+        //console.log(auth.currentUser.uid)
+        if (!uid_user){
+            //console.log('user exist parent')
+            await updateAccordingEmail(details.email, {idsMangeParents: details.id.toString()})
+
+        }
+        //
+        // else{
+        //     signOutFrom()
+        //
+        // }
+        await updatesCurrentUser(/*details.idSecretary,*/{students_arr: {id:details.id.toString(),jobs:['secretary']}})
+
+        //console.log('2222244')
+        const q = query(collection_query_users, where("idsMangeParents","array-contains",details.id));
+        const querySnapshot = await getDocs(q);
+        let id_parents=[]
+        // let id_Therapists=[]
+        querySnapshot.forEach((doc) => {
+            id_parents.push(doc.id)
+        });
+        //console.log('institutionNumber nnn ',details.institutionNumber)
+        await setDoc(doc(collection_query_patients, details.id), {
+            id:details.id,
+            dateOfBirth:details.dateOfBirth,
+            firstName:details.firstName,
+            lastName:details.lastName,
+            city:details.city,
+            street:details.street,
+            buildingNumber:details.buildingNumber,
+            parents:id_parents,
+            therapistsOutside:[],
+            institutes:{[details.institutionNumber]:[{[details.idSecretary]:'secretary'}]},
+            /*idSecretary:[details.idSecretary]*/
+        });
+        console.log('Add a patinet',details.id)
+        return true;
+
+
+    } catch (e) {
         return false
     }
 
-
-    const uid_user=await addUser({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
-    // need to think what to do beacuse is connect from secretry
-    //console.log(auth.currentUser.uid)
-    // need to think what to do beacuse is connect from secretry
-    // signOutFrom()
-    await signIfUserExists({email:details.emailCurrent,
-        password:details.passwordCurrent})
-    ///////////////////////////////////////////////////////
-    console.log(auth.currentUser.uid)
-    if (!uid_user){
-        console.log('user exist parent')
-        await updateAccordingEmail(details.email, {idsMangeParents: details.id.toString()})
-
-    }
-    //
-    // else{
-    //     signOutFrom()
-    //
-    // }
-    await updatesCurrentUser(/*details.idSecretary,*/{students_arr: {id:details.id.toString(),jobs:['secretary']}})
-
-    //console.log('2222244')
-    const q = query(collection_query_users, where("idsMangeParents","array-contains",details.id));
-    const querySnapshot = await getDocs(q);
-    let id_parents=[]
-    // let id_Therapists=[]
-    querySnapshot.forEach((doc) => {
-        id_parents.push(doc.id)
-    });
-    console.log('institutionNumber nnn ',details.institutionNumber)
-    await setDoc(doc(collection_query_patients, details.id), {
-        id:details.id,
-        dateOfBirth:details.dateOfBirth,
-        firstName:details.firstName,
-        lastName:details.lastName,
-        city:details.city,
-        street:details.street,
-        buildingNumber:details.buildingNumber,
-        parents:id_parents,
-        therapistsOutside:[],
-        institutes:{[details.institutionNumber]:[{[details.idSecretary]:'secretary'}]},
-        /*idSecretary:[details.idSecretary]*/
-    });
-    return true;
 }
 
 // export const doc_by_id = async (id,name_path)=>{
@@ -235,7 +243,7 @@ export const addPatient = async details=>{
 export const signIfUserExists = async details=>{
     try {
         const res = await signInWithEmailAndPassword(auth, details.email, details.password);
-        console.log( res.user.uid)
+        //console.log( res.user.uid)
         const docRef = doc(db, "users", res.user.uid);
         const d = await getDoc(docRef);
         // need to add details that need
@@ -287,7 +295,7 @@ export const updatesCurrentUser = async (data)=>{
     return true;
 }
 export const deleteCurrentUser = async (type,idRemove)=>{
-    await deleteFrom(auth.currentUser.uid,type,idRemove)
+    await deleteFrom(auth.currentUser.uid,type,idRemove,"array-contains")
 
 }
 // only exist doc
@@ -305,7 +313,7 @@ export const setIDDoc  = async (id,name_path,data)=>{
 }
 export const updateDocUser  = async (id,data)=>{
     if('idsMangeParents' in data){
-        console.log('in idsMangeParents')
+        //console.log('in idsMangeParents')
         if (await ifPatientExists(data.idsMangeParents)){
             const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(id)}
             await updateIDDoc(data.idsMangeParents, 'patients', patient_data)
@@ -337,19 +345,20 @@ export const updateDocUser  = async (id,data)=>{
         data.meetings= firebase.firestore.FieldValue.arrayUnion(data.meetings)
 
     }
-    console.log('before update doc')
-    console.log('id',id)
+    // console.log('before update doc')
+    // console.log('id',id)
     await updateIDDoc(id, 'users', data)
 
 }
 
 export const updateAccordingEmail  = async (email, data)=>{
-    console.log('in update by email')
+    //console.log('in update by email')
     const q = query(collection_query_users, where("email","==",email));
-    console.log('find email')
+    //console.log('find email')
     const querySnapshot = await getDocs(q);
-    console.log('find doc')
-    await updateDocUser(querySnapshot.docs[0].id, data)
+    //console.log('find doc')
+    if (querySnapshot.docs.length>0)
+        await updateDocUser(querySnapshot.docs[0].id, data)
 
 
     // querySnapshot.forEach((doc) => {
@@ -408,16 +417,16 @@ export const signOutFrom = function (){
         console.log('not signOutFrom')
     });
 }
-const deleteFrom= async (id,type,removeFrom) =>{
-    const q = query(collection_query_users, where(type,"array-contains",id));
+const deleteFrom= async (ob,type,removeFrom,opStr) =>{
+    const q = query(collection_query_users, where(type,opStr,ob));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach( (doc) => {
         console.log('id',doc.id)
         if (doc.id == removeFrom){
             // const washingtonRef = db.collection("users").doc(id.toString());
-            console.log(id)
+            console.log(ob)
             try{
-                const deleteId = firebase.firestore.FieldValue.arrayRemove(id)
+                const deleteId = firebase.firestore.FieldValue.arrayRemove(ob)
 
                 updateIDDoc(doc.id, 'users', {[type]: deleteId,
                 })
@@ -436,15 +445,12 @@ export const deleteDocFrom = async (id,type)=>{
      await deleteDoc(doc(db, type, id.toString()));
 
 }
-export const deletePatient = async (id,type,idRemoveFrom)=>{
+export const deletePatientFromInstitute = async (institute,removeOb,id)=>{
     // await deleteDoc(doc(db, "patients", id.toString()));
-    if (type == 'admin'){
-       //students_arr
-        console.log('remove from',idRemoveFrom)
-        await deleteFrom(id,'students_arr',idRemoveFrom)
-    }
-    // await deleteFrom(id,'idsMangeTherapist')
-    // await deleteFrom(id,'idsMangeParents')
+    console.log('remove from',removeOb)
+    await deleteFrom(removeOb,'students_arr',id,"array-contains")
+    const patient_data={['institutes.'+ institute]:firebase.firestore.FieldValue.delete()}
+    await updateIDDoc(removeOb.id, 'patients', patient_data)
 
 }
 //TODO: to check how remove user and when
@@ -467,4 +473,4 @@ export const deletePatient = async (id,type,idRemoveFrom)=>{
 //
 // }
 
-export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient,details_users,updateIDDoc,deleteDocFrom,deleteCurrentUser,allDetailsMeetings};
+export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail, deletePatientFromInstitute,details_users,updateIDDoc,deleteDocFrom,deleteCurrentUser,allDetailsMeetings};

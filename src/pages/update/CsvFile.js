@@ -1,10 +1,11 @@
 import React, {useState} from "react";
-
+import Papa from 'papaparse'
 
 export default function CsvFile({addNewPatient}){
     const [file, editFile] = useState(null)
     const submit = (event) => {
         event.preventDefault();
+        //console.log(file)
         if(file){
             parser(file,addNewPatient)
         }
@@ -12,30 +13,52 @@ export default function CsvFile({addNewPatient}){
 
     }
     function parser(file,f){
+        console.log(file)
+        let reader = new FileReader();
 
-        let data = file.data.toString()
+        reader.addEventListener('load', function (e) {
+            const allObj=[]
+            //let csvdata = e.target.result;
+            let arr =  Papa.parse(e.target.result).data
+            console.log(arr)
 
-        let arr= data.split("\n");
+            // let arr= data.split("\n");
 
-        let keys=arr[0].split(',');
-        let rows=arr.length;
-        let cols=keys.length;
+            let keys=arr[0]
+            console.log(keys)
+            let rows=arr.length;
+
+            let cols=keys.length;
 
 
 
-        let i,j=0;
-        for (i = 1; i < rows-1; i++) {
-            let line = arr[i].split(',');
-            let obj = {};
-            for (j = 0; j < cols; j++) {
+            let i,j=0;
+            for (i = 1; i < rows; i++) {
+                let line = arr[i];
+                if (line == '\n')
+                    continue
+                let obj = {};
 
-                let header =keys[j]
-                let value = line[j]
-                obj[header]=value
+                for (j = 0; j < cols; j++) {
+
+                    let header =keys[j]
+                    let value = line[j]
+                    obj[header]=value
+                }
+                console.log(obj)
+                // if(i==1){
+                //     f(obj)
+                // }
+                allObj.push(obj)
+
+
             }
-            f(obj)
+            f(allObj)
+            //editFile(null)
+            // parseCsv.getParsecsvdata(csvdata); // calling function for parse csv data
+        });
+        reader.readAsText(file)
 
-        }
 
 
     }
@@ -48,7 +71,8 @@ export default function CsvFile({addNewPatient}){
                         <table className="menu">
                             <tr>
                                 <td>
-                                    <input type="file" name="learnCSV" accept="text/csv" onChange={e=>editFile(e.target.value)}/>
+                                    <input type="file" name="learnCSV" accept="text/csv" onChange={e=>{editFile(e.target.files[0])
+                                    console.log('change')}}/>
                                 </td>הכנס/הסר תלמידים
 
                             </tr>

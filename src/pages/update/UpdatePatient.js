@@ -8,7 +8,7 @@ import {addUserFromAdmin, deletePatientFromInstitute, details_users, updatesPati
 import "./UpdatePatient.css"
 import CsvFile from "./CsvFile";
 
-export default  function UpdatePatient({data,new_patients}) {
+export default  function UpdatePatient({update,data,new_patients}) {
 
     console.log(data)
     const [detailsPatients,setDetailsPatients] = useState({id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:""});
@@ -24,32 +24,15 @@ export default  function UpdatePatient({data,new_patients}) {
     });
     const handleEditFormChange = (event) => {
         event.preventDefault();
-
         const fieldName = event.target.getAttribute("name");
         const fieldValue = event.target.value;
-
         const newFormData = {...editFormData};
         newFormData[fieldName] = fieldValue;
-        console.log('Changeeeeeeeeeeee',fieldName,fieldValue)
-        //editContactId
-        // updatesPatients(editContactId,{[fieldName]:fieldValue})
         setEditFormData(newFormData)
-        console.log('Changeeeeeeeeeeee',newFormData)
     };
     const handleCancelClick = () => {
         setEditContactId(null);
     };
-//     const handleAddFormChange = (event) => {
-//         event.preventDefault();
-//
-//         const fieldName = event.target.getAttribute("name");
-//         const fieldValue = event.target.value;
-//
-//         const newFormData = { ...addFormData };
-//         newFormData[fieldName] = fieldValue;
-//
-//         setAddFormData(newFormData);
-//       };
     const handleEditClick = (event, contact) => {
         event.preventDefault();
         setEditContactId(contact.id);
@@ -80,27 +63,13 @@ export default  function UpdatePatient({data,new_patients}) {
 
     const handleEditFormSubmit = (event) => {
         event.preventDefault();
-
-        const editedContact = {
-            id: editContactId,
-            firstName: editFormData.firstName,
-            lastName: editFormData.lastName,
-            dateOfBirth:editFormData.dateOfBirth
-            ,
-            city:editFormData.city,street:editFormData.street,buildingNumber:editFormData.buildingNumber,
-            // phoneNumber: editFormData.phoneNumber,
-            // email: editFormData.email,
-        };
-
+        const editedContact=Object.assign({}, editFormData,{id: editContactId})
         const newContacts = [...contacts];
-
         const index = contacts.findIndex((contact) => contact.id === editContactId);
-
-        newContacts[index] = editedContact;
-
-        setContacts(newContacts);
-        setEditContactId(null);
-        updatesPatients(editContactId,editedContact)
+        newContacts[index] = editedContact
+        setContacts(newContacts)
+        setEditContactId(null)
+        update(editContactId,editedContact)
         console.log('change',contacts)
     };
     const addNewPatient =allDetails => {
@@ -156,6 +125,7 @@ export default  function UpdatePatient({data,new_patients}) {
     };
     const submitNewTherapist = (event) => {
         event.preventDefault()
+        detailsTherapist.jobs =detailsTherapist.jobs.split(",")
         addUserFromAdmin(detailsTherapist,data.emailCurrent,
             data.passwordCurrent,"works")
     }
@@ -194,15 +164,48 @@ export default  function UpdatePatient({data,new_patients}) {
                                                { contact!==undefined && editContactId === contact.id ? (
                                                    <EditableRow
                                                        contact={contact}
-                                                       editFormData={editFormData}
+                                                       /*editFormData={editFormData}*/
                                                        handleEditFormChange={handleEditFormChange}
                                                        handleCancelClick={handleCancelClick}
+                                                       inputs={[{type:"text",required:"required",
+                                                           placeholder:"Enter a first name..."
+                                                           ,name:"firstName"
+                                                           ,value:editFormData.firstName,
+                                                           },{type:"text",required:"required",
+                                                           placeholder:"Enter a last name..."
+                                                           ,name:"lastName"
+                                                           ,value:editFormData.lastName,
+                                                       },
+                                                           {type:"date",required:"required",
+                                                               placeholder:"Enter a birth day..."
+                                                               ,name:"dateOfBirth"
+                                                               ,value:editFormData.dateOfBirth,
+                                                           },
+                                                           {type:"text",required:"required",
+                                                               placeholder:"Enter a last city..."
+                                                               ,name:"city"
+                                                               ,value:editFormData.city,
+                                                           },
+                                                           {type:"text",required:"required",
+                                                               placeholder:"Enter a last street..."
+                                                               ,name:"street"
+                                                               ,value:editFormData.street,
+                                                           },
+                                                           {type:"text",required:"required",
+                                                               placeholder:"Enter a last buildingNumber..."
+                                                               ,name:"buildingNumber"
+                                                               ,value:editFormData.buildingNumber,
+                                                           }
+                                                       ]}
+
                                                    />
                                                ) : (contact!==undefined)?(
                                                    <ReadOnlyRow
                                                        contact={contact}
                                                        handleEditClick={handleEditClick}
                                                        handleDeleteClick={handleDeleteClick}
+                                                       namesFiled={['id','firstName','lastName','dateOfBirth',
+                                                           'city','street','buildingNumber']}
                                                    />
                                                    ):
                                                    <div>

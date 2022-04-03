@@ -2,6 +2,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 const EditableRow = ({
                             contact,
+                         editFormData,
                          inputs,
                          handleEditFormChange,
                          handleCancelClick,
@@ -18,7 +19,7 @@ const EditableRow = ({
                             required={i.required}
                             placeholder={i.placeholder}
                             name={i.name}
-                            value={i.value}
+                            value={editFormData[i.name]}
                             onChange={handleEditFormChange}
                         ></input>
                         </td>

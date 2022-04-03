@@ -1,15 +1,21 @@
 import React from "react";
 
 const ReadOnlyRow = ({ contact, handleEditClick, handleDeleteClick,namesFiled }) => {
-//     console.log('ReadOnlyRow',contact)
+    console.log('ReadOnlyRow',contact)
+    console.log('ReadOnlyRow',namesFiled)
+    namesFiled.map((f) => (
+
+        console.log(contact[f])
+    ))
   return (
     <tr>
-    {
-        namesFiled.map((f) => (
+        <td>{contact.id}</td>
+        {
+            namesFiled.map((f) => (
 
-            <td>{contact[f]}</td>
-        ))
-    }
+                <td>{contact[f]}</td>
+            ))
+        }
       <td>
         <button
           type="button"

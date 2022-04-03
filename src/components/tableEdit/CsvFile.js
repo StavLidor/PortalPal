@@ -1,13 +1,20 @@
 import React, {useState} from "react";
 import Papa from 'papaparse'
 
-export default function CsvFile({addNewPatient}){
+export default function CsvFile({addNews,remove}){
     const [file, editFile] = useState(null)
+    const [type, editType] = useState("add")
     const submit = (event) => {
         event.preventDefault();
         //console.log(file)
         if(file){
-            parser(file,addNewPatient)
+            if (type == 'add'){
+                parser(file,addNews)
+            }
+            else {
+                parser(file,remove)
+            }
+
         }
 
 
@@ -74,6 +81,12 @@ export default function CsvFile({addNewPatient}){
                                     <input type="file" name="learnCSV" accept="text/csv" onChange={e=>{editFile(e.target.files[0])
                                     console.log('change')}}/>
                                 </td>הכנס/הסר תלמידים
+                                <td>
+                                <select type="text" name="type" id="type" onChange={e=> editType(e.target.value)} value={type} >
+                                    <option value="add">הוסף</option>
+                                    <option value="delete">הסר</option>
+                                </select>
+                                </td>
 
                             </tr>
                             <tr>
@@ -83,19 +96,6 @@ export default function CsvFile({addNewPatient}){
                             </tr>
                         </table>
                     </td>
-                    {/*<td>*/}
-                    {/*    <select datatype="sel" name="algorithmSelect">*/}
-                    {/*        <option value="newStudent" selected>תלמדים חדשים</option>*/}
-                    {/*        <option value="newEmployee">עובד חדש</option>*/}
-                    {/*    </select>*/}
-                    {/*</td>*/}
-                    {/*<td>*/}
-                    {/*    <div style="margin-left: 50px">*/}
-                    {/*        <p id="instructionsText"><u>Instructions:</u></p>*/}
-                    {/*        <p style="margin-left: 20px"> </p>*/}
-
-                    {/*    </div>*/}
-                    {/*</td>*/}
                 </tr>
             </table>
         </form>

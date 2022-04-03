@@ -181,7 +181,7 @@ export const addPatient = async details=>{
     try {
         console.log('add a patient')
 
-        // maybe in this case update details? add more institute?
+        // maybe in this case tableEdit details? add more institute?
         if ((await getDocs(query(collection_query_patients, where("id", "==", details.id)))).docs.length>0){
             return false
         }
@@ -264,7 +264,7 @@ export const signIfUserExists = async details=>{
     }
 }
 
-// TODO: update user and patient(change one of the details,delete from therapist a patient)
+// TODO: tableEdit user and patient(change one of the details,delete from therapist a patient)
 
 export const updatesPatients = async (id,data)=>{
     await updateIDDoc(id, 'patients', data)
@@ -359,14 +359,14 @@ export const updateDocUser  = async (id,data)=>{
         data.meetings= firebase.firestore.FieldValue.arrayUnion(data.meetings)
 
     }
-    // console.log('before update doc')
+    // console.log('before tableEdit doc')
     // console.log('id',id)
     await updateIDDoc(id, 'users', data)
 
 }
 
 export const updateAccordingEmail  = async (email, data)=>{
-    //console.log('in update by email')
+    //console.log('in tableEdit by email')
     const q = query(collection_query_users, where("email","==",email));
     //console.log('find email')
     const querySnapshot = await getDocs(q);
@@ -378,7 +378,7 @@ export const updateAccordingEmail  = async (email, data)=>{
     // querySnapshot.forEach((doc) => {
     //     // need to see how to do this.
     //     // its depentes of Permissions
-    //     console.log('id for update',doc.id)
+    //     console.log('id for tableEdit',doc.id)
     //     if ('email' in data){
     //
     //     }
@@ -411,7 +411,7 @@ export const updateAccordingEmail  = async (email, data)=>{
     //     // const washingtonRef = db.collection("cities").doc("DC");
     //     //
     //     // // Atomically add a new region to the "regions" array field.
-    //     // washingtonRef.update({
+    //     // washingtonRef.tableEdit({
     //     //     regions: firebase.firestore.FieldValue.arrayUnion("greater_virginia")
     //     // });
     //     //
@@ -479,7 +479,7 @@ export const deletePatientFromInstitute = async (institute,removeOb,id)=>{
 //     querySnapshot.forEach( (doc) => {
 //
 //         const washingtonRef = db.collection("patients").doc(id.toString());
-//         washingtonRef.update({
+//         washingtonRef.tableEdit({
 //             regions: firebase.firestore.FieldValue.arrayRemove("east_coast")
 //         });
 //

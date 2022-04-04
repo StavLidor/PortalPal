@@ -1,4 +1,4 @@
-import {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient,details_users} from "../../firebase";
+import {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail,deletePatient,detailsPatient} from "../../firebase";
 
 
 export const newUser=async details=>{
@@ -49,4 +49,4 @@ export const newPatients= async details=>{
 export const unSignUser= function (){
     signOutFrom()
 }
-export default {newUser,signUser,unSignUser,newPatients,details_users}
+export default {newUser,signUser,unSignUser,newPatients,detailsPatient}

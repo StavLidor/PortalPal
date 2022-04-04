@@ -7,16 +7,17 @@ import {newUser,newPatients} from "../../pepole/users/user";
 import Home from "../home/Home";
 import {signUser} from "../../pepole/users/user";
 import {signOut} from "firebase/auth";
-import {auth, details_users, updateIDDoc, updatesPatients,deletePatientFromInstitute} from "../../firebase";
+import {auth, updateIDDoc, updatesPatients,deletePatientFromInstitute} from "../../firebase";
 import TableEdit from "../../components/tableEdit/TableEdit";
 // import {details_users} from "../../firebase"
 
 export default function Secretary({data}){
-    const deleteObj = async (id)=>{
+
+    const deleteObjPatient = async (id)=>{
         await deletePatientFromInstitute(data.institutionNumber,{id:id,jobs:['secretary']},data.id)
         //
     }
-    const add = async (details)=>{
+    const addPatient = async (details)=>{
         await newPatients(Object.assign({}, {
             institutionNumber: data.institutionNumber, idSecretary: data.id, emailCurrent: data.emailCurrent,
             passwordCurrent: data.passwordCurrent
@@ -24,7 +25,7 @@ export default function Secretary({data}){
         //
     }
     console.log(data)
-    const inputsView =[{type:"text",required:"required",
+    const inputsViewPatient =[{type:"text",required:"required",
         placeholder:"Enter a first name..."
         ,name:"firstName",label:"שם פרטי:"
         /*,value:editFormData.firstName,*/
@@ -54,7 +55,37 @@ export default function Secretary({data}){
             /*,value:editFormData.buildingNumber*/,
         }
     ]
-    const inputsNew= inputsView.concat([
+    const inputsViewTherapist =[{type:"text",required:"required",
+        placeholder:"Enter a first name..."
+        ,name:"firstName",label:"שם פרטי:"
+        /*,value:editFormData.firstName,*/
+    },{type:"text",required:"required",
+        placeholder:"Enter a last name..."
+        ,name:"lastName",label:"שם משפחה:"
+        /*,value:editFormData.lastName,*/
+    },
+
+        {type:"text",required:"required",
+            placeholder:"Enter a last city..."
+            ,name:"jobs",label:"עבודות:"
+            /*,value:editFormData.city*/,
+        }
+
+    ]
+
+    const inputsNewTherapist= inputsViewTherapist.concat([
+        {type:"text",required:"required"
+            ,name:"firstNameParent",label:"שם פרטי מטפל:"
+        },
+        {type:"text",required:"required"
+            ,name:"lastNameParent",label:"שם משפחה מטפל:"
+        },
+        {type:"email",required:"required"
+            ,name:"email",label:"איימיל של מטפל:"
+        }
+
+    ])
+    const inputsNewPatient= inputsViewPatient.concat([
         {type:"text",required:"required"
             ,name:"firstNameParent",label:"שם פרטי הורה:"
         },
@@ -67,6 +98,7 @@ export default function Secretary({data}){
 
     ])
 
+
     return(
         <div className="secretary">
             <div>
@@ -74,13 +106,17 @@ export default function Secretary({data}){
                     עמוד מזכירה!
                 </h2>
                 {/*<RegistrationFromUser new_user={newUser}/>*/}
-                <TableEdit add ={add} update ={updatesPatients} deleteObj={deleteObj}
+                <TableEdit add ={addPatient} update ={updatesPatients} deleteObj={deleteObjPatient}
                            emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:""}} emptyEditDetails={{firstName: "",
                     lastName: "",
                     dateOfBirth:new Date()
                     ,city:"",street:"",buildingNumber:"",}} data={data.students_arr} HebrewNames={[
                     "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב"]
-                } inputsView={inputsView} inputsNew={inputsNew}/>
+                } inputsView={inputsViewPatient} inputsNew={inputsNewPatient} requeredId={true}/>
+                <TableEdit /*add ={} update ={} deleteObj={}*/
+                           emptyDetails={{id:"",firstName:"",lastName:"",jobs:[]}} emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={data.works} HebrewNames={[
+                    "שם פרטי","שם משפחה","עבודות"]
+                } inputsView={inputsViewTherapist} inputsNew={inputsNewTherapist} requeredId={false}/>
                 {/*<RegistrationFromPatient data={data} new_patients={newPatients}/>*/}
             </div>
         </div>

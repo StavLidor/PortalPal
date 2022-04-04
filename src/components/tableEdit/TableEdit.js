@@ -1,19 +1,28 @@
 
 
-import React, { useState, Fragment } from "react"
+import React, { useState, Fragment,useEffect } from "react"
 import "react-datepicker/dist/react-datepicker.css"
 import ReadOnlyRow from "./ReadOnlyRow"
 import EditableRow from "./EditableRow"
 import "./tableEdit.css"
 import CsvFile from "./CsvFile"
+import {allMeetingOf} from "../../meetingSummaries/database/Database";
 
-export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditDetails,data,HebrewNames,inputsView,inputsNew}) {
+export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditDetails,data,HebrewNames,inputsView,inputsNew,requeredId}) {
 
     const [detailsNew,setDetailsNew] = useState(emptyDetails);
-    const [contacts, setContacts] = useState(data);
+    const [contacts, setContacts] = useState([]);
     // const [detailsTherapist,setDetailsTherapist]=useState({firstName:"",lastName:"",email:"",jobs:"",institutes:[data.institutionNumber]})
     const [editContactId, setEditContactId] = useState(null);
     const [editFormData, setEditFormData] = useState(emptyEditDetails)
+    useEffect(()=>{
+        const p1 = Promise.resolve(data)
+        p1.then(arr=> {
+            setContacts(arr)
+        })
+
+
+    },[])
     const handleEditFormChange = (event) => {
         event.preventDefault();
         const fieldName = event.target.getAttribute("name");
@@ -66,14 +75,21 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
     const remove =allDetails => {
         //console.log('new patinet for csv')
         const newContacts = [...contacts]
+        const removeIndexs=[]
         allDetails.map(async (details) => {
+
                 const index = contacts.findIndex((contact) => contact.id === details.id)
+                removeIndexs.push(index)
+                console.log(index)
                 newContacts.splice(index, 1)
-                setContacts(newContacts)
+
                 await deleteObj(details.id)
             }
 
         )
+        removeIndexs.map((i)=>{
+            newContacts.splice(i, 1)
+        })
         setContacts(newContacts)
     }
     const submitAdd = (event) => {
@@ -130,6 +146,7 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
                                                        handleEditFormChange={handleEditFormChange}
                                                        handleCancelClick={handleCancelClick}
                                                        inputs={inputsView}
+                                                       requeredId={requeredId}
 
                                                    />
                                                ) : (contact!==undefined)?(
@@ -140,6 +157,7 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
                                                        // namesFiled={['firstName','lastName','dateOfBirth',
                                                        //     'city','street','buildingNumber']}
                                                        namesFiled={Object.keys(emptyEditDetails)}
+                                                       requeredId={requeredId}
                                                    />
                                                    ):
                                                    <div>
@@ -159,10 +177,13 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
                                        <h2>
                                            חדש
                                        </h2>
-                           <div className="form-group">
-                               <label htmlFor="id">תעודות זהות:</label>
-                               <input type="number" name="id" id="id" onChange={e=>setDetailsNew({...detailsNew,id:e.target.value})} value={detailsNew.id}/>
-                           </div>
+                           {requeredId &&
+                               <div className="form-group">
+                                   <label htmlFor="id">תעודות זהות:</label>
+                                   <input type="number" name="id" id="id" onChange={e=>setDetailsNew({...detailsNew,id:e.target.value})} value={detailsNew.id}/>
+                               </div>
+                           }
+
                            {
                                inputsNew.map((i) => (
                                    <div className="form-group">

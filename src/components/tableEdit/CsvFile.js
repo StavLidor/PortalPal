@@ -80,7 +80,7 @@ export default function CsvFile({addNews,remove}){
                                 <td>
                                     <input type="file" name="learnCSV" accept="text/csv" onChange={e=>{editFile(e.target.files[0])
                                     console.log('change')}}/>
-                                </td>הכנס/הסר תלמידים
+                                </td>הכנס/הסר
                                 <td>
                                 <select type="text" name="type" id="type" onChange={e=> editType(e.target.value)} value={type} >
                                     <option value="add">הוסף</option>

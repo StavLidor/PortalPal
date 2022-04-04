@@ -3,7 +3,7 @@ import React,{useState} from "react";
 import Home from "../../pages/home/Home";
 import {signUser, unSignUser,newUser} from "../../pepole/users/user";
 import {signOut} from "firebase/auth";
-import {auth, details_users,resetPassword} from "../../firebase";
+import {auth, detailsPatient, detailsWorks, resetPassword} from "../../firebase";
 
 
 export default function LoginFrom(){
@@ -11,7 +11,8 @@ export default function LoginFrom(){
     const [detailsNewUser,setDetailsNewUser] = useState({name:"",/*type:"therapist",*/email:"",password:"",/*patients:""*/});
     const [isMovePage,setIsMovePage] = useState(false);
     const [isFormNewUser,setFormNewUser] = useState(false);
-    const [info,setInfo] = useState({name:""});
+    const [info,setInfo] = useState({id:'',name:'',students_arr:[],myDoc:'',emailCurrent:'',
+        passwordCurrent:'',institutionNumber:'',works:[]});
     // if (login){
     //     setIsMovePage(true)
     // }
@@ -23,16 +24,31 @@ export default function LoginFrom(){
             const data = doc.data()
             const id = doc.id
             console.log('lalalala')
-            if (details.type === 'admin'||details.type === 'therapist'){
-                const arr=details_users(data.students_arr)
-                const p1 = Promise.resolve(arr)
-                p1.then(value2 => {
+            if (details.type === 'admin'/*||details.type === 'therapist'*/){
+                const arrStudents=detailsPatient(data.students_arr)
+                const arrWorks=detailsWorks(data.works)
+                setInfo({id:id,name:data.name,students_arr:arrStudents,myDoc:doc,emailCurrent:details.email,
+                    passwordCurrent:details.password,institutionNumber:data.institutionNumber,works:arrWorks})
 
-                    setInfo({id:id,name:data.name,students_arr:value2,myDoc:doc,emailCurrent:details.email,
-                        passwordCurrent:details.password,institutionNumber:data.institutionNumber})
+
+                // const p1 = Promise.resolve(arrStudents)
+                // const p2 = Promise.resolve(arrWorks)
+
+                // p1.then(v1=> {
+                //     p2.then(v2 => {
+                //
+                //         setInfo({id:id,name:data.name,students_arr:v1,myDoc:doc,emailCurrent:details.email,
+                //             passwordCurrent:details.password,institutionNumber:data.institutionNumber,works:v2})
+                //         console.log('After p2 info',info)
+                //         // setInfo({id:id,name:data.name,patients:value2,myDoc:doc})
+                //
+                //     })
+                    // setInfo({...info,students_arr:v1})
+                    // console.log('After p1 info',info)
                     // setInfo({id:id,name:data.name,patients:value2,myDoc:doc})
 
-                });
+               // })
+
                 console.log('institutionNumber',data.institutionNumber)
             }
             // else if (details.type === 'therapist'){

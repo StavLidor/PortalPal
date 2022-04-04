@@ -1,6 +1,6 @@
 import React from "react";
 
-const ReadOnlyRow = ({ contact, handleEditClick, handleDeleteClick,namesFiled }) => {
+const ReadOnlyRow = ({ contact, handleEditClick, handleDeleteClick,namesFiled,requeredId }) => {
     console.log('ReadOnlyRow',contact)
     console.log('ReadOnlyRow',namesFiled)
     namesFiled.map((f) => (
@@ -9,7 +9,8 @@ const ReadOnlyRow = ({ contact, handleEditClick, handleDeleteClick,namesFiled })
     ))
   return (
     <tr>
-        <td>{contact.id}</td>
+        {requeredId && <td>{contact.id}</td>}
+
         {
             namesFiled.map((f) => (
 

@@ -6,10 +6,12 @@ const EditableRow = ({
                          inputs,
                          handleEditFormChange,
                          handleCancelClick,
+                         requeredId
                      }) => {
     return (
         <tr>
-            <td>{contact.id}</td>
+            {requeredId && <td>{contact.id}</td>}
+
 
                 {
                     inputs.map((i) => (

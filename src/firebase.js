@@ -131,7 +131,33 @@ const ifPatientExists = async id=>{
     return false
 
 }
-export const  details_users= async arr_id =>{
+export const  detailsWorks= async arr_id =>{
+    // console.log(arr_id)
+    let arr_data =[]
+
+
+    for (const id of arr_id) {
+        // console.log(id)
+        try {
+            let docRef = doc(db, "users", id);
+            let d =  await getDoc(docRef);
+            // maybe add the job
+            arr_data.push({...d.data(),id:id})
+        }
+        catch (err){
+            console.log('err in ',detailsWorks)
+
+        }
+
+
+        // console.log(d.data())
+
+
+    }
+    //console.log('ALL',arr_data)
+    return arr_data
+}
+export const  detailsPatient= async arr_id =>{
     // console.log(arr_id)
     let arr_data =[]
 
@@ -153,7 +179,7 @@ export const  details_users= async arr_id =>{
 
 
     }
-    console.log('ALL',arr_data)
+    //console.log('ALL',arr_data)
     return arr_data
 }
 export const allDetailsMeetings = async (id)=>{
@@ -487,5 +513,5 @@ export const deletePatientFromInstitute = async (institute,removeOb,id)=>{
 //
 // }
 
-export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail, deletePatientFromInstitute,details_users,updateIDDoc,deleteDocFrom,
+export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail, deletePatientFromInstitute,detailsPatient,updateIDDoc,deleteDocFrom,
     deleteCurrentUser,allDetailsMeetings,addUserFromAdmin};

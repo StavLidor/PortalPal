@@ -119,7 +119,7 @@ export const addUserFromAdmin= async (details,emailCurrent,passwordCurrent,nameF
     p.then(async id => {
         await updatesCurrentUser({[nameFiled]:id})
     })
-
+    return uid_user
 
 }
 
@@ -294,6 +294,10 @@ export const signIfUserExists = async details=>{
 
 export const updatesPatients = async (id,data)=>{
     await updateIDDoc(id, 'patients', data)
+    //
+}
+export const updatesUser = async (id,data)=>{
+    await updateIDDoc(id, 'users', data)
     //
 }
 // this moment current user don't can to add patient

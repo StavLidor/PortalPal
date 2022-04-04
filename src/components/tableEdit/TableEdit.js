@@ -6,7 +6,7 @@ import ReadOnlyRow from "./ReadOnlyRow"
 import EditableRow from "./EditableRow"
 import "./tableEdit.css"
 import CsvFile from "./CsvFile"
-import {allMeetingOf} from "../../meetingSummaries/database/Database";
+
 
 export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditDetails,data,HebrewNames,inputsView,inputsNew,requeredId}) {
 
@@ -92,29 +92,37 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
         })
         setContacts(newContacts)
     }
+    const addToContacts=(details)=>{
+        const newContacts = [...contacts]
+        newContacts[contacts.length]= details
+        setContacts(newContacts)
+    }
     const submitAdd = (event) => {
         event.preventDefault();
-        const newContacts = [...contacts];
-        const index = contacts.findIndex((contact) => contact.id === detailsNew.id);
-        if(index<0){
-
-            add(detailsNew);
-             newContacts[contacts.length]= detailsNew
+        if(!requeredId){
+            const p=Promise.resolve(add(detailsNew))
+            p.then(async id => {
+                if(id){
+                    addToContacts({...detailsNew,id:id})
+                }
+            })
         }
         else {
-        // mybe can not change the informtion need to think about
-            newContacts[index] = detailsNew
+            const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
+            if(index<0){
+
+                add(detailsNew)
+                addToContacts(detailsNew)
+            }
+            else {
+                // mybe can not change the informtion need to think about
+                //newContacts[index] = detailsNew
+            }
+
         }
-        setContacts(newContacts);
         setEditContactId(null);
         setDetailsNew(emptyDetails)
     };
-    // const submitNewTherapist = (event) => {
-    //     event.preventDefault()
-    //     detailsTherapist.jobs =detailsTherapist.jobs.split(",")
-    //     addUserFromAdmin(detailsTherapist,data.emailCurrent,
-    //         data.passwordCurrent,"works")
-    // }
     return (
            <div>
                <CsvFile addNews={addNews} remove={remove}/>
@@ -203,32 +211,7 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
 
                                        <input type="submit" value="הוסף"/>
                                    </form>
-               {/*<form onSubmit={submitNewTherapist}>*/}
-               {/*    <h2>*/}
-               {/*        מטפל בית ספרי*/}
-               {/*    </h2>*/}
-               {/*    <div className="form-group" >*/}
-               {/*        <label htmlFor="firstName">שם פרטי:</label>*/}
-               {/*        <input type="text" name="firstName" id="firstName" onChange={e=>setDetailsTherapist({...detailsTherapist,firstName:e.target.value})} value={detailsTherapist.firstName}/>*/}
-               {/*    </div>*/}
-               {/*    <div className="form-group" >*/}
-               {/*        <label htmlFor="lastName">שם משפחה:</label>*/}
-               {/*        <input type="text" name="lastName" id="lastName" onChange={e=>setDetailsTherapist({...detailsTherapist,lastName:e.target.value})} value={detailsTherapist.lastName} />*/}
-               {/*    </div>*/}
-               {/*    <div className="form-group">*/}
-               {/*        <label htmlFor="email">איימיל:</label>*/}
-               {/*        <input type="email" name="email" id="email" onChange={e=>setDetailsTherapist({...detailsTherapist,email:e.target.value})} value={detailsTherapist.email} />*/}
-               {/*    </div>*/}
-               {/*    <div className="form-group">*/}
-               {/*        <label htmlFor="jobs">תפקידים</label>*/}
-               {/*        <input type="jobs" name="jobs" id="jobs" onChange={e=>setDetailsTherapist({...detailsTherapist,jobs:e.target.value})} value={detailsTherapist.jobs}/>*/}
-               {/*    </div>*/}
-               {/*    <input type="submit" value="מטפל בית ספרי הוספה"/>*/}
-               {/*</form>*/}
+
            </div>
-
-
-
-
     )
 }

@@ -7,7 +7,14 @@ import {newUser,newPatients} from "../../pepole/users/user";
 import Home from "../home/Home";
 import {signUser} from "../../pepole/users/user";
 import {signOut} from "firebase/auth";
-import {auth, updateIDDoc, updatesPatients,deletePatientFromInstitute} from "../../firebase";
+import {
+    auth,
+    updateIDDoc,
+    updatesPatients,
+    deletePatientFromInstitute,
+    addUserFromAdmin,
+    updatesUser
+} from "../../firebase";
 import TableEdit from "../../components/tableEdit/TableEdit";
 // import {details_users} from "../../firebase"
 
@@ -23,6 +30,11 @@ export default function Secretary({data}){
             passwordCurrent: data.passwordCurrent
         }, details))
         //
+    }
+    const addTherapist = async(details) => {
+        details.jobs =details.jobs.split(",")
+        return await addUserFromAdmin({...details,institution: [data.institutionNumber]},data.emailCurrent,
+            data.passwordCurrent,"works")
     }
     console.log(data)
     const inputsViewPatient =[{type:"text",required:"required",
@@ -74,12 +86,6 @@ export default function Secretary({data}){
     ]
 
     const inputsNewTherapist= inputsViewTherapist.concat([
-        {type:"text",required:"required"
-            ,name:"firstNameParent",label:"שם פרטי מטפל:"
-        },
-        {type:"text",required:"required"
-            ,name:"lastNameParent",label:"שם משפחה מטפל:"
-        },
         {type:"email",required:"required"
             ,name:"email",label:"איימיל של מטפל:"
         }
@@ -113,8 +119,8 @@ export default function Secretary({data}){
                     ,city:"",street:"",buildingNumber:"",}} data={data.students_arr} HebrewNames={[
                     "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב"]
                 } inputsView={inputsViewPatient} inputsNew={inputsNewPatient} requeredId={true}/>
-                <TableEdit /*add ={} update ={} deleteObj={}*/
-                           emptyDetails={{id:"",firstName:"",lastName:"",jobs:[]}} emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={data.works} HebrewNames={[
+                <TableEdit add ={addTherapist} update ={updatesUser} /*deleteObj={}*/
+                           emptyDetails={{id:"",firstName:"",lastName:"",jobs:[],email:""}} emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={data.works} HebrewNames={[
                     "שם פרטי","שם משפחה","עבודות"]
                 } inputsView={inputsViewTherapist} inputsNew={inputsNewTherapist} requeredId={false}/>
                 {/*<RegistrationFromPatient data={data} new_patients={newPatients}/>*/}

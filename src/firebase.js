@@ -394,61 +394,22 @@ export const updateDocUser  = async (id,data)=>{
     await updateIDDoc(id, 'users', data)
 
 }
+export const findUserByEmail=async (email)=>{
 
+    const q = query(collection_query_users, where("email","==",email))
+    const querySnapshot = await getDocs(q)
+    if (querySnapshot.docs.length>0){
+        return querySnapshot.docs[0].id
+    }
+}
 export const updateAccordingEmail  = async (email, data)=>{
     //console.log('in tableEdit by email')
-    const q = query(collection_query_users, where("email","==",email));
-    //console.log('find email')
-    const querySnapshot = await getDocs(q);
-    //console.log('find doc')
-    if (querySnapshot.docs.length>0)
-        await updateDocUser(querySnapshot.docs[0].id, data)
-
-
-    // querySnapshot.forEach((doc) => {
-    //     // need to see how to do this.
-    //     // its depentes of Permissions
-    //     console.log('id for tableEdit',doc.id)
-    //     if ('email' in data){
-    //
-    //     }
-    //     // its depentes of Permissions
-    //     if ('password' in data){
-    //
-    //     }
-    //     // updateDocUser(doc,data)
-    //     if('idsMangeParents' in data){
-    //         const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(doc.id)}
-    //         updateIDDoc(data.idsMangeParents, 'patients', patient_data)
-    //         data.idsMangeParents = firebase.firestore.FieldValue.arrayUnion(data.idsMangeParents)
-    //
-    //     }
-    //     if('idsMangeTherapist' in data){
-    //         const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(doc.id)}
-    //         updateIDDoc(data.idsMangeTherapist, 'patients', patient_data)
-    //         data.idsMangeTherapist = firebase.firestore.FieldValue.arrayUnion(data.idsMangeTherapist)
-    //
-    //     }
-    //     // if ('idPatient' in data){
-    //     //     const patient_data={[job]:firebase.firestore.FieldValue.arrayUnion(doc.id)}
-    //     //     updateIDDoc(data.idPatient, 'patients', patient_data)
-    //     //     // the data.ids in only one value
-    //     //     data.ids = firebase.firestore.FieldValue.arrayUnion(data.idPatient)
-    //     //
-    //     //
-    //     // }
-    //
-    //     // const washingtonRef = db.collection("cities").doc("DC");
-    //     //
-    //     // // Atomically add a new region to the "regions" array field.
-    //     // washingtonRef.tableEdit({
-    //     //     regions: firebase.firestore.FieldValue.arrayUnion("greater_virginia")
-    //     // });
-    //     //
-    //
-    //     updateIDDoc(doc.id, 'users', data)
-    //
-    // });
+    // const q = query(collection_query_users, where("email","==",email));
+    // //console.log('find email')
+    // const querySnapshot = await getDocs(q);
+    // //console.log('find doc')
+    // if (querySnapshot.docs.length>0)
+    await updateDocUser(await findUserByEmail(email), data)
 
 
 }

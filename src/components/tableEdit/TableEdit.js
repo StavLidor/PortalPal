@@ -8,7 +8,7 @@ import "./tableEdit.css"
 import CsvFile from "./CsvFile"
 
 
-export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditDetails,data,HebrewNames,inputsView,inputsNew,requeredId}) {
+export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditDetails,data,HebrewNames,inputsView,requeredId,find}) {
 
     const [detailsNew,setDetailsNew] = useState(emptyDetails);
     const [contacts, setContacts] = useState([]);
@@ -79,13 +79,24 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
         const newContacts = [...contacts]
         const removeIndexs=[]
         allDetails.map(async (details) => {
+            let id=""
+            if(requeredId){
+                id=details.id
+            }
+            else {
+                id= await find(details)
+                // const p=Promise.resolve(id)
+                // p.then(async id => {
+                //     if(id){
+                //         handleDeleteClick(id)
+                //     }
+                // })
+            }
+            const index = contacts.findIndex((contact) => contact.id === id)
+            removeIndexs.push(index)
+            console.log(index)
+            await deleteObj(id)
 
-                const index = contacts.findIndex((contact) => contact.id === details.id)
-                removeIndexs.push(index)
-                console.log(index)
-                newContacts.splice(index, 1)
-
-                await deleteObj(details.id)
             }
 
         )
@@ -166,7 +177,7 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
                                                        handleDeleteClick={handleDeleteClick}
                                                        // namesFiled={['firstName','lastName','dateOfBirth',
                                                        //     'city','street','buildingNumber']}
-                                                       namesFiled={Object.keys(emptyEditDetails)}
+                                                       namesFiled={Object.keys(emptyDetails)}
                                                        requeredId={requeredId}
                                                    />
                                                    ):
@@ -195,7 +206,7 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
                            }
 
                            {
-                               inputsNew.map((i) => (
+                               inputsView.map((i) => (
                                    <div className="form-group">
                                        <label htmlFor="name">{i.label}</label>
                                        <input

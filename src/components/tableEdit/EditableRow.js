@@ -16,15 +16,20 @@ const EditableRow = ({
                 {
                     inputs.map((i) => (
                         <td>
-                        <input
-                            type={i.type}
-                            required={i.required}
-                            placeholder={i.placeholder}
-                            name={i.name}
-                            value={editFormData[i.name]}
-                            onChange={handleEditFormChange}
-                        ></input>
+                            {i.edit ===true &&
+                                <input
+                                    type={i.type}
+                                    required={i.required}
+                                    placeholder={i.placeholder}
+                                    name={i.name}
+                                    value={editFormData[i.name]}
+                                    onChange={handleEditFormChange}
+                                ></input>
+
+                            }
+                            {i.edit ===false && contact[i.name]}
                         </td>
+
 
                     ))
                 }

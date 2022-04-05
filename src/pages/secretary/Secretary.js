@@ -13,7 +13,7 @@ import {
     updatesPatients,
     deletePatientFromInstitute,
     addUserFromAdmin,
-    updatesUser, deleteTherapistFromInstitute
+    updatesUser, deleteTherapistFromInstitute, findUserByEmail
 } from "../../firebase";
 import TableEdit from "../../components/tableEdit/TableEdit";
 // import {details_users} from "../../firebase"
@@ -25,8 +25,13 @@ export default function Secretary({data}){
         //
     }
     const deleteObjTherapist = async (id)=>{
+
         await deleteTherapistFromInstitute(data.institutionNumber,id,data.id)
         //
+    }
+    const findTherapist = async (details)=>{
+        return await findUserByEmail(details.email)
+
     }
     const addPatient = async (details)=>{
         await newPatients(Object.assign({}, {
@@ -51,72 +56,76 @@ export default function Secretary({data}){
     console.log(data)
     const inputsViewPatient =[{type:"text",required:"required",
         placeholder:"Enter a first name..."
-        ,name:"firstName",label:"שם פרטי:"
+        ,name:"firstName",label:"שם פרטי:",
+        edit:true
         /*,value:editFormData.firstName,*/
     },{type:"text",required:"required",
         placeholder:"Enter a last name..."
-        ,name:"lastName",label:"שם משפחה:"
+        ,name:"lastName",label:"שם משפחה:",edit:true
         /*,value:editFormData.lastName,*/
     },
         {type:"date",required:"required",
             placeholder:"Enter a birth day..."
-            ,name:"dateOfBirth",label: "תאריך לידה:"
+            ,name:"dateOfBirth",label: "תאריך לידה:",
+            edit:true
             /*,value:editFormData.dateOfBirth,*/
         },
         {type:"text",required:"required",
             placeholder:"Enter a last city..."
-            ,name:"city",label:"עיר:"
+            ,name:"city",label:"עיר:",edit:true
             /*,value:editFormData.city*/,
         },
         {type:"text",required:"required",
             placeholder:"Enter a last street..."
-            ,name:"street",label:"רחוב:"
+            ,name:"street",label:"רחוב:",edit:true
             /*,value:editFormData.street*/,
         },
         {type:"text",required:"required",
             placeholder:"Enter a last buildingNumber..."
-            ,name:"buildingNumber",label:"מספר רחוב:"
+            ,name:"buildingNumber",label:"מספר רחוב:",edit:true
             /*,value:editFormData.buildingNumber*/,
+        },
+        {type:"text",required:"required"
+            ,name:"firstNameParent",label:"שם פרטי הורה:",
+            edit:false
+        },
+        {type:"text",required:"required"
+            ,name:"lastNameParent",label:"שם משפחה הורה:",
+            edit:false
+        },
+        {type:"email",required:"required"
+            ,name:"email",label:"איימיל של הורה:",
+            edit:false
         }
+
     ]
-    const inputsViewTherapist =[{type:"text",required:"required",
+    const inputsViewTherapist =[
+
+        {type:"text",required:"required",
         placeholder:"Enter a first name..."
-        ,name:"firstName",label:"שם פרטי:"
+        ,name:"firstName",label:"שם פרטי:",
+        edit:true
         /*,value:editFormData.firstName,*/
     },{type:"text",required:"required",
         placeholder:"Enter a last name..."
         ,name:"lastName",label:"שם משפחה:"
+        , edit:true
         /*,value:editFormData.lastName,*/
     },
 
         {type:"text",required:"required",
             placeholder:"Enter a last city..."
             ,name:"jobs",label:"עבודות:"
+            ,
+            edit:true
             /*,value:editFormData.city*/,
-        }
+        },
+        {type:"email",required:"required"
+            ,name:"email",label:"איימיל של מטפל:",
+            edit:false
+        },
 
     ]
-
-    const inputsNewTherapist= inputsViewTherapist.concat([
-        {type:"email",required:"required"
-            ,name:"email",label:"איימיל של מטפל:"
-        }
-
-    ])
-    const inputsNewPatient= inputsViewPatient.concat([
-        {type:"text",required:"required"
-            ,name:"firstNameParent",label:"שם פרטי הורה:"
-        },
-        {type:"text",required:"required"
-            ,name:"lastNameParent",label:"שם משפחה הורה:"
-        },
-        {type:"email",required:"required"
-            ,name:"email",label:"איימיל של הורה:"
-        }
-
-    ])
-
-
     return(
         <div className="secretary">
             <div>
@@ -129,12 +138,13 @@ export default function Secretary({data}){
                     lastName: "",
                     dateOfBirth:new Date()
                     ,city:"",street:"",buildingNumber:"",}} data={data.students_arr} HebrewNames={[
-                    "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב"]
-                } inputsView={inputsViewPatient} inputsNew={inputsNewPatient} requeredId={true}/>
+                    "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב","שם פרטי הורה","שם משפחה הורה","אימייל"]
+                } inputsView={inputsViewPatient}  requeredId={true}/>
                 <TableEdit add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist}
                            emptyDetails={{firstName:"",lastName:"",jobs:[],email:""}} emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={data.works} HebrewNames={[
-                    "שם פרטי","שם משפחה","עבודות"]
-                } inputsView={inputsViewTherapist} inputsNew={inputsNewTherapist} requeredId={false}/>
+                    "שם פרטי","שם משפחה","עבודות","אימייל"]
+                } inputsView={inputsViewTherapist}  requeredId={false}
+                find={findTherapist}/>
                 {/*<RegistrationFromPatient data={data} new_patients={newPatients}/>*/}
             </div>
         </div>

@@ -30,6 +30,7 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
         const newFormData = {...editFormData};
         newFormData[fieldName] = fieldValue;
         setEditFormData(newFormData)
+        console.log(editFormData,'e1')
     };
     const handleCancelClick = () => {
         setEditContactId(null);
@@ -50,8 +51,9 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
     };
 
     const handleEditFormSubmit = (event) => {
-        event.preventDefault();
-        const editedContact=Object.assign({}, editFormData,{id: editContactId})
+        event.preventDefault()
+        const editedContact = editFormData
+        console.log('editedContact',editFormData)
         const newContacts = [...contacts];
         const index = contacts.findIndex((contact) => contact.id === editContactId);
         newContacts[index] = editedContact

@@ -13,7 +13,7 @@ import {
     updatesPatients,
     deletePatientFromInstitute,
     addUserFromAdmin,
-    updatesUser
+    updatesUser, deleteTherapistFromInstitute
 } from "../../firebase";
 import TableEdit from "../../components/tableEdit/TableEdit";
 // import {details_users} from "../../firebase"
@@ -22,6 +22,10 @@ export default function Secretary({data}){
 
     const deleteObjPatient = async (id)=>{
         await deletePatientFromInstitute(data.institutionNumber,{id:id,jobs:['secretary']},data.id)
+        //
+    }
+    const deleteObjTherapist = async (id)=>{
+        await deleteTherapistFromInstitute(data.institutionNumber,id,data.id)
         //
     }
     const addPatient = async (details)=>{
@@ -33,8 +37,16 @@ export default function Secretary({data}){
     }
     const addTherapist = async(details) => {
         details.jobs =details.jobs.split(",")
-        return await addUserFromAdmin({...details,institution: [data.institutionNumber]},data.emailCurrent,
+        return await addUserFromAdmin({...details,institutes: [data.institutionNumber]},data.emailCurrent,
             data.passwordCurrent,"works")
+    }
+    const updateTherapist = async(id,details) => {
+        console.log('edit details',details)
+        if(typeof(details.jobs) === "string" ){
+            details.jobs =details.jobs.split(",")
+        }
+
+        updatesUser(id,{firstName:details.firstName,lastName:details.lastName,jobs:details.jobs})
     }
     console.log(data)
     const inputsViewPatient =[{type:"text",required:"required",
@@ -119,8 +131,8 @@ export default function Secretary({data}){
                     ,city:"",street:"",buildingNumber:"",}} data={data.students_arr} HebrewNames={[
                     "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב"]
                 } inputsView={inputsViewPatient} inputsNew={inputsNewPatient} requeredId={true}/>
-                <TableEdit add ={addTherapist} update ={updatesUser} /*deleteObj={}*/
-                           emptyDetails={{id:"",firstName:"",lastName:"",jobs:[],email:""}} emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={data.works} HebrewNames={[
+                <TableEdit add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist}
+                           emptyDetails={{firstName:"",lastName:"",jobs:[],email:""}} emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={data.works} HebrewNames={[
                     "שם פרטי","שם משפחה","עבודות"]
                 } inputsView={inputsViewTherapist} inputsNew={inputsNewTherapist} requeredId={false}/>
                 {/*<RegistrationFromPatient data={data} new_patients={newPatients}/>*/}

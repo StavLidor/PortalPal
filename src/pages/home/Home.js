@@ -5,7 +5,7 @@ import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Patient from "../patient/Patient";
 import Secretary from "../secretary/Secretary";
-import ReadOnlyRow from "../update/ReadOnlyRow";
+import ReadOnlyRow from "../../components/tableEdit/ReadOnlyRow";
 
 
 export default function Home({d,type}){

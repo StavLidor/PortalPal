@@ -497,6 +497,14 @@ export const deletePatientFromInstitute = async (institute,removeOb,id)=>{
     await updateIDDoc(removeOb.id, 'patients', patient_data)
 
 }
+export const deleteTherapistFromInstitute = async (institute,removeId,id)=>{
+    // await deleteDoc(doc(db, "patients", id.toString()));
+    console.log('remove from',removeId)
+    await deleteFrom(removeId,'works',id,"array-contains")
+    const deleteInstitute = {institutes:firebase.firestore.FieldValue.arrayRemove(institute)}
+    await updateIDDoc(removeId, 'users', deleteInstitute)
+
+}
 //TODO: to check how remove user and when
 
 // export const deleteUser = async id=>{

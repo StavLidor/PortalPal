@@ -11,7 +11,8 @@ import CsvFile from "./CsvFile"
 export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditDetails,data,HebrewNames,inputsView,requeredId,find}) {
 
     const [detailsNew,setDetailsNew] = useState(emptyDetails);
-    const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState([])
+
     // const [detailsTherapist,setDetailsTherapist]=useState({firstName:"",lastName:"",email:"",jobs:"",institutes:[data.institutionNumber]})
     const [editContactId, setEditContactId] = useState(null);
     const [editFormData, setEditFormData] = useState(emptyEditDetails)
@@ -23,6 +24,12 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
 
 
     },[])
+    // useEffect(()=>{
+    //     setModifyContacts(contacts)
+    //     console.log('Modify',modifyContacts)
+    //
+    // },contacts)
+
     const handleEditFormChange = (event) => {
         event.preventDefault();
         const fieldName = event.target.getAttribute("name");
@@ -40,70 +47,120 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
         setEditContactId(contact.id)
         setEditFormData(contact)
     };
-    const handleDeleteClick = (contactId) => {
+    const handleDeleteClick = async (contactId) => {
         const newContacts = [...contacts];
         console.log(contacts)
         const index = contacts.findIndex((contact) => contact.id === contactId);
-        deleteObj(contactId)
-        newContacts.splice(index, 1)
-        setContacts(newContacts)
+        if (await deleteObj(contactId)) {
+            newContacts.splice(index, 1)
+            setContacts(newContacts)
+        }
+
 
     };
 
-    const handleEditFormSubmit = (event) => {
+    const handleEditFormSubmit = async (event) => {
         event.preventDefault()
         const editedContact = editFormData
-        console.log('editedContact',editFormData)
-        const newContacts = [...contacts];
-        const index = contacts.findIndex((contact) => contact.id === editContactId);
-        newContacts[index] = editedContact
-        setContacts(newContacts)
-        setEditContactId(null)
-        update(editContactId,editedContact)
+        console.log('editedContact', editFormData)
+
+        if(await update(editContactId, editedContact)){
+            const newContacts = [...contacts];
+            const index = contacts.findIndex((contact) => contact.id === editContactId);
+            newContacts[index] = editedContact
+            setContacts(newContacts)
+            setEditContactId(null)
+        }
     };
     const addNews =allDetails => {
         //console.log('new patinet for csv')
-        const newContacts = [...contacts]
+
         let i=0
+        let count=0
+        const newContacts = [...contacts]
+        console.log('length allDetails',allDetails.length)
         allDetails.map(async (details) => {
-                newContacts[contacts.length+i] = details
-                i++
-                await add(details)
+
+            // const newContacts = [...contacts]
+            const promiseId=await add(details)
+            const p = Promise.resolve(promiseId)
+            let modifyContacts =((flag)=>{
+                count++
+                if (flag){
+                    console.log('add',i,promiseId)
+                    console.log('count',count)
+                    newContacts[contacts.length+i]={...details,id:promiseId}
+                }
+
+                if(count == allDetails.length){
+                    setContacts(newContacts)
+                }
+            })
+
+            console.log(i,'NUMBER')
+            p.then(async id => {
+
+                console.log('SEEEEEEEEC', id, i)
+                if(id){
+                    modifyContacts(true)
+                    console.log('BEFORE ADD C')
+
+                    // addToContacts({...details,id:id})
+                    console.log('AFTER ADD C',contacts)
+
+                }
+                else {
+                    modifyContacts(false)
+                    console.log(false)
+                }
+
+            })
+            i++
+            console.log()
+
+
             }
 
+
         )
-        setContacts(newContacts)
+            //setContacts(newContacts)
     }
     const remove =allDetails => {
         //console.log('new patinet for csv')
         const newContacts = [...contacts]
-        const removeIndexs=[]
+
+        let count=0
         allDetails.map(async (details) => {
+            let modifyContacts =((flag)=> {
+                count++
+                //console.log('modifyContacts',flag)
+                if (flag) {
+                    const index = contacts.findIndex((contact) => contact.id === id)
+                    newContacts.splice(index, 1)
+                }
+                if(count == allDetails.length){
+                    setContacts(newContacts)
+                }
+            })
             let id=""
             if(requeredId){
                 id=details.id
             }
             else {
                 id= await find(details)
-                // const p=Promise.resolve(id)
-                // p.then(async id => {
-                //     if(id){
-                //         handleDeleteClick(id)
-                //     }
-                // })
             }
-            const index = contacts.findIndex((contact) => contact.id === id)
-            removeIndexs.push(index)
-            console.log(index)
-            await deleteObj(id)
+            const p = Promise.resolve(id)
+            p.then(async id => {
+                deleteObj(id).then((flag)=>{
+                    modifyContacts(flag)
+                    if(flag){
 
+                    }
+                })
+            })
             }
 
         )
-        removeIndexs.map((i)=>{
-            newContacts.splice(i, 1)
-        })
-        setContacts(newContacts)
     }
     const addToContacts=(details)=>{
         const newContacts = [...contacts]
@@ -112,27 +169,20 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
     }
     const submitAdd = (event) => {
         event.preventDefault();
-        if(!requeredId){
-            const p=Promise.resolve(add(detailsNew))
-            p.then(async id => {
-                if(id){
+        const p=Promise.resolve(add(detailsNew))
+        p.then(async id => {
+            if(id){
+                const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
+                if(index<0){
                     addToContacts({...detailsNew,id:id})
                 }
-            })
-        }
-        else {
-            const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
-            if(index<0){
+                else {
+                    // mybe can not change the informtion need to think about
+                    //newContacts[index] = detailsNew
+                }
 
-                add(detailsNew)
-                addToContacts(detailsNew)
             }
-            else {
-                // mybe can not change the informtion need to think about
-                //newContacts[index] = detailsNew
-            }
-
-        }
+        })
         setEditContactId(null);
         setDetailsNew(emptyDetails)
     };

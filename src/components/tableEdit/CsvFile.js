@@ -42,7 +42,7 @@ export default function CsvFile({addNews,remove}){
             let i,j=0;
             for (i = 1; i < rows; i++) {
                 let line = arr[i];
-                if (line == '\n')
+                if (line.length!=cols)
                     continue
                 let obj = {};
 

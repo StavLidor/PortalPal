@@ -13,7 +13,7 @@ import {
     updatesPatients,
     deletePatientFromInstitute,
     addUserFromAdmin,
-    updatesUser, deleteTherapistFromInstitute, findUserByEmail
+    updatesUser, deleteTherapistFromInstitute, findUserByEmail, updatesCurrentUser
 } from "../../firebase";
 import TableEdit from "../../components/tableEdit/TableEdit";
 // import {details_users} from "../../firebase"
@@ -21,12 +21,18 @@ import TableEdit from "../../components/tableEdit/TableEdit";
 export default function Secretary({data}){
 
     const deleteObjPatient = async (id)=>{
-        await deletePatientFromInstitute(data.institutionNumber,{id:id,jobs:['secretary']},data.id)
+        if(!await deletePatientFromInstitute(data.institutionNumber,{id:id,jobs:['secretary']},data.id)){
+            return false
+        }
         //
+        return true
     }
     const deleteObjTherapist = async (id)=>{
 
-        await deleteTherapistFromInstitute(data.institutionNumber,id,data.id)
+        if(!await deleteTherapistFromInstitute(data.institutionNumber,id,data.id)){
+            return false
+        }
+        return true
         //
     }
     const findTherapist = async (details)=>{
@@ -34,16 +40,32 @@ export default function Secretary({data}){
 
     }
     const addPatient = async (details)=>{
-        await newPatients(Object.assign({}, {
+        return await newPatients(Object.assign({}, {
             institutionNumber: data.institutionNumber, idSecretary: data.id, emailCurrent: data.emailCurrent,
             passwordCurrent: data.passwordCurrent
         }, details))
         //
     }
     const addTherapist = async(details) => {
-        details.jobs =details.jobs.split(",")
-        return await addUserFromAdmin({...details,institutes: [data.institutionNumber]},data.emailCurrent,
-            data.passwordCurrent,"works")
+        if(details.jobs!==undefined){
+            console.log('JOBBBBBBBBS',details.jobs)
+            details.jobs =details.jobs.split(",")
+        }
+        if (details.email!==undefined){
+            const id =await addUserFromAdmin({...details,institutes: [data.institutionNumber]},data.emailCurrent,
+                data.passwordCurrent,"works")
+            return id
+            // const p=Promise.resolve(id)
+            //
+            // p.then(async id => {
+            //
+            //     console.log('SEEEEEEEEC',id)
+            //     return id
+            // })
+            // console.log('IDDDD INN',id)
+        }
+        return null
+
     }
     const updateTherapist = async(id,details) => {
         console.log('edit details',details)
@@ -51,7 +73,7 @@ export default function Secretary({data}){
             details.jobs =details.jobs.split(",")
         }
 
-        updatesUser(id,{firstName:details.firstName,lastName:details.lastName,jobs:details.jobs})
+        return await updatesUser(id,{firstName:details.firstName,lastName:details.lastName,jobs:details.jobs})
     }
     console.log(data)
     const inputsViewPatient =[{type:"text",required:"required",

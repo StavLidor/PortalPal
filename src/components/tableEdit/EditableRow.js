@@ -1,12 +1,14 @@
 import React from "react";
 import DatePicker from "react-datepicker";
+import TableEdit from "./TableEdit";
 const EditableRow = ({
                             contact,
                          editFormData,
                          inputs,
                          handleEditFormChange,
                          handleCancelClick,
-                         requeredId
+                         requeredId,table,
+                         handleOpen,handleClose
                      }) => {
     return (
         <tr>
@@ -16,7 +18,8 @@ const EditableRow = ({
                 {
                     inputs.map((i) => (
                         <td>
-                            {i.edit ===true &&
+                            {}
+                            {i.edit ===true && i.type!=='tableEdit' &&
                                 <input
                                     type={i.type}
                                     required={i.required}
@@ -27,12 +30,31 @@ const EditableRow = ({
                                 ></input>
 
                             }
+                            {i.edit ===true && i.type==='tableEdit' &&
+                                <TableEdit data={editFormData[i.name]}
+                                />}
                             {i.edit ===false && contact[i.name]}
                         </td>
 
 
                     ))
                 }
+            {table !== undefined &&
+                <td>
+                <button
+                            type="button"
+                            onClick={(event) => handleOpen(event, contact)}
+                        >
+                v
+                </button>
+                <button
+                type="button"
+                onClick={(event) => handleClose(event, contact)}
+                >
+                ^
+                </button>
+                </td>
+            }
             <td>
                 <button type="submit">Save</button>
                 <button type="button" onClick={handleCancelClick}>

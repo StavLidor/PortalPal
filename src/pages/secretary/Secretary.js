@@ -4,6 +4,7 @@ import LoginFrom from "../../components/login/LoginFrom";
 import RegistrationFromPatient from "../../components/registration/RegistrationFromPatient";
 import RegistrationFromUser from "../../components/registration/RegistrationFromUser";
 import {newUser,newPatients} from "../../pepole/users/user";
+import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom"
 import Home from "../home/Home";
 import {signUser} from "../../pepole/users/user";
 import {signOut} from "firebase/auth";
@@ -13,9 +14,10 @@ import {
     updatesPatients,
     deletePatientFromInstitute,
     addUserFromAdmin,
-    updatesUser, deleteTherapistFromInstitute, findUserByEmail, updatesCurrentUser
+    updatesUser, deleteTherapistFromInstitute, findUserByEmail, updatesCurrentUser, detailsPatient
 } from "../../firebase";
 import TableEdit from "../../components/tableEdit/TableEdit";
+import Patient from "../patient/Patient";
 // import {details_users} from "../../firebase"
 
 export default function Secretary({data}){
@@ -52,7 +54,7 @@ export default function Secretary({data}){
             details.jobs =details.jobs.split(",")
         }
         if (details.email!==undefined){
-            const id =await addUserFromAdmin({...details,institutes: [data.institutionNumber]},data.emailCurrent,
+            const id =await addUserFromAdmin({...details,institutes: {[data.institutionNumber]:[]}},data.emailCurrent,
                 data.passwordCurrent,"works")
             return id
             // const p=Promise.resolve(id)
@@ -146,27 +148,95 @@ export default function Secretary({data}){
             ,name:"email",label:"איימיל של מטפל:",
             edit:false
         },
+        /*{type:"tableEdit",name:"students",label:"תלמידים:",
+            edit:true
+        }*/
 
     ]
+    const HebrewNamesTableT=[
+        "תעודת זהות של תלמיד" ,"שם משפחה של תלמיד","שם של תלמיד"
+    ]
+    async function getTable(details) {
+        console.log('CCCCCCCCCC', details.institutes[data.institutionNumber])
+        const dataStudents = await detailsPatient(details.institutes[data.institutionNumber])
+        console.log('AAAAA', dataStudents)
+        return dataStudents
+        //data.works.institutes
+
+    }
+    const inputsViewPOfT=[
+        {type:"text",required:"required",
+            placeholder:"Enter a first name..."
+            ,name:"firstName",label:"שם פרטי:",
+            edit:false
+            /*,value:editFormData.firstName,*/
+        },{type:"text",required:"required",
+            placeholder:"Enter a last name..."
+            ,name:"lastName",label:"שם משפחה:",edit:false
+            /*,value:editFormData.lastName,*/
+        }
+    ]
+
     return(
         <div className="secretary">
             <div>
                 <h2>
                     עמוד מזכירה!
                 </h2>
+                <Router>
+                    <div className='sidebarMenu'>
+                        <ul className="sidebarList">
+                            <Link to={"/students"} className="link">
+
+                                <ul className="sidebarListItem">
+                                    תלמידים
+                                    &nbsp;
+
+                                </ul>
+                            </Link>
+
+                            &nbsp;
+
+                        </ul>
+                        <Routes>
+                            <Route path={"/students"} element={<TableEdit add ={addPatient} update ={updatesPatients} deleteObj={deleteObjPatient}
+                                                                          emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:""}} emptyEditDetails={{firstName: "",
+                                lastName: "",
+                                dateOfBirth:new Date()
+                                ,city:"",street:"",buildingNumber:"",}} data={data.students_arr} HebrewNames={[
+                                "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב","שם פרטי הורה","שם משפחה הורה",,"אימייל",/*"מטפלים בית ספריים"*/]
+                            } inputsView={inputsViewPatient}  requeredId={true}
+                                                                          toEdit={true} toAdd={true}/>}/>
+
+                        </Routes>
+                        <ul className="sidebarList">
+                            <Link to={"/works"} className="link">
+
+                                <ul className="sidebarListItem">
+                                    עובדים
+                                    &nbsp;
+
+                                </ul>
+                            </Link>
+                        </ul>
+                        <Routes>
+                            <Route path={"/works"} element={<TableEdit add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist}
+                                                                       emptyDetails={{firstName:"",lastName:"",jobs:[],email:"",/*table:[{id:"",firstName:"",lastName:""}]*/}}
+                                                                       emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={data.works} HebrewNames={[
+                                "שם פרטי","שם משפחה","עבודות","אימייל","מטופלים בית ספריים"]
+                            } inputsView={inputsViewTherapist}  requeredId={false}
+                            find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",firstName:"",lastName:""/**/}} toEdit={true} toAdd={true} table={getTable}
+                                                                       inputsViewTable={inputsViewPOfT}
+                            />}/>
+
+                        </Routes>
+                    </div>
+
+                </Router>
                 {/*<RegistrationFromUser new_user={newUser}/>*/}
-                <TableEdit add ={addPatient} update ={updatesPatients} deleteObj={deleteObjPatient}
-                           emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:""}} emptyEditDetails={{firstName: "",
-                    lastName: "",
-                    dateOfBirth:new Date()
-                    ,city:"",street:"",buildingNumber:"",}} data={data.students_arr} HebrewNames={[
-                    "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב","שם פרטי הורה","שם משפחה הורה","אימייל"]
-                } inputsView={inputsViewPatient}  requeredId={true}/>
-                <TableEdit add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist}
-                           emptyDetails={{firstName:"",lastName:"",jobs:[],email:""}} emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={data.works} HebrewNames={[
-                    "שם פרטי","שם משפחה","עבודות","אימייל"]
-                } inputsView={inputsViewTherapist}  requeredId={false}
-                find={findTherapist}/>
+
+
+
                 {/*<RegistrationFromPatient data={data} new_patients={newPatients}/>*/}
             </div>
         </div>

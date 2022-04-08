@@ -170,6 +170,9 @@ export const  detailsWorks= async arr_id =>{
     //console.log('ALL',arr_data)
     return arr_data
 }
+
+
+
 export const  detailsPatient= async arr_id =>{
     // console.log(arr_id)
     let arr_data =[]
@@ -178,10 +181,17 @@ export const  detailsPatient= async arr_id =>{
     for (const c of arr_id) {
         // console.log(id)
         try {
-            let docRef = doc(db, "patients", c.id);
+            let id=""
+            if(typeof(c) == 'string'){
+                id= c
+            }
+            else {
+                id= c. id
+            }
+            let docRef = doc(db, "patients", id);
             let d =  await getDoc(docRef);
             // maybe add the job
-            arr_data.push(Object.assign({},d.data(),{jobs:c.jobs}))
+            arr_data.push(d.data()/*Object.assign({},d.data(),{jobs:c.jobs})*/)
         }
         catch (err){
 
@@ -503,7 +513,7 @@ export const deleteTherapistFromInstitute = async (institute,removeId,id)=>{
     if(!await deleteFrom(removeId,'works',id,"array-contains")){
         return false
     }
-    const deleteInstitute = {institutes:firebase.firestore.FieldValue.arrayRemove(institute)}
+    const deleteInstitute = {['institutes.'+ institute]:firebase.firestore.FieldValue.delete()}/*{institutes:firebase.firestore.FieldValue.arrayRemove(institute)}*/
     if(!await updateIDDoc(removeId, 'users', deleteInstitute)){
         return false
     }

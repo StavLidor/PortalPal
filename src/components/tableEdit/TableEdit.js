@@ -6,16 +6,43 @@ import ReadOnlyRow from "./ReadOnlyRow"
 import EditableRow from "./EditableRow"
 import "./tableEdit.css"
 import CsvFile from "./CsvFile"
+import {updatesPatients} from "../../firebase";
 
 
-export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditDetails,data,HebrewNames,inputsView,requeredId,find}) {
+export default  function TableEdit({
+                       add,
+                       update,
+                       deleteObj,
+                       emptyDetails,
+                       emptyEditDetails,data
+                                       ,HebrewNames,inputsView,requeredId,find,
+                                       addTable,
+                                       updateTable,
+                                       deleteObjTable,
+                                       emptyDetailsTable,
+                                       emptyEditDetailsTable
+                                       ,HebrewNamesTable,
+                                       inputsViewTable,toEdit, toAdd
+                            ,table}) {
+
+
+
+
 
     const [detailsNew,setDetailsNew] = useState(emptyDetails);
     const [contacts, setContacts] = useState([])
+    const [contactTable,setContactTable]=useState(null)
 
     // const [detailsTherapist,setDetailsTherapist]=useState({firstName:"",lastName:"",email:"",jobs:"",institutes:[data.institutionNumber]})
     const [editContactId, setEditContactId] = useState(null);
-    const [editFormData, setEditFormData] = useState(emptyEditDetails)
+    const [editFormData, setEditFormData] = useState(
+        function (){
+            if(toEdit){
+                return emptyEditDetails
+            }
+            return null
+        }()
+    )
     useEffect(()=>{
         const p1 = Promise.resolve(data)
         p1.then(arr=> {
@@ -29,7 +56,35 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
     //     console.log('Modify',modifyContacts)
     //
     // },contacts)
+    const handleOpen=(event,contact)=>{
+        event.preventDefault()
+        if (contactTable === null){
+            setContactTable(contact)
+        }
+        // if(contact.id !== contactTable.id){
+        //     //setContactTable(null)
+        //     // handleClose(event,contactTable)
+        //     // console.log('1',contactTable)
+        //     setContactTable(null)
+        //     //handleOpen(event,contact)
+        //     //setContactTable(contact)
+        //     //console.log('2',contactTable)
+        //     //setContactTable(contact)
+        //     // setInterval(function() {
+        //     //     setContactTable(contact)
+        //     //     //call $.ajax here
+        //     // }, 1); //5 seconds
+        //     //setContactTable(contact)
+        //
+        // }
 
+        // console.log('OPENN',contact.id)
+    }
+    const handleClose=(event,contact)=>{
+        event.preventDefault()
+        if(contact.id === contactTable.id)
+            setContactTable(null)
+    }
     const handleEditFormChange = (event) => {
         event.preventDefault();
         const fieldName = event.target.getAttribute("name");
@@ -53,6 +108,9 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
         const index = contacts.findIndex((contact) => contact.id === contactId);
         if (await deleteObj(contactId)) {
             newContacts.splice(index, 1)
+            if(contactId === contactTable.id){
+                setContactTable(null)
+            }
             setContacts(newContacts)
         }
 
@@ -136,6 +194,9 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
                 //console.log('modifyContacts',flag)
                 if (flag) {
                     const index = contacts.findIndex((contact) => contact.id === id)
+                    if(id === contactTable.id){
+                        setContactTable(null)
+                    }
                     newContacts.splice(index, 1)
                 }
                 if(count == allDetails.length){
@@ -188,7 +249,8 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
     };
     return (
            <div>
-               <CsvFile addNews={addNews} remove={remove}/>
+               {toAdd && <CsvFile addNews={addNews} remove={remove}/>}
+
                {/*<input type="file" name="learnCSV" accept="text/csv"/>*/}
            {contacts.length > 0  &&
 
@@ -210,7 +272,7 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
 
                                         contacts.map((contact) => (
                                            <Fragment>
-                                               { contact!==undefined && editContactId === contact.id ? (
+                                               { contact!==undefined && editContactId === contact.id && toEdit ? (
                                                    <EditableRow
                                                        contact={contact}
                                                        editFormData={editFormData}
@@ -218,6 +280,7 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
                                                        handleCancelClick={handleCancelClick}
                                                        inputs={inputsView}
                                                        requeredId={requeredId}
+                                                       table={table}
 
                                                    />
                                                ) : (contact!==undefined)?(
@@ -229,13 +292,34 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
                                                        //     'city','street','buildingNumber']}
                                                        namesFiled={Object.keys(emptyDetails)}
                                                        requeredId={requeredId}
+                                                       toEdit={toEdit}
+                                                       table={table}
+
+                                                       handleOpen={
+                                                           function (){
+                                                               if(table !== undefined && contactTable == null){
+                                                                   return handleOpen
+                                                               }
+                                                               return null
+                                                                       }
+                                                                       ()
+
+                                                                }
+                                                       handleClose={
+                                                           function (){
+                                                               if(table !== undefined && contactTable == null ||table !== undefined &&
+                                                                    contact.id == contactTable.id){
+                                                                   return handleClose
+                                                               }
+                                                               return  null
+                                                           }
+                                                           ()
+                                                       }
                                                    />
                                                    ):
                                                    <div>
 
                                                    </div>}
-
-
                                            </Fragment>
                                        ))}
                                    </tbody>
@@ -244,36 +328,58 @@ export default  function TableEdit({add,update,deleteObj,emptyDetails,emptyEditD
 
                            </div>
                        }
-                       <form onSubmit={submitAdd} >
-                                       <h2>
-                                           חדש
-                                       </h2>
-                           {requeredId &&
-                               <div className="form-group">
-                                   <label htmlFor="id">תעודות זהות:</label>
-                                   <input type="number" name="id" id="id" onChange={e=>setDetailsNew({...detailsNew,id:e.target.value})} value={detailsNew.id}/>
-                               </div>
-                           }
+               {toAdd &&
+                   <form onSubmit={submitAdd}>
+                       <h2>
+                           חדש
+                       </h2>
+                       {requeredId &&
+                           <div className="form-group">
+                               <label htmlFor="id">תעודות זהות:</label>
+                               <input type="number" name="id" id="id"
+                                      onChange={e => setDetailsNew({...detailsNew, id: e.target.value})}
+                                      value={detailsNew.id}/>
+                           </div>
+                       }
 
-                           {
-                               inputsView.map((i) => (
-                                   <div className="form-group">
-                                       <label htmlFor="name">{i.label}</label>
-                                       <input
-                                           type={i.type}
-                                           // required={i.required}
-                                           // placeholder={i.placeholder}
-                                           id={i.name}
-                                           name={i.name}
-                                           value={detailsNew[i.name]}
-                                           onChange={e=>setDetailsNew({...detailsNew,[i.name]:e.target.value})}
-                                       ></input>
-                                   </div>
-                               ))
-                           }
 
-                                       <input type="submit" value="הוסף"/>
-                                   </form>
+                       {inputsView.map((i) => (
+                       <div className="form-group">
+                           <label htmlFor="name">{i.label}</label>
+                           <input
+                               type={i.type}
+                               // required={i.required}
+                               // placeholder={i.placeholder}
+                               id={i.name}
+                               name={i.name}
+                               value={detailsNew[i.name]}
+                               onChange={e => setDetailsNew({...detailsNew, [i.name]: e.target.value})}
+                           ></input>
+                       </div>
+                       ))}
+
+
+                       <input type="submit" value="הוסף"/>
+                   </form>
+
+               }
+               <Fragment>
+               {contactTable &&
+                   <div>
+
+
+
+                       <div>{contactTable.id}</div>
+                       <TableEdit add ={addTable} update ={updateTable} deleteObj={deleteObjTable}
+                                  emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable} data={table(contactTable)/*contactTable[tableName]*/}
+                                  HebrewNames={HebrewNamesTable} inputsView={inputsViewTable}  requeredId={true}
+                                  toEdit={false} toAdd={true}/>
+                   </div>
+
+
+               }
+               </Fragment>
+
 
            </div>
     )

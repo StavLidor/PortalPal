@@ -23,7 +23,7 @@ export default  function TableEdit({
                                        emptyEditDetailsTable
                                        ,HebrewNamesTable,
                                        inputsViewTable,toEdit, toAdd
-                            ,table}) {
+                            ,table,/*addDetails,addDetailsTable*/}) {
 
 
 
@@ -108,7 +108,7 @@ export default  function TableEdit({
         const index = contacts.findIndex((contact) => contact.id === contactId);
         if (await deleteObj(contactId)) {
             newContacts.splice(index, 1)
-            if(contactId === contactTable.id){
+            if(contactTable && contactId === contactTable.id){
                 setContactTable(null)
             }
             setContacts(newContacts)
@@ -147,7 +147,12 @@ export default  function TableEdit({
                 if (flag){
                     console.log('add',i,promiseId)
                     console.log('count',count)
-                    newContacts[contacts.length+i]={...details,id:promiseId}
+                    if(typeof(promiseId) == "string"){
+                             newContacts[contacts.length+i]={...details,id:promiseId}
+                    }
+                    else {
+                        newContacts[contacts.length+i]=Object.assign({}, detailsNew, promiseId)
+                    }
                 }
 
                 if(count == allDetails.length){
@@ -235,7 +240,13 @@ export default  function TableEdit({
             if(id){
                 const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
                 if(index<0){
-                    addToContacts({...detailsNew,id:id})
+                    if(typeof(id) == "string"){
+                        addToContacts({...detailsNew,id:id})
+                    }
+
+                    else {
+                        addToContacts(Object.assign({}, detailsNew, id))
+                    }
                 }
                 else {
                     // mybe can not change the informtion need to think about
@@ -344,6 +355,7 @@ export default  function TableEdit({
 
 
                        {inputsView.map((i) => (
+                           i.add &&
                        <div className="form-group">
                            <label htmlFor="name">{i.label}</label>
                            <input
@@ -373,7 +385,8 @@ export default  function TableEdit({
                        <TableEdit add ={addTable} update ={updateTable} deleteObj={deleteObjTable}
                                   emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable} data={table(contactTable)/*contactTable[tableName]*/}
                                   HebrewNames={HebrewNamesTable} inputsView={inputsViewTable}  requeredId={true}
-                                  toEdit={false} toAdd={true}/>
+                                  toEdit={false} toAdd={true}
+                                /*addDetails={addDetailsTable}*//>
                    </div>
 
 

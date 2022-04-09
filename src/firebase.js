@@ -138,10 +138,11 @@ export const addUserFromAdmin= async (details,emailCurrent,passwordCurrent,nameF
 
 
 const ifPatientExists = async id=>{
-    if ((await getDocs(query(collection_query_patients, where("id", "==", id)))).docs.length>0){
-        return true
+    const d= (await getDocs(query(collection_query_patients, where("id", "==", id)))).docs
+    if (d.length>0){
+        return d[0].data()
     }
-    return false
+    return null
 
 }
 export const  detailsWorks= async arr_id =>{
@@ -255,7 +256,8 @@ export const addPatient = async details=>{
         //     signOutFrom()
         //
         // }
-        await updatesCurrentUser(/*details.idSecretary,*/{students_arr: {id:details.id.toString(),jobs:['secretary']}})
+        await updatesCurrentUser(/*details.idSecretary,*/{students_arr:
+                details.id.toString()})
 
         //console.log('2222244')
         const q = query(collection_query_users, where("idsMangeParents","array-contains",details.id));
@@ -276,7 +278,7 @@ export const addPatient = async details=>{
             buildingNumber:details.buildingNumber,
             parents:id_parents,
             therapistsOutside:[],
-            institutes:{[details.institutionNumber]:[{[details.idSecretary]:'secretary'}]},
+            institutes:{[details.institutionNumber]:[]}
             /*idSecretary:[details.idSecretary]*/
         });
         console.log('Add a patinet',details.id)
@@ -383,7 +385,55 @@ export const setIDDoc  = async (id,name_path,data)=>{
     await setDoc(doc(db, name_path, id.toString()), data);
 
 }
+export const filedAdd  = async (data,nameFiled1,nameFiled2,id,idAdd,f)=>{
+    if(nameFiled1 in data){
+        const d =await ifPatientExists(idAdd)
+        if(d){
+            if(f!== undefined &&!f(d))
+                return null
+            const patient_data={[nameFiled2]:firebase.firestore.FieldValue.arrayUnion(id)}
+            if(!await updateIDDoc(idAdd, 'patients', patient_data))
+                return null
+            data[nameFiled1]=firebase.firestore.FieldValue.arrayUnion(idAdd)
+            return d
+        }
+        return null
+
+
+    }
+
+
+
+}
+export  const addConnectionUserToTherapist = async (id,idAdd,institutionNumber)=>{
+    const filedName ="institutes."+institutionNumber
+    const data ={[filedName]:idAdd}
+    const d = await filedAdd(data, filedName, filedName, id, idAdd,
+        (da)=>{
+        console.log('oooooooo',da)
+        if(institutionNumber in da.institutes)
+            return true
+        return false
+        })
+    if(!d){
+        return null
+    }
+
+    if(await updateIDDoc(id, 'users', data))
+        return d
+    return null
+}
+// export  const updateDocUserWithArrayFiled =async (id,idAdd,filedName,data)=>{
+//     if(!await filedAdd(data, filedName, filedName, id, idAdd))
+//         return null
+//     await updateDocUser(id, data)
+//
+// }
 export const updateDocUser  = async (id,data)=>{
+    // for (const [key, value] of Object.entries(data)) {
+    //     //console.log(key, value);
+    // }
+
     if('idsMangeParents' in data){
         //console.log('in idsMangeParents')
         if (await ifPatientExists(data.idsMangeParents)){
@@ -395,7 +445,7 @@ export const updateDocUser  = async (id,data)=>{
 
     }
     if('idsMangeTherapist' in data){
-        if (await ifPatientExists(data.idsMangeParents)){
+        if (await ifPatientExists(data.idsMangeTherapist)){
             const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(id)}
             await updateIDDoc(data.idsMangeTherapist, 'patients', patient_data)
         }
@@ -497,7 +547,7 @@ export const deletePatientFromInstitute = async (institute,removeOb,id)=>{
             return false
 
         const patient_data={['institutes.'+ institute]:firebase.firestore.FieldValue.delete()}
-        if(!await updateIDDoc(removeOb.id, 'patients', patient_data))
+        if(!await updateIDDoc(/*removeOb.id*/removeOb, 'patients', patient_data))
             return false
 
         return true

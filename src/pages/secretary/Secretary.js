@@ -14,16 +14,23 @@ import {
     updatesPatients,
     deletePatientFromInstitute,
     addUserFromAdmin,
-    updatesUser, deleteTherapistFromInstitute, findUserByEmail, updatesCurrentUser, detailsPatient
+    updatesUser,
+    deleteTherapistFromInstitute,
+    findUserByEmail,
+    updatesCurrentUser,
+    detailsPatient,
+    updateDocUser,
+    updateDocUserWithArrayFiled, addConnectionUserToTherapist
 } from "../../firebase";
 import TableEdit from "../../components/tableEdit/TableEdit";
 import Patient from "../patient/Patient";
 // import {details_users} from "../../firebase"
 
 export default function Secretary({data}){
+    const [idGetTable, setIdGetTable] = useState([])
 
     const deleteObjPatient = async (id)=>{
-        if(!await deletePatientFromInstitute(data.institutionNumber,{id:id,jobs:['secretary']},data.id)){
+        if(!await deletePatientFromInstitute(data.institutionNumber,id/*{id:id,jobs:['secretary']}*/,data.id)){
             return false
         }
         //
@@ -81,45 +88,45 @@ export default function Secretary({data}){
     const inputsViewPatient =[{type:"text",required:"required",
         placeholder:"Enter a first name..."
         ,name:"firstName",label:"שם פרטי:",
-        edit:true
+        edit:true,add:true
         /*,value:editFormData.firstName,*/
     },{type:"text",required:"required",
         placeholder:"Enter a last name..."
-        ,name:"lastName",label:"שם משפחה:",edit:true
+        ,name:"lastName",label:"שם משפחה:",edit:true,add:true
         /*,value:editFormData.lastName,*/
     },
         {type:"date",required:"required",
             placeholder:"Enter a birth day..."
             ,name:"dateOfBirth",label: "תאריך לידה:",
-            edit:true
+            edit:true,add:true
             /*,value:editFormData.dateOfBirth,*/
         },
         {type:"text",required:"required",
             placeholder:"Enter a last city..."
-            ,name:"city",label:"עיר:",edit:true
+            ,name:"city",label:"עיר:",edit:true,add:true
             /*,value:editFormData.city*/,
         },
         {type:"text",required:"required",
             placeholder:"Enter a last street..."
-            ,name:"street",label:"רחוב:",edit:true
+            ,name:"street",label:"רחוב:",edit:true,add:true
             /*,value:editFormData.street*/,
         },
         {type:"text",required:"required",
             placeholder:"Enter a last buildingNumber..."
-            ,name:"buildingNumber",label:"מספר רחוב:",edit:true
+            ,name:"buildingNumber",label:"מספר רחוב:",edit:true,add:true
             /*,value:editFormData.buildingNumber*/,
         },
         {type:"text",required:"required"
             ,name:"firstNameParent",label:"שם פרטי הורה:",
-            edit:false
+            edit:false,add:true
         },
         {type:"text",required:"required"
             ,name:"lastNameParent",label:"שם משפחה הורה:",
-            edit:false
+            edit:false,add:true
         },
         {type:"email",required:"required"
             ,name:"email",label:"איימיל של הורה:",
-            edit:false
+            edit:false,add:true
         }
 
     ]
@@ -128,12 +135,12 @@ export default function Secretary({data}){
         {type:"text",required:"required",
         placeholder:"Enter a first name..."
         ,name:"firstName",label:"שם פרטי:",
-        edit:true
+        edit:true,add:true
         /*,value:editFormData.firstName,*/
     },{type:"text",required:"required",
         placeholder:"Enter a last name..."
         ,name:"lastName",label:"שם משפחה:"
-        , edit:true
+        , edit:true,add:true
         /*,value:editFormData.lastName,*/
     },
 
@@ -141,12 +148,12 @@ export default function Secretary({data}){
             placeholder:"Enter a last city..."
             ,name:"jobs",label:"עבודות:"
             ,
-            edit:true
+            edit:true,add:true
             /*,value:editFormData.city*/,
         },
         {type:"email",required:"required"
             ,name:"email",label:"איימיל של מטפל:",
-            edit:false
+            edit:false,add:true
         },
         /*{type:"tableEdit",name:"students",label:"תלמידים:",
             edit:true
@@ -157,6 +164,7 @@ export default function Secretary({data}){
         "תעודת זהות של תלמיד" ,"שם משפחה של תלמיד","שם של תלמיד"
     ]
     async function getTable(details) {
+        setIdGetTable(details.id)
         console.log('CCCCCCCCCC', details.institutes[data.institutionNumber])
         const dataStudents = await detailsPatient(details.institutes[data.institutionNumber])
         console.log('AAAAA', dataStudents)
@@ -168,14 +176,23 @@ export default function Secretary({data}){
         {type:"text",required:"required",
             placeholder:"Enter a first name..."
             ,name:"firstName",label:"שם פרטי:",
-            edit:false
+            edit:false,
+            add:false
             /*,value:editFormData.firstName,*/
         },{type:"text",required:"required",
             placeholder:"Enter a last name..."
-            ,name:"lastName",label:"שם משפחה:",edit:false
+            ,name:"lastName",label:"שם משפחה:",edit:false,
+            add:false
             /*,value:editFormData.lastName,*/
         }
     ]
+    const addConnectionToTherapist = async (details)=>{
+        // console.log("EEEEEEEEEEEEEE",idGetTable)
+        return  addConnectionUserToTherapist(idGetTable,details.id,data.institutionNumber)
+    }
+    const deleteConnectionToTherapist = async (details)=>{
+
+    }
 
     return(
         <div className="secretary">
@@ -226,7 +243,8 @@ export default function Secretary({data}){
                                 "שם פרטי","שם משפחה","עבודות","אימייל","מטופלים בית ספריים"]
                             } inputsView={inputsViewTherapist}  requeredId={false}
                             find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",firstName:"",lastName:""/**/}} toEdit={true} toAdd={true} table={getTable}
-                                                                       inputsViewTable={inputsViewPOfT}
+                                                                       inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist} deleteObj={deleteConnectionToTherapist}
+
                             />}/>
 
                         </Routes>

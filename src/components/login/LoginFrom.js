@@ -7,11 +7,12 @@ import {auth, detailsPatient, detailsWorks, resetPassword} from "../../firebase"
 
 
 export default function LoginFrom(){
-    const [details,setDetails] = useState({email:"",password:"",type:"therapist"});
+
+    const [details,setDetails] = useState({email:"",password:"",type:"therapist",institute:"external"});
     const [detailsNewUser,setDetailsNewUser] = useState({name:"",/*type:"therapist",*/email:"",password:"",/*patients:""*/});
-    const [isMovePage,setIsMovePage] = useState(false);
-    const [isFormNewUser,setFormNewUser] = useState(false);
-    const [info,setInfo] = useState({id:'',name:'',students_arr:[],myDoc:'',emailCurrent:'',
+    const [isMovePage,setIsMovePage] = useState(false)
+    const [isFormNewUser,setFormNewUser] = useState(false)
+    const [info,setInfo] = useState({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
         passwordCurrent:'',institutionNumber:'',works:[]});
     // if (login){
     //     setIsMovePage(true)
@@ -27,53 +28,20 @@ export default function LoginFrom(){
             if (details.type === 'admin'/*||details.type === 'therapist'*/){
                 const arrStudents=detailsPatient(data.students_arr)
                 const arrWorks=detailsWorks(data.works)
-                setInfo({id:id,name:data.name,students_arr:arrStudents,myDoc:doc,emailCurrent:details.email,
+                setInfo({id:id,firstName:data.firstName,lastName:data.lastName,students_arr:arrStudents,myDoc:doc,emailCurrent:details.email,
                     passwordCurrent:details.password,institutionNumber:data.institutionNumber,works:arrWorks})
-
-
-                // const p1 = Promise.resolve(arrStudents)
-                // const p2 = Promise.resolve(arrWorks)
-
-                // p1.then(v1=> {
-                //     p2.then(v2 => {
-                //
-                //         setInfo({id:id,name:data.name,students_arr:v1,myDoc:doc,emailCurrent:details.email,
-                //             passwordCurrent:details.password,institutionNumber:data.institutionNumber,works:v2})
-                //         console.log('After p2 info',info)
-                //         // setInfo({id:id,name:data.name,patients:value2,myDoc:doc})
-                //
-                //     })
-                    // setInfo({...info,students_arr:v1})
-                    // console.log('After p1 info',info)
-                    // setInfo({id:id,name:data.name,patients:value2,myDoc:doc})
-
-               // })
-
                 console.log('institutionNumber',data.institutionNumber)
             }
-            // else if (details.type === 'therapist'){
-            //     //Therapist
-            //     setInfo({name:data.name,patients:data.idsMangeTherapist,myDoc:doc})
-            //
-            // }
-            // else if (details.type === 'parent'){
-            //     setInfo({name:data.name,patients:data.idsMangeParents,myDoc:doc})
-            // }
-            // else{
-            //     //teacher
-            //     setInfo({name:data.name,patients:data.idsMangeTeacher,myDoc:doc})
-            // }
+            else {
+                if(details.institute !="external" && !(details.institute in data.institutes)) {
+                    unSignUser()
+                }
+                else{
+                    setInfo({...data,id:id})
+                }
 
-
-        });
-
-
-        // console.log("infor:",infor.name)
-        // if(infor.name!==""/*infor*/){
-        //     setInfo(infor)
-        //     setIsMovePage(true)
-        //     console.log(info)
-        // }
+            }
+        })
     }
     const Logout = ()=>{
         // console.log('logout');
@@ -99,11 +67,11 @@ export default function LoginFrom(){
     }
 
     return(
-        (info.name !=='') ? (
+        (info.firstName !=='') ? (
             <div>
                 <button  onClick={Logout} >Logout</button>
 
-                <Home d={info} type={details.type}/>
+                <Home d={info} type={details.type} institute={details.institute}/>
             </div>
         ):
         (isFormNewUser) ? (
@@ -148,11 +116,21 @@ export default function LoginFrom(){
                 <label>סוג:
                     <select type="text" name="type" id="type" onChange={e=>setDetails({...details,type:e.target.value})} value={details.type} >
                         <option value="therapist">מטפל</option>
-                        <option value="teacher">מורה</option>
+                        {/*<option value="teacher">מורה</option>*/}
                         <option value="admin">ניהול</option>
                         <option value="parent">הורה</option>
                     </select>
                 </label>
+                    {(details.type !=="admin" && details.type !=="parent") &&
+                        <label>מוסד:
+                            <select type="text" name="type" id="type" onChange={e=>setDetails({...details,institute:e.target.value})} value={details.institute} >
+
+                                <option value="1">1</option>
+                                <option value="external">חיצוני</option>
+                            </select>
+                        </label>
+                    }
+
                 </div>
                 <input type="submit" value="התחברות"/>
 

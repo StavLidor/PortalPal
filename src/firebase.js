@@ -337,7 +337,8 @@ export const updatesCurrentUser = async (data)=>{
             // ...
         }).catch((error) => {
             console.log('err updath email')
-            console.log('err')
+            console.log(error)
+            return false
             // An error occurred
             // ...
         });
@@ -352,12 +353,14 @@ export const updatesCurrentUser = async (data)=>{
         }).catch((error) => {
             console.log('err updath password')
             console.log(error)
+            return false
             // An error ocurred
             // ...
         });
 
     }
-    await updateDocUser(auth.currentUser.uid, data)
+    if(!await updateDocUser(auth.currentUser.uid, data))
+        return false
     // await updateIDDoc(auth.currentUser.uid, 'users', data)
     return true;
 }
@@ -449,7 +452,11 @@ export const updateDocUser  = async (id,data)=>{
         //console.log('in idsMangeParents')
         if (await ifPatientExists(data.idsMangeParents)){
             const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(id)}
-            await updateIDDoc(data.idsMangeParents, 'patients', patient_data)
+            if(!await updateIDDoc(data.idsMangeParents, 'patients', patient_data))
+                return false
+        }
+        else {
+            return false
         }
 
         data.idsMangeParents = firebase.firestore.FieldValue.arrayUnion(data.idsMangeParents)
@@ -458,18 +465,24 @@ export const updateDocUser  = async (id,data)=>{
     if('idsMangeTherapist' in data){
         if (await ifPatientExists(data.idsMangeTherapist)){
             const patient_data={'parents':firebase.firestore.FieldValue.arrayUnion(id)}
-            await updateIDDoc(data.idsMangeTherapist, 'patients', patient_data)
+            if(!await updateIDDoc(data.idsMangeTherapist, 'patients', patient_data))
+                return false
         }
-
+        else {
+            return false
+        }
         data.idsMangeTherapist = firebase.firestore.FieldValue.arrayUnion(data.idsMangeTherapist)
 
     }
     if('students_arr' in data){
         if (await ifPatientExists(data.students_arr)){
             const patient_data={'admin':firebase.firestore.FieldValue.arrayUnion(id)}
-            await updateIDDoc(data.students_arr, 'patients', patient_data)
+            if(!await updateIDDoc(data.students_arr, 'patients', patient_data))
+                return false
         }
-
+        else {
+            return false
+        }
         data.students_arr= firebase.firestore.FieldValue.arrayUnion(data.students_arr)
 
     }
@@ -484,7 +497,9 @@ export const updateDocUser  = async (id,data)=>{
     }
     // console.log('before tableEdit doc')
     // console.log('id',id)
-    await updateIDDoc(id, 'users', data)
+    if(await updateIDDoc(id, 'users', data))
+        return  true
+    return  false
 
 }
 export const findUserByEmail=async (email)=>{

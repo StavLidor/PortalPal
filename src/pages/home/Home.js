@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, {useState} from "react";
 import Topbar from "../../components/topbar/Topbar";
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
 import Sidebar from "../../components/sidebar/Sidebar";
@@ -12,6 +12,7 @@ import Update from "../update/Update";
 
 export default function Home({d,type,institute}){
     console.log(d,'home')
+    const [data,setData]=useState(d)
     return(
         // (type =='admin') ? (
         //     // <div className="home">
@@ -43,7 +44,7 @@ export default function Home({d,type,institute}){
                     <div className="container">
 
                         <div className="containerLeft">
-                            <Update details={d}/>
+                            <Update details={d} setData ={setData}/>
                         </div>
                         <div className="containerRight">
                             <Sidebar type={type} ids={(()=>{

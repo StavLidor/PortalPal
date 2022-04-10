@@ -1,24 +1,75 @@
 import React, { useState, Fragment,useEffect } from "react"
-export default  function Update({details}){
-    const [isEdit, setIsEdit] = useState(true)
-    const [editedDetails,setEditDetails] =useState(details)
+import {updatesCurrentUser} from "../../firebase";
+export default  function Update({details,setData}){
+    const [isEdit, setIsEdit] = useState(false)
+    const [editedDetails,setEditDetails] =useState({
+        firstName:details.firstName,lastName:details.lastName,email:details.email,
+            lastPassword:"",newPassword:""}
+        )
     const [editPassword,setEditPassword] =useState(false)
+    const submitHandler=async e=>{
+        e.preventDefault()
+        let data ={}
+        for (const [key, value] of Object.entries(editedDetails)) {
+            if(key in details && value!=details[key])
+                data[key]=value
+        }
+        let flag = false
+        if(editPassword &&editedDetails.lastPassword == details.password &&
+        editedDetails.newPassword.length>5){
+            data['password']=editedDetails.newPassword
+            flag = true
+        }
+        if(await updatesCurrentUser(data)){
+            if(flag){
+                details.password=editedDetails.newPassword
+            }
+            for (const [key, value] of Object.entries(editedDetails)) {
+                if(key in details && value!=details[key])
+                    details[key]=value
+            }
+            setData(details)
+            setIsEdit(false)
+        }
+        else{
+            setEditDetails({firstName:details.firstName,lastName:details.lastName,email:details.email,
+                lastPassword:"",newPassword:""})
+        }
+
+    }
     return(
       <div>
           <h1>פרטים שלי</h1>
           <div className="form-group">
               <label htmlFor="firstName">שם פרטי:</label>
               {/*{details.firstName}*/}
-              <input type="firstName" name="firstName" id="firstName"
-                /*onChange={e=>setDetails({...details,password:e.target.value})}*/
+              <input type="text" name="firstName" id="firstName"
+                onChange={e=>{
+                    if(isEdit)
+                        setEditDetails({...editedDetails,firstName:e.target.value})}
+                }
+
                      value={editedDetails.firstName}/>
           </div>
           <div className="form-group">
               <label htmlFor="lastName">שם משפחה:</label>
               {/*{details.firstName}*/}
-              <input type="lastName" name="lastName" id="lastName"
-                  /*onChange={e=>setDetails({...details,password:e.target.value})}*/
+              <input type="text" name="lastName" id="lastName"
+                     onChange={e=>{
+                         if(isEdit)
+                             setEditDetails({...editedDetails,lastName:e.target.value})}
+                     }
                      value={editedDetails.lastName}/>
+          </div>
+          <div className="form-group">
+              <label htmlFor="email">אימייל:</label>
+              {/*{details.firstName}*/}
+              <input type="text" name="email" id="email"
+                     onChange={e=>{
+                         if(isEdit)
+                             setEditDetails({...editedDetails,email:e.target.value})}
+                     }
+                     value={editedDetails.email}/>
           </div>
           {isEdit &&
               <div>
@@ -37,15 +88,15 @@ export default  function Update({details}){
               <div>
                       <div className="form-group">
                           <label htmlFor="password">סיסמא ישנה:</label>
-                          <input type="password" name="password" id="password"
-                              /*onChange={e=>setDetailsNewUser({...detailsNewUser,password:e.target.value})}
-                              value={detailsNewUser.password}*//>
+                          <input type="password" name="lastPassword" id="lastPassword"
+                              onChange={e=>setEditDetails({...editedDetails,lastPassword:e.target.value})}
+                              value={setEditDetails.lastPassword}/>
                       </div>
                       <div className="form-group">
                       <label htmlFor="password">סיסמא חדשה:</label>
-                      <input type="password" name="password" id="password"
-                      /*onChange={e=>setDetailsNewUser({...detailsNewUser,password:e.target.value})}
-                      value={detailsNewUser.password}*//>
+                      <input type="password" name="newPassword" id="newPassword"
+                             onChange={e=>setEditDetails({...editedDetails,newPassword:e.target.value})}
+                             value={setEditDetails.newPassword}/>
                       </div>
               </div>
                   }
@@ -54,12 +105,20 @@ export default  function Update({details}){
 
 
               }
-          {isEdit ===null &&
+          {!isEdit &&
               <button
                   type="button"
-                  /*onClick={(event) => handleEditClick(event, contact)}*/
+                  onClick={(event) => setIsEdit(true)}
               >
                   ערוך
+              </button>
+          }
+          {isEdit &&
+              <button
+                  type="button"
+                  onClick={(event) => submitHandler(event)}
+              >
+                  שמור
               </button>
           }
 

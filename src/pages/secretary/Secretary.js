@@ -20,7 +20,7 @@ import {
     updatesCurrentUser,
     detailsPatient,
     updateDocUser,
-    updateDocUserWithArrayFiled, addConnectionUserToTherapist
+    updateDocUserWithArrayFiled, addConnectionPatientToTherapist, removeConnectionPatientToTherapist
 } from "../../firebase";
 import TableEdit from "../../components/tableEdit/TableEdit";
 import Patient from "../patient/Patient";
@@ -188,11 +188,14 @@ export default function Secretary({data}){
     ]
     const addConnectionToTherapist = async (details)=>{
         // console.log("EEEEEEEEEEEEEE",idGetTable)
-        return  addConnectionUserToTherapist(idGetTable,details.id,data.institutionNumber)
+        return   await addConnectionPatientToTherapist(idGetTable,details.id,data.institutionNumber)
     }
-    const deleteConnectionToTherapist = async (details)=>{
+    const deleteConnectionToTherapist = async (id)=>{
+        // console.log("EEEEEEEEEEEEEE",idGetTable)
+        return await removeConnectionPatientToTherapist(idGetTable,id,data.institutionNumber)
 
     }
+
 
     return(
         <div className="secretary">
@@ -244,6 +247,7 @@ export default function Secretary({data}){
                             } inputsView={inputsViewTherapist}  requeredId={false}
                             find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",firstName:"",lastName:""/**/}} toEdit={true} toAdd={true} table={getTable}
                                                                        inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist} deleteObj={deleteConnectionToTherapist}
+                                                                       deleteObjTable={deleteConnectionToTherapist}
 
                             />}/>
 

@@ -405,7 +405,18 @@ export const filedAdd  = async (data,nameFiled1,nameFiled2,id,idAdd,f)=>{
 
 
 }
-export  const addConnectionUserToTherapist = async (id,idAdd,institutionNumber)=>{
+export  const  removeConnectionPatientToTherapist = async (id,idRemove,institutionNumber)=>{
+    // remove for patient
+    const filed = "institutes."+institutionNumber
+    const removeTherapist ={[filed]:firebase.firestore.FieldValue.arrayRemove(id)}
+    if(!await updateIDDoc(idRemove, 'patients', removeTherapist))
+        return false
+    const data = {[filed]:firebase.firestore.FieldValue.arrayRemove(idRemove)}
+    if(await updateIDDoc(id, 'users', data))
+        return true
+    return false
+}
+export  const addConnectionPatientToTherapist = async (id,idAdd,institutionNumber)=>{
     const filedName ="institutes."+institutionNumber
     const data ={[filedName]:idAdd}
     const d = await filedAdd(data, filedName, filedName, id, idAdd,

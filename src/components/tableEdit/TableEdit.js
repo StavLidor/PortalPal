@@ -382,7 +382,7 @@ export default  function TableEdit({
 
 
                        <div>{contactTable.id}</div>
-                       <TableEdit add ={addTable} update ={updateTable} deleteObj={deleteObjTable}
+                       <TableEdit add ={addTable}  deleteObj={deleteObjTable}
                                   emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable} data={table(contactTable)/*contactTable[tableName]*/}
                                   HebrewNames={HebrewNamesTable} inputsView={inputsViewTable}  requeredId={true}
                                   toEdit={false} toAdd={true}

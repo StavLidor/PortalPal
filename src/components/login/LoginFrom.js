@@ -1,30 +1,65 @@
 
-import React,{useState} from "react";
+import React, {useEffect, useState} from "react";
 import Home from "../../pages/home/Home";
 import {signUser, unSignUser,newUser} from "../../pepole/users/user";
 import {signOut} from "firebase/auth";
-import {auth, detailsPatient, detailsWorks, resetPassword} from "../../firebase";
+import {auth, detailsPatient, detailsWorks, getDocCurrentUser, resetPassword, updatesCurrentUser} from "../../firebase";
 
 
 export default function LoginFrom(){
 
     const [details,setDetails] = useState({email:"",password:"",type:"therapist",institute:"external"});
     const [detailsNewUser,setDetailsNewUser] = useState({name:"",/*type:"therapist",*/email:"",password:"",/*patients:""*/});
-    const [isMovePage,setIsMovePage] = useState(false)
+    const [isMovePage,setIsMovePage] = useState(true)
     const [isFormNewUser,setFormNewUser] = useState(false)
     const [info,setInfo] = useState({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
         passwordCurrent:'',institutionNumber:'',works:[]});
+    const [loginNow,setLoginNow]=useState(false)
     // if (login){
     //     setIsMovePage(true)
     // }
-    const submitHandler=async e=>{
-        e.preventDefault();
-        const infor = await  signUser(details)
-        const p1=Promise.resolve(infor)
-        p1.then(doc => {
+    useEffect(()=>{
+       const unsubscribe= auth.onAuthStateChanged(async user => {
+           if (user) {
+               console.log('user',user)
+               setIsMovePage(true)
+               resolver(await getDocCurrentUser())
+
+           } else {
+               setIsMovePage(false)
+               setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
+                   passwordCurrent:'',institutionNumber:'',works:[]})
+           }
+           // if(initializing){
+           //     setInitializing(false)
+           // }
+       })
+        return unsubscribe
+
+    },[])
+    const resolver=async val=>{
+        const p=Promise.resolve(val)
+        p.then(doc => {
             const data = doc.data()
             const id = doc.id
             console.log('lalalala')
+            if(loginNow){
+                if(details.type !=="admin" && details.type !=="parent" ){
+                    updatesCurrentUser({lastLogin:details.type+","+details.institute})
+                }
+                else {
+                    updatesCurrentUser({lastLogin:details.type})
+                }
+
+            }
+            else {
+                let lastLogin = data.lastLogin.split(",")
+                console.log(lastLogin,"lastLogin")
+                if (lastLogin.length == 2){
+                    details.institute = lastLogin[1]
+                }
+                details.type = lastLogin[0]
+            }
             if (details.type === 'admin'/*||details.type === 'therapist'*/){
                 const arrStudents=detailsPatient(data.students_arr)
                 const arrWorks=detailsWorks(data.works)
@@ -43,12 +78,21 @@ export default function LoginFrom(){
             }
         })
     }
+    const submitHandler=async e=>{
+        e.preventDefault()
+        setIsMovePage(true)
+        setLoginNow(true)
+       await  signUser(details)
+
+
+    }
     const Logout = ()=>{
         // console.log('logout');
 
         setDetails({email:"",password:""});
         setIsMovePage(false)
-        setInfo({name:""})
+        setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
+            passwordCurrent:'',institutionNumber:'',works:[]})
         unSignUser()
     }
      const submitLink = function (){
@@ -67,11 +111,11 @@ export default function LoginFrom(){
     }
 
     return(
-        (info.firstName !=='') ? (
+        (isMovePage) ? (
             <div>
                 <button  onClick={Logout} >Logout</button>
 
-                <Home d={info} type={details.type} institute={details.institute}/>
+                {info.firstName!=="" && <Home d={info} type={details.type} institute={details.institute}/>}
             </div>
         ):
         (isFormNewUser) ? (

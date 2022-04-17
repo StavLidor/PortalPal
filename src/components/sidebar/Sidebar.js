@@ -2,15 +2,22 @@ import "./sidebar.css"
 import {LineStyle} from '@mui/icons-material';
 // import Patient from "./pages/patient/Patient"
 import React, {useEffect, useState} from "react";
-import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
+import {BrowserRouter as Router, Link, Route, Routes,useLocation} from "react-router-dom";
 import Patient from "../../pages/patient/Patient";
 import ListMeeting from "../../meetingSummaries/listMeetingSummries/ListMeeting"
 import ViewMeetingSummaries from "../../meetingSummaries/viewMeetingSummaries/ViewMeetingSummaries"
-import {detailsPatient} from "../../firebase";
+import {db, detailsPatient} from "../../firebase";
+import {collection, getDocs, limit, orderBy, query, where} from "firebase/firestore";
 
 
 export default function Sidebar({type,ids}){
     const [arr_data, setArrData] = useState([])
+    // const location = useLocation()
+    // useEffect(() => {
+    //     // return history.listen((location) => {
+    //     //     console.log(`You changed the page to: ${location.pathname}`)
+    //     // })
+    // },[location])
 
     useEffect(()=>{
         const p1 = Promise.resolve(ids)
@@ -32,6 +39,7 @@ export default function Sidebar({type,ids}){
                 <h1>רשימת תלמידים</h1>
 
          }
+            <Router>
             {
 
                 arr_data.map((p) => (
@@ -42,7 +50,7 @@ export default function Sidebar({type,ids}){
 
 
                             </div>
-                            <Router>
+
                                 <div className='sidebarMenu'>
 
 
@@ -61,16 +69,19 @@ export default function Sidebar({type,ids}){
 
                                     </ul>
                                     <Routes>
-                                        <Route path={"/"+p.id+"/*"} element={<Patient id={p.id} />}/>
+                                        <Route path={"/"+p.id+"/*"} element={<Patient details={p} /*id={p.id}*/ />}/>
                                     </Routes>
                                 </div>
-                            </Router>
+
                         </div>
 
                     </div>
 
                 ))
+
             }
+            </Router>
+
 
 
         </div>

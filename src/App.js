@@ -2,6 +2,7 @@ import React from 'react';
 import "./app.css"
 
 import LoginFrom from "./components/login/LoginFrom";
+import Chat from "./components/chat/Chat";
 
 function App() {
     // function getInstitutes() {
@@ -33,6 +34,7 @@ function App() {
     <div className="App">
         {/*<Secretary signUser={signUser}  new_user={newUser} new_patients={newPatients} variant={false}/>*/}
     {/*<AddMeetingSummaries/>*/}
+    {/*    <Chat userUid1="Rahbt7jhvugjFSsnrcnBb5VMfUb2" userUid2="Rahbt7jhvugjFSsnrcnBb5VMfUb2"/>*/}
       <LoginFrom />
     </div>
 

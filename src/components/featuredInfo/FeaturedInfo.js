@@ -53,6 +53,7 @@ export default function FeaturedInfo({id}){
                         &nbsp;
                         <ul className="featuredListItem">
                             התקשורת
+
                             &nbsp;
 
                         </ul>

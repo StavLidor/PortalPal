@@ -8,6 +8,7 @@ import Secretary from "../secretary/Secretary";
 import ReadOnlyRow from "../../components/tableEdit/ReadOnlyRow";
 import {detailsPatient} from "../../firebase";
 import Update from "../update/Update";
+import Chat1 from "../../components/chat/Chat1"
 
 
 export default function Home({d,type,institute}){
@@ -42,7 +43,7 @@ export default function Home({d,type,institute}){
                     // </div>
                 ) :
                     <div className="container">
-
+                        {/*<Chat1 userUid1={d.id} userUid2={d.id}/>*/}
                         <div className="containerLeft">
                             <Update details={d} setData ={setData}/>
                         </div>
@@ -57,6 +58,7 @@ export default function Home({d,type,institute}){
                             })()
 
                             }/>
+                            {/*<Chat1/>*/}
                         </div>
 
 

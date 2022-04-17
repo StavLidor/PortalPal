@@ -127,7 +127,11 @@ export default function Secretary({data}){
         {type:"email",required:"required"
             ,name:"email",label:"איימיל של הורה:",
             edit:false,add:true
-        }
+        },
+        // {type:"text",required:"required"
+        //     ,name:"gender",label:"מין",
+        //     edit:true,add:true
+        // }
 
     ]
     const inputsViewTherapist =[

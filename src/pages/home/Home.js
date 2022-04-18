@@ -8,7 +8,7 @@ import Secretary from "../secretary/Secretary";
 import ReadOnlyRow from "../../components/tableEdit/ReadOnlyRow";
 import {detailsPatient} from "../../firebase";
 import Update from "../update/Update";
-import Chat1 from "../../components/chat/Chat1"
+import Chat1 from "../../components/chats/Chat1"
 
 
 export default function Home({d,type,institute}){

@@ -625,6 +625,41 @@ export const deleteTherapistFromInstitute = async (institute,removeId,id)=>{
 //     });
 //
 // }
+const getDocUser= async (id)=>{
+    let docRef = doc(db, "users", id);
+    let d =  await getDoc(docRef)
+    return d.data()
+}
+
+export const connections= async (details)=>{
+    let usersConnections=[]
+    details.parents.map(async (p) => {
+        let data = await getDocUser(p)
+        usersConnections.push({
+            id: p, firstName: data.firstName, lastName: data.lastName,
+            connection: 'parent'
+        })
+    })
+    details.therapistsOutside.map(async (p) => {
+        let data = await getDocUser(p)
+        usersConnections.push({
+            id: p, firstName: data.firstName, lastName: data.lastName,
+            connection: data.jobs, institute: 'outside'
+        })
+    })
+    for (const [key, value] of Object.entries(details.institutes)) {
+        value.map(async (p) => {
+            let data = await getDocUser(p)
+            usersConnections.push({
+                id: p, firstName: data.firstName, lastName: data.lastName,
+                connection: data.jobs, institute: key
+            })
+        })
+        //console.log(key, value);
+    }
+        return usersConnections
+    //parents,therapistsOutside,institutes
+}
 
 export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail, deletePatientFromInstitute,detailsPatient,updateIDDoc,deleteDocFrom,
     deleteCurrentUser,allDetailsMeetings,addUserFromAdmin};

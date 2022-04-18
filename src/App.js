@@ -2,7 +2,7 @@ import React from 'react';
 import "./app.css"
 
 import LoginFrom from "./components/login/LoginFrom";
-import Chat from "./components/chat/Chat";
+import Chat from "./components/chats/Chat";
 
 function App() {
     // function getInstitutes() {

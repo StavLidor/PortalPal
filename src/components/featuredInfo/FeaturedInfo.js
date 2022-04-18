@@ -2,9 +2,11 @@ import "./featuredInfo.css"
 import React from "react";
 import ListMeeting from "../../meetingSummaries/listMeetingSummries/ListMeeting"
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
+import Chats from "../chats/Chats";
+import {auth, connections} from "../../firebase";
 // import {Container} from "@mui/material";
 
-export default function FeaturedInfo({id}){
+export default function FeaturedInfo({details}){
     return(
         <div className="featured">
             <div className="featuredWrapper">
@@ -51,17 +53,22 @@ export default function FeaturedInfo({id}){
 
                         </ul>
                         &nbsp;
+                        <Link to={"chats/*"} className="link">
                         <ul className="featuredListItem">
                             התקשורת
 
                             &nbsp;
 
                         </ul>
+                        </Link>
                     </ul>
                          <Routes>
-                         <Route path={"meetings/*"} element={<ListMeeting id={id}  />} />
-                         </Routes>
+                         <Route path={"meetings/*"} element={<ListMeeting id={details.id}  />} />
 
+                         </Routes>
+                    <Routes>
+                    <Route path={"chats/*"} element={<Chats patient={details.id} userId={auth.currentUser.uid} talkersIds={connections(details)}  />} />
+                    </Routes>
 {/*                     <Routes> */}
 {/*                     <Route path={"/"+id +"/meetings/*"} element={<ListMeeting id={id} arr_data={[ */}
 {/*                     {date:"03/02/2022 12:00 AM",summaries:"123"}]} />} /> */}

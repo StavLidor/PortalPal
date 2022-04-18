@@ -21,7 +21,7 @@ export default function Patient({details}){
                 <label htmlFor="city">מקום מגורים:</label>
             {details.city}
             </div>
-            <FeaturedInfo id={details.id}/>
+            <FeaturedInfo details={details}/>
             {/*<div>*/}
             {/*        somting*/}
             {/*</div>*/}

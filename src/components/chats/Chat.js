@@ -4,7 +4,7 @@ import firebase from "firebase/compat/app"
 import {auth, db, getDocCurrentUser,} from "../../firebase";
 import {collection, query, where, addDoc, Timestamp, orderBy, limit, onSnapshot, getDocs} from "firebase/firestore";
 import Message from "./message";
-export default function Chat({userUid1=null,userUid2=null}){
+export default function Chat({userUid1=null,userUid2=null,patient}){
     const [messages,setMessages]=useState([])
     const [newMessage,setNewMessage]=useState('')
     const [click,setClick]=useState(true)
@@ -13,7 +13,8 @@ export default function Chat({userUid1=null,userUid2=null}){
 
     }
     useEffect(async () => {
-        const unsubscribe = query(collection(db, "messages"), where("senderAndReceiver", 'in',
+        const unsubscribe = query(collection(db, "messages"),
+            where('patient','==',patient),where("senderAndReceiver", 'in',
             [{receiver: userUid1, sender: userUid2},
                 {sender: userUid2, receiver: userUid1}]),orderBy("createdAt", "desc"), limit(100),
 

@@ -3,13 +3,15 @@ import React, {useEffect, useState} from "react";
 import Home from "../../pages/home/Home";
 import {signUser, unSignUser,newUser} from "../../pepole/users/user";
 import {signOut} from "firebase/auth";
-import {auth, detailsPatient, detailsWorks, getDocCurrentUser, resetPassword, updatesCurrentUser} from "../../firebase";
+import {auth, detailsPatient, detailsWorks, getDocCurrentUser, resetPassword, updatesCurrentUser} from "../../firebase"
+import approve from "../../crawler/Crawler"
 
 
 export default function LoginFrom(){
 
     const [details,setDetails] = useState({email:"",password:"",type:"therapist",institute:"external"});
-    const [detailsNewUser,setDetailsNewUser] = useState({name:"",/*type:"therapist",*/email:"",password:"",/*patients:""*/});
+    const [detailsNewUser,setDetailsNewUser] = useState({firstName:"",
+        lastName:"",license:"",email:"",password:""});
     const [isMovePage,setIsMovePage] = useState(true)
     const [isFormNewUser,setFormNewUser] = useState(false)
     const [info,setInfo] = useState({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
@@ -68,7 +70,7 @@ export default function LoginFrom(){
                 console.log('institutionNumber',data.institutionNumber)
             }
             else {
-                if(details.institute !="external" && !(details.institute in data.institutes)) {
+                if(details.institute !="external" && ('institute' in data)&& !(details.institute in data.institutes)) {
                     unSignUser()
                 }
                 else{
@@ -80,9 +82,12 @@ export default function LoginFrom(){
     }
     const submitHandler=async e=>{
         e.preventDefault()
-        setIsMovePage(true)
-        setLoginNow(true)
-       await  signUser(details)
+
+       if(await  signUser(details)){
+           setIsMovePage(true)
+           setLoginNow(true)
+           console.log('connected')
+       }
 
 
     }
@@ -105,7 +110,9 @@ export default function LoginFrom(){
     }
     const submitNewUser=e=>{
         e.preventDefault();
-        newUser(detailsNewUser);
+        // approve(detailsNewUser.license,detailsNewUser.firstName,detailsNewUser.lastName)
+        newUser(detailsNewUser)
+
         setFormNewUser(false)
         // Login(details);
     }
@@ -124,8 +131,16 @@ export default function LoginFrom(){
                         מטפל
                     </h2>
                     <div className="form-group" >
-                        <label htmlFor="name">שם:</label>
-                        <input type="text" name="name1" id="name1"onChange={e=>setDetailsNewUser({...detailsNewUser,name:e.target.value})} value={detailsNewUser.name}/>
+                        <label htmlFor="firstName">שם פרטי:</label>
+                        <input type="text" name="firstName" id="firstName"onChange={e=>setDetailsNewUser({...detailsNewUser,firstName:e.target.value})} value={detailsNewUser.firstName}/>
+                    </div>
+                    <div className="form-group" >
+                        <label htmlFor="lastName">שם משפחה:</label>
+                        <input type="text" name="lastName" id="lastName"onChange={e=>setDetailsNewUser({...detailsNewUser,lastName:e.target.value})} value={detailsNewUser.lastName}/>
+                    </div>
+                    <div className="form-group" >
+                        <label htmlFor="license">רשיון:</label>
+                        <input type="text" name="license" id="license" onChange={e=>setDetailsNewUser({...detailsNewUser,license:e.target.value})} value={detailsNewUser.license}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="email">איימיל:</label>

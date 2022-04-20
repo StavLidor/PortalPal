@@ -69,7 +69,7 @@ export default function Sidebar({type,ids}){
 
                                     </ul>
                                     <Routes>
-                                        <Route path={"/"+p.id+"/*"} element={<Patient details={p} /*id={p.id}*/ />}/>
+                                        <Route path={"/"+p.id+"/*"} type ={type} element={<Patient details={p} /*id={p.id}*/ />}/>
                                     </Routes>
                                 </div>
 

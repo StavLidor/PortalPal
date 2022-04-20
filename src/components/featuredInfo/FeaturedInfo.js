@@ -3,10 +3,11 @@ import React from "react";
 import ListMeeting from "../../meetingSummaries/listMeetingSummries/ListMeeting"
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
 import Chats from "../chats/Chats";
-import {auth, connections} from "../../firebase";
+import {auth, connections} from "../../firebase"
+import Code from  "../code/Code"
 // import {Container} from "@mui/material";
 
-export default function FeaturedInfo({details}){
+export default function FeaturedInfo({details,type}){
     return(
         <div className="featured">
             <div className="featuredWrapper">
@@ -46,6 +47,10 @@ export default function FeaturedInfo({details}){
 
                         </ul>
                         </Link>
+                        <Routes>
+                            <Route path={"meetings/*"} element={<ListMeeting id={details.id}  />} />
+
+                        </Routes>
                         &nbsp;
                         <ul className="featuredListItem">
                             תרגילים
@@ -61,11 +66,24 @@ export default function FeaturedInfo({details}){
 
                         </ul>
                         </Link>
-                    </ul>
-                         <Routes>
-                         <Route path={"meetings/*"} element={<ListMeeting id={details.id}  />} />
+                        {/*{type =='parent' &&*/}
+                        {/*    <>*/}
+                        {/*    <Link to={"code/*"} className="link">*/}
+                        {/*        <ul className="featuredListItem">*/}
+                        {/*            קוד עבור מטפל חדש*/}
 
-                         </Routes>
+                        {/*            &nbsp;*/}
+
+                        {/*        </ul>*/}
+                        {/*    </Link>*/}
+                        {/*    <Routes>*/}
+                        {/*        <Route path={"code/*"} element={<Code/>} />*/}
+                        {/*    </Routes>*/}
+                        {/*    </>*/}
+
+                        {/*}*/}
+                    </ul>
+
                     <Routes>
                     <Route path={"chats/*"} element={<Chats patient={details.id} userId={auth.currentUser.uid} talkersIds={connections(details)}  />} />
                     </Routes>

@@ -2,7 +2,7 @@ import "./patient.css"
 import React from "react";
 import FeaturedInfo from "../../components/featuredInfo/FeaturedInfo";
 
-export default function Patient({details}){
+export default function Patient({details,type}){
     return(
         <div className="patient">
             <div className="form-group">
@@ -21,7 +21,7 @@ export default function Patient({details}){
                 <label htmlFor="city">מקום מגורים:</label>
             {details.city}
             </div>
-            <FeaturedInfo details={details}/>
+            <FeaturedInfo details={details} type={type}/>
             {/*<div>*/}
             {/*        somting*/}
             {/*</div>*/}

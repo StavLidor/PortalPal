@@ -16,7 +16,7 @@ export default function Chat({userUid1=null,userUid2=null,patient}){
         const unsubscribe = query(collection(db, "messages"),
             where('patient','==',patient),where("senderAndReceiver", 'in',
             [{receiver: userUid1, sender: userUid2},
-                {sender: userUid2, receiver: userUid1}]),orderBy("createdAt", "desc"), limit(100),
+                {sender: userUid2, receiver: userUid1}]),orderBy("createdAt", "asc"), limit(100),
 
         )
         console.log('blb')
@@ -42,7 +42,8 @@ export default function Chat({userUid1=null,userUid2=null,patient}){
             const docRef = await addDoc(collection(db, "messages"), {
                 text:newMessage,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                senderAndReceiver:{sender:userUid1,receiver:userUid2}
+                senderAndReceiver:{sender:userUid1,receiver:userUid2},
+                patient:patient
             })
             setNewMessage('')
         }

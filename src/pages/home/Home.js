@@ -49,8 +49,11 @@ export default function Home({d,type,institute}){
                         </div>
                         <div className="containerRight">
                             <Sidebar type={type} ids={(()=>{
-                                if(type == 'parent')
-                                    return d.idsMangeParents
+                                if(type == 'parent'){
+                                    console.log(d.idsMangeParents)
+                                    return detailsPatient(d.idsMangeParents)
+                                }
+
                                 if(institute == 'external')
                                     return d.patients
                                 console.log('students',d.institutes[institute])

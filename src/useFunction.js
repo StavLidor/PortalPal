@@ -1,4 +1,7 @@
-
+// import DDPClient from 'ddp-client'
+// import hash from 'hash.js'
+// import {sha256} from 'crypto-hash'
+import hashcode from 'hashcode'
 function makePassword(length) {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -9,4 +12,18 @@ function makePassword(length) {
     }
     return result;
 }
-export default makePassword
+let ddpClient = new DDPClient({
+    host: 'localhost',
+    port: '3000',
+    // url: <your websocket url>
+});
+ddpClient.sha256 = (password) => {
+    return {
+        digest: hash.sha256().update(password).digest('hex'),
+        algorithm: "sha-256"
+    };
+}
+
+
+
+export default {makePassword,ddpClient}

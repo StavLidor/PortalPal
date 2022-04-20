@@ -35,9 +35,11 @@ export const newUser=async details=>{
 export const signUser = async details=>{
     try {
         const res = await signInWithEmailAndPassword(auth, details.email, details.password)
+        return true
     }
     catch (err){
         console.log(err)
+        return false
     }
 
     // later check before if this in Cache

@@ -16,21 +16,21 @@
 // } from 'node-fetch'
 // import fetch from 'node-fetch'
 
-import fetch from 'cross-fetch'
-import cheerio from 'cheerio'
+// import fetch from 'cross-fetch'
+// import cheerio from 'cheerio'
 import axios from "axios";
 
 async function approve(license, firstName, lastName) {
-    const response=await fetch('https://practitioners.health.gov.il/Practitioners/search?license=' + license, {
-            mode: 'no-cors',
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(response=>
-        console.log("html",response)
-
-    )
+    // const response=await fetch('https://practitioners.health.gov.il/Practitioners/search?license=' + license, {
+    //         mode: 'no-cors',
+    //         method: 'GET',
+    //         headers: {
+    //             'X-Requested-With': 'XMLHttpRequest'
+    //         }
+    //     }).then(response=>
+    //     console.log("html",response)
+    //
+    // )
     // const html = await response.text()
     //
     // await response.json().then((j)=>{

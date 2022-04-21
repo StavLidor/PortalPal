@@ -9,6 +9,7 @@ import ReadOnlyRow from "../../components/tableEdit/ReadOnlyRow";
 import {detailsPatient} from "../../firebase";
 import Update from "../update/Update";
 import Chat1 from "../../components/chats/Chat1"
+import Code from "../../components/code/Code";
 
 
 export default function Home({d,type,institute}){
@@ -47,6 +48,7 @@ export default function Home({d,type,institute}){
                         <div className="containerLeft">
                             <Update details={d} setData ={setData}/>
                         </div>
+                        {type !== 'parent' && <Code type={type} />}
                         <div className="containerRight">
                             <Sidebar type={type} ids={(()=>{
                                 if(type == 'parent'){

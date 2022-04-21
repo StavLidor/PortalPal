@@ -206,18 +206,25 @@ export const  detailsPatient= async arr_id =>{
     //console.log('ALL',arr_data)
     return arr_data
 }
-export const allDetailsMeetings = async (id)=>{
+export const allDetailsMeetings = async (id,type)=>{
     console.log('allDetailsMeetings')
-    const q= query(collection(db,"summaries"), where("therapist", '==',auth.currentUser.uid));
+    let q
+    if(type != 'parent')
+        q= query(collection(db,"summaries"), where("therapist", '==',auth.currentUser.uid),
+        where("client", '==',id))
+    else
+        q= query(collection(db,"summaries"),
+            where("client", '==',id))
     // const q=query(q1,where("client", '==',id))
     console.log('allDetailsMeetings222')
     const querySnapshot = await getDocs(q);
     const arr =[]
     querySnapshot.forEach( (doc) => {
-        if (doc.data().client === id){
-            arr.push(doc.data())
-            console.log('id',doc.id)
-        }
+        arr.push(doc.data())
+        console.log('id',doc.id)
+        // if (doc.data().client === id){
+        //
+        // }
 
 
 
@@ -396,6 +403,45 @@ export const setIDDoc  = async (id,name_path,data)=>{
     //await updateDoc(doc(db, name_path, id), data,{marge:true});
     //auth.currentUser.uid
     await setDoc(doc(db, name_path, id.toString()), data);
+
+}
+export const addPatientToExternalTherapist= async (id,code)=>{
+    const d =await ifPatientExists(id)
+    if(!d)
+        return false
+    if( code in d.code){
+        const patient_data={'code':firebase.firestore.FieldValue.arrayRemove(code),
+            'institutes.external': firebase.firestore.FieldValue.arrayUnion(auth.currentUser.uid)}
+        const filedName ='institutes.external'
+        if(!await updateIDDoc(id, 'patients', patient_data))
+            return false
+        if(await updateIDDoc(id, 'users', {'institutes.external': firebase.firestore.FieldValue.arrayUnion(id)}))
+            return true
+    }
+    return false
+
+}
+export const addToPatientArr=async (id,filed,data)=>{
+
+    const d =await ifPatientExists(id)
+    console.log('find patient',id,d)
+    if(!d)
+        return false
+
+    let patient_data
+
+    if(filed in d){
+
+        patient_data={[filed]:firebase.firestore.FieldValue.arrayUnion(data)}
+    }
+    else {
+
+        patient_data={[filed]:[data]}
+    }
+
+    if(!await updateIDDoc(id, 'patients', patient_data))
+        return false
+    return true
 
 }
 export const filedAdd  = async (data,nameFiled1,nameFiled2,id,idAdd,f)=>{

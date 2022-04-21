@@ -47,8 +47,9 @@ export default function FeaturedInfo({details,type}){
 
                         </ul>
                         </Link>
+
                         <Routes>
-                            <Route path={"meetings/*"} element={<ListMeeting id={details.id}  />} />
+                            <Route path={"meetings/*"} element={<ListMeeting id={details.id} type={type}  />} />
 
                         </Routes>
                         &nbsp;

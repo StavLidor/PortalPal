@@ -8,11 +8,12 @@ import {allMeetingOf, removeMeeting} from "../database/Database";
 import ViewMeetingSummaries from "../viewMeetingSummaries/ViewMeetingSummaries"
 
 
-export default function ListMeeting({id}){
+export default function ListMeeting({id,type}){
+    console.log('ListMeeting',type)
     const [data, setData] = useState([])
     useEffect(()=>{
         console.log('useEffect')
-        allMeetingOf(id).then(arr => {
+        allMeetingOf(id,type).then(arr => {
             console.log('then',arr)
             setData(arr)
         })
@@ -21,7 +22,7 @@ export default function ListMeeting({id}){
     // const allMeetings =async ()=>{
     //
     // }
-     console.log('ListMeeting')
+    //  console.log('ListMeeting')
      // const submitNewMeeting=e=>{
      //        e.preventDefault();
      //        // new_patients(detailsPatients);
@@ -49,23 +50,30 @@ export default function ListMeeting({id}){
              {/*<form onSubmit={submitNewMeeting} >*/}
              {/*<input type="submit" name="add" value="הוספת פגישה חדשה"/>*/}
              {/*</form>*/}
-            <ul className="sidebarList">
-                <Link to={ "newMeeting"} className="link">
+            {type!=='parent' &&
+                <>
+                <ul className="sidebarList">
 
-                    <ul className="sidebarListItem">
-                        הוספה פגישה חדשה
-                        &nbsp;
+                    <Link to={ "newMeeting"} className="link">
 
-                    </ul>
-                </Link>
+                        <ul className="sidebarListItem">
+                            הוספה פגישה חדשה
+                            &nbsp;
 
-                &nbsp;
+                        </ul>
+                    </Link>
 
-            </ul>
-            <Routes>
-                <Route path={ "newMeeting"} element={<ViewMeetingSummaries client_id={id} last_data={{date:"",summary:""}}
-                                                                           addMeeting ={addMeeting} />} />
-            </Routes>
+                    &nbsp;
+
+                </ul>
+                    <Routes>
+                        <Route path={ "newMeeting"} element={<ViewMeetingSummaries client_id={id} last_data={{date:"",summary:""}} addMeeting ={addMeeting} />} />
+                    </Routes>
+                </>
+
+            }
+
+
               <h1>רשימת מפגשים</h1>
             {
 

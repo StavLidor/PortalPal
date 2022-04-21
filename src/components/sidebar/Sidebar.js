@@ -33,7 +33,7 @@ export default function Sidebar({type,ids}){
         {
             type ==="therapist"?(
                 <h1>רשימת מטופלים</h1>
-            ): (type ==="parents")?(
+            ): (type ==="parent")?(
                     <h1>רשימת ילדים</h1>
                 ):
                 <h1>רשימת תלמידים</h1>
@@ -69,7 +69,7 @@ export default function Sidebar({type,ids}){
 
                                     </ul>
                                     <Routes>
-                                        <Route path={"/"+p.id+"/*"} type ={type} element={<Patient details={p} /*id={p.id}*/ />}/>
+                                        <Route path={"/"+p.id+"/*"}  element={<Patient details={p} type ={type} /*id={p.id}*/ />}/>
                                     </Routes>
                                 </div>
 

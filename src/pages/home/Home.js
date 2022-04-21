@@ -48,7 +48,7 @@ export default function Home({d,type,institute}){
                         <div className="containerLeft">
                             <Update details={d} setData ={setData}/>
                         </div>
-                        {type !== 'parent' && <Code type={type} />}
+                        {type != 'parent'&&institute == 'external' && <Code type={type} />}
                         <div className="containerRight">
                             <Sidebar type={type} ids={(()=>{
                                 if(type == 'parent'){

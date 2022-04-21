@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import {makePassword,ddpClient} from "../../useFunction"
+import {makePassword} from "../../useFunction"
 import {addPatientToExternalTherapist, addToPatientArr} from "../../firebase";
 import hash from "hash.js";
 
@@ -10,7 +10,7 @@ export default function Code({id=null,type}){
     const submitCreate = async e => {
         e.preventDefault()
         const realCode =makePassword(10)
-        const hashCode = hash.sha256().update(realCode).digest()
+        const hashCode = hash.sha256().update(realCode).digest("hex")
         setCode(hashCode)
 
         if(await addToPatientArr(id,'code',realCode))
@@ -38,7 +38,7 @@ export default function Code({id=null,type}){
     ):
             <form onSubmit={submitAdd }>
                 <div className="form-group">
-                    <label htmlFor="email">איימיל:</label>
+                    <label htmlFor="id">תז</label>
                     <input type="text" name="id" id="id" onChange={e=>setDetailsNewPatient({...detailsNewPatient,id:e.target.value})} value={detailsNewPatient.id}/>
                 </div>
                 <div className="form-group">

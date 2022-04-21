@@ -18,6 +18,7 @@ import firebase from "firebase/compat/app";
 import 'firebase/compat/firestore';
 // import firebase from "firebase/compat";
 import makePassword from "./useFunction"
+import hash from "hash.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -406,18 +407,36 @@ export const setIDDoc  = async (id,name_path,data)=>{
 
 }
 export const addPatientToExternalTherapist= async (id,code)=>{
+
     const d =await ifPatientExists(id)
+    console.log('add with hash',d.code)
     if(!d)
         return false
-    if( code in d.code){
-        const patient_data={'code':firebase.firestore.FieldValue.arrayRemove(code),
+    let flag=false
+    const len = d.code.length
+    let c=''
+    for(let i=0;i<len;i++){
+        let hashCode =hash.sha256().update(d.code[i]).digest("hex")
+        console.log(d.code[i],hashCode)
+        if( hashCode === code){
+            c =d.code[i]
+            break
+        }
+    }
+
+    if( c!=''){
+        const patient_data={'code':firebase.firestore.FieldValue.arrayRemove(c),
             'institutes.external': firebase.firestore.FieldValue.arrayUnion(auth.currentUser.uid)}
         const filedName ='institutes.external'
         if(!await updateIDDoc(id, 'patients', patient_data))
             return false
-        if(await updateIDDoc(id, 'users', {'institutes.external': firebase.firestore.FieldValue.arrayUnion(id)}))
+
+        if(await updateIDDoc(auth.currentUser.uid, 'users', {'institutes.external': firebase.firestore.FieldValue.arrayUnion(id)}))
+            return true
+        else if(await updateIDDoc(auth.currentUser.uid, 'users', {'institutes.external': [id]}))
             return true
     }
+    console.log('WW')
     return false
 
 }

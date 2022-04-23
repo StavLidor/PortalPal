@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
-import { collection, doc, setDoc,getDoc ,where,query, getDocs, addDoc,updateDoc,deleteDoc} from "firebase/firestore";
+import { collection, doc, setDoc,getDoc ,where,query, getDocs, addDoc,updateDoc,deleteDoc,onSnapshot} from "firebase/firestore";
 import {
     GoogleAuthProvider,
     getAuth,
@@ -285,7 +285,7 @@ export const addPatient = async details=>{
             street:details.street,
             buildingNumber:details.buildingNumber,
             parents:id_parents,
-            therapistsOutside:[],
+            // therapistsOutside:[],
             institutes:{[details.institutionNumber]:[]}
             /*idSecretary:[details.idSecretary]*/
         });
@@ -705,13 +705,13 @@ export const connections= async (details)=>{
             connection: 'parent'
         })
     })
-    details.therapistsOutside.map(async (p) => {
-        let data = await getDocUser(p)
-        usersConnections.push({
-            id: p, firstName: data.firstName, lastName: data.lastName,
-            connection: data.jobs, institute: 'outside'
-        })
-    })
+    // details.therapistsOutside.map(async (p) => {
+    //     let data = await getDocUser(p)
+    //     usersConnections.push({
+    //         id: p, firstName: data.firstName, lastName: data.lastName,
+    //         connection: data.jobs, institute: 'outside'
+    //     })
+    // })
     for (const [key, value] of Object.entries(details.institutes)) {
         value.map(async (p) => {
             let data = await getDocUser(p)

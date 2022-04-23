@@ -1,6 +1,7 @@
 import React, { useState, Fragment,useEffect } from "react"
 import {updatesCurrentUser} from "../../firebase";
 export default  function Update({details,setData}){
+    // this.forceUpdate()
     const [isEdit, setIsEdit] = useState(false)
     const [editedDetails,setEditDetails] =useState({
         firstName:details.firstName,lastName:details.lastName,email:details.email,
@@ -28,7 +29,8 @@ export default  function Update({details,setData}){
                 if(key in details && value!=details[key])
                     details[key]=value
             }
-            setData(details)
+            console.log(details.firstName)
+            //setData(details)
             setIsEdit(false)
         }
         else{

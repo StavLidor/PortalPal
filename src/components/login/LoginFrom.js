@@ -16,6 +16,7 @@ export default function LoginFrom(){
     const [isFormNewUser,setFormNewUser] = useState(false)
     const [info,setInfo] = useState({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
         passwordCurrent:'',institutionNumber:'',works:[]});
+    const [user,setUser]=useState(null)
     const [loginNow,setLoginNow]=useState(false)
     // if (login){
     //     setIsMovePage(true)
@@ -23,8 +24,13 @@ export default function LoginFrom(){
     useEffect(()=>{
        const unsubscribe= auth.onAuthStateChanged(async user => {
            if (user) {
-               console.log('user',user)
-               setIsMovePage(true)
+               console.log('user',user.uid)
+               const p=Promise.resolve(user.uid)
+               p.then(id => {
+                   setIsMovePage(true)
+                   setUser(id)
+               })
+
                resolver(await getDocCurrentUser())
 
            } else {
@@ -40,6 +46,7 @@ export default function LoginFrom(){
 
     },[])
     const resolver=async val=>{
+        console.log('login now',loginNow)
         const p=Promise.resolve(val)
         p.then(doc => {
             const data = doc.data()
@@ -82,11 +89,15 @@ export default function LoginFrom(){
     }
     const submitHandler=async e=>{
         e.preventDefault()
-
-       if(await  signUser(details)){
+        setLoginNow(true)
+        console.log('set to true login',loginNow)
+       if(loginNow && await  signUser(details) ){
            setIsMovePage(true)
-           setLoginNow(true)
+
            console.log('connected')
+       }
+       else {
+           setLoginNow(false)
        }
 
 
@@ -95,6 +106,7 @@ export default function LoginFrom(){
         // console.log('logout');
 
         setDetails({email:"",password:""});
+        setUser(null)
         setIsMovePage(false)
         setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
             passwordCurrent:'',institutionNumber:'',works:[]})
@@ -122,7 +134,20 @@ export default function LoginFrom(){
             <div>
                 <button  onClick={Logout} >Logout</button>
 
-                {info.firstName!=="" && <Home d={info} type={details.type} institute={details.institute}/>}
+                {info.firstName!=="" && <Home d={info} type={details.type} institute={details.institute}
+                user={user}/>}
+                {/*{user && <Home d={info} type={ (()=>{*/}
+                {/*    if(loginNow)*/}
+                {/*        return details.type*/}
+                {/*    return null */}
+                {/*})()*/}
+                {/*    */}
+                {/*} institute={(()=>{*/}
+                {/*    if(loginNow)*/}
+                {/*        return details.institute*/}
+                {/*    return null*/}
+                {/*})()}*/}
+                {/*                              user={user}/>}*/}
             </div>
         ):
         (isFormNewUser) ? (

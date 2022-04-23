@@ -20,13 +20,16 @@ export default function Sidebar({type,ids}){
     // },[location])
 
     useEffect(()=>{
-        const p1 = Promise.resolve(ids)
+        console.log('sidebar',ids)
+        const allDetails =detailsPatient(ids)
+        console.log('allDetails',ids)
+        const p1 = Promise.resolve(allDetails)
         p1.then(arr => {
             console.log('ALL',arr)
             setArrData(arr)
         })
 
-    },[])
+    },[ids])
     return(
         <div className='sidebar'>
 

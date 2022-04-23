@@ -30,7 +30,7 @@ export default function Home({d,type,institute,user}){
             (snapshot) => {
                 console.log(snapshot.data())
                 const data = snapshot.data()
-                setData(data)
+                setData({...data,id:user})
                 // const id = user
 
 

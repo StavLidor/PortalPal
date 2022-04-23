@@ -20,7 +20,7 @@ import {
     updatesCurrentUser,
     detailsPatient,
     updateDocUser,
-    updateDocUserWithArrayFiled, addConnectionPatientToTherapist, removeConnectionPatientToTherapist
+    updateDocUserWithArrayFiled, addConnectionPatientToTherapist, removeConnectionPatientToTherapist, detailsWorks
 } from "../../firebase";
 import TableEdit from "../../components/tableEdit/TableEdit";
 import Patient from "../patient/Patient";
@@ -50,8 +50,8 @@ export default function Secretary({data}){
     }
     const addPatient = async (details)=>{
         return await newPatients(Object.assign({}, {
-            institutionNumber: data.institutionNumber, idSecretary: data.id, emailCurrent: data.emailCurrent,
-            passwordCurrent: data.passwordCurrent
+            institutionNumber: data.institutionNumber, idSecretary: data.id, emailCurrent: data.email,
+            passwordCurrent: data.password
         }, details))
         //
     }
@@ -61,8 +61,8 @@ export default function Secretary({data}){
             details.jobs =details.jobs.split(",")
         }
         if (details.email!==undefined){
-            const id =await addUserFromAdmin({...details,institutes: {[data.institutionNumber]:[]}},data.emailCurrent,
-                data.passwordCurrent,"works")
+            const id =await addUserFromAdmin({...details,institutes: {[data.institutionNumber]:[]}},data.email,
+                data.password,"works")
             return id
             // const p=Promise.resolve(id)
             //
@@ -227,7 +227,7 @@ export default function Secretary({data}){
                                                                           emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:""}} emptyEditDetails={{firstName: "",
                                 lastName: "",
                                 dateOfBirth:new Date()
-                                ,city:"",street:"",buildingNumber:"",}} data={data.students_arr} HebrewNames={[
+                                ,city:"",street:"",buildingNumber:"",}} data={detailsPatient(data.students_arr)} HebrewNames={[
                                 "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב","שם פרטי הורה","שם משפחה הורה",,"אימייל",/*"מטפלים בית ספריים"*/]
                             } inputsView={inputsViewPatient}  requeredId={true}
                                                                           toEdit={true} toAdd={true}/>}/>
@@ -246,7 +246,7 @@ export default function Secretary({data}){
                         <Routes>
                             <Route path={"/works"} element={<TableEdit add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist}
                                                                        emptyDetails={{firstName:"",lastName:"",jobs:[],email:"",/*table:[{id:"",firstName:"",lastName:""}]*/}}
-                                                                       emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={data.works} HebrewNames={[
+                                                                       emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={detailsWorks(data.works)} HebrewNames={[
                                 "שם פרטי","שם משפחה","עבודות","אימייל","מטופלים בית ספריים"]
                             } inputsView={inputsViewTherapist}  requeredId={false}
                             find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",firstName:"",lastName:""/**/}} toEdit={true} toAdd={true} table={getTable}

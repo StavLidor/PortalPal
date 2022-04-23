@@ -69,29 +69,37 @@ export default function LoginFrom(){
                 }
                 details.type = lastLogin[0]
             }
-            if (details.type === 'admin'/*||details.type === 'therapist'*/){
-                const arrStudents=detailsPatient(data.students_arr)
-                const arrWorks=detailsWorks(data.works)
-                setInfo({id:id,firstName:data.firstName,lastName:data.lastName,students_arr:arrStudents,myDoc:doc,emailCurrent:details.email,
-                    passwordCurrent:details.password,institutionNumber:data.institutionNumber,works:arrWorks})
-                console.log('institutionNumber',data.institutionNumber)
+            if(details.type !== 'admin'&&
+                details.institute !="external" && ('institute' in data)&& !(details.institute in data.institutes)) {
+                unSignUser()
             }
-            else {
-                if(details.institute !="external" && ('institute' in data)&& !(details.institute in data.institutes)) {
-                    unSignUser()
-                }
-                else{
-                    setInfo({...data,id:id})
-                }
-
+            else{
+                setInfo({...data,id:id})
             }
+            // if (details.type === 'admin'/*||details.type === 'therapist'*/){
+            //     // const arrStudents=detailsPatient(data.students_arr)
+            //     // const arrWorks=detailsWorks(data.works)
+            //     setInfo({id:id,firstName:data.firstName,lastName:data.lastName,students_arr:arrStudents,myDoc:doc,emailCurrent:details.email,
+            //         passwordCurrent:details.password,institutionNumber:data.institutionNumber,works:arrWorks})
+            //     console.log('institutionNumber',data.institutionNumber)
+            // }
+            // else {
+            //     if(details.institute !="external" && ('institute' in data)&& !(details.institute in data.institutes)) {
+            //         unSignUser()
+            //     }
+            //     else{
+            //         setInfo({...data,id:id})
+            //     }
+            //
+            // }
         })
     }
     const submitHandler=async e=>{
-        e.preventDefault()
         setLoginNow(true)
+        e.preventDefault()
+
         console.log('set to true login',loginNow)
-       if(loginNow && await  signUser(details) ){
+       if(await  signUser(details) ){
            setIsMovePage(true)
 
            console.log('connected')

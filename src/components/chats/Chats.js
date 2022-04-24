@@ -3,23 +3,39 @@ import {Link, Route, Routes} from "react-router-dom";
 import Patient from "../../pages/patient/Patient";
 import React from "react";
 import Chat from "./Chat";
-export default function Chats({patient,userId,talkersIds}){
+import {connections} from "../../firebase";
+export default function Chats({patient,userId,talkersIds,details}){
     const [talkers,setTalkers]=useState([])
     //console.log(talkersIds)
 
     let count =0
-    useEffect(()=>{
-        const p1 = Promise.resolve(talkersIds)
-        p1.then(arr=> {
+    useEffect(async () => {
+        console.log(details)
+        const try1 =  connections(details)
+        // const p1 = Promise.resolve( talkersIds)
+        p1.then(async arr => {
             setTalkers(arr)
+            console.log('talkers',talkers)
             console.log(arr)
+            // if (await arr.length > 0) {
+            //
+            // }
+
         })
-
-
     },[])
+    // useEffect(async () => {
+    //     const p1 = Promise.resolve(talkersIds)
+    //     p1.then(arr=> {
+    //         setTalkers(arr)
+    //         console.log(arr)
+    //     })
+    //
+    // },[])
     // talkersIds {id,firstName,lastName,connection job\parents}
     return(
-        <>
+        // <>
+        <div>
+            <div>{ talkers.length}</div>
         {
 
             talkers.map((t,i) => (
@@ -62,7 +78,8 @@ export default function Chats({patient,userId,talkersIds}){
             ))
 
         }
-        </>
+        </div>
+        // </>
     )
 
 

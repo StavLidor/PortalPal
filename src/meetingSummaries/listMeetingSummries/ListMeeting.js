@@ -8,12 +8,12 @@ import {allMeetingOf, removeMeeting} from "../database/Database";
 import ViewMeetingSummaries from "../viewMeetingSummaries/ViewMeetingSummaries"
 
 
-export default function ListMeeting({id,type}){
+export default function ListMeeting({id,type,therapistId=null}){
     console.log('ListMeeting',type)
     const [data, setData] = useState([])
     useEffect(()=>{
-        console.log('useEffect')
-        allMeetingOf(id,type).then(arr => {
+        //console.log('useEffect')
+        allMeetingOf(id,type,therapistId).then(arr => {
             console.log('then',arr)
             setData(arr)
         })
@@ -67,7 +67,8 @@ export default function ListMeeting({id,type}){
 
                 </ul>
                     <Routes>
-                        <Route path={ "newMeeting"} element={<ViewMeetingSummaries client_id={id} last_data={{date:"",summary:""}} addMeeting ={addMeeting} />} />
+                        <Route path={ "newMeeting"} element={<ViewMeetingSummaries client_id={id} last_data={{date:"",summary:""}} addMeeting ={addMeeting}
+                                                                                   isEdit={true}/>} />
                     </Routes>
                 </>
 
@@ -97,6 +98,7 @@ export default function ListMeeting({id,type}){
                                             </ul>
                                         </Link>
 
+
                                         &nbsp;
 
                                     </ul>
@@ -104,7 +106,14 @@ export default function ListMeeting({id,type}){
                                          <Route path={p.idDoc} element={<ViewMeetingSummaries client_id={id} last_data={p}
                                                                                               addMeeting={addMeeting}
                                                                                               removeMeetingView={removeMeeting}
-                                                                                              updateMeetingView={updateMeeting}/>} />
+                                                                                              updateMeetingView={updateMeeting}
+                                                                                              isEdit={(()=>{
+                                                                                                  if(type == 'parent'){
+                                                                                                      return false
+                                                                                                  }
+                                                                                                  return true
+                                                                                              })()}/>
+                                         } />
                                      </Routes>
                                 </div>
                         </div>

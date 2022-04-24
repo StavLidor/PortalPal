@@ -17,13 +17,14 @@ export const newUser=async details=>{
     //let arr_ids = details.ids.split(",");
 
     if (await addUser({
-        name: details.name,
-        /*type: details.type,*/
-        email: details.email,
-        password: details.password,
+        // name: details.name,
+        // /*type: details.type,*/
+        // email: details.email,
+        // password: details.password,
         /*idsMangeParents: arr_ids*,*/
         // idsMangeTherapist: []
         /*ids: arr_ids*/
+        details
     })){
         console.log("HI user",details.name.toString(),details.password.toString());
     }

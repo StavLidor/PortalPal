@@ -7,10 +7,11 @@ import Datetime from 'react-datetime';
 import {updateMeeting, removeMeeting, newMeeting} from "../database/Database";
 import TimeInput from 'react-time-input';
 
-export default function ViewMeetingSummaries({client_id,last_data,addMeeting,removeMeetingView, updateMeetingView}){
+export default function ViewMeetingSummaries({client_id,last_data,addMeeting,removeMeetingView, updateMeetingView,isEdit}){
     console.log('viewMeeting')
     console.log(last_data)
-    const [startDate, setStartDate] = useState(new Date());
+    const [edit, setEdit] =useState(last_data.date==="")
+    //const [startDate, setStartDate] = useState(new Date());
 //     const [startTime, setStartTime] = useState("00:00");
     const [data, setData] = useState(last_data/*{date:"",summary:""}*//*{date:"03/02/2022 12:00 AM",summaries:"123"}*/)
     const submit=e=>{
@@ -38,30 +39,64 @@ export default function ViewMeetingSummaries({client_id,last_data,addMeeting,rem
         removeMeeting(last_data)
     }
     return(
-        <form onSubmit={submit} >
-            <div className="from-inner">
-                <h2>
-                    הוספת פגישה חדשה
-                </h2>
+        // <>
+            (edit)?(
+                <form onSubmit={submit} >
+                    <div className="from-inner">
+                        {last_data.date==="" &&
+                            <h2>
+                                הוספת פגישה חדשה
+                            </h2>
+                        }
+                        {last_data.date!=="" &&
+                            <h2>
+                                עריכת פגישה
+                            </h2>
+                        }
 
+                        <div className="form-group">
+                            <label htmlFor="date">תאריך ושעת מפגש:</label>
+                            <Datetime value={data.date} selected={data.date}  onChange={d=>setData({...data,date:d._d.toString(),idDoc:client_id +d._d.toJSON()})} />
+
+
+                        </div>
+
+                        <div className="form-group" >
+
+
+                            <input  value={data.summary} type="text"   className="summaries" name="summaries" id="Meeting summaries"
+                                    onChange={e=>setData({...data,summary:e.target.value})}/>
+                            <label htmlFor="name">סיכום פגישה </label>
+                        </div>
+                        <input type="submit" name="add" value="הוספת פגישה"/>
+                        {last_data.date!=="" && <button onClick={deleteMeeting}>מחיקת פגישה </button> }
+
+                    </div>
+                </form>
+
+            ):
+                <div>
                 <div className="form-group">
-                    <label htmlFor="date">תאריך ושעת מפגש:</label>
-                    <Datetime value={data.date} selected={data.date}  onChange={d=>setData({...data,date:d._d.toString(),idDoc:client_id +d._d.toJSON()})} />
-
-
+                    <label htmlFor="date">תאריך:</label>
+                    {last_data.date}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="lastName">סיכום פגישה:</label>
+                    {data.summary}
+                </div>
+                    {isEdit &&
+                        <button
+                            type="button"
+                            onClick={(event) => setEdit(true)}
+                        >
+                            ערוך
+                        </button>
+                    }
                 </div>
 
-                <div className="form-group" >
 
 
-                    <input  value={data.summary} type="text"   className="summaries" name="summaries" id="Meeting summaries"
-                            onChange={e=>setData({...data,summary:e.target.value})}/>
-                    <label htmlFor="name">סיכום פגישה </label>
-                </div>
-                <input type="submit" name="add" value="הוספת פגישה"/>
-                {last_data.date!=="" && <button onClick={deleteMeeting}>מחיקת פגישה </button> }
 
-            </div>
-        </form>
+        // </>
     )
 }

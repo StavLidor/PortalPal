@@ -21,8 +21,8 @@ export const removeMeeting=async details=>{
     await deleteDocFrom(details.idDoc,'summaries')
     //await deleteCurrentUser('meetings',details.client.toString()+details.time.toString())
 }
-export const allMeetingOf=async(idClient)=>{
-    return allDetailsMeetings(idClient)
+export const allMeetingOf=async(id,type,therapistId)=>{
+    return await allDetailsMeetings(id,type,therapistId)
 
 }
 

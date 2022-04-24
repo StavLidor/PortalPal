@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore } from "firebase/firestore"
+import {getFirestore, orderBy} from "firebase/firestore"
 import { collection, doc, setDoc,getDoc ,where,query, getDocs, addDoc,updateDoc,deleteDoc,onSnapshot} from "firebase/firestore";
 import {
     GoogleAuthProvider,
@@ -207,15 +207,21 @@ export const  detailsPatient= async arr_id =>{
     //console.log('ALL',arr_data)
     return arr_data
 }
-export const allDetailsMeetings = async (id,type)=>{
-    console.log('allDetailsMeetings')
+export const allDetailsMeetings = async (id,type,idTherapist)=>{
+    console.log('allDetailsMeetings',id,type,idTherapist)
     let q
-    if(type != 'parent')
+    if(type !== 'parent'){
         q= query(collection(db,"summaries"), where("therapist", '==',auth.currentUser.uid),
-        where("client", '==',id))
-    else
-        q= query(collection(db,"summaries"),
-            where("client", '==',id))
+            where("client", '==',id),orderBy("date", "desc"))
+    }
+
+    else{
+        console.log('hehe')
+        q= query(collection(db,"summaries") ,
+           where("therapist", '==',idTherapist),where("client", '==',id),
+            orderBy("date", "desc"))
+    }
+
     // const q=query(q1,where("client", '==',id))
     console.log('allDetailsMeetings222')
     const querySnapshot = await getDocs(q);
@@ -712,18 +718,34 @@ export const connections= async (details)=>{
     //         connection: data.jobs, institute: 'outside'
     //     })
     // })
+    // for (const [key, value] of Object.entries(details.institutes)) {
+    //     value.map(async (p) => {
+    //         let data = await getDocUser(p)
+    //         usersConnections.push({
+    //             id: p, firstName: data.firstName, lastName: data.lastName,
+    //             connection: data.jobs, institute: key
+    //         })
+    //     })
+    //     //console.log(key, value);
+    // }
+        return usersConnections.concat(await Therapists(details))
+    //parents,therapistsOutside,institutes
+}
+export const Therapists= async (details)=>{
+    let usersTherapists=[]
     for (const [key, value] of Object.entries(details.institutes)) {
         value.map(async (p) => {
             let data = await getDocUser(p)
-            usersConnections.push({
+
+            usersTherapists.push({
                 id: p, firstName: data.firstName, lastName: data.lastName,
                 connection: data.jobs, institute: key
             })
         })
-        //console.log(key, value);
     }
-        return usersConnections
-    //parents,therapistsOutside,institutes
+    // console.log('firebase therpist',usersTherapists)
+    return usersTherapists
+
 }
 
 export default {addUser,addPatient,signIfUserExists,updatesCurrentUser,updatesPatients ,signOutFrom,updateAccordingEmail, deletePatientFromInstitute,detailsPatient,updateIDDoc,deleteDocFrom,

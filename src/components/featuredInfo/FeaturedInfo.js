@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
 import Chats from "../chats/Chats";
 import {auth, connections} from "../../firebase"
 import Code from  "../code/Code"
+import ListTherapists from "../../meetingSummaries/listTherapists/ListTherapists";
 // import {Container} from "@mui/material";
 
 export default function FeaturedInfo({details,type}){
@@ -47,11 +48,19 @@ export default function FeaturedInfo({details,type}){
 
                         </ul>
                         </Link>
+                        {type !== 'parent' &&
+                            <Routes>
 
-                        <Routes>
-                            <Route path={"meetings/*"} element={<ListMeeting id={details.id} type={type}  />} />
+                                <Route path={"meetings/*"} element={<ListMeeting id={details.id} type={type}  />} />
 
-                        </Routes>
+                            </Routes>}
+                        {type === 'parent' &&
+                            <Routes>
+
+                                <Route path={"meetings/*"} element={<ListTherapists patientDetails={details} type={type}  />} />
+
+                            </Routes>}
+
                         &nbsp;
                         <ul className="featuredListItem">
                             תרגילים
@@ -67,32 +76,11 @@ export default function FeaturedInfo({details,type}){
 
                         </ul>
                         </Link>
-                        {/*{type =='parent' &&*/}
-                        {/*    <>*/}
-                        {/*    <Link to={"code/*"} className="link">*/}
-                        {/*        <ul className="featuredListItem">*/}
-                        {/*            קוד עבור מטפל חדש*/}
-
-                        {/*            &nbsp;*/}
-
-                        {/*        </ul>*/}
-                        {/*    </Link>*/}
-                        {/*    <Routes>*/}
-                        {/*        <Route path={"code/*"} element={<Code/>} />*/}
-                        {/*    </Routes>*/}
-                        {/*    </>*/}
-
-                        {/*}*/}
                     </ul>
 
                     <Routes>
                     <Route path={"chats/*"} element={<Chats patient={details.id} userId={auth.currentUser.uid} talkersIds={connections(details)}  />} />
                     </Routes>
-{/*                     <Routes> */}
-{/*                     <Route path={"/"+id +"/meetings/*"} element={<ListMeeting id={id} arr_data={[ */}
-{/*                     {date:"03/02/2022 12:00 AM",summaries:"123"}]} />} /> */}
-{/*                     </Routes> */}
-                    {/*sidebar*/}
                 </div>
             </div>
             featuredInfo

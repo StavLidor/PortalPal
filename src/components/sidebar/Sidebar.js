@@ -7,7 +7,7 @@ import Patient from "../../pages/patient/Patient";
 import ListMeeting from "../../meetingSummaries/listMeetingSummries/ListMeeting"
 import ViewMeetingSummaries from "../../meetingSummaries/viewMeetingSummaries/ViewMeetingSummaries"
 import {db, detailsPatient} from "../../firebase";
-import {collection, getDocs, limit, orderBy, query, where} from "firebase/firestore";
+import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 
 
 export default function Sidebar({type,ids}){
@@ -20,6 +20,24 @@ export default function Sidebar({type,ids}){
     // },[location])
 
     useEffect(()=>{
+        ids.map((id)=>{
+            const userDocRef = doc(db, 'patients',id)
+            return onSnapshot(
+                userDocRef,
+                (snapshot) => {
+                    const newContacts = [...arr_data]
+                    const index = arr_data.findIndex((contact) => contact.id === id)
+                    newContacts[index] = {...snapshot.data(),id:id}
+                    setArrData(newContacts)
+                },
+                (error) => {
+                    // TODO: Handle errors!
+                    console.log('error!!',error)
+                })
+
+
+        })
+
         console.log('sidebar',ids)
         const allDetails =detailsPatient(ids)
         console.log('allDetails',ids)

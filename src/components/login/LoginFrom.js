@@ -17,11 +17,14 @@ export default function LoginFrom(){
     const [info,setInfo] = useState({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
         passwordCurrent:'',institutionNumber:'',works:[]});
     const [user,setUser]=useState(null)
-    const [loginNow,setLoginNow]=useState(false)
     // if (login){
     //     setIsMovePage(true)
     // }
+    // if(loginNow){
+    //     signUser(details)
+    // }
     useEffect(()=>{
+
        const unsubscribe= auth.onAuthStateChanged(async user => {
            if (user) {
                console.log('user',user.uid)
@@ -45,14 +48,15 @@ export default function LoginFrom(){
         return unsubscribe
 
     },[])
+
     const resolver=async val=>{
-        console.log('login now',loginNow)
+
         const p=Promise.resolve(val)
         p.then(doc => {
             const data = doc.data()
             const id = doc.id
             console.log('lalalala')
-            if(loginNow){
+            if(details.email!==''){
                 if(details.type !=="admin" && details.type !=="parent" ){
                     updatesCurrentUser({lastLogin:details.type+","+details.institute})
                 }
@@ -95,18 +99,12 @@ export default function LoginFrom(){
         })
     }
     const submitHandler=async e=>{
-        setLoginNow(true)
+
         e.preventDefault()
+        if(details.email!=='' && details.password!==''){
+            await  signUser(details)
+        }
 
-        console.log('set to true login',loginNow)
-       if(await  signUser(details) ){
-           setIsMovePage(true)
-
-           console.log('connected')
-       }
-       else {
-           setLoginNow(false)
-       }
 
 
     }

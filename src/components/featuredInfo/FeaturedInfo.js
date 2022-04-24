@@ -9,6 +9,7 @@ import ListTherapists from "../../meetingSummaries/listTherapists/ListTherapists
 // import {Container} from "@mui/material";
 
 export default function FeaturedInfo({details,type}){
+    console.log('FeaturedInfo',details)
     return(
         <div className="featured">
             <div className="featuredWrapper">
@@ -48,18 +49,7 @@ export default function FeaturedInfo({details,type}){
 
                         </ul>
                         </Link>
-                        {type !== 'parent' &&
-                            <Routes>
 
-                                <Route path={"meetings/*"} element={<ListMeeting id={details.id} type={type}  />} />
-
-                            </Routes>}
-                        {type === 'parent' &&
-                            <Routes>
-
-                                <Route path={"meetings/*"} element={<ListTherapists patientDetails={details} type={type}  />} />
-
-                            </Routes>}
 
                         &nbsp;
                         <ul className="featuredListItem">
@@ -79,8 +69,21 @@ export default function FeaturedInfo({details,type}){
                     </ul>
 
                     <Routes>
-                    <Route path={"chats/*"} element={<Chats patient={details.id} userId={auth.currentUser.uid} talkersIds={connections(details)}  />} />
+                    <Route path={"chats/*"} element={<Chats patient={details.id} userId={auth.currentUser.uid} /*talkersIds={connections(details)}*/
+                                                            details={details}/>} />
                     </Routes>
+                    {type !== 'parent' &&
+                        <Routes>
+
+                            <Route path={"meetings/*"} element={<ListMeeting id={details.id} type={type}  />} />
+
+                        </Routes>}
+                    {type === 'parent' &&
+                        <Routes>
+
+                            <Route path={"meetings/*"} element={<ListTherapists patientDetails={details} type={type}  />} />
+
+                        </Routes>}
                 </div>
             </div>
             featuredInfo

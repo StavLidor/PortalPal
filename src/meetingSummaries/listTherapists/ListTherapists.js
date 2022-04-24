@@ -12,7 +12,8 @@ export default function ListTherapists({patientDetails,type}){
         const p1 = Promise.resolve(Therapists(patientDetails))
         p1.then(arr => {
             console.log('list Therapist', arr)
-            setTherapists(arr)
+            if(arr.length !== 0)
+                setTherapists(arr)
             console.log(arr)
         })
 

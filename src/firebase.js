@@ -703,48 +703,69 @@ const getDocUser= async (id)=>{
 }
 
 export const connections= async (details)=>{
-    let usersConnections=[]
-    details.parents.map(async (p) => {
-        let data = await getDocUser(p)
-        usersConnections.push({
-            id: p, firstName: data.firstName, lastName: data.lastName,
-            connection: 'parent'
+
+    try {
+        console.log(details.id)
+        let usersConnections = []
+        details.parents.map(async (p) => {
+            let data = await getDocUser(p)
+            usersConnections.push({
+                id: p, firstName: data.firstName, lastName: data.lastName,
+                connection: 'parent'
+            })
         })
-    })
-    // details.therapistsOutside.map(async (p) => {
-    //     let data = await getDocUser(p)
-    //     usersConnections.push({
-    //         id: p, firstName: data.firstName, lastName: data.lastName,
-    //         connection: data.jobs, institute: 'outside'
-    //     })
-    // })
-    // for (const [key, value] of Object.entries(details.institutes)) {
-    //     value.map(async (p) => {
-    //         let data = await getDocUser(p)
-    //         usersConnections.push({
-    //             id: p, firstName: data.firstName, lastName: data.lastName,
-    //             connection: data.jobs, institute: key
-    //         })
-    //     })
-    //     //console.log(key, value);
-    // }
-        return usersConnections.concat(await Therapists(details))
+        // details.therapistsOutside.map(async (p) => {
+        //     let data = await getDocUser(p)
+        //     usersConnections.push({
+        //         id: p, firstName: data.firstName, lastName: data.lastName,
+        //         connection: data.jobs, institute: 'outside'
+        //     })
+        // })
+        for (const [key, value] of Object.entries(details.institutes)) {
+            value.map(async (p) => {
+                let data = await getDocUser(p)
+                if(data !== undefined)
+                usersConnections.push({
+                    id: p, firstName: data.firstName, lastName: data.lastName,
+                    connection: data.jobs, institute: key
+                })
+            })
+            //console.log(key, value);
+        }
+        // const all =usersConnections.concat(Therapists(details))
+        // console.log('chattt',all)
+        return usersConnections
+    }
+    catch (err){
+        console.log(err)
+        console.log(details)
+        return []
+    }
     //parents,therapistsOutside,institutes
 }
 export const Therapists= async (details)=>{
-    let usersTherapists=[]
-    for (const [key, value] of Object.entries(details.institutes)) {
-        value.map(async (p) => {
-            let data = await getDocUser(p)
 
-            usersTherapists.push({
-                id: p, firstName: data.firstName, lastName: data.lastName,
-                connection: data.jobs, institute: key
+    try {
+        let usersTherapists=[]
+        for (const [key, value] of Object.entries(details.institutes)) {
+            value.map(async (p) => {
+                let data = await getDocUser(p)
+
+                usersTherapists.push({
+                    id: p, firstName: data.firstName, lastName: data.lastName,
+                    connection: data.jobs, institute: key
+                })
             })
-        })
+        }
+        console.log('firebase therpist',usersTherapists)
+        return  usersTherapists
     }
-    // console.log('firebase therpist',usersTherapists)
-    return usersTherapists
+    catch (err){
+        console.log(err)
+        console.log(details)
+        return []
+    }
+
 
 }
 

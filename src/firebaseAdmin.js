@@ -1,12 +1,12 @@
-// import { initializeApp,getApp,cert } from 'firebase-admin/app'
-import {makePassword} from "./useFunction"
-// import {getAuth} from "firebase/auth";
-import {getFirestore} from "firebase-admin/firestore"
-import {
-    getAuth,
-
-} from "firebase-admin/auth"
-const { initializeApp } = require('firebase-admin/app');
+// // import { initializeApp,getApp,cert } from 'firebase-admin/app'
+// import {makePassword} from "./useFunction"
+// // import {getAuth} from "firebase/auth";
+// import {getFirestore} from "firebase-admin/firestore"
+// import {
+//     getAuth,
+//
+// } from "firebase-admin/auth"
+// const { initializeApp } = require('firebase-admin/app');
 
 
 // // Initialize Firebase
@@ -19,10 +19,10 @@ const { initializeApp } = require('firebase-admin/app');
 
 
 
-const app = initializeApp({
-    credential: applicationDefault(),
-    // databaseURL: 'https://<DATABASE_NAME>.firebaseio.com'
-});
+// const app = initializeApp({
+//     credential: applicationDefault(),
+//     // databaseURL: 'https://<DATABASE_NAME>.firebaseio.com'
+// });
 
 // export const auth = getAuth(firebaseConfig);
 // export const db = getFirestore()

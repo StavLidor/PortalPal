@@ -1,26 +1,31 @@
-.featured{
+.sidebar{
     flex: 1;
-    height:10vh;
-    /*left: 150px;*/
-    width: 200px;
-
+    /*height:10vh;*/
     height: calc(100vh - 50px);
-    background-color: #7ca69c;
+    background-color: #ccc6c6;
     position: sticky;
     top: 50px;
+    float: right;
 }
-.featuredWrapper{
-    padding: 3px;
+.sidebarWrapper{
+    padding: 20px;
     color:#555;
 }
-.featuredMenu{
+.sidebarMenu{
     margin-bottom: 10px;
 }
-.featuredList{
+.logo{
+    font-weight: bold;
+    font-size: 50px;
+    color: cornflowerblue;
+    cursor: pointer;
+
+}
+.sidebarList{
     list-style: none;
     padding: -5px;
 }
-.featuredListItem{
+.sidebarListItem{
     padding: -10px;
     cursor: pointer;
     display: flex;
@@ -28,6 +33,6 @@
     border-radius: 10px;
 
 }
-.featuredListItem.active,.featuredListItem:hover{
+.sidebarListItem.active,.sidebarListItem:hover{
     background-color: rgb(228,228,250);
 }

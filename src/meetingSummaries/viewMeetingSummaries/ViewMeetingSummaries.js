@@ -1,0 +1,102 @@
+
+import React,{useState} from "react";
+import DatePicker from "react-datepicker";
+import "react-datetime/css/react-datetime.css";
+import "./viewMeetingSummaries.css"
+import Datetime from 'react-datetime';
+import {updateMeeting, removeMeeting, newMeeting} from "../database/Database";
+import TimeInput from 'react-time-input';
+
+export default function ViewMeetingSummaries({client_id,last_data,addMeeting,removeMeetingView, updateMeetingView,isEdit}){
+    console.log('viewMeeting')
+    console.log(last_data)
+    const [edit, setEdit] =useState(last_data.date==="")
+    //const [startDate, setStartDate] = useState(new Date());
+//     const [startTime, setStartTime] = useState("00:00");
+    const [data, setData] = useState(last_data/*{date:"",summary:""}*//*{date:"03/02/2022 12:00 AM",summaries:"123"}*/)
+    const submit=e=>{
+
+        e.preventDefault();
+        if(last_data.date==="" ||last_data.date !== data.date){
+            if(last_data.date !== data.date){
+                deleteMeeting()
+            }
+            console.log('sumbit')
+            const fullData =Object.assign({}, {client:client_id,/*idDoc:client_id +data.date._d.toJSON()*/ }, data)
+            console.log('add meeting op')
+
+            newMeeting({idDoc:fullData.idDoc,client: fullData.client,summary:fullData.summary,date:fullData.date}).then(r => {})
+            addMeeting({idDoc:fullData.idDoc,client: fullData.client,summary:fullData.summary,date:fullData.date})
+        }
+        else if(last_data.summary !== data.summary){
+            updateMeeting({idDoc:last_data.idDoc,summary:data.summary})
+
+            updateMeetingView({idDoc:last_data.idDoc,client: last_data.client,summary:data.summary,date:last_data.date})
+        }
+    }
+    function deleteMeeting (){
+        removeMeetingView(last_data.idDoc)
+        removeMeeting(last_data)
+    }
+    return(
+        // <>
+            (edit)?(
+                <form onSubmit={submit} >
+                    <div className="from-inner">
+                        {last_data.date==="" &&
+                            <h2>
+                                הוספת פגישה חדשה
+                            </h2>
+                        }
+                        {last_data.date!=="" &&
+                            <h2>
+                                עריכת פגישה
+                            </h2>
+                        }
+
+                        <div className="form-group">
+                            <label htmlFor="date">תאריך ושעת מפגש:</label>
+                            <Datetime value={data.date} selected={data.date}  onChange={d=>setData({...data,date:d._d.toString(),idDoc:client_id +d._d.toJSON()})} />
+
+
+                        </div>
+
+                        <div className="form-group" >
+
+
+                            <input  value={data.summary} type="text"   className="summaries" name="summaries" id="Meeting summaries"
+                                    onChange={e=>setData({...data,summary:e.target.value})}/>
+                            <label htmlFor="name">סיכום פגישה </label>
+                        </div>
+                        <input type="submit" name="add" value="הוספת פגישה"/>
+                        {last_data.date!=="" && <button onClick={deleteMeeting}>מחיקת פגישה </button> }
+
+                    </div>
+                </form>
+
+            ):
+                <div>
+                <div className="form-group">
+                    <label htmlFor="date">תאריך:</label>
+                    {last_data.date}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="lastName">סיכום פגישה:</label>
+                    {data.summary}
+                </div>
+                    {isEdit &&
+                        <button
+                            type="button"
+                            onClick={(event) => setEdit(true)}
+                        >
+                            ערוך
+                        </button>
+                    }
+                </div>
+
+
+
+
+        // </>
+    )
+}

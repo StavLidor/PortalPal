@@ -1,2 +1,3 @@
 # Project exclude paths
 /node_modules/
+portal-website-db707-firebase-adminsdk-eytw9-a4296028c0.json

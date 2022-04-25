@@ -10,9 +10,36 @@ import App from "../../App";
 import {signUser} from "../../pepole/users/user";
 import {signInWithEmailAndPassword} from "firebase/auth";
 
-function Login() {
+function Login({login}) {
+    // console.log("current user" ,auth.currentUser)
 
     const [userDetails, setUserDetails] = useState({email: "", password: "", type: "therapist", institute: "external"});
+    // useEffect(()=>{
+    //     const unsubscribe= auth.onAuthStateChanged(async user => {
+    //         if (user) {
+    //             // await signOutCurrentUser()
+    //             console.log('user',user.uid)
+    //             // const p=Promise.resolve(user.uid)
+    //             // p.then(id => {
+    //             //     setIsMovePage(true)
+    //             //     setUser(id)
+    //             // })
+    //
+    //              // getDocCurrentUser().then(value => {login(value,userDetails.type,userDetails.institute)})
+    //
+    //         } else {
+    //             // setIsMovePage(false)
+    //             // setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
+    //             //     passwordCurrent:'',institutionNumber:'',works:[]})
+    //         }
+    //         // if(initializing){
+    //         //     setInitializing(false)
+    //         // }
+    //     })
+    //     console.log("prefix: ",unsubscribe)
+    //     return unsubscribe
+    //
+    // },[])
     //
     // useEffect(()=>{
     //     const unsubscribe= auth.onAuthStateChanged(async user => {
@@ -39,7 +66,39 @@ function Login() {
         e.preventDefault()
         const form = e.currentTarget
         console.log(userDetails)
+        // signIn(userDetails.email, userDetails.password).then(value => {login(value,userDetails.type,userDetails.institute)})
         await signIn(userDetails.email, userDetails.password)
+        const unsubscribe= auth.onAuthStateChanged(async user => {
+            if (user) {
+                // await signOutCurrentUser()
+                console.log('user',user.uid)
+                // const p=Promise.resolve(user.uid)
+                // p.then(id => {
+                //     setIsMovePage(true)
+                //     setUser(id)
+                // })
+
+                getDocCurrentUser().then(value => {
+                    if(userDetails.type !=="admin" && userDetails.type !=="parent" ){
+                        updatesCurrentUser({lastLogin:userDetails.type+","+userDetails.institute})
+                    }
+                    else {
+                        updatesCurrentUser({lastLogin:userDetails.type})
+                    }
+                    login(value,userDetails.type,userDetails.institute)})
+
+            } else {
+                // setIsMovePage(false)
+                // setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
+                //     passwordCurrent:'',institutionNumber:'',works:[]})
+            }
+            // if(initializing){
+            //     setInitializing(false)
+            // }
+        })
+        console.log("prefix: ",unsubscribe)
+        // return unsubscribe
+
         // if (userDetails.email !== '' && userDetails.password !== '') {
         //     try {
         //         const res = await signInWithEmailAndPassword(auth, userDetails.email, userDetails.password)
@@ -93,9 +152,9 @@ function Login() {
                             <Col md="7">
                                 <Form.Select id='type'
                                              onChange={e => setUserDetails({...userDetails, type: e.target.value})}>
-                                    <option style={{fontSize: 18}} id='title1'>מטפל</option>
-                                    <option style={{fontSize: 18}} id='title2'>הורה</option>
-                                    <option style={{fontSize: 18}} id='title3'>ניהול</option>
+                                    <option style={{fontSize: 18}} id='title1' value="therapist">מטפל</option>
+                                    <option style={{fontSize: 18}} id='title2' value="parent">הורה</option>
+                                    <option style={{fontSize: 18}} id='title3' value="admin">ניהול</option>
                                 </Form.Select>
                             </Col>
                         </Row>
@@ -109,10 +168,10 @@ function Login() {
                                     ...userDetails,
                                     institute: e.target.value
                                 })}>
-                                    <option style={{fontSize: 18}} id='ins1'>1</option>
+                                    <option style={{fontSize: 18}} id='ins1' value="1">1</option>
                                     <option style={{fontSize: 18}} id='ins2'>2</option>
                                     <option style={{fontSize: 18}} id='ins3'>3</option>
-                                    <option style={{fontSize: 18}} id='ins4'>חיצוני</option>
+                                    <option style={{fontSize: 18}} id='ins4' value="external">חיצוני</option>
                                 </Form.Select>
                             </Col>
                         </Row>

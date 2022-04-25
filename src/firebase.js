@@ -21,8 +21,10 @@ import {
     signInWithEmailAndPassword,
     signOut,
     updateEmail,
-    updatePassword
+    updatePassword,
+     setPersistence, browserSessionPersistence
 } from "firebase/auth";
+
 import firebase from "firebase/compat/app";
 import 'firebase/compat/firestore';
 // import firebase from "firebase/compat";
@@ -102,13 +104,20 @@ export async function signUp(userDetails) {
 export async function signIn(email, password) {
     if (email !== '' && password !== '') {
         try {
-            const res = await signInWithEmailAndPassword(auth, email, password)
-            if (res!=null){
-                currentUserDoc =  await getDocCurrentUser()
-            }
+            // let res;
+            setPersistence(auth, browserSessionPersistence)
+                .then(
+                    async () => {
+             await signInWithEmailAndPassword(auth, email, password)
+        })
+            // if (res != null) {
+            //     return await getDocCurrentUser()
+            // }
+            // return null;
             //TODO: check null?
         } catch (err) {
             console.log(err)
+            // return null;
         }
     }
 }
@@ -127,7 +136,7 @@ export async function signOutCurrentUser() {
 export function GetCurrentUser() {
     const [currentUser, setCurrentUser] = useState(null);
     useEffect(() => {
-        return auth.onAuthStateChanged(user => setCurrentUser({'firebase_user':user,'user_doc':currentUserDoc}));
+        return auth.onAuthStateChanged(user => setCurrentUser({'firebase_user': user, 'user_doc': currentUserDoc}));
     }, [])
 
     return currentUser;

@@ -27,6 +27,7 @@ import Patient from "../patient/Patient";
 // import {details_users} from "../../firebase"
 
 export default function Secretary({data}){
+    console.log("data students", data.students_arr)
     const [idGetTable, setIdGetTable] = useState([])
 
     const deleteObjPatient = async (id)=>{

@@ -13,10 +13,12 @@ import Code from "../../components/code/Code";
 import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 
 
-export default function Home({d,type,institute,user}){
-    console.log(user,'home')
+export default function Home({d,type,institute}){
+    console.log(d.id,'home')
 
-    const [data,setData]=useState(d)
+
+    const [data,setData]=useState({...d.data(),id:d.id})
+    console.log("data :" , data)
     const [shouldRender, setShouldRender] = useState(true)
     // const userDocRef = collection(db, 'users/'+auth.currentUser.uid)
     useEffect( () =>{
@@ -25,13 +27,13 @@ export default function Home({d,type,institute,user}){
         //     setData(snapshot.docs[0].data())
         // })
 
-        const userDocRef = doc(db, 'users',user)
+        const userDocRef = doc(db, 'users',d.id)
         return onSnapshot(
             userDocRef,
             (snapshot) => {
                 console.log(snapshot.data())
                 const data = snapshot.data()
-                setData({...data,id:user})
+                setData({...data,id:d.id})
                 // const id = user
 
 
@@ -49,9 +51,9 @@ export default function Home({d,type,institute,user}){
     return(
         // <>
         //     </>
-        (type =='admin') ? (
+        (type ==='admin') ? (
             // <div className="home">
-                <Secretary data={d}/>
+                <Secretary data={data}/>
             // </div>
             ):
         // (type =="therapist") ? (
@@ -72,6 +74,7 @@ export default function Home({d,type,institute,user}){
 
                 <Topbar/>
                 {(type === 'admin') ? (
+
                     // <div className="home">
                     <Secretary data={data}/>
                     // </div>

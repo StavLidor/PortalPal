@@ -46,6 +46,7 @@ for col in columns:
 
 
 X = asd_data.drop(['Class/ASD Traits '], axis=1)
+print("X: ", X)
 Y = asd_data['Class/ASD Traits ']
 x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.20, random_state=7)
 

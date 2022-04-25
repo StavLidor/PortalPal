@@ -128,8 +128,8 @@ export default function Secretary({data}){
             ,name:"email",label:"איימיל של הורה:",
             edit:false,add:true
         },
-        {type:"text",required:"required",options:[('male','זכר'),('female','נקבה'),
-                ('other','אחר')]
+        {type:"text",required:"required",options:['זכר','נקבה',
+               'אחר']
             ,name:"gender",label:"מין",
             edit:true,add:true
         }
@@ -225,10 +225,10 @@ export default function Secretary({data}){
                         </ul>
                         <Routes>
                             <Route path={"/students"} element={<TableEdit add ={addPatient} update ={updatesPatients} deleteObj={deleteObjPatient}
-                                                                          emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:""}} emptyEditDetails={{firstName: "",
+                                                                          emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:"זכר"}} emptyEditDetails={{firstName: "",
                                 lastName: "",
                                 dateOfBirth:new Date()
-                                ,city:"",street:"",buildingNumber:"",gender:""}} data={detailsPatient(data.students_arr)} HebrewNames={[
+                                ,city:"",street:"",buildingNumber:"",gender:"זכר"}} data={detailsPatient(data.students_arr)} HebrewNames={[
                                 "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב","שם פרטי הורה","שם משפחה הורה","אימייל",'מין'/*"מטפלים בית ספריים"*/]
                             } inputsView={inputsViewPatient}  requeredId={true}
                                                                           toEdit={true} toAdd={true}/>}/>

@@ -88,9 +88,10 @@ export default  function TableEdit({
     const handleEditFormChange = (event) => {
         event.preventDefault();
         const fieldName = event.target.getAttribute("name");
-        const fieldValue = event.target.value;
-        const newFormData = {...editFormData};
-        newFormData[fieldName] = fieldValue;
+        const fieldValue = event.target.value
+        console.log(fieldName,fieldValue)
+        const newFormData = {...editFormData}
+        newFormData[fieldName] = fieldValue
         setEditFormData(newFormData)
         console.log(editFormData,'e1')
     };
@@ -242,6 +243,7 @@ export default  function TableEdit({
                 if(index<0){
                     if(typeof(id) == "string"){
                         addToContacts({...detailsNew,id:id})
+                        console.log(detailsNew)
                     }
 
                     else {
@@ -365,7 +367,7 @@ export default  function TableEdit({
                                            value={detailsNew[i.name]}>
                                        {
                                            i.options.map((op) => (
-                                               <option value={op[0]}>{op[1]}</option>
+                                               <option value={op}>{op}</option>
                                            ))
 
 

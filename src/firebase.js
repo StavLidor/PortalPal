@@ -19,7 +19,7 @@ import 'firebase/compat/firestore';
 // import firebase from "firebase/compat";
 import {makePassword} from "./useFunction"
 import hash from "hash.js";
-import {addUserForAdmin} from "./firebaseAdmin"
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -37,7 +37,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig)
+const firebaseAppAddNewUser = initializeApp(firebaseConfig,"Secondary")
+const authAdd= getAuth(firebaseAppAddNewUser)
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore();
 const collection_query_users = collection(db,"users");
@@ -92,18 +94,18 @@ export const resetPassword=email=>{
 export const addUser = async details=>{
     try {
         //sentToEmail(details)
-        const res = await createUserWithEmailAndPassword(auth, details.email, details.password)
+        const res = await createUserWithEmailAndPassword(authAdd, details.email, details.password)
 
 
         const user = res.user
-        await sendEmailVerification(auth.currentUser/*,actionCodeSettings*/)
+        await sendEmailVerification(authAdd.currentUser/*,actionCodeSettings*/)
             .then(() => {
                 // Email verification sent!
                 // ...
                 console.log('sent the email now')
             })
         console.log('before set doc of',user.uid)
-        await auth.signOut()
+        await authAdd.signOut()
         await setDoc(doc(collection_query_users , user.uid), details/*{
             name:details.name,type:details.type,email:details.email,password:details.password,ids:details.ids}*/);
         // Maybe just to a new Therapist?
@@ -111,7 +113,7 @@ export const addUser = async details=>{
 
 
 
-        return user.uid;
+        return user.uid
     } catch (err) {
         console.log(err)
         console.log("Email error",details.email)
@@ -252,7 +254,7 @@ export const addPatient = async details=>{
         }
 
         //const uid_user =addUserForAdmin({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
-        // const uid_user=await addUser({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
+        const uid_user=await addUser({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
         // need to think what to do beacuse is connect from secretry
         //console.log(auth.currentUser.uid)
         // need to think what to do beacuse is connect from secretry
@@ -261,18 +263,19 @@ export const addPatient = async details=>{
         //     password:details.passwordCurrent})
         ///////////////////////////////////////////////////////
         //console.log(auth.currentUser.uid)
-        if (/*!uid_user*/ true){
+        if (uid_user){
             //console.log('user exist parent')
             await updateAccordingEmail(details.email, {idsMangeParents: details.id.toString()})
 
         }
+        console.log('starttttttt')
         //
         // else{
         //     signOutFrom()
         //
         // }
-        await updatesCurrentUser(/*details.idSecretary,*/{students_arr:
-                details.id.toString()})
+
+
 
         //console.log('2222244')
         const q = query(collection_query_users, where("idsMangeParents","array-contains",details.id));
@@ -297,6 +300,8 @@ export const addPatient = async details=>{
             gender:details.gender
             /*idSecretary:[details.idSecretary]*/
         });
+        await updatesCurrentUser(/*details.idSecretary,*/{students_arr:
+                details.id.toString()})
         console.log('Add a patinet',details.id)
         return details.id
 
@@ -356,6 +361,7 @@ export const updatesUser = async (id,data)=>{
 // this moment current user don't can to add patient
 // look that is ok but need to check in ...
 export const updatesCurrentUser = async (data)=>{
+    console.log('update current user',auth.currentUser.uid)
     if ('email' in data){
         const auth = getAuth();
         updateEmail(auth.currentUser, data.email).then(() => {
@@ -558,15 +564,17 @@ export const updateDocUser  = async (id,data)=>{
 
     }
     if('students_arr' in data){
+        console.log('students_arr')
         if (await ifPatientExists(data.students_arr)){
-            const patient_data={'admin':firebase.firestore.FieldValue.arrayUnion(id)}
-            if(!await updateIDDoc(data.students_arr, 'patients', patient_data))
-                return false
+            // const patient_data={'admin':firebase.firestore.FieldValue.arrayUnion(id)}
+            // if(!await updateIDDoc(data.students_arr, 'patients', patient_data))
+            //     return false
+            data.students_arr= firebase.firestore.FieldValue.arrayUnion(data.students_arr)
         }
         else {
             return false
         }
-        data.students_arr= firebase.firestore.FieldValue.arrayUnion(data.students_arr)
+        //data.students_arr= firebase.firestore.FieldValue.arrayUnion(data.students_arr)
 
     }
     if('works' in data){

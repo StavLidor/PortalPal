@@ -27,7 +27,6 @@ export default function LoginFrom(){
     //     signUser(details)
     // }
     useEffect(()=>{
-
        const unsubscribe= auth.onAuthStateChanged(async user => {
            if (user) {
                console.log('user',user.uid)
@@ -48,6 +47,7 @@ export default function LoginFrom(){
            //     setInitializing(false)
            // }
        })
+        console.log("prefix: ",unsubscribe)
         return unsubscribe
 
     },[])
@@ -107,9 +107,6 @@ export default function LoginFrom(){
         if(details.email!=='' && details.password!==''){
             await  signUser(details)
         }
-
-
-
     }
     const Logout = ()=>{
         // console.log('logout');

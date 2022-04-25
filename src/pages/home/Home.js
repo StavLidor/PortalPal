@@ -15,6 +15,7 @@ import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from
 
 export default function Home({d,type,institute,user}){
     console.log(user,'home')
+
     const [data,setData]=useState(d)
     const [shouldRender, setShouldRender] = useState(true)
     // const userDocRef = collection(db, 'users/'+auth.currentUser.uid)
@@ -67,7 +68,7 @@ export default function Home({d,type,institute,user}){
 
         <div className="home">
             <div className="welcome">
-                <h2>Welcome,<span>{data.firstName +" "+data.lastName}</span></h2>
+                {/*<h2>Welcome,<span>{data.firstName +" "+data.lastName}</span></h2>*/}
 
                 <Topbar/>
                 {(type === 'admin') ? (

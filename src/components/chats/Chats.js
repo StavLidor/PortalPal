@@ -3,26 +3,27 @@ import {Link, Route, Routes} from "react-router-dom";
 import Patient from "../../pages/patient/Patient";
 import React from "react";
 import Chat from "./Chat";
-import {connections} from "../../firebase";
+import {connections, getUserConnections} from "../../firebase";
 export default function Chats({patient,userId,talkersIds,details}){
     const [talkers,setTalkers]=useState([])
     //console.log(talkersIds)
 
     let count =0
     useEffect(async () => {
-        console.log(details)
-        const try1 =  connections(details)
-        // const p1 = Promise.resolve( talkersIds)
+        // console.log(details)
+        // const try1 =  await getUserConnections(details)
+        const p1 = Promise.resolve(talkersIds)
         p1.then(async arr => {
-            setTalkers(arr)
-            console.log('talkers',talkers)
+            console.log('talkers',talkersIds)
+            if(arr.length>0)
+                setTalkers(arr)
             console.log(arr)
             // if (await arr.length > 0) {
             //
             // }
 
         })
-    },[])
+    },[talkersIds])
     // useEffect(async () => {
     //     const p1 = Promise.resolve(talkersIds)
     //     p1.then(arr=> {

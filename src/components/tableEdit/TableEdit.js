@@ -357,8 +357,30 @@ export default  function TableEdit({
                        {inputsView.map((i) => (
                            i.add &&
                        <div className="form-group">
-                           <label htmlFor="name">{i.label}</label>
-                           <input
+
+                           {'options' in i &&
+                               <label>:{i.label}
+                                   <select type="text" name="type" id="type"
+                                           onChange={e => setDetailsNew({...detailsNew, [i.name]: e.target.value})}
+                                           value={detailsNew[i.name]}>
+                                       {
+                                           i.options.map((op) => (
+                                               <option value={op[0]}>{op[1]}</option>
+                                           ))
+
+
+
+                                       }
+
+                                   </select>
+
+                               </label>
+
+                           }
+                           {!('options' in i )&&
+                               <div>
+                               <label htmlFor="name">{i.label}</label>
+                               <input
                                type={i.type}
                                // required={i.required}
                                // placeholder={i.placeholder}
@@ -366,7 +388,9 @@ export default  function TableEdit({
                                name={i.name}
                                value={detailsNew[i.name]}
                                onChange={e => setDetailsNew({...detailsNew, [i.name]: e.target.value})}
-                           ></input>
+                               ></input>
+                               </div>
+                           }
                        </div>
                        ))}
 

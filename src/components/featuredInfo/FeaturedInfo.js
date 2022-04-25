@@ -3,7 +3,7 @@ import React from "react";
 import ListMeeting from "../../meetingSummaries/listMeetingSummries/ListMeeting"
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
 import Chats from "../chats/Chats";
-import {auth, connections} from "../../firebase"
+import {auth, connections, getUserConnections} from "../../firebase"
 import Code from  "../code/Code"
 import ListTherapists from "../../meetingSummaries/listTherapists/ListTherapists";
 // import {Container} from "@mui/material";
@@ -65,11 +65,12 @@ export default function FeaturedInfo({details,type}){
                             &nbsp;
 
                         </ul>
+
                         </Link>
                     </ul>
 
                     <Routes>
-                    <Route path={"chats/*"} element={<Chats patient={details.id} userId={auth.currentUser.uid} /*talkersIds={connections(details)}*/
+                    <Route path={"chats/*"} element={<Chats patient={details.id} userId={auth.currentUser.uid} talkersIds={getUserConnections(details)}
                                                             details={details}/>} />
                     </Routes>
                     {type !== 'parent' &&

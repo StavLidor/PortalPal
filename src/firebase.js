@@ -17,8 +17,9 @@ import { getDatabase, ref, push, set } from "firebase/database";
 import firebase from "firebase/compat/app";
 import 'firebase/compat/firestore';
 // import firebase from "firebase/compat";
-import makePassword from "./useFunction"
+import {makePassword} from "./useFunction"
 import hash from "hash.js";
+import {addUserForAdmin} from "./firebaseAdmin"
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -250,17 +251,17 @@ export const addPatient = async details=>{
             return false
         }
 
-
-        const uid_user=await addUser({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
+        //const uid_user =addUserForAdmin({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
+        // const uid_user=await addUser({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
         // need to think what to do beacuse is connect from secretry
         //console.log(auth.currentUser.uid)
         // need to think what to do beacuse is connect from secretry
         // signOutFrom()
-        await signIfUserExists({email:details.emailCurrent,
-            password:details.passwordCurrent})
+        // await signIfUserExists({email:details.emailCurrent,
+        //     password:details.passwordCurrent})
         ///////////////////////////////////////////////////////
         //console.log(auth.currentUser.uid)
-        if (!uid_user){
+        if (/*!uid_user*/ true){
             //console.log('user exist parent')
             await updateAccordingEmail(details.email, {idsMangeParents: details.id.toString()})
 
@@ -292,7 +293,8 @@ export const addPatient = async details=>{
             buildingNumber:details.buildingNumber,
             parents:id_parents,
             // therapistsOutside:[],
-            institutes:{[details.institutionNumber]:[]}
+            institutes:{[details.institutionNumber]:[]},
+            gender:details.gender
             /*idSecretary:[details.idSecretary]*/
         });
         console.log('Add a patinet',details.id)
@@ -697,12 +699,18 @@ export const deleteTherapistFromInstitute = async (institute,removeId,id)=>{
 //
 // }
 const getDocUser= async (id)=>{
-    let docRef = doc(db, "users", id);
-    let d =  await getDoc(docRef)
-    return d.data()
+    try {
+        let docRef = doc(db, "users", id);
+        let d =  await getDoc(docRef)
+        return d.data()
+    }
+    catch (err){
+        return null
+    }
+
 }
 
-export const connections= async (details)=>{
+export const getUserConnections= async (details)=>{
 
     try {
         console.log(details.id)
@@ -724,16 +732,17 @@ export const connections= async (details)=>{
         for (const [key, value] of Object.entries(details.institutes)) {
             value.map(async (p) => {
                 let data = await getDocUser(p)
-                if(data !== undefined)
-                usersConnections.push({
-                    id: p, firstName: data.firstName, lastName: data.lastName,
-                    connection: data.jobs, institute: key
-                })
+                console.log('data connection',data)
+                if(data)
+                    usersConnections.push({
+                        id: p, firstName: data.firstName, lastName: data.lastName,
+                        connection: data.jobs, institute: key
+                    })
             })
             //console.log(key, value);
         }
         // const all =usersConnections.concat(Therapists(details))
-        // console.log('chattt',all)
+        console.log('connection',usersConnections)
         return usersConnections
     }
     catch (err){

@@ -20,6 +20,7 @@ const EditableRow = ({
                         <td>
                             {}
                             {i.edit ===true && i.type!=='tableEdit' &&
+
                                 <input
                                     type={i.type}
                                     required={i.required}
@@ -29,6 +30,16 @@ const EditableRow = ({
                                     onChange={handleEditFormChange}
                                 ></input>
 
+                            }
+                            {i.edit ===true && i.type!=='tableEdit' &&'options' in i &&
+                                <select type={i.type} name={i.name} id={i.name} onChange={handleEditFormChange}
+                                        value={editFormData[i.name]}>
+                                    {
+                                        i.options.map((op) => (
+                                            <option value={op[0]}>{op[1]}</option>
+                                        ))
+                                    }
+                                </select>
                             }
                             {i.edit ===true && i.type==='tableEdit' &&
                                 <TableEdit data={editFormData[i.name]}

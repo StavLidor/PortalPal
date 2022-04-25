@@ -5,6 +5,9 @@ import {signUser, unSignUser,newUser} from "../../pepole/users/user";
 import {signOut} from "firebase/auth";
 import {auth, detailsPatient, detailsWorks, getDocCurrentUser, resetPassword, updatesCurrentUser} from "../../firebase"
 import approve from "../../crawler/Crawler"
+import {Route, Routes} from "react-router-dom";
+import TableEdit from "../tableEdit/TableEdit";
+import AQ10ChildrenForm from "../../AQ10ChildrenForm";
 
 
 export default function LoginFrom(){
@@ -135,105 +138,191 @@ export default function LoginFrom(){
         // Login(details);
     }
 
-    return(
+    return (
         (isMovePage) ? (
-            <div>
-                <button  onClick={Logout} >Logout</button>
+                <div>
+                    <button onClick={Logout}>Logout</button>
 
-                {info.firstName!=="" && <Home d={info} type={details.type} institute={details.institute}
-                user={user}/>}
-                {/*{user && <Home d={info} type={ (()=>{*/}
-                {/*    if(loginNow)*/}
-                {/*        return details.type*/}
-                {/*    return null */}
-                {/*})()*/}
-                {/*    */}
-                {/*} institute={(()=>{*/}
-                {/*    if(loginNow)*/}
-                {/*        return details.institute*/}
-                {/*    return null*/}
-                {/*})()}*/}
-                {/*                              user={user}/>}*/}
-            </div>
-        ):
-        (isFormNewUser) ? (
-                <form onSubmit={submitNewUser}>
-                    <h2>
-                        מטפל
-                    </h2>
-                    <div className="form-group" >
-                        <label htmlFor="firstName">שם פרטי:</label>
-                        <input type="text" name="firstName" id="firstName"onChange={e=>setDetailsNewUser({...detailsNewUser,firstName:e.target.value})} value={detailsNewUser.firstName}/>
-                    </div>
-                    <div className="form-group" >
-                        <label htmlFor="lastName">שם משפחה:</label>
-                        <input type="text" name="lastName" id="lastName"onChange={e=>setDetailsNewUser({...detailsNewUser,lastName:e.target.value})} value={detailsNewUser.lastName}/>
-                    </div>
-                    <div className="form-group" >
-                        <label htmlFor="license">רשיון:</label>
-                        <input type="text" name="license" id="license" onChange={e=>setDetailsNewUser({...detailsNewUser,license:e.target.value})} value={detailsNewUser.license}/>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="email">איימיל:</label>
-                        <input type="email" name="email" id="email" onChange={e=>setDetailsNewUser({...detailsNewUser,email:e.target.value})} value={detailsNewUser.email}/>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">סיסמא:</label>
-                        <input type="password" name="password" id="password" onChange={e=>setDetailsNewUser({...detailsNewUser,password:e.target.value})} value={detailsNewUser.password}/>
-                    </div>
+                    {info.firstName !== "" && <Home d={info} type={details.type} institute={details.institute}
+                                                    user={user}/>}
+                    {/*{user && <Home d={info} type={ (()=>{*/}
+                    {/*    if(loginNow)*/}
+                    {/*        return details.type*/}
+                    {/*    return null */}
+                    {/*})()*/}
+                    {/*    */}
+                    {/*} institute={(()=>{*/}
+                    {/*    if(loginNow)*/}
+                    {/*        return details.institute*/}
+                    {/*    return null*/}
+                    {/*})()}*/}
+                    {/*  user={user}/>}*/}
+                </div>
+            ) :
+            (isFormNewUser) ? (
+                    <form onSubmit={submitNewUser}>
+                        <h2>
+                            מטפל
+                        </h2>
+                        <div className="form-group">
+                            <label htmlFor="firstName">שם פרטי:</label>
+                            <input type="text" name="firstName" id="firstName"
+                                   onChange={e => setDetailsNewUser({...detailsNewUser, firstName: e.target.value})}
+                                   value={detailsNewUser.firstName}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="lastName">שם משפחה:</label>
+                            <input type="text" name="lastName" id="lastName"
+                                   onChange={e => setDetailsNewUser({...detailsNewUser, lastName: e.target.value})}
+                                   value={detailsNewUser.lastName}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="license">רשיון:</label>
+                            <input type="text" name="license" id="license"
+                                   onChange={e => setDetailsNewUser({...detailsNewUser, license: e.target.value})}
+                                   value={detailsNewUser.license}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="email">איימיל:</label>
+                            <input type="email" name="email" id="email"
+                                   onChange={e => setDetailsNewUser({...detailsNewUser, email: e.target.value})}
+                                   value={detailsNewUser.email}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="password">סיסמא:</label>
+                            <input type="password" name="password" id="password"
+                                   onChange={e => setDetailsNewUser({...detailsNewUser, password: e.target.value})}
+                                   value={detailsNewUser.password}/>
+                        </div>
+                        {/*<div className="form-group">*/}
+                        {/*    <label htmlFor="ids">תעודות זהות של הילדים:</label>*/}
+                        {/*    <input type="text" name="ids" id="ids" onChange={e=>setDetailsNewUser({...detailsNewUser,ids:e.target.value})} value={detailsNewUser.ids}/>*/}
+                        {/*</div>*/}
+                        <input type="submit" value="משתמש חדש"/>
+                    </form>
+                ) :
+                <div>
+                    <form onSubmit={submitHandler}>
+                        {/*<div className="from-inner">*/}
+                        {/*    <h2>*/}
+                        {/*        התחברות*/}
+                        {/*    </h2>*/}
+
+                        <table className="tg" align="center">
+                            <thead>
+                            <tr>
+                                <th>התחברות</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>איימיל:</td>
+                                <td><input type="email" name="email" id="email"
+                                           onChange={e => setDetails({...details, email: e.target.value})}
+                                           value={details.email}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>                                סיסמא:
+                                </td>
+                                <td> <input type="password" name="password" id="password"
+                                            onChange={e => setDetails({...details, password: e.target.value})}
+                                            value={details.password}/></td>
+                            </tr>
+                            <tr>
+                                <td>סוג:</td>
+                                <td><select type="text" name="type" id="type"
+                                            onChange={e => setDetails({...details, type: e.target.value})}
+                                            value={details.type}>
+                                    <option value="therapist">מטפל</option>
+                                    {/*<option value="teacher">מורה</option>*/}
+                                    <option value="admin">ניהול</option>
+                                    <option value="parent">הורה</option>
+                                </select></td>
+                            </tr>
+                                {(details.type !== "admin" && details.type !== "parent") &&
+                            <tr>
+                                <td>מוסד:</td>
+                                <td> <select type="text" name="type" id="type"
+                                             onChange={e => setDetails({...details, institute: e.target.value})}
+                                             value={details.institute}>
+
+                                    <option value="1">1</option>
+                                    <option value="external">חיצוני</option>
+                                </select></td>
+                            </tr>}
+                            <tr>
+                                <td><input type="submit" value="התחברות"/></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <table align="right">
+                        <tbody>
+                        <tr>
+                            <td><form onSubmit={submitForgetPassword}>
+                                <input type="submit" value="שכחתי סיסמא"/>
+                            </form></td>
+                        </tr>
+                        <tr>
+                            <td><form onSubmit={submitLink}>
+                                <input type="submit" value="מטפל חדש"/>
+                            </form></td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <br/>
+
+
                     {/*<div className="form-group">*/}
-                    {/*    <label htmlFor="ids">תעודות זהות של הילדים:</label>*/}
-                    {/*    <input type="text" name="ids" id="ids" onChange={e=>setDetailsNewUser({...detailsNewUser,ids:e.target.value})} value={detailsNewUser.ids}/>*/}
+                    {/*    <label htmlFor="email">איימיל:</label>*/}
+                    {/*    <input type="email" name="email" id="email"*/}
+                    {/*           onChange={e => setDetails({...details, email: e.target.value})}*/}
+                    {/*           value={details.email}/>*/}
                     {/*</div>*/}
-                    <input type="submit" value="משתמש חדש"/>
-                </form>
-            ):
-        <div>
-        <form onSubmit={submitHandler}>
-            <div className="from-inner">
-                <h2>
-                    התחברות
-                </h2>
-                <div className="form-group">
-                    <label htmlFor="email">איימיל:</label>
-                    <input type="email" name="email" id="email" onChange={e=>setDetails({...details,email:e.target.value})} value={details.email}/>
+                    {/*<div className="form-group">*/}
+                    {/*    <label htmlFor="password">סיסמא:</label>*/}
+                    {/*    <input type="password" name="password" id="password"*/}
+                    {/*           onChange={e => setDetails({...details, password: e.target.value})}*/}
+                    {/*           value={details.password}/>*/}
+                    {/*</div>*/}
+                    {/*<div className="form-group">*/}
+                    {/*    <label>סוג:*/}
+                    {/*        <select type="text" name="type" id="type"*/}
+                    {/*                onChange={e => setDetails({...details, type: e.target.value})}*/}
+                    {/*                value={details.type}>*/}
+                    {/*            <option value="therapist">מטפל</option>*/}
+                    {/*            /!*<option value="teacher">מורה</option>*!/*/}
+                    {/*            <option value="admin">ניהול</option>*/}
+                    {/*            <option value="parent">הורה</option>*/}
+                    {/*        </select>*/}
+                    {/*    </label>*/}
+                    {/*    {(details.type !== "admin" && details.type !== "parent") &&*/}
+                    {/*    <label>מוסד:*/}
+                    {/*        <select type="text" name="type" id="type"*/}
+                    {/*                onChange={e => setDetails({...details, institute: e.target.value})}*/}
+                    {/*                value={details.institute}>*/}
+
+                    {/*            <option value="1">1</option>*/}
+                    {/*            <option value="external">חיצוני</option>*/}
+                    {/*        </select>*/}
+                    {/*    </label>*/}
+                    {/*    }*/}
+
+                    {/*</div>*/}
+                    {/*<input type="submit" value="התחברות"/>*/}
+                    {/*</div>*/}
+                    {/*</form>*/}
+                    {/*<form onSubmit={submitLink}>*/}
+                    {/*    <input type="submit" value="מטפל חדש"/>*/}
+                    {/*</form>*/}
+                    {/*<form onSubmit={submitForgetPassword}>*/}
+                    {/*    <input type="submit" value="שכחתי סיסמא"/>*/}
+                    {/*</form>*/}
+
                 </div>
-                <div className="form-group">
-                    <label htmlFor="password">סיסמא:</label>
-                    <input type="password" name="password" id="password" onChange={e=>setDetails({...details,password:e.target.value})} value={details.password}/>
-                </div>
-                <div className="form-group">
-                <label>סוג:
-                    <select type="text" name="type" id="type" onChange={e=>setDetails({...details,type:e.target.value})} value={details.type} >
-                        <option value="therapist">מטפל</option>
-                        {/*<option value="teacher">מורה</option>*/}
-                        <option value="admin">ניהול</option>
-                        <option value="parent">הורה</option>
-                    </select>
-                </label>
-                    {(details.type !=="admin" && details.type !=="parent") &&
-                        <label>מוסד:
-                            <select type="text" name="type" id="type" onChange={e=>setDetails({...details,institute:e.target.value})} value={details.institute} >
-
-                                <option value="1">1</option>
-                                <option value="external">חיצוני</option>
-                            </select>
-                        </label>
-                    }
-
-                </div>
-                <input type="submit" value="התחברות"/>
-
-            </div>
-        </form >
-        <form onSubmit={submitLink}>
-            <input type="submit" value="מטפל חדש"/>
-        </form >
-            <form onSubmit={submitForgetPassword}>
-                <input type="submit" value="שכחתי סיסמא"/>
-            </form >
-
-        </div>
 
 
     )

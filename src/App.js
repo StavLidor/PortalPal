@@ -2,44 +2,31 @@ import React from 'react';
 import "./app.css"
 
 import LoginFrom from "./components/login/LoginFrom";
+
 import Chat from "./components/chats/Chat";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import AQ10ChildrenForm from "./AQ10ChildrenForm";
+import Template from "./template";
 
 function App() {
-    // function getInstitutes() {
-    //     setLoading(true);
-    //     // const querySnapshot = await getDocs(collection(db, "users"));
-    //     // querySnapshot.forEach((doc) => {
-    //     //     console.log(`${doc.id} => ${doc.data()}`);
-    //     // });
-    //     onSnapshot(collection_query,(querySnapshot)=>{
-    //         const items = [];
-    //         querySnapshot.forEach((doc) => {
-    //             items.push(doc.data());
-    //         });
-    //         setInstitutes(items);
-    //     setLoading(false);
-    //     })
-    // }
+    return (
 
-    // useEffect(()=> {
-    //     getInstitutes();
-    // }, []);
+        <Router>
+            <div className="App"
+                 style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
 
-    // if (loading){
-    //     return <h1>Loading...</h1>
-    // }
+                <Routes>
+                    <Route path={"/aq10children"} element={<AQ10ChildrenForm/>}/>
+                </Routes>
 
-  return (
+                {/*<Template/>*/}
+                <LoginFrom/>
+            </div>
+        </Router>
 
-    <div className="App">
-        {/*<Secretary signUser={signUser}  new_user={newUser} new_patients={newPatients} variant={false}/>*/}
-    {/*<AddMeetingSummaries/>*/}
-    {/*    <Chat userUid1="Rahbt7jhvugjFSsnrcnBb5VMfUb2" userUid2="Rahbt7jhvugjFSsnrcnBb5VMfUb2"/>*/}
-      <LoginFrom />
-    </div>
-
-  );
+    );
 }
+
 export default App;
 
 

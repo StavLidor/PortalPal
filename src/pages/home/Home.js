@@ -76,7 +76,6 @@ export default function Home({d,type,institute,user}){
                     // </div>
                 ) :
                     <div className="container">
-                        {/*<Chat1 userUid1={d.id} userUid2={d.id}/>*/}
                         <div className="containerLeft">
                             <Update details={data} setData ={setData}/>
                         </div>

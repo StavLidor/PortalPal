@@ -208,7 +208,7 @@ export default function Secretary({data}){
                 <h2>
                     עמוד מזכירה!
                 </h2>
-                <Router>
+                {/*<Router>*/}
                     <div className='sidebarMenu'>
                         <ul className="sidebarList">
                             <Link to={"/students"} className="link">
@@ -259,7 +259,7 @@ export default function Secretary({data}){
                         </Routes>
                     </div>
 
-                </Router>
+                {/*</Router>*/}
                 {/*<RegistrationFromUser new_user={newUser}/>*/}
 
 

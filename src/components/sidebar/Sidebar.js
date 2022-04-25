@@ -60,7 +60,7 @@ export default function Sidebar({type,ids}){
                 <h1>רשימת תלמידים</h1>
 
          }
-            <Router>
+
             {
 
                 arr_data.map((p) => (
@@ -101,8 +101,6 @@ export default function Sidebar({type,ids}){
                 ))
 
             }
-            </Router>
-
 
 
         </div>

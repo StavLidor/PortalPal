@@ -96,6 +96,7 @@ export const addUser = async details=>{
 
 
         const user = res.user
+        console.log(user)
         await sendEmailVerification(auth.currentUser/*,actionCodeSettings*/)
             .then(() => {
                 // Email verification sent!
@@ -104,6 +105,8 @@ export const addUser = async details=>{
             })
         console.log('before set doc of',user.uid)
         await auth.signOut()
+        console.log('details', details)
+        // TODO: Delete the password field when creating new user on Firestore
         await setDoc(doc(collection_query_users , user.uid), details/*{
             name:details.name,type:details.type,email:details.email,password:details.password,ids:details.ids}*/);
         // Maybe just to a new Therapist?

@@ -15,11 +15,12 @@ import {db, updateIDDoc} from "../../firebase";
 import Message from "../chats/message";
 import Exercise from "./Exercise";
 import Datetime from "react-datetime";
-import firebase from "firebase/compat";
-import {Route, Routes} from "react-router-dom";
+import firebase from "firebase/compat/app"
+import {Route, Routes,Link} from "react-router-dom";
 import ViewMeetingSummaries from "../../meetingSummaries/viewMeetingSummaries/ViewMeetingSummaries";
 import ViewExercise from "./ViewExercise";
 export default function Exercises({patient,user,type}){
+    console.log('exercises')
     const [exercises,setExercises]=useState([])
     const [click,setClick]=useState([])
     const [newExercise,setNewExercise]=useState({until:'',description:'',patient:patient,place:'',user:user})
@@ -41,6 +42,7 @@ export default function Exercises({patient,user,type}){
 
                 ))
                 setExercises(data)
+               console.log(data)
             },
             (error) => {
                 // TODO: Handle errors!
@@ -49,6 +51,7 @@ export default function Exercises({patient,user,type}){
     },[])
     const handleOnSubmit = async e => {
         e.preventDefault()
+        newExercise.until=firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
         setAddExercise(false)
         const docRef = await addDoc(collection(db, "exercises"),
             { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
@@ -82,6 +85,7 @@ export default function Exercises({patient,user,type}){
                                 onChange={e=>setNewExercise({...newExercise,place:e.target.value})}/>
                         <label htmlFor="name">מיקום התרגיל: </label>
                     </div>
+                    <input type="submit" value="הוסף תרגיל"/>
                 </form>
 
             ):
@@ -89,13 +93,16 @@ export default function Exercises({patient,user,type}){
             <ul>
                 {exercises.map((e,i)=>(
                     <>
+                    <Link to={i.toString()} className="link">
                     <li key ={e.id}>
-
+                        {e.createdAt.toDate().toUTCString()}
                     </li>
+                    </Link>
                     <Routes>
                     <Route path={ i.toString()} element={ (()=>{
-                        if(type === 'parent')
+                        if(type !== 'parent')
                             return <Exercise exercise={e} deleteExercise={deleteHandle} update={updateHandle}/>
+                        console.log('EEEEEEEXXXXXXXXX')
                         return  <ViewExercise exercise={e}/>
                     })()
 
@@ -104,6 +111,17 @@ export default function Exercises({patient,user,type}){
                     </>
                 ))}
             </ul>
+
+            {type!='parent' &&<button
+            type="button"
+            onClick={(event) => {
+                event.preventDefault()
+                setAddExercise(true)
+            }
+            }
+        >
+            הוסף תרגיל
+        </button>}
 
 
         </>

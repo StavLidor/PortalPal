@@ -57,8 +57,6 @@ export default function ViewMeetingSummaries({client_id,last_data,addMeeting,rem
                         <div className="form-group">
                             <label htmlFor="date">תאריך ושעת מפגש:</label>
                             <Datetime value={data.date} selected={data.date}  onChange={d=>setData({...data,date:d._d.toString(),idDoc:client_id +d._d.toJSON()})} />
-
-
                         </div>
 
                         <div className="form-group" >

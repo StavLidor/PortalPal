@@ -30,13 +30,22 @@ export default function LoginFrom(){
        const unsubscribe= auth.onAuthStateChanged(async user => {
            if (user) {
                console.log('user',user.uid)
-               const p=Promise.resolve(user.uid)
-               p.then(id => {
-                   setIsMovePage(true)
-                   setUser(id)
-               })
+              /* if(user.emailVerified){*/
+                   const p=Promise.resolve(user.uid)
+                   p.then(id => {
+                       setIsMovePage(true)
+                       setUser(id)
+                   })
+                    // console.log(details.email)
+                   resolver(await getDocCurrentUser())
+              /* }*/
+               // else {
+               //     unSignUser()
+               //     setIsMovePage(false)
+               //     setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
+               //         passwordCurrent:'',institutionNumber:'',works:[]})
+               // }
 
-               resolver(await getDocCurrentUser())
 
            } else {
                setIsMovePage(false)
@@ -69,6 +78,7 @@ export default function LoginFrom(){
 
             }
             else {
+                console.log(details.email)
                 let lastLogin = data.lastLogin.split(",")
                 console.log(lastLogin,"lastLogin")
                 if (lastLogin.length == 2){

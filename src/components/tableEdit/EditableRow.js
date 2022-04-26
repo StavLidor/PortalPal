@@ -19,7 +19,7 @@ const EditableRow = ({
                     inputs.map((i) => (
                         <td>
                             {}
-                            {i.edit ===true && i.type!=='tableEdit' &&
+                            {i.edit ===true && i.type!=='tableEdit' && !('options' in i)&&
 
                                 <input
                                     type={i.type}
@@ -36,7 +36,7 @@ const EditableRow = ({
                                         value={editFormData[i.name]}>
                                     {
                                         i.options.map((op) => (
-                                            <option value={op[0]}>{op[1]}</option>
+                                            <option value={op}>{op}</option>
                                         ))
                                     }
                                 </select>

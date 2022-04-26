@@ -104,6 +104,8 @@ function App() {
                 {/*{window.localStorage.saveSignedIn===false && <Login login={login}/>}*/}
                 {/*{window.localStorage.saveSignedIn && <Home d={ window.localStorage.saveUserDetails.doc} type={ window.localStorage.saveUserDetails.type} institute={ window.localStorage.saveUserDetails.institute}/>}*/}
                 {isSigneIn === false && checkUserConnection && <Login login={login}/>}
+                {(checkUserConnection===false ||(isSigneIn && hasDetails===false) ) && <div>loading</div>}
+                {/*// TODO: page for loading*/}
                 {/*{ window.localStorage.saveType}*/}
                 {/*{ window.localStorage.saveInstitute}*/}
                 {isSigneIn && hasDetails &&

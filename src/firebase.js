@@ -435,17 +435,17 @@ export const signIfUserExists = async details => {
         return null
     }
 }
-export const getDocCurrentUser = async ()=>{
-    try {
-        const docRef = doc(db, "users", auth.currentUser.uid);
-        const d = await getDoc(docRef)
-        return d
-    }
-    catch (err) {
-        return null
-    }
-
-}
+// export const getDocCurrentUser = async ()=>{
+//     try {
+//         const docRef = doc(db, "users", auth.currentUser.uid);
+//         const d = await getDoc(docRef)
+//         return d
+//     }
+//     catch (err) {
+//         return null
+//     }
+//
+// }
 // TODO: tableEdit user and patient(change one of the details,delete from therapist a patient)
 
 export const updatesPatients = async (id, data) => {

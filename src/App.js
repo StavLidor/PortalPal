@@ -18,51 +18,66 @@ import {Routes} from "react-router";
 import {signUser} from "./pepole/users/user";
 
 function App() {
+    const [isSigneIn, setIsSigneIn] = useState(false);
+    const [userDetails, setUserDetails] = useState(null);
+    const [hasDetails, setHasDetails] = useState(false);
+    const [checkUserConnection, setCheckUserConnection] = useState(false);
 
     // console.log("new",window.localStorage.saveSignedIn)
-    // useEffect(()=>{
-    //     const unsubscribe= auth.onAuthStateChanged(async user => {
-    //         if (user) {
-    //             // await signOutCurrentUser()
-    //             console.log('user',user.uid)
-    //             // const p=Promise.resolve(user.uid)
-    //             // p.then(id => {
-    //             //     setIsMovePage(true)
-    //             //     setUser(id)
-    //             // })
-    //
-    //             getDocCurrentUser().then(value => {
-    //                 // login(value,userDetails.type,userDetails.institute)
-    //                 setUserDetails(value)
-    //             }
-    //             )
-    //
-    //         } else {
-    //             // setIsMovePage(false)
-    //             // setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
-    //             //     passwordCurrent:'',institutionNumber:'',works:[]})
-    //         }
-    //         // if(initializing){
-    //         //     setInitializing(false)
-    //         // }
-    //     })
-    //     console.log("prefix: ",unsubscribe)
-    //     return unsubscribe
-    //
-    // },[])
+    useEffect(() => {
+
+        const unsubscribe = auth.onAuthStateChanged(async user => {
+            setCheckUserConnection(true)
+            if (user) {
+                // await signOutCurrentUser()
+                console.log('user', user.uid)
+                // const p=Promise.resolve(user.uid)
+                // p.then(id => {
+                //     setIsMovePage(true)
+                //     setUser(id)
+                // })
+
+                setIsSigneIn(true)
+                getDocCurrentUser().then(value => {
+                        // login(value,userDetails.type,userDetails.institute)
+                        setUserDetails(value)
+                        setHasDetails(true)
+                    }
+                )
+
+            } else {
+                localStorage.setItem("type", "")
+                localStorage.setItem("institute", "")
+                setIsSigneIn(false)
+                // setIsMovePage(false)
+                // setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
+                //     passwordCurrent:'',institutionNumber:'',works:[]})
+            }
+            // if(initializing){
+            //     setInitializing(false)
+            // }
+        })
+        console.log("prefix: ", unsubscribe)
+        return unsubscribe
+
+    }, [])
     // console.log("in app:",auth.currentUser)
     // console.log(GetCurrentUser()['firebase_user'])
     // const saveSignedIn = window.localStorage.isSigneIn
     // window.localStorage.toko = false
     // if (window.localStorage.toko===false){}
-    const [isSigneIn, setIsSigneIn] = useState(false);
-    const [userDetails, setUserDetails] = useState(null);
+
     // const saveUserDetails = window.localStorage.userDetails
     // const saveUserDetails = false
-    const login= async (doc,type,institute)=>{
+    const login = async (type, institute) => {
         // setUserDetails({doc: doc,type: type,institute:institute})
-        setUserDetails({doc: doc,type: type, institute:institute})
-        setIsSigneIn(true);
+        // setUserDetails({doc: doc, type: type, institute: institute})
+        // setUserDetails(doc)
+        // setIsSigneIn(true);
+        // localStorage.setItem("isSignedIn","true")
+        localStorage.setItem("type", type)
+        localStorage.setItem("institute", institute)
+
         // window.localStorage.saveSignedIn = isSigneIn
         // window.localStorage.saveUserDetails= userDetails
         // window.localStorage.saveType= type
@@ -71,9 +86,9 @@ function App() {
     }
 
     return (
-    <Router>
+        <Router>
             <div className="App">
-                 {/*style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>*/}
+                {/*style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>*/}
                 {/*<Route exact path="/login" component={Login} />*/}
                 {/*<Route exact path="/signup" component={SignUp} />*/}
                 {/*<Routes>*/}
@@ -88,10 +103,11 @@ function App() {
 
                 {/*{window.localStorage.saveSignedIn===false && <Login login={login}/>}*/}
                 {/*{window.localStorage.saveSignedIn && <Home d={ window.localStorage.saveUserDetails.doc} type={ window.localStorage.saveUserDetails.type} institute={ window.localStorage.saveUserDetails.institute}/>}*/}
-                {isSigneIn===false && <Login login={login}/>}
+                {isSigneIn === false && checkUserConnection && <Login login={login}/>}
                 {/*{ window.localStorage.saveType}*/}
                 {/*{ window.localStorage.saveInstitute}*/}
-                {isSigneIn && <Home d={userDetails.doc} type={userDetails.type} institute={userDetails.type.institute}/>}
+                {isSigneIn && hasDetails &&
+                <Home d={userDetails} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")}/>}
                 {/*<Login/>*/}
 
             </div>

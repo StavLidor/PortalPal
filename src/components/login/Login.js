@@ -67,36 +67,38 @@ function Login({login}) {
         const form = e.currentTarget
         console.log(userDetails)
         // signIn(userDetails.email, userDetails.password).then(value => {login(value,userDetails.type,userDetails.institute)})
+        login(userDetails.type,userDetails.institute)
         await signIn(userDetails.email, userDetails.password)
-        const unsubscribe= auth.onAuthStateChanged(async user => {
-            if (user) {
-                // await signOutCurrentUser()
-                console.log('user',user.uid)
-                // const p=Promise.resolve(user.uid)
-                // p.then(id => {
-                //     setIsMovePage(true)
-                //     setUser(id)
-                // })
 
-                getDocCurrentUser().then(value => {
-                    if(userDetails.type !=="admin" && userDetails.type !=="parent" ){
-                        updatesCurrentUser({lastLogin:userDetails.type+","+userDetails.institute})
-                    }
-                    else {
-                        updatesCurrentUser({lastLogin:userDetails.type})
-                    }
-                    login(value,userDetails.type,userDetails.institute)})
-
-            } else {
-                // setIsMovePage(false)
-                // setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
-                //     passwordCurrent:'',institutionNumber:'',works:[]})
-            }
-            // if(initializing){
-            //     setInitializing(false)
-            // }
-        })
-        console.log("prefix: ",unsubscribe)
+        // const unsubscribe= auth.onAuthStateChanged(async user => {
+        //     if (user) {
+        //         // await signOutCurrentUser()
+        //         console.log('user',user.uid)
+        //         // const p=Promise.resolve(user.uid)
+        //         // p.then(id => {
+        //         //     setIsMovePage(true)
+        //         //     setUser(id)
+        //         // })
+        //
+        //         getDocCurrentUser().then(value => {
+        //             if(userDetails.type !=="admin" && userDetails.type !=="parent" ){
+        //                 updatesCurrentUser({lastLogin:userDetails.type+","+userDetails.institute})
+        //             }
+        //             else {
+        //                 updatesCurrentUser({lastLogin:userDetails.type})
+        //             }
+        //             login(value,userDetails.type,userDetails.institute)})
+        //
+        //     } else {
+        //         // setIsMovePage(false)
+        //         // setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
+        //         //     passwordCurrent:'',institutionNumber:'',works:[]})
+        //     }
+        //     // if(initializing){
+        //     //     setInitializing(false)
+        //     // }
+        // })
+        // console.log("prefix: ",unsubscribe)
         // return unsubscribe
 
         // if (userDetails.email !== '' && userDetails.password !== '') {

@@ -11,8 +11,8 @@ import TabsBanner from "../../components/topbar/TabsBanner";
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
-    const [tabsComponent, setTabsComponent] = useState(<h3>משהו השתבש...</h3>)
-    const [currentPerson, setCurrentPerson] = useState()
+    const [currentPerson, setCurrentPerson] = useState('')
+    const [currentPage, setCurrentPage] = useState('')
 
 
     async function onLogout() {
@@ -24,35 +24,26 @@ function HomePage({userDetails, type, institute}) {
             case "admin":
                 setSideListComponent(<PatientList list={userDetails.students_arr}
                                                   setPatientListData={setPatientListData} listTitle={"רשימת תלמידים"}
-                                                  setCurrentPerson={setCurrentPerson}/>)
+                                                  setCurrentPerson={setCurrentPerson}
+                                                  currentPage={currentPage}/>)
                 break
             case "parent":
                 setSideListComponent(<PatientList list={userDetails.childrenIds} setPatientListData={setPatientListData}
                                                   listTitle={"רשימת ילדים"}
-                                                  setCurrentPerson={setCurrentPerson}/>)
+                                                  setCurrentPerson={setCurrentPerson}
+                                                  currentPage={currentPage}/>)
                 break
             case "therapist":
                 setSideListComponent(<PatientList list={userDetails.institutes[institute]}
                                                   setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}
-                                                  setCurrentPerson={setCurrentPerson}/>)
+                                                  setCurrentPerson={setCurrentPerson}
+                                                  currentPage={currentPage}/>)
                 break
             default:
                 <h3>משהו השתבש...</h3>
         }
-    }, [])
+    }, [currentPage])
 
-    useEffect(()=>{
-        setTabsComponent(<TabsBanner type={type} currentPerson={currentPerson}/>)
-    },[currentPerson])
-
-
-    // function onPatiantListItemClick(e) {
-    //     const previous = this.closest(".list-group").children(".active");
-    //     previous.removeClass('active'); // previous list-item
-    //     e.target.addClass('active'); // activated list-item
-    // }
-
-    console.log(patientListData)
     return (<div>
             <Container className="p-4" fluid>
                 <Row className='gap-4 '>
@@ -65,8 +56,8 @@ function HomePage({userDetails, type, institute}) {
                         </ButtonGroup>
                     </Col>
                     <Col md='5' className="border border-secondary rounded">
-                        {/*<TabsBanner type={type} currentPerson={currentPerson}/>*/}
-                        {tabsComponent}
+                        <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}/>
+                        {/*{tabsComponent}*/}
                     </Col>
                 </Row>
             </Container>

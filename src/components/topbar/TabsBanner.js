@@ -8,16 +8,17 @@ import {signOutCurrentUser} from "../../firebase";
 import PatientList from "../sidebar/PatientList";
 import PatientDetails from "../sidebar/PatientDetails";
 
-function TabsBanner({type,currentPerson}){
+function TabsBanner({type,currentPerson, setCurrentPage}){
 
     const [tabsComponent, setTabsComponent] = useState(<h3>משהו השתבש...</h3>)
-    const [currentPath, setCurrentPath] = useState(useLocation())
 
-    const Funcky =e=> {
-        e.preventDefault()
-        setCurrentPath(useLocation());
-    }
 
+
+    // useEffect(()=> {
+    //     console.log()
+    //     setCurrentPath(currentPerson)
+    //     console.log(currentPath);
+    // },[currentPerson])
 
 
 
@@ -57,7 +58,10 @@ function TabsBanner({type,currentPerson}){
                 setTabsComponent(
                     <Nav justify variant="tabs" defaultActiveKey='#/sessions'>
                         <Nav.Item>
-                            <Link to={'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                            <Link onClick={()=>{
+                                console.log("TOKO")
+                                setCurrentPage('sessions')
+                                }} to={currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="link-1">תרגילים</Nav.Link>
@@ -101,7 +105,7 @@ function TabsBanner({type,currentPerson}){
                 setTabsComponent(<h3>משהו השתבש...</h3>)
                 break
         }
-    },[])
+    },[currentPerson])
 
     return(tabsComponent)
 }

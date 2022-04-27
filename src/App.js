@@ -11,18 +11,21 @@ import Login from "./components/login/Login";
 import Chat from "./components/chats/Chat";
 import {BrowserRouter as Router, Route,} from "react-router-dom";
 import AQ10ChildrenForm from "./AQ10ChildrenForm";
+import {signOutCurrentUser} from "./firebase";
 import Template from "./template";
 import {Col, Row} from "react-bootstrap";
 import {auth, GetCurrentUser, getDocCurrentUser} from './firebase'
 import {Routes} from "react-router";
 import {signUser} from "./pepole/users/user";
+import Authenticate from "./components/login/Authenticate";
+import HomePage from "./pages/home/HomePage";
 
 function App() {
     const [isSigneIn, setIsSigneIn] = useState(false);
     const [userDetails, setUserDetails] = useState(null);
     const [hasDetails, setHasDetails] = useState(false);
     const [checkUserConnection, setCheckUserConnection] = useState(false);
-
+    // signOutCurrentUser()
     // console.log("new",window.localStorage.saveSignedIn)
     useEffect(() => {
 
@@ -103,13 +106,19 @@ function App() {
 
                 {/*{window.localStorage.saveSignedIn===false && <Login login={login}/>}*/}
                 {/*{window.localStorage.saveSignedIn && <Home d={ window.localStorage.saveUserDetails.doc} type={ window.localStorage.saveUserDetails.type} institute={ window.localStorage.saveUserDetails.institute}/>}*/}
-                {isSigneIn === false && checkUserConnection && <Login login={login}/>}
+
+                {/*<LoginFrom/>*/}
+                {/*{isSigneIn === false && checkUserConnection && <Login login={login}/>}*/}
+                {isSigneIn === false && checkUserConnection && <Authenticate login={login}/>}
                 {(checkUserConnection===false ||(isSigneIn && hasDetails===false) ) && <div>loading</div>}
+
                 {/*// TODO: page for loading*/}
-                {/*{ window.localStorage.saveType}*/}
-                {/*{ window.localStorage.saveInstitute}*/}
+
+                {/*{isSigneIn && hasDetails &&*/}
+                {/*<Home d={userDetails} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")}/>}*/}
+
                 {isSigneIn && hasDetails &&
-                <Home d={userDetails} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")}/>}
+                <HomePage userDetails={userDetails.data()} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")} />}
                 {/*<Login/>*/}
 
             </div>

@@ -27,6 +27,7 @@ import Patient from "../patient/Patient";
 // import {details_users} from "../../firebase"
 
 export default function Secretary({data}){
+    console.log("data students", data.students_arr)
     const [idGetTable, setIdGetTable] = useState([])
 
     const deleteObjPatient = async (id)=>{
@@ -208,7 +209,7 @@ export default function Secretary({data}){
                 <h2>
                     עמוד מזכירה!
                 </h2>
-                <Router>
+                {/*<Router>*/}
                     <div className='sidebarMenu'>
                         <ul className="sidebarList">
                             <Link to={"/students"} className="link">
@@ -259,7 +260,7 @@ export default function Secretary({data}){
                         </Routes>
                     </div>
 
-                </Router>
+                {/*</Router>*/}
                 {/*<RegistrationFromUser new_user={newUser}/>*/}
 
 

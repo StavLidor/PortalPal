@@ -8,7 +8,7 @@ import {db} from "../../firebase";
 
 export let patientList =[]
 
-function PatientList({list,setPatientListData}) {
+function PatientList({list,setPatientListData,listTitle}) {
 
     const [listData, setListData] = useState([])
     useEffect(getListData,[])
@@ -31,6 +31,7 @@ function PatientList({list,setPatientListData}) {
 
     return (
         <div>
+            <Form.Label style={{fontWeight:'bold'}}>{listTitle}</Form.Label>
             <ListGroup as="ul">
                 {listData.map((item) =>{
                     let data = item.data()

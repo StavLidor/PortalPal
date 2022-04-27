@@ -10,17 +10,34 @@ import TopBanner from "../../components/topbar/TopBanner";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
+    const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
 
 
     async function onLogout() {
         await signOutCurrentUser()
     }
+// 0544617812 Pleasent
 
-    function onPatiantListItemClick(e) {
-        const previous = this.closest(".list-group").children(".active");
-        previous.removeClass('active'); // previous list-item
-        e.target.addClass('active'); // activated list-item
+    switch (type) {
+        case "admin":
+            setSideListComponent( <PatientList list={userDetails.students_arr} setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}/>)
+            break
+        case "parent":
+            setSideListComponent( <PatientList list={userDetails.childrenIds} setPatientListData={setPatientListData} listTitle={"רשימת ילדים"}/>)
+            break
+        case "therapist":
+
+            break
+        default:
+            <h3>משהו השתבש...</h3>
     }
+
+
+    // function onPatiantListItemClick(e) {
+    //     const previous = this.closest(".list-group").children(".active");
+    //     previous.removeClass('active'); // previous list-item
+    //     e.target.addClass('active'); // activated list-item
+    // }
 
     console.log(patientListData)
     return (<div>
@@ -41,8 +58,10 @@ function HomePage({userDetails, type, institute}) {
             </Container>
             {/*<Container className='vh-100'>*/}
             <Row className='p-4 gap-4 vh-100'>
-                <Col md='2' className="border border-secondary rounded">רשימת מטופלים
-                    <PatientList list={userDetails.students_arr} setPatientListData={setPatientListData}/>
+                <Col md='2' className="p-3 border border-secondary rounded">
+                    {/*<PatientList list={userDetails.students_arr} setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}/>*/}
+                    {sideListComponent}
+
                 </Col>
                 <Col md='3' className="w-25 border border-secondary rounded ">
                     <Row className="p-2 border border-secondary rounded h-25 m-3">

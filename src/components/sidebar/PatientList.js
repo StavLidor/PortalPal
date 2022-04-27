@@ -8,7 +8,7 @@ import {db} from "../../firebase";
 
 export let patientList =[]
 
-function PatientList({list,setPatientListData,listTitle}) {
+function PatientList({list,setPatientListData,listTitle,setCurrentPerson}) {
 
     const [listData, setListData] = useState([])
     useEffect(getListData,[])
@@ -37,7 +37,7 @@ function PatientList({list,setPatientListData,listTitle}) {
                     let data = item.data()
                     // <ListGroup.Item style={{backgroundColor: "beige"}}
                     //                 as="li">{item.data().firstName + " " + item.data().lastName}</ListGroup.Item>
-                     return(<Link to={data.id.toString()} className="list-group-item list-group-item-action">{data.firstName + " " + data.lastName}</Link>)}
+                     return(<Link to={data.id.toString()} className="list-group-item list-group-item-action" onClick={()=>setCurrentPerson(data.id)}>{data.firstName + " " + data.lastName}</Link>)}
                 )}
             </ListGroup>
         </div>

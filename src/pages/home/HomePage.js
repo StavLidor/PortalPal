@@ -6,31 +6,44 @@ import {Link, Route, Routes} from "react-router-dom";
 import Patient from "../patient/Patient";
 import PatientList from "../../components/sidebar/PatientList";
 import PatientDetails from "../../components/sidebar/PatientDetails";
-import TopBanner from "../../components/topbar/TopBanner";
+import TabsBanner from "../../components/topbar/TabsBanner";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
+    const [tabsComponent, setTabsComponent] = useState(<h3>משהו השתבש...</h3>)
+    const [currentPerson, setCurrentPerson] = useState()
 
 
     async function onLogout() {
         await signOutCurrentUser()
     }
-// 0544617812 Pleasent
 
-    switch (type) {
-        case "admin":
-            setSideListComponent( <PatientList list={userDetails.students_arr} setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}/>)
-            break
-        case "parent":
-            setSideListComponent( <PatientList list={userDetails.childrenIds} setPatientListData={setPatientListData} listTitle={"רשימת ילדים"}/>)
-            break
-        case "therapist":
+    useEffect(() => {
+        switch (type) {
+            case "admin":
+                setSideListComponent(<PatientList list={userDetails.students_arr}
+                                                  setPatientListData={setPatientListData} listTitle={"רשימת תלמידים"}
+                                                  setCurrentPerson={setCurrentPerson}/>)
+                break
+            case "parent":
+                setSideListComponent(<PatientList list={userDetails.childrenIds} setPatientListData={setPatientListData}
+                                                  listTitle={"רשימת ילדים"}
+                                                  setCurrentPerson={setCurrentPerson}/>)
+                break
+            case "therapist":
+                setSideListComponent(<PatientList list={userDetails.institutes[institute]}
+                                                  setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}
+                                                  setCurrentPerson={setCurrentPerson}/>)
+                break
+            default:
+                <h3>משהו השתבש...</h3>
+        }
+    }, [])
 
-            break
-        default:
-            <h3>משהו השתבש...</h3>
-    }
+    useEffect(()=>{
+        setTabsComponent(<TabsBanner type={type} currentPerson={currentPerson}/>)
+    },[currentPerson])
 
 
     // function onPatiantListItemClick(e) {
@@ -52,32 +65,42 @@ function HomePage({userDetails, type, institute}) {
                         </ButtonGroup>
                     </Col>
                     <Col md='5' className="border border-secondary rounded">
-                        <TopBanner/>
+                        {/*<TabsBanner type={type} currentPerson={currentPerson}/>*/}
+                        {tabsComponent}
                     </Col>
                 </Row>
             </Container>
             {/*<Container className='vh-100'>*/}
             <Row className='p-4 gap-4 vh-100'>
                 <Col md='2' className="p-3 border border-secondary rounded">
-                    {/*<PatientList list={userDetails.students_arr} setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}/>*/}
                     {sideListComponent}
-
                 </Col>
                 <Col md='3' className="w-25 border border-secondary rounded ">
                     <Row className="p-2 border border-secondary rounded h-25 m-3">
                         <Routes>
                             {patientListData.map((item) => {
                                     let data = item.data()
-                                console.log(data)
                                     return (
                                         <Route path={data.id.toString() + '/*'}
-                                               // element={<h2>{data.firstName + " " + data.lastName}</h2>}/>)
-                                element={<PatientDetails details={data}/>}/>)
+                                               element={<PatientDetails details={data}/>}/>)
                                 }
                             )}
                         </Routes>
                     </Row>
-                    <Row className="border border-secondary rounded h-50 m-3"></Row>
+                    <Row className="border border-secondary rounded h-50 m-3">
+                        <Routes>
+                            <Route path={"sessions"}
+                                   element={<h4>אנא בחר ילד מהרשימה</h4>}/>
+
+                            {patientListData.map((item) => {
+                                    let data = item.data()
+                                    return (
+                                        <Route path={data.id.toString() + '/sessions/*'}
+                                               element={<PatientDetails details={data}/>}/>)
+                                }
+                            )}
+                        </Routes>
+                    </Row>
                 </Col>
                 <Col md='5' className="border border-secondary rounded">CCCCC</Col>
             </Row>

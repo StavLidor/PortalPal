@@ -15,8 +15,8 @@ import {func} from "prop-types";
 
 
 function Login({login, setDisplayLoginForm}) {
-
-    const [userDetails, setUserDetails] = useState({email: "", password: "", type: "therapist", institute: "external"});
+                                                                //TODO: delete default values.
+    const [userDetails, setUserDetails] = useState({email: "toko1010@gmail.com", password: "123456", type: "therapist", institute: 1}); //TODO: make sure default values are correct
     const onLogin = async e => {
         e.preventDefault()
         console.log(userDetails)
@@ -80,11 +80,11 @@ function Login({login, setDisplayLoginForm}) {
                                 מוסד:
                             </Col>
                             <Col md="auto">
-                                <Form.Select id='institute' onChange={e => setUserDetails({
+                                <Form.Select id='institute' disabled={userDetails.type === 'parent'} onChange={e => setUserDetails({
                                     ...userDetails,
                                     institute: e.target.value
                                 })}>
-                                    <option style={{fontSize: 18}} id='ins1' value="1">1</option>
+                                    <option style={{fontSize: 18}} id='ins1' value={1}>1</option>
                                     <option style={{fontSize: 18}} id='ins2'>2</option>
                                     <option style={{fontSize: 18}} id='ins3'>3</option>
                                     <option style={{fontSize: 18}} id='ins4' value="external">חיצוני</option>

@@ -32,17 +32,10 @@ function App() {
         const unsubscribe = auth.onAuthStateChanged(async user => {
             setCheckUserConnection(true)
             if (user) {
-                // await signOutCurrentUser()
-                console.log('user', user.uid)
-                // const p=Promise.resolve(user.uid)
-                // p.then(id => {
-                //     setIsMovePage(true)
-                //     setUser(id)
-                // })
-
                 setIsSigneIn(true)
                 getDocCurrentUser().then(value => {
-                        // login(value,userDetails.type,userDetails.institute)
+                    console.log(value)
+                    console.log(value.data())
                         setUserDetails(value)
                         setHasDetails(true)
                     }
@@ -52,40 +45,16 @@ function App() {
                 localStorage.setItem("type", "")
                 localStorage.setItem("institute", "")
                 setIsSigneIn(false)
-                // setIsMovePage(false)
-                // setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
-                //     passwordCurrent:'',institutionNumber:'',works:[]})
             }
-            // if(initializing){
-            //     setInitializing(false)
-            // }
         })
-        console.log("prefix: ", unsubscribe)
         return unsubscribe
 
     }, [])
-    // console.log("in app:",auth.currentUser)
-    // console.log(GetCurrentUser()['firebase_user'])
-    // const saveSignedIn = window.localStorage.isSigneIn
-    // window.localStorage.toko = false
-    // if (window.localStorage.toko===false){}
 
-    // const saveUserDetails = window.localStorage.userDetails
-    // const saveUserDetails = false
     const login = async (type, institute) => {
-        // setUserDetails({doc: doc,type: type,institute:institute})
-        // setUserDetails({doc: doc, type: type, institute: institute})
-        // setUserDetails(doc)
-        // setIsSigneIn(true);
-        // localStorage.setItem("isSignedIn","true")
+
         localStorage.setItem("type", type)
         localStorage.setItem("institute", institute)
-
-        // window.localStorage.saveSignedIn = isSigneIn
-        // window.localStorage.saveUserDetails= userDetails
-        // window.localStorage.saveType= type
-        // window.localStorage.saveInstitute= institute
-
     }
 
     return (

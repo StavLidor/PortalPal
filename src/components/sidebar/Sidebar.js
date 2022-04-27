@@ -67,8 +67,6 @@ export default function Sidebar({type, ids}) {
                         <div className="sidebarWrapper">
 
                             <div className="topLeft">
-
-
                             </div>
 
                             <div className='sidebarMenu'>

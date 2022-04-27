@@ -5,121 +5,35 @@ import {Redirect, useLocation} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import firebaseApp, {signIn, signUp, signOutCurrentUser, getCurrentUser} from '../../firebase'
 import {AuthContext} from "./Auth.js";
+// import {setDisplayLoginForm} from "./Authenticate.js";
 
 import App from "../../App";
 import {signUser} from "../../pepole/users/user";
 import {signInWithEmailAndPassword} from "firebase/auth";
+import {func} from "prop-types";
 
-function Login({login}) {
-    // console.log("current user" ,auth.currentUser)
+
+
+function Login({login, setDisplayLoginForm}) {
 
     const [userDetails, setUserDetails] = useState({email: "", password: "", type: "therapist", institute: "external"});
-    // useEffect(()=>{
-    //     const unsubscribe= auth.onAuthStateChanged(async user => {
-    //         if (user) {
-    //             // await signOutCurrentUser()
-    //             console.log('user',user.uid)
-    //             // const p=Promise.resolve(user.uid)
-    //             // p.then(id => {
-    //             //     setIsMovePage(true)
-    //             //     setUser(id)
-    //             // })
-    //
-    //              // getDocCurrentUser().then(value => {login(value,userDetails.type,userDetails.institute)})
-    //
-    //         } else {
-    //             // setIsMovePage(false)
-    //             // setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
-    //             //     passwordCurrent:'',institutionNumber:'',works:[]})
-    //         }
-    //         // if(initializing){
-    //         //     setInitializing(false)
-    //         // }
-    //     })
-    //     console.log("prefix: ",unsubscribe)
-    //     return unsubscribe
-    //
-    // },[])
-    //
-    // useEffect(()=>{
-    //     const unsubscribe= auth.onAuthStateChanged(async user => {
-    //         if (user) {
-    //             console.log('user',user.uid)
-    //             const p=Promise.resolve(user.uid)
-    //             p.then(id => {
-    //                 setIsMovePage(true)
-    //                 setUser(id)
-    //             })
-    //
-    //             resolver(await getDocCurrentUser())
-    //
-    //         } else {
-    //             setIsMovePage(false)
-    //             setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
-    //                 passwordCurrent:'',institutionNumber:'',works:[]})
-    //         }
-    //     })
-    //     return unsubscribe
-    // },[])
-
     const onLogin = async e => {
         e.preventDefault()
-        const form = e.currentTarget
         console.log(userDetails)
-        // signIn(userDetails.email, userDetails.password).then(value => {login(value,userDetails.type,userDetails.institute)})
         login(userDetails.type,userDetails.institute)
         await signIn(userDetails.email, userDetails.password)
+    }
 
-        // const unsubscribe= auth.onAuthStateChanged(async user => {
-        //     if (user) {
-        //         // await signOutCurrentUser()
-        //         console.log('user',user.uid)
-        //         // const p=Promise.resolve(user.uid)
-        //         // p.then(id => {
-        //         //     setIsMovePage(true)
-        //         //     setUser(id)
-        //         // })
-        //
-        //         getDocCurrentUser().then(value => {
-        //             if(userDetails.type !=="admin" && userDetails.type !=="parent" ){
-        //                 updatesCurrentUser({lastLogin:userDetails.type+","+userDetails.institute})
-        //             }
-        //             else {
-        //                 updatesCurrentUser({lastLogin:userDetails.type})
-        //             }
-        //             login(value,userDetails.type,userDetails.institute)})
-        //
-        //     } else {
-        //         // setIsMovePage(false)
-        //         // setInfo({id:'',firstName:'',lastName:'',students_arr:[],myDoc:'',emailCurrent:'',
-        //         //     passwordCurrent:'',institutionNumber:'',works:[]})
-        //     }
-        //     // if(initializing){
-        //     //     setInitializing(false)
-        //     // }
-        // })
-        // console.log("prefix: ",unsubscribe)
-        // return unsubscribe
-
-        // if (userDetails.email !== '' && userDetails.password !== '') {
-        //     try {
-        //         const res = await signInWithEmailAndPassword(auth, userDetails.email, userDetails.password)
-        //         if (res!=null){
-        //
-        //         }
-        //         //TODO: check null?
-        //         return true
-        //     } catch (err) {
-        //         console.log(err)
-        //         return false
-        //     }
-        // }
+    const  changeForm = e =>{
+        e.preventDefault()
+        setDisplayLoginForm(false)
     }
 
 
     return (
         <div className='login'>
-            <Form onSubmit={onLogin}>
+            <Form>
+                {/*onSubmit={onLogin}>*/}
                 <Container className="w-auto" fluid="sm">
                     <Form.Group className="mb-3" controlId="formEmail">
                         <Form.Label className="text-center" style={{width: "100%"}}>התחברות</Form.Label>
@@ -128,7 +42,7 @@ function Login({login}) {
                             <Col>
                                 אימייל:
                             </Col>
-                            <Col md="7">
+                            <Col md="auto">
                                 <Form.Control type='email' placeholder='toko@gmail.com' id='email'
                                               onChange={e => setUserDetails({...userDetails, email: e.target.value})}/>
                             </Col>
@@ -138,7 +52,7 @@ function Login({login}) {
                             <Col>
                                 סיסמה:
                             </Col>
-                            <Col md="7">
+                            <Col md="auto">
                                 <Form.Control type='password' placeholder='סיסמה' id='password'
                                               onChange={e => setUserDetails({
                                                   ...userDetails,
@@ -151,7 +65,7 @@ function Login({login}) {
                             <Col>
                                 תפקיד:
                             </Col>
-                            <Col md="7">
+                            <Col md="auto">
                                 <Form.Select id='type'
                                              onChange={e => setUserDetails({...userDetails, type: e.target.value})}>
                                     <option style={{fontSize: 18}} id='title1' value="therapist">מטפל</option>
@@ -165,7 +79,7 @@ function Login({login}) {
                             <Col>
                                 מוסד:
                             </Col>
-                            <Col md="7">
+                            <Col md="auto">
                                 <Form.Select id='institute' onChange={e => setUserDetails({
                                     ...userDetails,
                                     institute: e.target.value
@@ -181,7 +95,7 @@ function Login({login}) {
                     <Row className="p-1" md="10">
                         <ButtonGroup className="gap-4">
                             <Button className="rounded-3" size="md" onClick={onLogin}>התחבר</Button>
-                            <Button className="rounded-3" variant="outline-primary" size="md">הירשם</Button>
+                            <Button className="rounded-3" variant="outline-primary" size="md" onClick={changeForm}>הירשם</Button>
                         </ButtonGroup>
                     </Row>
                     <Row>
@@ -192,7 +106,6 @@ function Login({login}) {
 
             </Form>
         </div>
-
     )
 }
 

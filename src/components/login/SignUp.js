@@ -4,10 +4,21 @@ import firebaseApp, {signIn, signUp, signOutCurrentUser, getCurrentUser} from '.
 // import {setDisplayLoginForm} from "./Authenticate.js";
 
 function SignUp({setDisplayLoginForm})  {
+    //Users Fields:
 
+    //     email: string
+    // firstName: string
+    // lastName: string
+    // jobs: [] (therapist only)
+    // license only external therapist
+    // titles: [parent / therapist / admin]
+    // institute: string (admin only)
+    // institutes: {1: ...patients.  external:...patients.} (therapist only)
+    // childrenIds: [] (parent only)
     const [userDetails, setUserDetails] = useState({
         firstName: "",
-        lastName: "", license: "", email: "", password: "", institute: {external: []}
+        lastName: "",jobs:[], license: "",titles:['מטפל'] ,email: "", password: "",institute:"", institutes: {external: []},
+        childrenIds:[]
     });
     const onSignUp = async e => {
         e.preventDefault()

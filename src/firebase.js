@@ -1,11 +1,12 @@
 import {initializeApp} from "firebase/app"
 import {
+    addDoc,
     collection,
     deleteDoc,
     doc,
     getDoc,
     getDocs,
-    getFirestore,
+    getFirestore, limit,
     orderBy,
     query,
     setDoc,
@@ -225,22 +226,17 @@ export const addUser = async details => {
     }
 
 }
-export const addUserFromAdmin = async (details, emailCurrent, passwordCurrent, nameFiled) => {
-    const uid_user = await addUser(Object.assign({}, {password: makePassword(7)}, details))
-    await signIfUserExists({
-        email: emailCurrent,
-        password: passwordCurrent
-    }).then((d) => {
-        if (d != null) {
-            const p = Promise.resolve(uid_user)
 
-            p.then(async id => {
-
-                await updatesCurrentUser({[nameFiled]: id})
-            })
-        }
-    })
-
+export const addUserFromAdmin = async (details,institute) => {
+    let uid_user = await addUser({...details,institutes: {[institute]:[]},license:"",
+        titles:["therapist"],institute:"",childrenIds:[],password: makePassword(7)})
+    // if user exists
+    if(!uid_user){
+        uid_user= await updateAccordingEmail(details.email, {['institutes.'+institute]: []})
+    }
+   // add to doc of institute
+    if(uid_user)
+        await updateIDDoc(institute, 'employees',{employees: firebase.firestore.FieldValue.arrayUnion(uid_user)})
     return uid_user
 
 }
@@ -342,6 +338,7 @@ export const allDetailsMeetings = async (id, type, idTherapist) => {
 
 }
 export const addPatient = async details => {
+    // TODO: think about what to do if patient Exists? add more institute?
     // need to check if the patient in the portal
     try {
         console.log('add a patient')
@@ -350,34 +347,12 @@ export const addPatient = async details => {
         if ((await getDocs(query(collection_query_patients, where("id", "==", details.id)))).docs.length > 0) {
             return false
         }
-
-        //const uid_user =addUserForAdmin({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
         const uid_user=await addUser({firstName:details.firstNameParent,lastName:details.lastNameParent,email: details.email, password: makePassword(7),idsMangeParents:[details.id],/*idSecretary:details.idSecretary*/})
-        // need to think what to do beacuse is connect from secretry
-        //console.log(auth.currentUser.uid)
-        // need to think what to do beacuse is connect from secretry
-        // signOutFrom()
-        // await signIfUserExists({email:details.emailCurrent,
-        //     password:details.passwordCurrent})
-        ///////////////////////////////////////////////////////
-        //console.log(auth.currentUser.uid)
         if (uid_user){
             //console.log('user exist parent')
             await updateAccordingEmail(details.email, {idsMangeParents: details.id.toString()})
 
         }
-        console.log('starttttttt')
-        //
-        // else{
-        //     signOutFrom()
-        //
-        // }
-        // await updatesCurrentUser(/*details.idSecretary,*/{
-        //     students_arr:
-        //         details.id.toString()
-        // })
-
-        //console.log('2222244')
         const q = query(collection_query_users, where("idsMangeParents", "array-contains", details.id));
         const querySnapshot = await getDocs(q);
         let id_parents = []
@@ -395,15 +370,17 @@ export const addPatient = async details => {
             street: details.street,
             buildingNumber: details.buildingNumber,
             parents: id_parents,
-            // therapistsOutside:[],
-            institutes: {[details.institutionNumber]: []},
             gender: details.gender
             /*idSecretary:[details.idSecretary]*/
-        });
-        await updatesCurrentUser(/*details.idSecretary,*/{students_arr:
-                details.id.toString()})
-        console.log('Add a patinet',details.id)
-        return details.id
+        })
+
+
+        // await updatesCurrentUser(/*details.idSecretary,*/{students_arr:
+        //         details.id.toString()})
+        // console.log('Add a patinet',details.id)
+        if(await updateIDDoc(details.institute, 'students',{employees: firebase.firestore.FieldValue.arrayUnion( details.id)}))
+            return details.id
+        return null
 
 
     } catch (e) {
@@ -541,11 +518,17 @@ export const addPatientToExternalTherapist = async (id, code) => {
     if (c != '') {
         const patient_data = {
             'code': firebase.firestore.FieldValue.arrayRemove(c),
-            'institutes.external': firebase.firestore.FieldValue.arrayUnion(auth.currentUser.uid)
+            //'institutes.external': firebase.firestore.FieldValue.arrayUnion(auth.currentUser.uid)
         }
-        const filedName = 'institutes.external'
+        // const filedName = 'institutes.external'
         if (!await updateIDDoc(id, 'patients', patient_data))
             return false
+        await setDoc(collection(db, "patients/"+id+"/therapists/",auth.currentUser.uid), {
+            active:true,
+            //TODO:add a connection
+            connection:'',
+            institute:'external',
+        })
 
         if (await updateIDDoc(auth.currentUser.uid, 'users', {'institutes.external': firebase.firestore.FieldValue.arrayUnion(id)}))
             return true
@@ -601,29 +584,39 @@ export const filedAdd = async (data, nameFiled1, nameFiled2, id, idAdd, f) => {
 export const removeConnectionPatientToTherapist = async (id, idRemove, institutionNumber) => {
     // remove for patient
     const filed = "institutes." + institutionNumber
-    const removeTherapist = {[filed]: firebase.firestore.FieldValue.arrayRemove(id)}
-    if (!await updateIDDoc(idRemove, 'patients', removeTherapist))
-        return false
+    // const removeTherapist = {[filed]: firebase.firestore.FieldValue.arrayRemove(id)}
+    // if (!await updateIDDoc(idRemove, 'patients', removeTherapist))
+    //     return false
+    await deleteDoc(doc(db, "patients/therapists/", idRemove))
     const data = {[filed]: firebase.firestore.FieldValue.arrayRemove(idRemove)}
     if (await updateIDDoc(id, 'users', data))
         return true
     return false
 }
-export const addConnectionPatientToTherapist = async (id, idAdd, institutionNumber) => {
-    const filedName = "institutes." + institutionNumber
-    const data = {[filedName]: idAdd}
-    const d = await filedAdd(data, filedName, filedName, id, idAdd,
-        (da) => {
-            console.log('oooooooo', da)
-            if (institutionNumber in da.institutes)
-                return true
-            return false
-        })
-    if (!d) {
+export const addConnectionPatientToTherapist = async (id, idAdd, institutionNumber,connection) => {
+    const d = await ifPatientExists(idAdd)
+    if(!d){
         return null
     }
-
-    if (await updateIDDoc(id, 'users', data))
+    await setDoc(collection(db, "patients/"+idAdd+"/therapists/",id), {
+        active:true,
+        connection:connection,
+        institute:institutionNumber,
+    })
+    // const filedName = "institutes." + institutionNumber
+    // const data = {[filedName]: idAdd}
+    // const d = await filedAdd(data, filedName, filedName, id, idAdd,
+    //     (da) => {
+    //         console.log('oooooooo', da)
+    //         if (institutionNumber in da.institutes)
+    //             return true
+    //         return false
+    //     })
+    // if (!d) {
+    //     return null
+    // }
+    //
+    if (await updateIDDoc(id, 'users', {["institutes." + institutionNumber]:firebase.firestore.FieldValue.arrayUnion(idAdd)}))
         return d
     return null
 }
@@ -676,15 +669,19 @@ export const updateDocUser = async (id, data) => {
         //data.students_arr= firebase.firestore.FieldValue.arrayUnion(data.students_arr)
 
     }
-    if ('works' in data) {
-        data.works = firebase.firestore.FieldValue.arrayUnion(data.works)
+    // if('institutes' in data){
+        //data.institutes= firebase.firestore.FieldValue.arrayUnion(data.institutes)
 
-    }
-    if ('meetings' in data) {
-
-        data.meetings = firebase.firestore.FieldValue.arrayUnion(data.meetings)
-
-    }
+    // }
+    // if ('works' in data) {
+    //     data.works = firebase.firestore.FieldValue.arrayUnion(data.works)
+    //
+    // }
+    // if ('meetings' in data) {
+    //
+    //     data.meetings = firebase.firestore.FieldValue.arrayUnion(data.meetings)
+    //
+    // }
     // console.log('before tableEdit doc')
     // console.log('id',id)
     if (await updateIDDoc(id, 'users', data))
@@ -707,7 +704,10 @@ export const updateAccordingEmail = async (email, data) => {
     // const querySnapshot = await getDocs(q);
     // //console.log('find doc')
     // if (querySnapshot.docs.length>0)
-    await updateDocUser(await findUserByEmail(email), data)
+    const id = await findUserByEmail(email)
+    if(await updateDocUser(id, data))
+        return id
+    return null
 
 
 }
@@ -722,7 +722,9 @@ export const signOutFrom = function () {
 }
 const deleteFrom = async (ob, type, removeFrom, opStr) => {
     try {
-        const q = query(collection_query_users, where(type, opStr, ob));
+        // works array-contains idWork
+        //removeId, 'works', id, "array-contains"
+        const q = query(collection_query_users, where(type, "array-contains", ob));
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
             console.log('id', doc.id)
@@ -755,16 +757,28 @@ export const deleteDocFrom = async (id, type) => {
     await deleteDoc(doc(db, type, id.toString()))
 
 }
-export const deletePatientFromInstitute = async (institute, removeOb, id) => {
+export const deletePatientFromInstitute = async (institute, removeOb) => {
     // await deleteDoc(doc(db, "patients", id.toString()));
     console.log('remove from', removeOb)
     try {
-        if (!await deleteFrom(removeOb, 'students_arr', id, "array-contains"))
-            return false
+        //data.institute,id,data.id
+        // if (!await deleteFrom(removeOb, 'students_arr', id, "array-contains"))
+        //     return false
+        // remove from institute
+        await updateIDDoc(institute, 'institutes',
+            {employees: firebase.firestore.FieldValue.arrayRemove(id)})
+        const unsubscribe = query(collection(db, 'patients/'+removeOb+'/therapists'),
+            where('institute','==',institute)
+        )
 
-        const patient_data = {['institutes.' + institute]: firebase.firestore.FieldValue.delete()}
-        if (!await updateIDDoc(/*removeOb.id*/removeOb, 'patients', patient_data))
-            return false
+        const querySnapshot = await getDocs(unsubscribe)
+        querySnapshot.forEach((doc) => (
+            // console.log(doc)
+
+            //doc.id
+            updateDoc(doc(db, "patients/"+removeOb+"/therapists/"+doc.id), {active:false})
+
+        ))
 
         return true
     } catch (err) {
@@ -772,14 +786,35 @@ export const deletePatientFromInstitute = async (institute, removeOb, id) => {
     }
 
 }
-export const deleteTherapistFromInstitute = async (institute, removeId, id) => {
+export const deleteTherapistFromInstitute = async (institute,details) => {
     // await deleteDoc(doc(db, "patients", id.toString()));
-    console.log('remove from', removeId)
-    if (!await deleteFrom(removeId, 'works', id, "array-contains")) {
-        return false
-    }
+    // console.log('remove from', removeId)
+    // if (!await deleteFrom(removeId, 'works', id, "array-contains")) {
+    //     return false
+    // }
+    await updateIDDoc(institute, 'institutes', {employees: firebase.firestore.FieldValue.arrayRemove(details.id)})
+    const unsubscribe = query(collection(db, "patients"),
+        where('id','in',details.institutes[institute])
+
+
+    )
+    //  await setDoc(collection(db, "patients/"+idAdd+"/therapists/",id), {
+    //         active:true,
+    //         connection:connection,
+    //         institute:institutionNumber,
+    //     })
+
+    const querySnapshot = await getDocs(unsubscribe)
+    querySnapshot.forEach((doc) => (
+        // console.log(doc)
+
+        //doc.id
+         updateDoc(doc(db, "patients/"+doc.id+"/therapists/"+details.id), {active:false})
+
+    ))
+
     const deleteInstitute = {['institutes.' + institute]: firebase.firestore.FieldValue.delete()}/*{institutes:firebase.firestore.FieldValue.arrayRemove(institute)}*/
-    if (!await updateIDDoc(removeId, 'users', deleteInstitute)) {
+    if (!await updateIDDoc(details.id, 'users', deleteInstitute)) {
         return false
     }
     return true
@@ -895,5 +930,5 @@ export default {
     deleteDocFrom,
     deleteCurrentUser,
     allDetailsMeetings,
-    addUserFromAdmin
+
 };

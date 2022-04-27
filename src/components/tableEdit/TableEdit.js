@@ -107,7 +107,7 @@ export default  function TableEdit({
         const newContacts = [...contacts];
         console.log(contacts)
         const index = contacts.findIndex((contact) => contact.id === contactId);
-        if (await deleteObj(contactId)) {
+        if (await deleteObj(contacts[index]/*contactId*/)) {
             newContacts.splice(index, 1)
             if(contactTable && contactId === contactTable.id){
                 setContactTable(null)
@@ -218,7 +218,8 @@ export default  function TableEdit({
             }
             const p = Promise.resolve(id)
             p.then(async id => {
-                deleteObj(id).then((flag)=>{
+                const index = contacts.findIndex((contact) => contact.id === id)
+                deleteObj(contacts[index]).then((flag)=>{
                     modifyContacts(flag)
                     if(flag){
 

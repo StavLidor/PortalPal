@@ -4,7 +4,7 @@ import {addPatientToExternalTherapist, addToPatientArr} from "../../firebase";
 import hash from "hash.js";
 
 export default function Code({id=null,type}){
-
+    //TODO:add a connection
     const [code,setCode]=useState(null)
     const [detailsNewPatient,setDetailsNewPatient]=useState({id:"",code:""})
     const submitCreate = async e => {

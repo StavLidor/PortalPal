@@ -7,6 +7,7 @@ import Patient from "../patient/Patient";
 import PatientList from "../../components/sidebar/PatientList";
 import PatientDetails from "../../components/sidebar/PatientDetails";
 import TabsBanner from "../../components/topbar/TabsBanner";
+import FileSystem from "../../components/fileSystem/FileSystem";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
@@ -93,7 +94,20 @@ function HomePage({userDetails, type, institute}) {
                         </Routes>
                     </Row>
                 </Col>
-                <Col md='5' className="border border-secondary rounded">CCCCC</Col>
+                <Col md='5' className="border border-secondary rounded">
+
+                    <Routes>
+                        {patientListData.map((item) => {
+                                let data = item.data()
+                                return (
+                                    <Route path={data.id.toString() + '/*'}
+                                           element={<FileSystem/>}/>)
+                            }
+                        )}
+                    </Routes>
+
+
+                </Col>
             </Row>
             <Row className="border border-secondary rounded m-3 w-auto"></Row>
 

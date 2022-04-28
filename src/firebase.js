@@ -1,4 +1,5 @@
 import {initializeApp} from "firebase/app"
+import {getStorage} from "firebase/storage";
 import {
     collection,
     deleteDoc,
@@ -26,6 +27,7 @@ import {
 } from "firebase/auth";
 
 import firebase from "firebase/compat/app";
+// import firebaseStorage from 'firebase'
 import 'firebase/compat/firestore';
 // import firebase from "firebase/compat";
 import {makePassword} from "./useFunction"
@@ -51,6 +53,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig)
 const firebaseAppAddNewUser = initializeApp(firebaseConfig,"Secondary")
 const authAdd= getAuth(firebaseAppAddNewUser)
+export const storage = getStorage(firebaseApp)
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore();
 export let currentUserDoc;

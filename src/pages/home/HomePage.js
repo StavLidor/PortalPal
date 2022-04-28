@@ -45,7 +45,7 @@ function HomePage({userDetails, type, institute}) {
         }
     }, [currentPage])
 
-    return (<div>
+    return (<div><h3>TOKO</h3>
             <Container className="p-4" fluid>
                 <Row className='gap-4 '>
                     <Col md='2' className="border border-secondary rounded">פורטלי</Col>
@@ -73,7 +73,7 @@ function HomePage({userDetails, type, institute}) {
                             {patientListData.map((item) => {
                                     let data = item.data()
                                     return (
-                                        <Route path={data.id.toString() + '/*'}
+                                        <Route path={'/#/'+data.id.toString() + '/*'}
                                                element={<PatientDetails details={data}/>}/>)
                                 }
                             )}
@@ -87,7 +87,7 @@ function HomePage({userDetails, type, institute}) {
                             {patientListData.map((item) => {
                                     let data = item.data()
                                     return (
-                                        <Route path={'#/'+ data.id.toString() + '/sessions/*'}
+                                        <Route path={'/#/'+ data.id.toString() + '/sessions/*'}
                                                element={<PatientDetails details={data}/>}/>)
                                 }
                             )}
@@ -100,7 +100,7 @@ function HomePage({userDetails, type, institute}) {
                         {patientListData.map((item) => {
                                 let data = item.data()
                                 return (
-                                    <Route path={'#/'+ data.id.toString() + '/*'}
+                                    <Route path={'/#/'+ data.id.toString() + '/*'}
                                            element={<FileSystem/>}/>)
                             }
                         )}

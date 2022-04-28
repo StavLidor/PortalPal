@@ -46,6 +46,7 @@ function HomePage({userDetails, type, institute}) {
     }, [currentPage])
 
     return (<div>
+            <h2>TEST</h2>
             <Container className="p-4" fluid>
                 <Row className='gap-4 '>
                     <Col md='2' className="border border-secondary rounded">פורטלי</Col>

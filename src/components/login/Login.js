@@ -20,8 +20,9 @@ function Login({login, setDisplayLoginForm}) {
     const onLogin = async e => {
         e.preventDefault()
         console.log(userDetails)
-        login(userDetails.type,userDetails.institute)
-        await signIn(userDetails.email, userDetails.password)
+        let result = await signIn(userDetails.email, userDetails.password)
+        login(userDetails.type,userDetails.institute, result)
+
     }
 
     const  changeForm = e =>{
@@ -33,11 +34,9 @@ function Login({login, setDisplayLoginForm}) {
     return (
         <div className='login'>
             <Form>
-                {/*onSubmit={onLogin}>*/}
                 <Container className="w-auto" fluid="sm">
                     <Form.Group className="mb-3" controlId="formEmail">
                         <Form.Label className="text-center" style={{width: "100%"}}>התחברות</Form.Label>
-                        {/*<Container fluid="md">*/}
                         <Row>
                             <Col>
                                 אימייל:

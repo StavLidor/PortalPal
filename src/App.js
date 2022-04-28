@@ -19,42 +19,65 @@ import {Routes} from "react-router";
 import {signUser} from "./pepole/users/user";
 import Authenticate from "./components/login/Authenticate";
 import HomePage from "./pages/home/HomePage";
+import {signOut} from "firebase/auth";
 
 function App() {
     const [isSigneIn, setIsSigneIn] = useState(false);
     const [userDetails, setUserDetails] = useState(null);
     const [hasDetails, setHasDetails] = useState(false);
     const [checkUserConnection, setCheckUserConnection] = useState(false);
+    const [displayLoginError, setDisplayLoginError] = useState(false);
+    const [isFirstLoad, setIsFirstLoad] = useState(true);
+
     // signOutCurrentUser()
     // console.log("new",window.localStorage.saveSignedIn)
     useEffect(() => {
-
+        // let isFirstLoad = true
         const unsubscribe = auth.onAuthStateChanged(async user => {
             setCheckUserConnection(true)
             if (user) {
-                setIsSigneIn(true)
+                // setIsSigneIn(true)
                 getDocCurrentUser().then(value => {
                     console.log(value)
                     console.log(value.data())
+                    console.log(value.data().titles)
+                    if(value.data().titles.includes(localStorage.getItem('type'))){
+                        console.log('print hello')
+                        setDisplayLoginError(false)
+                        setIsSigneIn(true)
                         setUserDetails(value)
                         setHasDetails(true)
+                        setIsFirstLoad(true)
                     }
+                    else{
+                        signOutCurrentUser()
+                        setDisplayLoginError(true)
+                        localStorage.setItem("type", "")
+                        localStorage.setItem("institute", "")
+                    }
+
+                }
                 )
 
             } else {
                 localStorage.setItem("type", "")
                 localStorage.setItem("institute", "")
                 setIsSigneIn(false)
+                if(isFirstLoad === false){
+                    setDisplayLoginError(true)
+                }
+                setIsFirstLoad(false)
             }
         })
         return unsubscribe
 
     }, [])
 
-    const login = async (type, institute) => {
-
+    const login = async (type, institute, isSuccessfulSignIn) => {
         localStorage.setItem("type", type)
         localStorage.setItem("institute", institute)
+        // setIsFirstLoad(isSuccessfulSignIn)
+        setDisplayLoginError(!isSuccessfulSignIn)
     }
 
     return (
@@ -80,7 +103,7 @@ function App() {
                 {/*{isSigneIn === false && checkUserConnection && <Login login={login}/>}*/}
                 {isSigneIn === false && checkUserConnection && <Authenticate login={login}/>}
                 {(checkUserConnection===false ||(isSigneIn && hasDetails===false) ) && <div>loading</div>}
-
+                {displayLoginError && isSigneIn === false && checkUserConnection && <h4>אחד מפרטי ההתחברות לא נכון :(</h4>}
                 {/*// TODO: page for loading*/}
 
                 {/*{isSigneIn && hasDetails &&*/}

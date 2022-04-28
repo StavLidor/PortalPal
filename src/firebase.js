@@ -312,22 +312,19 @@ export const detailsPatient = async arr_id => {
 export const allDetailsMeetings = async (id, type, idTherapist) => {
     console.log('allDetailsMeetings', id, type, idTherapist)
     let q
-    if (type !== 'parent') {
-        q = query(collection(db, "summaries"), where("therapist", '==', auth.currentUser.uid),
-            where("client", '==', id), orderBy("date", "desc"))
-    } else {
-        console.log('hehe')
-        q = query(collection(db, "summaries"),
-            where("therapist", '==', idTherapist), where("client", '==', id),
-            orderBy("date", "desc"))
-    }
+    let idTherapistIs =(()=>{
+        if(type ==='parent')
+            return idTherapist
+        return auth.currentUser.uid
+    })()
+    q = query(collection(db, "patients/"+id+"/therapists/"+idTherapistIs+"/sessions"), orderBy("date", "desc"))
 
     // const q=query(q1,where("client", '==',id))
     console.log('allDetailsMeetings222')
     const querySnapshot = await getDocs(q);
     const arr = []
     querySnapshot.forEach((doc) => {
-        arr.push(doc.data())
+        arr.push({...doc.data(),id:doc.id})
         console.log('id', doc.id)
         // if (doc.data().client === id){
         //

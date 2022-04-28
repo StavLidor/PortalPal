@@ -49,6 +49,7 @@ export default function Sidebar({type, ids}) {
 
     }, [ids])
     return (
+        <Router>
         <div className='sidebar'>
 
             {
@@ -101,5 +102,6 @@ export default function Sidebar({type, ids}) {
 
 
         </div>
+        </Router>
     )
 }

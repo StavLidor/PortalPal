@@ -5,51 +5,52 @@ import React from "react";
 import firebase from "firebase/compat/app"
 import {db, Therapists} from "../../firebase";
 import ListMeeting from "../listMeetingSummries/ListMeeting";
-import {collection, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
+import {collection, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 export default function ListTherapists({patientDetails,type,f}){
     const [therapists,setTherapists]=useState([])
+    console.log('therapistLIstt')
     //console.log(talkersIds)
-    useEffect( () => {
-
-        let therapistIds=[]
-        let dict={}
-        for (const [key, value] of Object.entries(patientDetails.institutes)) {
-            value.map(async (id) => {
-                //let data = await getDocUser(p)
-
-                // usersTherapists.push({
-                //     id: p, firstName: data.firstName, lastName: data.lastName,
-                //     connection: data.jobs, institute: key
-                // })
-                dict[id]=key
-                therapistIds.push(id)
-            })
-        }
-        if(therapistIds.length >0){
-            const unsubscribe = query(collection(db, "users"),
-                where(firebase.firestore.FieldPath.documentId(),'in',therapistIds)
+    useEffect( async () => {
 
 
-            )
-            return onSnapshot(
-                unsubscribe,
-                (querySnapshot) => {
-                    let data=[]
-                    querySnapshot.forEach((doc) => (
-                        // console.log(doc)
+        let dict = {}
+        console.log('therapistLIstt',"patients/" + patientDetails + "/therapists")
+        const docRef = query(collection(db, "patients/" + patientDetails.id + "/therapists"))
+        // const querySnapshot = await getDocs(docRef)
+        getDocs(docRef).then((d) => {
+            const therapistIds = []
 
-                        data.push({id: doc.id, firstName: doc.data().firstName, lastName: doc.data().lastName,
-                            connection: doc.data().jobs, institute: dict[doc.id]})
+            d.forEach((doc) => {
+                // console.log('therapistLIstt',doc.data())
+                therapistIds.push(doc.id)
+                dict[doc.id] = {institute: doc.data().institute, connection: doc.data().connection}
+            });
+            if (therapistIds.length > 0) {
+                const unsubscribe = query(collection(db, "users"),
+                    where(firebase.firestore.FieldPath.documentId(), 'in', therapistIds)
+                )
+                return onSnapshot(
+                    unsubscribe,
+                    (querySnapshot) => {
+                        let data = []
+                        querySnapshot.forEach((doc) => (
+                            // console.log(doc)
+                            data.push({
+                                id: doc.id, firstName: doc.data().firstName, lastName: doc.data().lastName,
+                                institute: dict[doc.id].institute, connection: dict[doc.id].connection
+                            })
+                            // console.log()
+                        ))
+                        setTherapists(data)
+                        console.log(data)
+                    },
+                    (error) => {
+                        // TODO: Handle errors!
+                        console.log('error!!', error)
+                    })
+            }
 
-                    ))
-                    setTherapists(data)
-                },
-                (error) => {
-                    // TODO: Handle errors!
-                    console.log('error!!',error)
-                })
-        }
-
+        })
 
 
         // const p1 = Promise.resolve(Therapists(patientDetails))

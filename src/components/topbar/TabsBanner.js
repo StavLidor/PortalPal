@@ -26,9 +26,11 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
         switch (type) {
             case "admin":
                 setTabsComponent(
-                    <Nav justify variant="tabs" defaultActiveKey="#/sessions">
+                    <Nav justify variant="tabs" defaultActiveKey={currentPerson +'/sessions'}>
                         <Nav.Item>
-                            <Link to='#/sessions' className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                            <Link onClick={()=>{
+                                setCurrentPage('sessions')
+                            }} to={currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="link-1">הוספת משתמשי פורטל</Nav.Link>
@@ -56,12 +58,11 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
                 // </Routes>
 
                 setTabsComponent(
-                    <Nav justify variant="tabs" defaultActiveKey='#/sessions'>
+                    <Nav justify variant="tabs" defaultActiveKey={'#/'+ currentPerson +'/sessions'}>
                         <Nav.Item>
                             <Link onClick={()=>{
-                                console.log("TOKO")
                                 setCurrentPage('sessions')
-                                }} to={currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                                }} to={'#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="link-1">תרגילים</Nav.Link>
@@ -81,9 +82,11 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
             case "therapist":
 
                 setTabsComponent(
-                    <Nav justify variant="tabs" defaultActiveKey="#/sessions">
+                    <Nav justify variant="tabs" defaultActiveKey={currentPerson +'/sessions'}>
                         <Nav.Item>
-                            <Link to='#/sessions' className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                            <Link onClick={()=>{
+                                setCurrentPage('sessions')
+                            }} to={currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="link-1">תרגילים</Nav.Link>

@@ -87,7 +87,7 @@ function HomePage({userDetails, type, institute}) {
                             {patientListData.map((item) => {
                                     let data = item.data()
                                     return (
-                                        <Route path={data.id.toString() + '/sessions/*'}
+                                        <Route path={'#/'+ data.id.toString() + '/sessions/*'}
                                                element={<PatientDetails details={data}/>}/>)
                                 }
                             )}
@@ -100,7 +100,7 @@ function HomePage({userDetails, type, institute}) {
                         {patientListData.map((item) => {
                                 let data = item.data()
                                 return (
-                                    <Route path={data.id.toString() + '/*'}
+                                    <Route path={'#/'+ data.id.toString() + '/*'}
                                            element={<FileSystem/>}/>)
                             }
                         )}

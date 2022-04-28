@@ -36,17 +36,17 @@ function App() {
         const unsubscribe = auth.onAuthStateChanged(async user => {
             setCheckUserConnection(true)
             if (user) {
-                // setIsSigneIn(true)
+                setIsSigneIn(true)
                 getDocCurrentUser().then(value => {
                     console.log(value)
                     console.log(value.data())
                     console.log(value.data().titles)
+                        setUserDetails(value)
+                        setHasDetails(true)
                     if(value.data().titles.includes(localStorage.getItem('type'))){
                         console.log('print hello')
                         setDisplayLoginError(false)
-                        setIsSigneIn(true)
-                        setUserDetails(value)
-                        setHasDetails(true)
+                        // setIsSigneIn(true)
                         setIsFirstLoad(true)
                     }
                     else{
@@ -83,35 +83,12 @@ function App() {
     return (
         <Router>
             <div className="App">
-                {/*style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>*/}
-                {/*<Route exact path="/login" component={Login} />*/}
-                {/*<Route exact path="/signup" component={SignUp} />*/}
-                {/*<Routes>*/}
-                {/*    <Route path={"/aq10children"} element={<AQ10ChildrenForm/>}/>*/}
-                {/*</Routes>*/}
-
-                {/*<Template/>*/}
-                {/*<LoginFrom/>*/}
-
-                {/*{GetCurrentUser()['firebase_user']  ==null && <Login/>}*/}
-                {/*{GetCurrentUser()['firebase_user'] !=null && <Home/>}*/}
-
-                {/*{window.localStorage.saveSignedIn===false && <Login login={login}/>}*/}
-                {/*{window.localStorage.saveSignedIn && <Home d={ window.localStorage.saveUserDetails.doc} type={ window.localStorage.saveUserDetails.type} institute={ window.localStorage.saveUserDetails.institute}/>}*/}
-
-                {/*<LoginFrom/>*/}
-                {/*{isSigneIn === false && checkUserConnection && <Login login={login}/>}*/}
                 {isSigneIn === false && checkUserConnection && <Authenticate login={login}/>}
                 {(checkUserConnection===false ||(isSigneIn && hasDetails===false) ) && <div>loading</div>}
                 {displayLoginError && isSigneIn === false && checkUserConnection && <h4>אחד מפרטי ההתחברות לא נכון :(</h4>}
                 {/*// TODO: page for loading*/}
-
-                {/*{isSigneIn && hasDetails &&*/}
-                {/*<Home d={userDetails} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")}/>}*/}
-
-                {isSigneIn && hasDetails &&
+                {isSigneIn && hasDetails && displayLoginError === false &&
                 <HomePage userDetails={userDetails.data()} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")} />}
-                {/*<Login/>*/}
 
             </div>
         </Router>

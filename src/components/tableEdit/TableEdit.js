@@ -106,7 +106,8 @@ export default  function TableEdit({
     const handleDeleteClick = async (contactId) => {
         const newContacts = [...contacts];
         console.log(contacts)
-        const index = contacts.findIndex((contact) => contact.id === contactId);
+        const index = contacts.findIndex((contact) => contact.id === contactId)
+        console.log(contacts[index])
         if (await deleteObj(contacts[index]/*contactId*/)) {
             newContacts.splice(index, 1)
             if(contactTable && contactId === contactTable.id){
@@ -114,8 +115,6 @@ export default  function TableEdit({
             }
             setContacts(newContacts)
         }
-
-
     };
 
     const handleEditFormSubmit = async (event) => {

@@ -30,14 +30,20 @@ export default function Secretary({data}){
     const [students,setStudents]=useState([])
     const [employees,setEmployees]=useState([])
     useEffect(async () => {
-        let docRef = (db, "institutes",data.institute)
-        let d = await getDoc(docRef)
-        setStudents(d.data().students)
-        setEmployees(d.data().employees)
+        console.log('SEC')
+        let docRef = doc(db, "institutes",data.institute.toString())
+        getDoc(docRef).then((d)=>{
+            console.log('institute',d.data())
+            console.log('students',d.data().students)
+            console.log('employees',d.data().employees)
+            setStudents(d.data().students)
+            setEmployees(d.data().employees)
+        })
+
         //d.data().employees
         //d.data().students
     },[])
-    console.log("data students", data.students_arr)
+    // console.log("data students", data.students_arr)
     const [idGetTable, setIdGetTable] = useState([])
 
     const deleteObjPatient = async (contact/*id*/)=>{
@@ -48,11 +54,12 @@ export default function Secretary({data}){
         return true
     }
     const deleteObjTherapist = async (contact/*id*/)=>{
-
+        console.log('delete Therapist')
         if(!await deleteTherapistFromInstitute(data.institute,contact)){
             return false
         }
         return true
+        return false
         //
     }
     const findTherapist = async (details)=>{
@@ -61,7 +68,7 @@ export default function Secretary({data}){
     }
     const addPatient = async (details)=>{
         return await newPatients(Object.assign({}, {
-            institutionNumber: data.institute, idSecretary: data.id, emailCurrent: data.email,
+            institute: data.institute, idSecretary: data.id, emailCurrent: data.email,
             passwordCurrent: data.password
         }, details))
         //
@@ -180,8 +187,8 @@ export default function Secretary({data}){
     ]
     async function getTable(details) {
         setIdGetTable(details.id)
-        console.log('CCCCCCCCCC', details.institutes[data.institutionNumber])
-        const dataStudents = await detailsPatient(details.institutes[data.institutionNumber])
+        console.log('CCCCCCCCCC', details.institutes[data.institute])
+        const dataStudents = await detailsPatient(details.institutes[data.institute])
         console.log('AAAAA', dataStudents)
         return dataStudents
         //data.works.institutes
@@ -202,13 +209,13 @@ export default function Secretary({data}){
         }
     ]
     const addConnectionToTherapist = async (details)=>{
-        // console.log("EEEEEEEEEEEEEE",idGetTable)
+        console.log("EEEEEEEEEEEEEE",idGetTable)
         // TODO: add csv and to inputs of this connections part.
         return   await addConnectionPatientToTherapist(idGetTable,details.id,data.institute,details.connection)
     }
     const deleteConnectionToTherapist = async (contact/*id*/)=>{
         // console.log("EEEEEEEEEEEEEE",idGetTable)
-        return await removeConnectionPatientToTherapist(idGetTable,contact.id,data.institutionNumber)
+        return await removeConnectionPatientToTherapist(idGetTable,contact.id,data.institute)
 
     }
 
@@ -219,9 +226,9 @@ export default function Secretary({data}){
                 <h2>
                     עמוד מזכירה!
                 </h2>
-                {/*<Router>*/}
+                <Router>
                     <div className='sidebarMenu'>
-                        {students.length>0 &&
+
                             <div>
                             <ul className="sidebarList">
                                 <Link to={"/students"} className="link">
@@ -247,9 +254,9 @@ export default function Secretary({data}){
                             toEdit={true} toAdd={true}/>}/>
 
                             </Routes>
-                            </div>}
+                            </div>
 
-                        {employees.length>0&&
+
                             <div>
                             <ul className="sidebarList">
                                 <Link to={"/works"} className="link">
@@ -262,7 +269,8 @@ export default function Secretary({data}){
                                 </Link>
                             </ul>
                             <Routes>
-                            <Route path={"/works"} element={<TableEdit add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist}
+                            <Route path={"/works"} element={<TableEdit add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist
+                                }
                             //     email: string
                             // firstName: string
                             // lastName: string
@@ -273,21 +281,22 @@ export default function Secretary({data}){
                             // institutes: {1: ...patients.  external:...patients.} (therapist only)
                             // childrenIds: [] (parent only)
                             emptyDetails={{firstName:"",lastName:"",jobs:[],email:"",/*table:[{id:"",firstName:"",lastName:""}]*/}}
-                            emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={detailsWorks(data.works)} HebrewNames={[
+                            emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={detailsWorks(employees)} HebrewNames={[
                             "שם פרטי","שם משפחה","עבודות","אימייל","מטופלים בית ספריים"]
                         } inputsView={inputsViewTherapist}  requeredId={false}
                             find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",firstName:"",lastName:""/**/}} toEdit={true} toAdd={true} table={getTable}
-                            inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist} deleteObj={deleteConnectionToTherapist}
+                            inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
+                                /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/
                             deleteObjTable={deleteConnectionToTherapist}
 
                             />}/>
 
                             </Routes>
-                            </div>}
+                            </div>
 
                     </div>
 
-                {/*</Router>*/}
+                </Router>
                 {/*<RegistrationFromUser new_user={newUser}/>*/}
 
 

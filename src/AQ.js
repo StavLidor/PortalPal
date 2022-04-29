@@ -12,7 +12,8 @@ function AQ() {
         <div>
             <Form className="col justify-content-center">
                 <Form.Group>
-                    <Form.Label className="text-center" style={{fontWeight: "bold" ,width: "100%"}}>טופס לאבחון אוטיזם</Form.Label>
+                    <Form.Label className="text-center" style={{fontWeight: "bold", width: "100%"}}>טופס לאבחון
+                        אוטיזם</Form.Label>
 
                     <Row>
                         <Col>
@@ -82,7 +83,7 @@ function AQ() {
                         <Col>
                             מין:
                         </Col>
-                        <Col md="auto" >
+                        <Col md="auto">
                             <Form.Group className="mb-3">
                                 <Form.Select id='gender'
                                     // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
@@ -131,128 +132,150 @@ function AQ() {
                     </Row>
                 </Form.Group>
             </Form>
-            <Form  className="col justify-content-center">
+            <Form className="col justify-content-center">
                 <Form.Group>
-                <Table className= "table-responsive" striped bordered hover size="sm" /*variant="dark"*/>
-                    <thead>
-                    <tr>
-                        <th className="text-end p-2 ">#</th>
-                        <th className="text-end p-2" >שאלה</th>
-                        <th className="text-end p-2">מסכים בהחלט</th>
-                        <th className="text-end p-2 ">מסכים</th>
-                        <th className="text-end p-2">לא מסכים</th>
-                        <th className="text-end p-2">בהחלט לא מסכים</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td className="text-end">1</td>
-                        <td className="text-end p-2" style={{fontSize: 20}}>הוא נוטה להבחין בצלילים קטנים כאשר אחרים לא מבחינים.</td>
-                        <td className="text-center">
-                            <Form.Check name="firstQuestion" type="radio"/>
-                        </td>
-                        <td className="text-center"> <Form.Check name="firstQuestion" type="radio"/></td>
-                        <td className="text-center"> <Form.Check name="firstQuestion" type="radio"/></td>
-                        <td className="text-center"> <Form.Check name="firstQuestion" type="radio"/></td>
-                    </tr>
-                    <tr>
-                        <td className="text-end">2</td>
-                        <td className="text-end p-2" style={{fontSize: 20}}>הוא בדרך כלל מתרכז יותר בתמונה הכללית מאשר בפרטים הקטנים.</td>
-                        <td>
-                            <Form.Check className="text-center" name="secondQuestion" type="radio"/>
-                        </td>
-                        <td> <Form.Check className="text-center" name="secondQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="secondQuestion" type="radio"/></td>
-                        <td> <Form.Check  className="text-center" name="secondQuestion" type="radio"/></td>
-                    </tr>
-                    <tr>
-                        <td className="text-end">3</td>
-                        <td className="text-end p-2" style={{fontSize: 20}}>במפגש חברתי, הוא מצליח לעקוב בקלות אחר מספר שיחות עם אנשים שונים.</td>
-                        <td>
-                            <Form.Check className="text-center" name="thirdQuestion" type="radio"/>
-                        </td>
-                        <td> <Form.Check className="text-center" name="thirdQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="thirdQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="thirdQuestion" type="radio"/></td>
-                    </tr>
-                    <tr>
-                        <td className="text-end">4</td>
-                        <td className="text-end p-2" style={{fontSize: 20}}>הוא מצליח לעבור בין פעילויות שונות בקלות.</td>
-                        <td>
-                            <Form.Check   className="text-center" name="fourthQuestion" type="radio"/>
-                        </td>
-                        <td> <Form.Check className="text-center" name="fourthQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="fourthQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="fourthQuestion" type="radio"/></td>
-                    </tr>
-                    <tr>
-                        <td className="text-end">5</td>
-                        <td className="text-end p-2" style={{fontSize: 20}}>הוא לא יודע איך להחזיק שיחה עם חבריו.</td>
-                        <td>
-                            <Form.Check className="text-center" name="fifthQuestion" type="radio"/>
-                        </td>
-                        <td> <Form.Check className="text-center" name="fifthQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="fifthQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="fifthQuestion" type="radio"/></td>
-                    </tr>
-                    <tr>
-                        <td className="text-end">6</td>
-                        <td  className="text-end p-2" style={{fontSize: 20}}>הוא טוב בשיחת חולין.</td>
-                        <td>
-                            <Form.Check className="text-center" name="sixthQuestion" type="radio"/>
-                        </td>
-                        <td> <Form.Check className="text-center" name="sixthQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="sixthQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="sixthQuestion" type="radio"/></td>
-                    </tr>
-                    <tr>
-                        <td className="text-end">7</td>
-                        <td  className="text-end p-2" style={{fontSize: 20}}>כאשר מספרים לו סיפור, קשה לו לגלות ולהבין מה הכוונות והתחושות של כל דמות בסיפור.</td>
-                        <td>
-                            <Form.Check className="text-center" name="seventhQuestion" type="radio"/>
-                        </td>
-                        <td> <Form.Check className="text-center" name="seventhQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="seventhQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="seventhQuestion" type="radio"/></td>
-                    </tr>
-                    <tr>
-                        <td className="text-end">8</td>
-                        <td className="text-end p-2" style={{fontSize: 20}}>כשהיה בגן, הוא אהב לשחק במשחקי העמדת פנים עם ילדים אחרים.</td>
-                        <td>
-                            <Form.Check className="text-center" name="eightQuestion" type="radio"/>
-                        </td>
-                        <td> <Form.Check className="text-center" name="eightQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="eightQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="eightQuestion" type="radio"/></td>
-                    </tr>
-                    <tr>
-                        <td className="text-end" >9</td>
-                        <td className="text-end p-2" style={{fontSize: 20}}>הוא מצליח להבין בקלות מה אדם אחר חושב או מרגיש רק על ידי הבטה בפניו.</td>
-                        <td>
-                            <Form.Check className="text-center" name="ninthQuestion" type="radio"/>
-                        </td>
-                        <td> <Form.Check className="text-center" name="ninthQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="ninthQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="ninthQuestion" type="radio"/></td>
-                    </tr>
-                    <tr>
-                        <td className="text-end">10</td>
-                        <td className="text-end p-2" style={{fontSize: 20}}>הוא מתקשה להכיר וליצור חברים חדשים.</td>
-                        <td>
-                            <Form.Check className="text-center" name="tenthQuestion" type="radio"/>
-                        </td>
-                        <td> <Form.Check className="text-center" name="tenthQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="tenthQuestion" type="radio"/></td>
-                        <td> <Form.Check className="text-center" name="tenthQuestion" type="radio"/></td>
-                    </tr>
+                    <Table className="table-responsive" striped bordered hover size="sm" /*variant="dark"*/>
+                        <thead>
+                        <tr>
+                            <th className="text-end p-2 ">#</th>
+                            <th className="text-end p-2">שאלה</th>
+                            <th className="text-end p-2">מסכים בהחלט</th>
+                            <th className="text-end p-2 ">מסכים</th>
+                            <th className="text-end p-2">לא מסכים</th>
+                            <th className="text-end p-2">בהחלט לא מסכים</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td className="text-end">1</td>
+                            <td className="text-end p-2" style={{fontSize: 20}}>הוא נוטה להבחין בצלילים קטנים כאשר אחרים
+                                לא מבחינים.
+                            </td>
+                            <td className="text-center">
+                                <Form.Check name="firstQuestion" type="radio"/>
+                            </td>
+                            <td className="text-center"><Form.Check name="firstQuestion" type="radio"/></td>
+                            <td className="text-center"><Form.Check name="firstQuestion" type="radio"/></td>
+                            <td className="text-center"><Form.Check name="firstQuestion" type="radio"/></td>
+                        </tr>
+                        <tr>
+                            <td className="text-end">2</td>
+                            <td className="text-end p-2" style={{fontSize: 20}}>הוא בדרך כלל מתרכז יותר בתמונה הכללית
+                                מאשר בפרטים הקטנים.
+                            </td>
+                            <td>
+                                <Form.Check className="text-center" name="secondQuestion" type="radio"/>
+                            </td>
+                            <td><Form.Check className="text-center" name="secondQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="secondQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="secondQuestion" type="radio"/></td>
+                        </tr>
+                        <tr>
+                            <td className="text-end">3</td>
+                            <td className="text-end p-2" style={{fontSize: 20}}>במפגש חברתי, הוא מצליח לעקוב בקלות אחר
+                                מספר שיחות עם אנשים שונים.
+                            </td>
+                            <td>
+                                <Form.Check className="text-center" name="thirdQuestion" type="radio"/>
+                            </td>
+                            <td><Form.Check className="text-center" name="thirdQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="thirdQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="thirdQuestion" type="radio"/></td>
+                        </tr>
+                        <tr>
+                            <td className="text-end">4</td>
+                            <td className="text-end p-2" style={{fontSize: 20}}>הוא מצליח לעבור בין פעילויות שונות
+                                בקלות.
+                            </td>
+                            <td>
+                                <Form.Check className="text-center" name="fourthQuestion" type="radio"/>
+                            </td>
+                            <td><Form.Check className="text-center" name="fourthQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="fourthQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="fourthQuestion" type="radio"/></td>
+                        </tr>
+                        <tr>
+                            <td className="text-end">5</td>
+                            <td className="text-end p-2" style={{fontSize: 20}}>הוא לא יודע איך להחזיק שיחה עם חבריו.
+                            </td>
+                            <td>
+                                <Form.Check className="text-center" name="fifthQuestion" type="radio"/>
+                            </td>
+                            <td><Form.Check className="text-center" name="fifthQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="fifthQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="fifthQuestion" type="radio"/></td>
+                        </tr>
+                        <tr>
+                            <td className="text-end">6</td>
+                            <td className="text-end p-2" style={{fontSize: 20}}>הוא טוב בשיחת חולין.</td>
+                            <td>
+                                <Form.Check className="text-center" name="sixthQuestion" type="radio"/>
+                            </td>
+                            <td><Form.Check className="text-center" name="sixthQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="sixthQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="sixthQuestion" type="radio"/></td>
+                        </tr>
+                        <tr>
+                            <td className="text-end">7</td>
+                            <td className="text-end p-2" style={{fontSize: 20}}>כאשר מספרים לו סיפור, קשה לו לגלות
+                                ולהבין מה הכוונות והתחושות של כל דמות בסיפור.
+                            </td>
+                            <td>
+                                <Form.Check className="text-center" name="seventhQuestion" type="radio"/>
+                            </td>
+                            <td><Form.Check className="text-center" name="seventhQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="seventhQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="seventhQuestion" type="radio"/></td>
+                        </tr>
+                        <tr>
+                            <td className="text-end">8</td>
+                            <td className="text-end p-2" style={{fontSize: 20}}>כשהיה בגן, הוא אהב לשחק במשחקי העמדת
+                                פנים עם ילדים אחרים.
+                            </td>
+                            <td>
+                                <Form.Check className="text-center" name="eightQuestion" type="radio"/>
+                            </td>
+                            <td><Form.Check className="text-center" name="eightQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="eightQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="eightQuestion" type="radio"/></td>
+                        </tr>
+                        <tr>
+                            <td className="text-end">9</td>
+                            <td className="text-end p-2" style={{fontSize: 20}}>הוא מצליח להבין בקלות מה אדם אחר חושב או
+                                מרגיש רק על ידי הבטה בפניו.
+                            </td>
+                            <td>
+                                <Form.Check className="text-center" name="ninthQuestion" type="radio"/>
+                            </td>
+                            <td><Form.Check className="text-center" name="ninthQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="ninthQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="ninthQuestion" type="radio"/></td>
+                        </tr>
+                        <tr>
+                            <td className="text-end">10</td>
+                            <td className="text-end p-2" style={{fontSize: 20}}>הוא מתקשה להכיר וליצור חברים חדשים.</td>
+                            <td>
+                                <Form.Check className="text-center" name="tenthQuestion" type="radio"/>
+                            </td>
+                            <td><Form.Check className="text-center" name="tenthQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="tenthQuestion" type="radio"/></td>
+                            <td><Form.Check className="text-center" name="tenthQuestion" type="radio"/></td>
+                        </tr>
 
-                    </tbody>
-                </Table>
+                        </tbody>
+                    </Table>
                 </Form.Group>
             </Form>
             <Row className="justify-content-center">
-            <Button className=" rounded-3" style={{width:"10%"}} size="md" variant="outline-primary">אישור</Button>
+                <Button className=" rounded-3" style={{width: "10%"}} size="md" variant="outline-primary">אישור</Button>
             </Row>
+            {/*<Form>*/}
+            {/*    <Form.Group>*/}
+            <Row className="justify-content-center text-center">
+                <Form.Text>התוצאה:</Form.Text>
+            </Row>
+            {/*    </Form.Group>*/}
+            {/*</Form>*/}
         </div>
     )
 }

@@ -20,6 +20,7 @@ import {signUser} from "./pepole/users/user";
 import Authenticate from "./components/login/Authenticate";
 import HomePage from "./pages/home/HomePage";
 import {signOut} from "firebase/auth";
+import AQ from "./AQ";
 
 function App() {
     const [isSigneIn, setIsSigneIn] = useState(false);
@@ -42,6 +43,7 @@ function App() {
                     console.log(value.data())
                     console.log(value.data().titles)
                         setUserDetails(value)
+                        console.log("data user details: ", value.data().childrenIds)
                         setHasDetails(true)
                     if(value.data().titles.includes(localStorage.getItem('type'))){
                         console.log('print hello')
@@ -80,13 +82,17 @@ function App() {
         setDisplayLoginError(!isSuccessfulSignIn)
     }
 
+
     return (
         <Router>
             <div className="App">
                 {isSigneIn === false && checkUserConnection && <Authenticate login={login}/>}
+                {/*{isSigneIn === false && checkUserConnection && <AQ/>}*/}
+                {/*{isSigneIn === false && checkUserConnection && <AQ10ChildrenForm/>}*/}
                 {(checkUserConnection===false ||(isSigneIn && hasDetails===false) ) && <div>loading</div>}
                 {displayLoginError && isSigneIn === false && checkUserConnection && <h4>אחד מפרטי ההתחברות לא נכון :(</h4>}
                 {/*// TODO: page for loading*/}
+
                 {isSigneIn && hasDetails && displayLoginError === false &&
                 <HomePage userDetails={userDetails.data()} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")} />}
 

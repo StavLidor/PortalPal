@@ -152,6 +152,10 @@ export function GetCurrentUser() {
 export const getDocCurrentUser = async () => {
     try {
         const docRef = doc(db, "users", auth.currentUser.uid);
+
+        // const document = await getDoc(docRef)
+        // console.log("doc: " ,document)
+        // return document
         return await getDoc(docRef)
     } catch (err) {
         return null

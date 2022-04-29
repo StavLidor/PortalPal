@@ -23,6 +23,7 @@ function HomePage({userDetails, type, institute}) {
     useEffect(() => {
         switch (type) {
             case "admin":
+                // TODO: change the given list here
                 setSideListComponent(<PatientList list={userDetails.students_arr}
                                                   setPatientListData={setPatientListData} listTitle={"רשימת תלמידים"}
                                                   setCurrentPerson={setCurrentPerson}
@@ -73,7 +74,7 @@ function HomePage({userDetails, type, institute}) {
                             {patientListData.map((item) => {
                                     let data = item.data()
                                     return (
-                                        <Route path={'/#/'+data.id.toString() + '/*'}
+                                        <Route path={'/#/'+ data.id.toString() + '/*'}
                                                element={<PatientDetails details={data}/>}/>)
                                 }
                             )}

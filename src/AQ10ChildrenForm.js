@@ -232,7 +232,6 @@ export default function AQ10ChildrenForm() {
                         <td>שאלה</td>
                         <td>מסכים בהחלט</td>
                         <td>מסכים</td>
-                        <td>לא מסכים</td>
                         <td>בהחלט לא מסכים</td>
                     </tr>
                     <tr>{/*<label htmlFor="javascript">JavaScript</label>*/}

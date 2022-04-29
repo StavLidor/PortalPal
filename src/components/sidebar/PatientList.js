@@ -18,6 +18,7 @@ function PatientList({list,setPatientListData,listTitle,setCurrentPerson,current
         onSnapshot(
             queryRequest,
             (snapshot) => {
+                console.log("list data: ", snapshot.docs)
                 setListData(snapshot.docs)
                 setPatientListData(snapshot.docs)},
             (error) => {
@@ -33,6 +34,7 @@ function PatientList({list,setPatientListData,listTitle,setCurrentPerson,current
             <ListGroup as="ul">
                 {listData.map((item) =>{
                     let data = item.data()
+                    console.log("data to show : ", data)
                     // <ListGroup.Item style={{backgroundColor: "beige"}}
                     //                 as="li">{item.data().firstName + " " + item.data().lastName}</ListGroup.Item>
                      return(<Link to={'/#/'+ data.id.toString() + '/' + currentPage} className="list-group-item list-group-item-action" onClick={(e)=> {

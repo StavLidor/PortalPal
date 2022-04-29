@@ -2,20 +2,65 @@ import react,{useEffect,useState,useRef} from "react"
 import {Link, Route, Routes} from "react-router-dom";
 import Patient from "../../pages/patient/Patient";
 import React from "react";
-import {Therapists} from "../../firebase";
+import firebase from "firebase/compat/app"
+import {db, Therapists} from "../../firebase";
 import ListMeeting from "../listMeetingSummries/ListMeeting";
-export default function ListTherapists({patientDetails,type}){
+import {collection, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
+export default function ListTherapists({patientDetails,type,f}){
     const [therapists,setTherapists]=useState([])
+    console.log('therapistLIstt')
     //console.log(talkersIds)
-    useEffect( () => {
+    useEffect( async () => {
 
-        const p1 = Promise.resolve(Therapists(patientDetails))
-        p1.then(arr => {
-            console.log('list Therapist', arr)
-            if(arr.length !== 0)
-                setTherapists(arr)
-            console.log(arr)
+
+        let dict = {}
+        console.log('therapistLIstt',"patients/" + patientDetails + "/therapists")
+        const docRef = query(collection(db, "patients/" + patientDetails.id + "/therapists"))
+        // const querySnapshot = await getDocs(docRef)
+        getDocs(docRef).then((d) => {
+            const therapistIds = []
+
+            d.forEach((doc) => {
+                // console.log('therapistLIstt',doc.data())
+                therapistIds.push(doc.id)
+                dict[doc.id] = {institute: doc.data().institute, connection: doc.data().connection}
+            });
+            if (therapistIds.length > 0) {
+                const unsubscribe = query(collection(db, "users"),
+                    where(firebase.firestore.FieldPath.documentId(), 'in', therapistIds)
+                )
+                return onSnapshot(
+                    unsubscribe,
+                    (querySnapshot) => {
+                        let data = []
+                        querySnapshot.forEach((doc) => (
+                            // console.log(doc)
+                            data.push({
+                                id: doc.id, firstName: doc.data().firstName, lastName: doc.data().lastName,
+                                institute: dict[doc.id].institute, connection: dict[doc.id].connection
+                            })
+                            // console.log()
+                        ))
+                        setTherapists(data)
+                        console.log(data)
+                    },
+                    (error) => {
+                        // TODO: Handle errors!
+                        console.log('error!!', error)
+                    })
+            }
+
         })
+
+
+        // const p1 = Promise.resolve(Therapists(patientDetails))
+        //
+        // p1.then(arr => {
+        //     console.log('list Therapist', arr)
+        //     if(arr.length !== 0)
+        //         setTherapists(arr)
+        //     console.log(arr)
+        // })
 
 
     },[])
@@ -58,8 +103,8 @@ export default function ListTherapists({patientDetails,type}){
 
                                 </ul>
                                 <Routes>
-                                    <Route path={i.toString()+"/*"} element={ <ListMeeting id={patientDetails.id} type={type}
-                                    therapistId={t.id}/>}/>
+                                    <Route path={i.toString()+"/*"} element={ /*<ListMeeting id={patientDetails.id} type={type}
+                                    therapistId={t.id})/>*/f(patientDetails.id,t.id)}/>
                                 </Routes>
                             </div>
 

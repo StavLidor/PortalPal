@@ -19,30 +19,47 @@ import {
     findUserByEmail,
     updatesCurrentUser,
     detailsPatient,
-    updateDocUser,
-    updateDocUserWithArrayFiled, addConnectionPatientToTherapist, removeConnectionPatientToTherapist, detailsWorks
+    updateDocUser, addConnectionPatientToTherapist, removeConnectionPatientToTherapist, detailsWorks, db
 } from "../../firebase";
 import TableEdit from "../../components/tableEdit/TableEdit";
 import Patient from "../patient/Patient";
+import {collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 // import {details_users} from "../../firebase"
 
 export default function Secretary({data}){
-    console.log("data students", data.students_arr)
+    const [students,setStudents]=useState([])
+    const [employees,setEmployees]=useState([])
+    useEffect(async () => {
+        console.log('SEC')
+        let docRef = doc(db, "institutes",data.institute.toString())
+        getDoc(docRef).then((d)=>{
+            console.log('institute',d.data())
+            console.log('students',d.data().students)
+            console.log('employees',d.data().employees)
+            setStudents(d.data().students)
+            setEmployees(d.data().employees)
+        })
+
+        //d.data().employees
+        //d.data().students
+    },[])
+    // console.log("data students", data.students_arr)
     const [idGetTable, setIdGetTable] = useState([])
 
-    const deleteObjPatient = async (id)=>{
-        if(!await deletePatientFromInstitute(data.institutionNumber,id/*{id:id,jobs:['secretary']}*/,data.id)){
+    const deleteObjPatient = async (contact/*id*/)=>{
+        if(!await deletePatientFromInstitute(data.institute,contact.id/*{id:id,jobs:['secretary']}*//*,data.id*/)){
             return false
         }
         //
         return true
     }
-    const deleteObjTherapist = async (id)=>{
-
-        if(!await deleteTherapistFromInstitute(data.institutionNumber,id,data.id)){
+    const deleteObjTherapist = async (contact/*id*/)=>{
+        console.log('delete Therapist')
+        if(!await deleteTherapistFromInstitute(data.institute,contact)){
             return false
         }
         return true
+        return false
         //
     }
     const findTherapist = async (details)=>{
@@ -51,7 +68,7 @@ export default function Secretary({data}){
     }
     const addPatient = async (details)=>{
         return await newPatients(Object.assign({}, {
-            institutionNumber: data.institutionNumber, idSecretary: data.id, emailCurrent: data.email,
+            institute: data.institute, idSecretary: data.id, emailCurrent: data.email,
             passwordCurrent: data.password
         }, details))
         //
@@ -62,17 +79,16 @@ export default function Secretary({data}){
             details.jobs =details.jobs.split(",")
         }
         if (details.email!==undefined){
-            const id =await addUserFromAdmin({...details,institutes: {[data.institutionNumber]:[]}},data.email,
-                data.password,"works")
+            const id =await addUserFromAdmin(details,data.institute)
             return id
-            // const p=Promise.resolve(id)
-            //
-            // p.then(async id => {
-            //
-            //     console.log('SEEEEEEEEC',id)
-            //     return id
-            // })
-            // console.log('IDDDD INN',id)
+            const p=Promise.resolve(id)
+
+            p.then(async id => {
+
+                console.log('SEEEEEEEEC',id)
+                return id
+            })
+            console.log('IDDDD INN',id)
         }
         return null
 
@@ -171,8 +187,8 @@ export default function Secretary({data}){
     ]
     async function getTable(details) {
         setIdGetTable(details.id)
-        console.log('CCCCCCCCCC', details.institutes[data.institutionNumber])
-        const dataStudents = await detailsPatient(details.institutes[data.institutionNumber])
+        console.log('CCCCCCCCCC', details.institutes[data.institute])
+        const dataStudents = await detailsPatient(details.institutes[data.institute])
         console.log('AAAAA', dataStudents)
         return dataStudents
         //data.works.institutes
@@ -193,12 +209,13 @@ export default function Secretary({data}){
         }
     ]
     const addConnectionToTherapist = async (details)=>{
-        // console.log("EEEEEEEEEEEEEE",idGetTable)
-        return   await addConnectionPatientToTherapist(idGetTable,details.id,data.institutionNumber)
+        console.log("EEEEEEEEEEEEEE",idGetTable)
+        // TODO: add csv and to inputs of this connections part.
+        return   await addConnectionPatientToTherapist(idGetTable,details.id,data.institute,details.connection)
     }
-    const deleteConnectionToTherapist = async (id)=>{
+    const deleteConnectionToTherapist = async (contact/*id*/)=>{
         // console.log("EEEEEEEEEEEEEE",idGetTable)
-        return await removeConnectionPatientToTherapist(idGetTable,id,data.institutionNumber)
+        return await removeConnectionPatientToTherapist(idGetTable,contact.id,data.institute)
 
     }
 
@@ -209,58 +226,77 @@ export default function Secretary({data}){
                 <h2>
                     עמוד מזכירה!
                 </h2>
-                {/*<Router>*/}
+                <Router>
                     <div className='sidebarMenu'>
-                        <ul className="sidebarList">
-                            <Link to={"/students"} className="link">
 
-                                <ul className="sidebarListItem">
-                                    תלמידים
-                                    &nbsp;
+                            <div>
+                            <ul className="sidebarList">
+                                <Link to={"/students"} className="link">
 
-                                </ul>
-                            </Link>
+                                    <ul className="sidebarListItem">
+                                        תלמידים
+                                        &nbsp;
 
-                            &nbsp;
+                                    </ul>
+                                </Link>
 
-                        </ul>
-                        <Routes>
+                                &nbsp;
+
+                            </ul>
+                            <Routes>
                             <Route path={"/students"} element={<TableEdit add ={addPatient} update ={updatesPatients} deleteObj={deleteObjPatient}
-                                                                          emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:"זכר"}} emptyEditDetails={{firstName: "",
-                                lastName: "",
-                                dateOfBirth:new Date()
-                                ,city:"",street:"",buildingNumber:"",gender:"זכר"}} data={detailsPatient(data.students_arr)} HebrewNames={[
-                                "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב","שם פרטי הורה","שם משפחה הורה","אימייל",'מין'/*"מטפלים בית ספריים"*/]
-                            } inputsView={inputsViewPatient}  requeredId={true}
-                                                                          toEdit={true} toAdd={true}/>}/>
+                            emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:"זכר"}} emptyEditDetails={{firstName: "",
+                            lastName: "",
+                            dateOfBirth:new Date()
+                            ,city:"",street:"",buildingNumber:"",gender:"זכר"}} data={detailsPatient(students)} HebrewNames={[
+                            "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב","שם פרטי הורה","שם משפחה הורה","אימייל",'מין'/*"מטפלים בית ספריים"*/]
+                        } inputsView={inputsViewPatient}  requeredId={true}
+                            toEdit={true} toAdd={true}/>}/>
 
-                        </Routes>
-                        <ul className="sidebarList">
-                            <Link to={"/works"} className="link">
+                            </Routes>
+                            </div>
 
-                                <ul className="sidebarListItem">
-                                    עובדים
-                                    &nbsp;
 
-                                </ul>
-                            </Link>
-                        </ul>
-                        <Routes>
-                            <Route path={"/works"} element={<TableEdit add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist}
-                                                                       emptyDetails={{firstName:"",lastName:"",jobs:[],email:"",/*table:[{id:"",firstName:"",lastName:""}]*/}}
-                                                                       emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={detailsWorks(data.works)} HebrewNames={[
-                                "שם פרטי","שם משפחה","עבודות","אימייל","מטופלים בית ספריים"]
-                            } inputsView={inputsViewTherapist}  requeredId={false}
+                            <div>
+                            <ul className="sidebarList">
+                                <Link to={"/works"} className="link">
+
+                                    <ul className="sidebarListItem">
+                                        עובדים
+                                        &nbsp;
+
+                                    </ul>
+                                </Link>
+                            </ul>
+                            <Routes>
+                            <Route path={"/works"} element={<TableEdit add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist
+                                }
+                            //     email: string
+                            // firstName: string
+                            // lastName: string
+                            // jobs: [] (therapist only)
+                            // license only external therapist
+                            // titles: [parent / therapist / admin]
+                            // institute: string (admin only)
+                            // institutes: {1: ...patients.  external:...patients.} (therapist only)
+                            // childrenIds: [] (parent only)
+                            emptyDetails={{firstName:"",lastName:"",jobs:[],email:"",/*table:[{id:"",firstName:"",lastName:""}]*/}}
+                            emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={detailsWorks(employees)} HebrewNames={[
+                            "שם פרטי","שם משפחה","עבודות","אימייל","מטופלים בית ספריים"]
+                        } inputsView={inputsViewTherapist}  requeredId={false}
                             find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",firstName:"",lastName:""/**/}} toEdit={true} toAdd={true} table={getTable}
-                                                                       inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist} deleteObj={deleteConnectionToTherapist}
-                                                                       deleteObjTable={deleteConnectionToTherapist}
+                            inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
+                                /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/
+                            deleteObjTable={deleteConnectionToTherapist}
 
                             />}/>
 
-                        </Routes>
+                            </Routes>
+                            </div>
+
                     </div>
 
-                {/*</Router>*/}
+                </Router>
                 {/*<RegistrationFromUser new_user={newUser}/>*/}
 
 

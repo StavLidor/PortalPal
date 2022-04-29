@@ -6,6 +6,9 @@ import Chats from "../chats/Chats";
 import {auth, connections, getUserConnections} from "../../firebase"
 import Code from  "../code/Code"
 import ListTherapists from "../../meetingSummaries/listTherapists/ListTherapists";
+import Exercises from "../exercises/Exercises";
+import Exercise from "../exercises/Exercise";
+import ViewExercise from "../exercises/ViewExercise";
 // import {Container} from "@mui/material";
 
 export default function FeaturedInfo({details,type}){
@@ -52,12 +55,26 @@ export default function FeaturedInfo({details,type}){
 
 
                         &nbsp;
+                        <Link to={"exercises/*"} className="link">
                         <ul className="featuredListItem">
                             תרגילים
                             &nbsp;
 
                         </ul>
+                        </Link>
                         &nbsp;
+                        <Routes>
+                            <Route path={"exercises/*"} element={(()=>{
+                                if(type === 'parent')
+                                    return <ListTherapists patientDetails={details} type={type}
+                                                           f={
+                                                               ((patientId,userId)=>{
+                                                                    return <Exercises patient={patientId} user={userId} type={type} />
+                                                               })
+                                                           }  />
+                                return  <Exercises patient={details.id} user={auth.currentUser.uid} type={type}/>
+                            })()} />
+                        </Routes>
                         <Link to={"chats/*"} className="link">
                         <ul className="featuredListItem">
                             התקשורת
@@ -76,13 +93,21 @@ export default function FeaturedInfo({details,type}){
                     {type !== 'parent' &&
                         <Routes>
 
-                            <Route path={"meetings/*"} element={<ListMeeting id={details.id} type={type}  />} />
+                            <Route path={"meetings/*"} element={<ListMeeting id={details.id} type={type}
+
+                            />} />
 
                         </Routes>}
                     {type === 'parent' &&
                         <Routes>
 
-                            <Route path={"meetings/*"} element={<ListTherapists patientDetails={details} type={type}  />} />
+                            <Route path={"meetings/*"} element={<ListTherapists patientDetails={details} type={type}
+                                                                                f={
+                                                                                    ((patientId,userId)=>{
+                                                                                        return <ListMeeting id={patientId} type={type}
+                                                                                                            therapistId={userId}/>
+                                                                                    })
+                                                                                }/>} />
 
                         </Routes>}
                 </div>

@@ -5,41 +5,54 @@ import hash from "hash.js";
 
 export default function Code({id=null,type}){
     //TODO:add a connection
-    const [code,setCode]=useState(null)
-    const [detailsNewPatient,setDetailsNewPatient]=useState({id:"",code:""})
+    const [code,setCode]=useState("")
+    const [detailsNewPatient,setDetailsNewPatient]=useState({id:"",connection:"",code:""})
     const submitCreate = async e => {
         e.preventDefault()
         const realCode =makePassword(10)
         const hashCode = hash.sha256().update(realCode).digest("hex")
         setCode(hashCode)
+        console.log(hashCode)
 
-        if(await addToPatientArr(id,'code',realCode))
-            console.log('add the code')
+        await addToPatientArr(id,'code',realCode)
+
+        // if(await addToPatientArr(id,'code',realCode)){
+        //
+        // }
+
 
     }
     const submitAdd = async e => {
         e.preventDefault()
-        await addPatientToExternalTherapist(detailsNewPatient.id,detailsNewPatient.code)
+        await addPatientToExternalTherapist(detailsNewPatient.id,detailsNewPatient.code,detailsNewPatient.connection)
     }
     return(
         (type=== 'parent')?(
-            <form onSubmit={submitCreate}>
-                {code &&
-                    <h2>
-                        הקוד הנוכחי שניתן לתת למטפל לקישור
-                        {code}
-                    </h2>
+            <>
+                <h2>
+                    הקוד הנוכחי שניתן לתת למטפל לקישור
+                    {code}
+                </h2>
+            {/*<form onSubmit={submitCreate}>*/}
+            {/*    /!*{code!=="" &&*!/*/}
 
-                }
-                <button type="submit" >
+
+            {/*    /!*}*!/*/}
+            {/*   */}
+            {/*</form>*/}
+                <button type="submit"  onClick={submitCreate}>
                     קבל קוד
                 </button>
-            </form>
+            </>
     ):
             <form onSubmit={submitAdd }>
                 <div className="form-group">
                     <label htmlFor="id">תז</label>
                     <input type="text" name="id" id="id" onChange={e=>setDetailsNewPatient({...detailsNewPatient,id:e.target.value})} value={detailsNewPatient.id}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="connection">קשר</label>
+                    <input type="text" name="connection" id="connection" onChange={e=>setDetailsNewPatient({...detailsNewPatient,connection:e.target.value})} value={detailsNewPatient.connection}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="code">קוד:</label>

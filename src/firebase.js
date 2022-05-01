@@ -513,7 +513,7 @@ export const setIDDoc = async (id, name_path, data) => {
     await setDoc(doc(db, name_path, id.toString()), data);
 
 }
-export const addPatientToExternalTherapist = async (id, code) => {
+export const addPatientToExternalTherapist = async (id, code,connection) => {
 
     const d = await ifPatientExists(id)
     console.log('add with hash', d.code)
@@ -544,7 +544,7 @@ export const addPatientToExternalTherapist = async (id, code) => {
         ), {
             active:true,
             //TODO:add a connection
-            connection:'',
+            connection:connection,
             institute:'external',
         })
 
@@ -605,11 +605,9 @@ export const removeConnectionPatientToTherapist = async (id, idRemove, instituti
     // const removeTherapist = {[filed]: firebase.firestore.FieldValue.arrayRemove(id)}
     // if (!await updateIDDoc(idRemove, 'patients', removeTherapist))
     //     return false
-    await setDoc(doc(collection_query_patients, idRemove, "therapists",id
+    await updateDoc(doc(collection_query_patients, idRemove, "therapists",id
     )/*collection(db, '/patients/001/therapists','Rahbt7jhvugjFSsnrcnBb5VMfUb2')*/, {
         active:false,
-        connection:"",
-        institute:institutionNumber,
     })
     // await deleteDoc(doc(db, "patients/therapists/", idRemove))
     const data = {[filed]: firebase.firestore.FieldValue.arrayRemove(idRemove)}
@@ -618,17 +616,24 @@ export const removeConnectionPatientToTherapist = async (id, idRemove, instituti
     return false
 }
 export const addConnectionPatientToTherapist = async (id, idAdd, institutionNumber,connection) => {
+    console.log('connection1111',id, idAdd, institutionNumber,connection)
     const d = await ifPatientExists(idAdd)
     if(!d){
         return null
     }
     console.log('RRRRRRRRRR')
-    await setDoc(doc(collection_query_patients, idAdd, "therapists",id
+    try {
+        await setDoc(doc(collection_query_patients, idAdd, "therapists",id
         )/*collection(db, '/patients/001/therapists','Rahbt7jhvugjFSsnrcnBb5VMfUb2')*/, {
-        active:true,
-        connection:"",
-        institute:institutionNumber,
-    })
+            active:true,
+            connection:connection,
+            institute:institutionNumber,
+        })
+    }
+    catch (err){
+        console.log('not set the doc beacuse',err)
+    }
+
 
     // const filedName = "institutes." + institutionNumber
     // const data = {[filedName]: idAdd}

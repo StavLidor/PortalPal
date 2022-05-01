@@ -47,7 +47,7 @@ export default function Secretary({data}){
                 (querySnapshot) => {
                     let data = []
                     querySnapshot.forEach((doc) => (
-                        data.push(doc.data())
+                        data.push({...doc.data(),id:doc.id})
                     ))
                     setEmployees(data)
                     console.log(data)
@@ -224,7 +224,7 @@ export default function Secretary({data}){
 
     ]
     const HebrewNamesTableT=[
-        "תעודת זהות של תלמיד" ,"שם משפחה של תלמיד","שם של תלמיד"
+        "תעודת זהות של תלמיד" ,"קשר","שם משפחה של תלמיד","שם של תלמיד"
     ]
     async function getTable(details) {
         if(details === null){
@@ -259,6 +259,13 @@ export default function Secretary({data}){
 
     }
     const inputsViewPOfT=[
+        {type:"text",required:"required",
+            placeholder:"Enter a connection between therapist and patients..."
+            ,name:"connection",label:"קשר:",
+            edit:true,
+            add:true
+            /*,value:editFormData.firstName,*/
+        },
         {type:"text",required:"required",
             placeholder:"Enter a first name..."
             ,name:"firstName",label:"שם פרטי:",
@@ -348,7 +355,7 @@ export default function Secretary({data}){
                             emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={employees} HebrewNames={[
                             "שם פרטי","שם משפחה","עבודות","אימייל","מטופלים בית ספריים"]
                         } inputsView={inputsViewTherapist}  requeredId={false}
-                            find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",firstName:"",lastName:""/**/}} toEdit={true} toAdd={true} getTable={getTable}
+                            find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",connection:"",lastName:"",firstName:""/**/}} toEdit={true} toAdd={true} getTable={getTable}
                                                                        table={studentsTable}
                             inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
                                 /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/

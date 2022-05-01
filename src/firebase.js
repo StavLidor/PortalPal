@@ -436,8 +436,14 @@ export const signIfUserExists = async details => {
 // TODO: tableEdit user and patient(change one of the details,delete from therapist a patient)
 
 export const updatesPatients = async (id, data) => {
-    if (await updateIDDoc(id, 'patients', data))
-        return true
+    // if('dateOfBirth' in data)
+    //     data.dateOfBirth= firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
+    if('dateOfBirth' in data)
+        if (await updateIDDoc(id, 'patients', {...data,dateOfBirth:firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))}))
+            return true
+    else
+        if (await updateIDDoc(id, 'patients', data))
+            return true
     return false
     //
 }

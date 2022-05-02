@@ -23,7 +23,7 @@ export default  function TableEdit({
                                        emptyEditDetailsTable
                                        ,HebrewNamesTable,
                                        inputsViewTable,toEdit, toAdd
-                            ,table,/*addDetails,addDetailsTable*/}) {
+                            ,table,getTable/*addDetails,addDetailsTable*/}) {
 
 
 
@@ -50,7 +50,7 @@ export default  function TableEdit({
         })
 
 
-    },[])
+    },[data])
     // useEffect(()=>{
     //     setModifyContacts(contacts)
     //     console.log('Modify',modifyContacts)
@@ -60,6 +60,7 @@ export default  function TableEdit({
         event.preventDefault()
         if (contactTable === null){
             setContactTable(contact)
+            getTable(contact)
         }
         // if(contact.id !== contactTable.id){
         //     //setContactTable(null)
@@ -82,8 +83,11 @@ export default  function TableEdit({
     }
     const handleClose=(event,contact)=>{
         event.preventDefault()
-        if(contact.id === contactTable.id)
+        if(contact.id === contactTable.id){
             setContactTable(null)
+            getTable(null)
+        }
+
     }
     const handleEditFormChange = (event) => {
         event.preventDefault();
@@ -409,7 +413,7 @@ export default  function TableEdit({
 
                        <div>{contactTable.id}</div>
                        <TableEdit add ={addTable}  deleteObj={deleteObjTable}
-                                  emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable} data={table(contactTable)/*contactTable[tableName]*/}
+                                  emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable} data={table/*contactTable[tableName]*/}
                                   HebrewNames={HebrewNamesTable} inputsView={inputsViewTable}  requeredId={true}
                                   toEdit={false} toAdd={true}
                                 /*addDetails={addDetailsTable}*//>

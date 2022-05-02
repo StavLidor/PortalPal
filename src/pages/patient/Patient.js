@@ -16,7 +16,7 @@ export default function Patient({details,type}){
             </div>
             <div className="form-group">
                 <label htmlFor="dateOfBirth">תאריך לידה:</label>
-            {details.dateOfBirth}
+            {details.dateOfBirth.toDate().toUTCString()}
             </div>
             <div className="form-group">
                 <label htmlFor="city">מקום מגורים:</label>

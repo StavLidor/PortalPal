@@ -24,10 +24,12 @@ import {
 import TableEdit from "../../components/tableEdit/TableEdit";
 import Patient from "../patient/Patient";
 import {collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
+import firebase from "firebase/compat/app";
 // import {details_users} from "../../firebase"
 
 export default function Secretary({data}){
     const [students,setStudents]=useState([])
+    const [studentsTable,setStudentsTable]=useState([])
     const [employees,setEmployees]=useState([])
     useEffect(async () => {
         console.log('SEC')
@@ -36,9 +38,48 @@ export default function Secretary({data}){
             console.log('institute',d.data())
             console.log('students',d.data().students)
             console.log('employees',d.data().employees)
-            setStudents(d.data().students)
-            setEmployees(d.data().employees)
+
+            const unsubscribe = query(collection(db, "users"),
+                where(firebase.firestore.FieldPath.documentId(), 'in', d.data().employees))
+
+            onSnapshot(
+                unsubscribe,
+                (querySnapshot) => {
+                    let data = []
+                    querySnapshot.forEach((doc) => (
+                        data.push({...doc.data(),id:doc.id})
+                    ))
+                    setEmployees(data)
+                    console.log(data)
+                },
+                (error) => {
+                    // TODO: Handle errors!
+                    console.log('error!!', error)
+                })
+            const unsubscribe1 = query(collection(db, "patients"),
+                where("id", 'in', d.data().students))
+            // setStudents(d.data().students)
+            // setEmployees(d.data().employees)
+            onSnapshot(
+                unsubscribe1,
+                (querySnapshot) => {
+                    let data = []
+                    querySnapshot.forEach((doc) => {
+                        if (typeof (doc.data().dateOfBirth) !== 'string')
+                            data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
+                        else
+                            data.push(doc.data)
+                    })
+                    setStudents(data)
+                    console.log('Students1112',data)
+                },
+                    (error) => {
+                        // TODO: Handle errors!
+                        console.log('error!!', error)
+                    })
+
         })
+
 
         //d.data().employees
         //d.data().students
@@ -55,6 +96,7 @@ export default function Secretary({data}){
     }
     const deleteObjTherapist = async (contact/*id*/)=>{
         console.log('delete Therapist')
+
         if(!await deleteTherapistFromInstitute(data.institute,contact)){
             return false
         }
@@ -67,10 +109,9 @@ export default function Secretary({data}){
 
     }
     const addPatient = async (details)=>{
-        return await newPatients(Object.assign({}, {
-            institute: data.institute, idSecretary: data.id, emailCurrent: data.email,
-            passwordCurrent: data.password
-        }, details))
+        //details.dateOfBirth =firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
+        return await newPatients({...details,institute: data.institute,dateOfBirth:firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
+        })
         //
     }
     const addTherapist = async(details) => {
@@ -183,11 +224,34 @@ export default function Secretary({data}){
 
     ]
     const HebrewNamesTableT=[
-        "תעודת זהות של תלמיד" ,"שם משפחה של תלמיד","שם של תלמיד"
+        "תעודת זהות של תלמיד" ,"קשר","שם משפחה של תלמיד","שם של תלמיד"
     ]
     async function getTable(details) {
+        if(details === null){
+            setStudentsTable([])
+            return
+        }
+
         setIdGetTable(details.id)
         console.log('CCCCCCCCCC', details.institutes[data.institute])
+        const unsubscribe = query(collection(db, "patients"),
+            where(firebase.firestore.FieldPath.documentId(), 'in',details.institutes[data.institute]))
+        // setStudents(d.data().students)
+        // setEmployees(d.data().employees)
+        onSnapshot(
+            unsubscribe,
+            (querySnapshot) => {
+                let data = []
+                querySnapshot.forEach((doc) => (
+                    data.push({...doc.data(),dateOfBirth:doc.data().dateOfBirth.toDate().toUTCString()})
+                ))
+                setStudentsTable(data)
+                console.log(data)
+            },
+            (error) => {
+                // TODO: Handle errors!
+                console.log('error!!', error)
+            })
         const dataStudents = await detailsPatient(details.institutes[data.institute])
         console.log('AAAAA', dataStudents)
         return dataStudents
@@ -195,6 +259,13 @@ export default function Secretary({data}){
 
     }
     const inputsViewPOfT=[
+        {type:"text",required:"required",
+            placeholder:"Enter a connection between therapist and patients..."
+            ,name:"connection",label:"קשר:",
+            edit:true,
+            add:true
+            /*,value:editFormData.firstName,*/
+        },
         {type:"text",required:"required",
             placeholder:"Enter a first name..."
             ,name:"firstName",label:"שם פרטי:",
@@ -248,7 +319,7 @@ export default function Secretary({data}){
                             emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:"זכר"}} emptyEditDetails={{firstName: "",
                             lastName: "",
                             dateOfBirth:new Date()
-                            ,city:"",street:"",buildingNumber:"",gender:"זכר"}} data={detailsPatient(students)} HebrewNames={[
+                            ,city:"",street:"",buildingNumber:"",gender:"זכר"}} data={students} HebrewNames={[
                             "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב","שם פרטי הורה","שם משפחה הורה","אימייל",'מין'/*"מטפלים בית ספריים"*/]
                         } inputsView={inputsViewPatient}  requeredId={true}
                             toEdit={true} toAdd={true}/>}/>
@@ -281,10 +352,11 @@ export default function Secretary({data}){
                             // institutes: {1: ...patients.  external:...patients.} (therapist only)
                             // childrenIds: [] (parent only)
                             emptyDetails={{firstName:"",lastName:"",jobs:[],email:"",/*table:[{id:"",firstName:"",lastName:""}]*/}}
-                            emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={detailsWorks(employees)} HebrewNames={[
+                            emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={employees} HebrewNames={[
                             "שם פרטי","שם משפחה","עבודות","אימייל","מטופלים בית ספריים"]
                         } inputsView={inputsViewTherapist}  requeredId={false}
-                            find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",firstName:"",lastName:""/**/}} toEdit={true} toAdd={true} table={getTable}
+                            find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",connection:"",lastName:"",firstName:""/**/}} toEdit={true} toAdd={true} getTable={getTable}
+                                                                       table={studentsTable}
                             inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
                                 /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/
                             deleteObjTable={deleteConnectionToTherapist}

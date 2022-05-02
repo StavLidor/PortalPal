@@ -8,10 +8,10 @@ import {
     limit,
     onSnapshot,
     orderBy,
-    query,
+    query, updateDoc,
     where
 } from "firebase/firestore";
-import {db, updateIDDoc} from "../../firebase";
+import {auth, db, updateIDDoc} from "../../firebase";
 import Message from "../chats/message";
 import Exercise from "./Exercise";
 import Datetime from "react-datetime";
@@ -26,42 +26,70 @@ export default function Exercises({patient,user,type}){
     const [newExercise,setNewExercise]=useState({until:'',description:'',patient:patient,place:'',user:user})
     const [addExercise,setAddExercise]=useState(false)
     useEffect(async () => {
-        const unsubscribe = query(collection(db, "exercises"),
-            where('patient','==',patient),
-            where('user','==',user),orderBy("createdAt", "asc"), limit(100),
+        //console.log('useEffect')
+        const q = query(collection(db, "patients/" + patient + "/therapists/" + user + "/exercises"), orderBy("createdAt", "desc"))
+        if (type === 'parent') {
+            console.log('allDetailsExercises222')
 
-        )
-        return onSnapshot(
-            unsubscribe,
-            (querySnapshot) => {
-                let data=[]
-                querySnapshot.forEach((doc) => (
-                    // console.log(doc)
 
-                    data.push({...doc.data(),id:doc.id})
+            const arr = []
+            getDocs(q).then((querySnapshot)=>{
+                querySnapshot.forEach((doc) => {
+                    arr.push({...doc.data(), id: doc.id})
+                    console.log('id', doc.id)
+                    // if (doc.data().client === id){
+                    //
+                    // }
+                    console.log(arr)
+                    setExercises(arr)
 
-                ))
-                setExercises(data)
-               console.log(data)
-            },
-            (error) => {
-                // TODO: Handle errors!
-                console.log('error!!',error)
+                });
             })
+
+
+        }
+        else {
+            return onSnapshot(
+                q,
+                (querySnapshot) => {
+                    let data=[]
+                    querySnapshot.forEach((doc) => (
+                        // console.log(doc)
+
+                        data.push({...doc.data(),id:doc.id})
+
+                    ))
+                    setExercises(data)
+                    console.log(data)
+                },
+                (error) => {
+                    // TODO: Handle errors!
+                    console.log('error!!',error)
+                })
+        }
+        // const q=query(q1,where("client", '==',id))
+
+
     },[])
+
     const handleOnSubmit = async e => {
         e.preventDefault()
         newExercise.until=firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
         setAddExercise(false)
-        const docRef = await addDoc(collection(db, "exercises"),
-            { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+        await addDoc(collection(db, "patients/"+patient+"/therapists/"+user+'/exercises'),  { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+        // const docRef = await addDoc(collection(db, "exercises"),
+        //     { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
 
     }
     const deleteHandle = async docId => {
-        await deleteDoc(doc(db, "exercises", docId))
+        await deleteDoc(doc(collection(db, "patients"), patient, "therapists", user, 'exercises',
+            docId))
+        // await deleteDoc(doc(db, "exercises", docId))
     }
     const updateHandle = async (docId,data) => {
-        await updateIDDoc(docId, "exercises", data)
+        // await updateIDDoc(docId, "exercises", data)
+        await updateDoc(doc(collection(db, "patients"),patient,"therapists",user,'exercises',
+            docId),data)
     }
 
 

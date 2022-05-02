@@ -23,7 +23,7 @@ function FileSystem({patient, user}){
 
     //'file' comes from the Blob or File API
     const upload=()=> {
-        const storageRef = ref(storage, '/' + user.toString() + '/'+patient.toString() + image.name.toString());
+        const storageRef = ref(storage, '/' + user.toString() + '/'+patient.toString() +'/'+ image.name.toString());
         // const storageRef = ref(storage, '/' + 'Stav' + '/'+'Liron' +'/' + image.name.toString());
 
         console.log('try')

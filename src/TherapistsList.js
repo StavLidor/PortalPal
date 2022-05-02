@@ -57,15 +57,13 @@ function TherapistsList({details,setCurrentTherapist,currentPage,setTherapistLis
                 {/*{therapists}*/}
                 {therapists.map((item, index) =>{
                     let data = item
-                    console.log("data to show : ", data)
-                    // <ListGroup.Item style={{backgroundColor: "beige"}}
-                    //                 as="li">{item.data().firstName + " " + item.data().lastName}</ListGroup.Item>
-                    //  return(<Link to={'/#/' + data.id.toString() + '/' + currentPage} className="list-group-item list-group-item-action" onClick={(e)=> {
+
                     return(
                         // <div>{data.firstName + " " + data.lastName+', '+data.connection}</div>
-                        <Link to={index.toString()} className="list-group-item list-group-item-action" onClick={(e)=> {
+                        <Link to={index.toString() + '/' + currentPage.toString()} className="list-group-item list-group-item-action" onClick={(e)=> {
                         // e.preventDefault()
                         // setCurrentPerson(data.id.toString())
+
                             setCurrentTherapist({id:data.id, index:index.toString()})
 
                     }}>{data.firstName + " " + data.lastName+', '+data.connection}</Link>

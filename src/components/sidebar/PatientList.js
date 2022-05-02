@@ -34,12 +34,12 @@ function PatientList({list,setPatientListData,listTitle,setCurrentPerson,current
             <ListGroup as="ul">
                 {listData.map((item) =>{
                     let data = item.data()
-                    console.log("data to show : ", data)
-                    // <ListGroup.Item style={{backgroundColor: "beige"}}
-                    //                 as="li">{item.data().firstName + " " + item.data().lastName}</ListGroup.Item>
-                    //  return(<Link to={'/#/' + data.id.toString() + '/' + currentPage} className="list-group-item list-group-item-action" onClick={(e)=> {
-                    //  return(<Link to={data.id.toString() + '/' + currentPage} className="list-group-item list-group-item-action" onClick={(e)=> {
-                     return(<Link to={data.id.toString()} className="list-group-item list-group-item-action" onClick={(e)=> {
+                     return(<Link to={data.id.toString() + (()=>{
+                         if(currentPage==='documentation')
+                             return '/documentation'
+                         return ''
+                     })()
+                     } className="list-group-item list-group-item-action" onClick={(e)=> {
                          // e.preventDefault()
                          setCurrentPerson(data.id.toString())
                      }}>{data.firstName + " " + data.lastName}</Link>)}

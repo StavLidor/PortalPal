@@ -56,9 +56,8 @@ function SessionsList({patientId, therapistId=null, type}){
     },[])
     return(
         <div>
-            <h3>RonliToko</h3>
+            <h3>סיכומי טיפולים</h3>
             {
-
             sessionsData.map((s)=>(
                 <>
                 <Button
@@ -79,13 +78,7 @@ function SessionsList({patientId, therapistId=null, type}){
                     </Collapse>
                 </>
                 ))
-
             }
-
-        {/*    return (<Link>*/}
-
-        {/*</Link>)*/}
-
         </div>
     )
 }

@@ -55,20 +55,22 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
                     // <Nav justify variant="tabs" defaultActiveKey={'/#/'+ currentPerson +'/sessions'}>
                     <Nav justify variant="tabs" /*defaultActiveKey={'sessions'}*/>
 
+                        {/*<Nav.Item>*/}
+                        {/*    <Link to='sessions' /*onClick={()=>{*/}
+                        {/*        setCurrentPage('sessions')*/}
+                        {/*        // }} to={'/#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>*/}
+                        {/*        }}  className="list-group-item list-group-item-action">סיכומי טיפולים</Link>*/}
+                        {/*</Nav.Item>*/}
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link eventKey="link-1">תרגילים</Nav.Link>*/}
+                        {/*</Nav.Item>*/}
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link eventKey="link-2">התקשרות</Nav.Link>*/}
+                        {/*</Nav.Item>*/}
                         <Nav.Item>
-                            <Link to='sessions' /*onClick={()=>{
-                                setCurrentPage('sessions')
-                                // }} to={'/#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
-                                }} */ className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="link-1">תרגילים</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="link-2">התקשרות</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="link-3">מסמכים</Nav.Link>
+                            <Link to={currentPerson + '/documentation'} onClick={()=>{
+                         setCurrentPage('documentation')
+                                }}  className="list-group-item list-group-item-action">מסמכים</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="link-4">API</Nav.Link>
@@ -80,18 +82,18 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
 
                 setTabsComponent(
                     <Nav justify variant="tabs" defaultActiveKey={'/#/'+ currentPerson +'/sessions'}>
-                        <Nav.Item>
-                            <Link onClick={()=>{
-                                setCurrentPage('sessions')
-                            }} to={'/#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="link-1">תרגילים</Nav.Link>
-                            {/*<Link to={'toko'} className="list-group-item list-group-item-action">sdfasfsd</Link>*/}
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="link-2">התקשרות</Nav.Link>
-                        </Nav.Item>
+                        {/*<Nav.Item>*/}
+                        {/*    <Link onClick={()=>{*/}
+                        {/*        setCurrentPage('sessions')*/}
+                        {/*    }} to={'/#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>*/}
+                        {/*</Nav.Item>*/}
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link eventKey="link-1">תרגילים</Nav.Link>*/}
+                        {/*    /!*<Link to={'toko'} className="list-group-item list-group-item-action">sdfasfsd</Link>*!/*/}
+                        {/*</Nav.Item>*/}
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link eventKey="link-2">התקשרות</Nav.Link>*/}
+                        {/*</Nav.Item>*/}
                         <Nav.Item>
                             <Nav.Link eventKey="link-3">מסמכים</Nav.Link>
                         </Nav.Item>

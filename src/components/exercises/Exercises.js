@@ -45,8 +45,6 @@ export default function Exercises({patient,user,type}){
 
                 });
             })
-
-
         }
         else {
             return onSnapshot(

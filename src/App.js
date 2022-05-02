@@ -94,7 +94,7 @@ function App() {
                 {/*// TODO: page for loading*/}
 
                 {isSigneIn && hasDetails && displayLoginError === false &&
-                <HomePage userDetails={userDetails.data()} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")} />}
+                <HomePage userDetails={{...userDetails.data(),id:userDetails.id}} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")} />}
 
             </div>
         </Router>

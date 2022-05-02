@@ -14,10 +14,11 @@ import SessionsList from "../../meetingSummaries/listMeetingSummries/SessionsLis
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
+    const [therapistListData, setTherapistListData] = useState([])
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
     const [currentPerson, setCurrentPerson] = useState('')
     const [currentPage, setCurrentPage] = useState('')
-    const [currentTherapist,setCurrentTherapist]=useState({id:'', index: ''})
+    const [currentTherapist, setCurrentTherapist] = useState({id: '', index: ''})
 
 
     async function onLogout() {
@@ -81,7 +82,7 @@ function HomePage({userDetails, type, institute}) {
                                 return (
                                     <Routes>
                                         {/*<Route path={/#/ + data.id.toString() + '/*'}*/}
-                                        <Route path={ data.id.toString() + '/*'}
+                                        <Route path={data.id.toString() + '/*'}
                                                element={<PatientDetails details={data}/>}/>
 
                                     </Routes>)
@@ -95,33 +96,56 @@ function HomePage({userDetails, type, institute}) {
                                    element={<h4>אנא בחר ילד מהרשימה</h4>}/>
                         </Routes>
 
-                            {patientListData.map((item) => {
-                                    let data = item.data()
-                                    return (
-                                        <Routes>
+                        {patientListData.map((item) => {
+                                let data = item.data()
+                                return (
+                                    <Routes>
                                         {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
-                                        <Route path={ data.id.toString() + '/*'}
-                                               element={<TherapistsList details={data} currentPage={currentPage} setCurrentTherapist={setCurrentTherapist}/>}/>
-                                        </Routes>)
-                                }
-                            )}
+                                        <Route path={data.id.toString() + '/*'}
+                                               element={<TherapistsList details={data} currentPage={currentPage}
+                                                                        setCurrentTherapist={setCurrentTherapist}
+                                                                        setTherapistListData={setTherapistListData}
+                                                                        currentPerson={currentPerson}/>}/>
+                                    </Routes>)
+                            }
+                        )}
 
                     </Row>
                 </Col>
                 <Col md='5' className="border border-secondary rounded">
 
-                    <Routes>
-                        {/*{patientListData.map((item) => {*/}
-                        {/*        let data = item.data()*/}
-                        {/*        return (*/}
-                        {/*            <Route path={'/#/' + data.id.toString() + '/*'}*/}
-                        {/*                   element={<FileSystem/>}/>)*/}
-                        {/*    }*/}
-                        {/*)}*/}
+
+                        {patientListData.map((item) => {
+                            let data = item.data()
+
+                            therapistListData.map((therapist,index) => {
+                                // console.log('list list', therapist.data())
+                                // let therapistData = therapist.data()
+                                console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
+                                return (  <Routes>
+                                    {/*<Route path={'/#/' + data.id.toString() + '/*'}*/}
+                                    <Route path={data.id.toString() + '/' + index.toString()}
+                                // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
+                                element={<h4>asdasd</h4>}/></Routes>)
+
+                            }
+                        )})}
                         {/*<Route path={currentPerson + '/' + currentTherapist.index + '/*'}*/}
-                        {/*    element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>*/}
-                        {/*</Route>*/}
-                    </Routes>
+                        {/*    // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>*/}
+                        {/*       element={<h4>Hi Toko</h4>}/>*/}
+
+
+                    {/*{patientListData.map((item) => {*/}
+                    {/*        let data = item.data()*/}
+                    {/*        return (*/}
+                    {/*            <Routes>*/}
+                    {/*                /!*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*!/*/}
+                    {/*                <Route path={data.id.toString() + '/0' +'/*'}*/}
+                    {/*                       element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>*/}
+                    {/*            </Routes>)*/}
+                    {/*    }*/}
+                    {/*)}*/}
+
 
 
                 </Col>

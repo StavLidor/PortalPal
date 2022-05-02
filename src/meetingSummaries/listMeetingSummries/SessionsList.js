@@ -57,22 +57,23 @@ function SessionsList({patientId, therapistId=null, type}){
     },[])
     return(
         <div>
-            <Button
-                onClick={() => setOpen(!open)}
-                aria-controls="example-collapse-text"
-                aria-expanded={open}
-            >
-                click
-            </Button>
-            <Collapse in={open}>
-                <div id="example-collapse-text">
-                    {sessionsData[0].title}
-                </div>
-            </Collapse>
+            <h3>RonliToko</h3>
+        {/*    <Button*/}
+        {/*        onClick={() => setOpen(!open)}*/}
+        {/*        aria-controls="example-collapse-text"*/}
+        {/*        aria-expanded={open}*/}
+        {/*    >*/}
+        {/*        click*/}
+        {/*    </Button>*/}
+        {/*    <Collapse in={open}>*/}
+        {/*        <div id="example-collapse-text">*/}
+        {/*            {sessionsData[0].title}*/}
+        {/*        </div>*/}
+        {/*    </Collapse>*/}
 
-            return (<Link>
+        {/*    return (<Link>*/}
 
-        </Link>)
+        {/*</Link>)*/}
 
         </div>
     )

@@ -32,7 +32,8 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
                             <Link onClick={()=>{
                                 setCurrentPage('sessions')
                             // }} to={'/#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
-                            }} to={ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                            // }} to={ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                            }} to={ 'sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="link-1">הוספת משתמשי פורטל</Nav.Link>

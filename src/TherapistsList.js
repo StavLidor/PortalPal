@@ -8,7 +8,7 @@ import {collection, getDocs, onSnapshot, query, where} from "firebase/firestore"
 import {db} from "./firebase";
 import firebase from "firebase/compat/app";
 
-function TherapistsList({details,setCurrentTherapist,currentPage}){
+function TherapistsList({details,setCurrentTherapist,currentPage,setTherapistListData, currentPerson}){
     console.log("in therapist!!!!!!!!")
     const [therapists,setTherapists]=useState([])
 
@@ -17,9 +17,9 @@ function TherapistsList({details,setCurrentTherapist,currentPage}){
     useEffect( async () => {
 
         let dict = {}
-        const docRef = query(collection(db, "patients/" + details.id + "/therapists"))
+        const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"))
         // const querySnapshot = await getDocs(docRef)
-        getDocs(docRef).then((d) => {
+        getDocs(collectionRef).then((d) => {
             const therapistIds = []
 
             d.forEach((doc) => {
@@ -44,6 +44,7 @@ function TherapistsList({details,setCurrentTherapist,currentPage}){
                         // console.log()
                     ))
                     setTherapists(data)
+                    setTherapistListData(data)
                     console.log("my data: " , data)
                 })
             }
@@ -62,7 +63,7 @@ function TherapistsList({details,setCurrentTherapist,currentPage}){
                     //  return(<Link to={'/#/' + data.id.toString() + '/' + currentPage} className="list-group-item list-group-item-action" onClick={(e)=> {
                     return(
                         // <div>{data.firstName + " " + data.lastName+', '+data.connection}</div>
-                        <Link to={ index.toString() +'/*'} className="list-group-item list-group-item-action" onClick={(e)=> {
+                        <Link to={index.toString()} className="list-group-item list-group-item-action" onClick={(e)=> {
                         // e.preventDefault()
                         // setCurrentPerson(data.id.toString())
                             setCurrentTherapist({id:data.id, index:index.toString()})

@@ -117,7 +117,7 @@ function HomePage({userDetails, type, institute}) {
 
                         {patientListData.map((item) => {
                             let data = item.data()
-
+                            return(
                             therapistListData.map((therapist,index) => {
                                 // console.log('list list', therapist.data())
                                 // let therapistData = therapist.data()
@@ -126,9 +126,10 @@ function HomePage({userDetails, type, institute}) {
                                     {/*<Route path={'/#/' + data.id.toString() + '/*'}*/}
                                     <Route path={data.id.toString() + '/' + index.toString()}
                                 // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
-                                element={<h4>asdasd</h4>}/></Routes>)
+                                element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/></Routes>)
 
                             }
+                            )
                         )})}
                         {/*<Route path={currentPerson + '/' + currentTherapist.index + '/*'}*/}
                         {/*    // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>*/}

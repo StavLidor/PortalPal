@@ -9,7 +9,7 @@ function SessionsList({patientId, therapistId=null, type}){
     const [sessionsData, setSessionsData] = useState([])
     const [open, setOpen] = useState(false);
     useEffect(async () => {
-        //console.log('useEffect')
+        console.log('useEffect')
         let q
         let therapistIDForSession = (() => {
             if (type === 'parent')
@@ -52,24 +52,35 @@ function SessionsList({patientId, therapistId=null, type}){
                     console.log('error!!',error)
                 })
         }
-        // const q=query(q1,where("client", '==',id))
 
     },[])
     return(
         <div>
             <h3>RonliToko</h3>
-        {/*    <Button*/}
-        {/*        onClick={() => setOpen(!open)}*/}
-        {/*        aria-controls="example-collapse-text"*/}
-        {/*        aria-expanded={open}*/}
-        {/*    >*/}
-        {/*        click*/}
-        {/*    </Button>*/}
-        {/*    <Collapse in={open}>*/}
-        {/*        <div id="example-collapse-text">*/}
-        {/*            {sessionsData[0].title}*/}
-        {/*        </div>*/}
-        {/*    </Collapse>*/}
+            {
+
+            sessionsData.map((s)=>(
+                <>
+                <Button
+                    onClick={() => setOpen(!open)}
+                    aria-controls="example-collapse-text"
+                    aria-expanded={open}
+                >
+                    {s.date.toDate().toUTCString() + s.title}
+                </Button>
+
+
+                    <Collapse in={open}>
+                        <div id="example-collapse-text">
+                            {s.date.toDate().toUTCString()}
+                            {s.title}
+                            {s.summary}
+                        </div>
+                    </Collapse>
+                </>
+                ))
+
+            }
 
         {/*    return (<Link>*/}
 

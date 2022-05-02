@@ -8,12 +8,16 @@ import PatientList from "../../components/sidebar/PatientList";
 import PatientDetails from "../../components/sidebar/PatientDetails";
 import TabsBanner from "../../components/topbar/TabsBanner";
 import FileSystem from "../../components/fileSystem/FileSystem";
+import TherapistsDetails from "../../therapistsDetails";
+import TherapistsList from "../../TherapistsList";
+import SessionsList from "../../meetingSummaries/listMeetingSummries/SessionsList";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
     const [currentPerson, setCurrentPerson] = useState('')
     const [currentPage, setCurrentPage] = useState('')
+    const [currentTherapist,setCurrentTherapist]=useState({id:'', index: ''})
 
 
     async function onLogout() {
@@ -21,6 +25,7 @@ function HomePage({userDetails, type, institute}) {
     }
 
     useEffect(() => {
+        // console.log("currentTherapist: ", currentTherapist)
         switch (type) {
             case "admin":
                 // TODO: change the given list here
@@ -46,7 +51,7 @@ function HomePage({userDetails, type, institute}) {
         }
     }, [currentPage])
 
-    return (<div><h3>TOKO</h3>
+    return (<div><h3>{currentTherapist.id}</h3>
             <Container className="p-4" fluid>
                 <Row className='gap-4 '>
                     <Col md='2' className="border border-secondary rounded">פורטלי</Col>
@@ -70,41 +75,52 @@ function HomePage({userDetails, type, institute}) {
                 </Col>
                 <Col md='3' className="w-25 border border-secondary rounded ">
                     <Row className="p-2 border border-secondary rounded h-25 m-3">
-                        <Routes>
-                            {patientListData.map((item) => {
-                                    let data = item.data()
-                                    return (
-                                        <Route path={'/#/'+ data.id.toString() + '/*'}
-                                               element={<PatientDetails details={data}/>}/>)
-                                }
-                            )}
-                        </Routes>
+
+                        {patientListData.map((item) => {
+                                let data = item.data()
+                                return (
+                                    <Routes>
+                                        {/*<Route path={/#/ + data.id.toString() + '/*'}*/}
+                                        <Route path={ data.id.toString() + '/*'}
+                                               element={<PatientDetails details={data}/>}/>
+
+                                    </Routes>)
+                            }
+                        )}
+
                     </Row>
                     <Row className="border border-secondary rounded h-50 m-3">
                         <Routes>
                             <Route path={"sessions"}
                                    element={<h4>אנא בחר ילד מהרשימה</h4>}/>
+                        </Routes>
 
                             {patientListData.map((item) => {
                                     let data = item.data()
                                     return (
-                                        <Route path={'/#/'+ data.id.toString() + '/sessions/*'}
-                                               element={<PatientDetails details={data}/>}/>)
+                                        <Routes>
+                                        {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
+                                        <Route path={ data.id.toString() + '/*'}
+                                               element={<TherapistsList details={data} currentPage={currentPage} setCurrentTherapist={setCurrentTherapist}/>}/>
+                                        </Routes>)
                                 }
                             )}
-                        </Routes>
+
                     </Row>
                 </Col>
                 <Col md='5' className="border border-secondary rounded">
 
                     <Routes>
-                        {patientListData.map((item) => {
-                                let data = item.data()
-                                return (
-                                    <Route path={'/#/'+ data.id.toString() + '/*'}
-                                           element={<FileSystem/>}/>)
-                            }
-                        )}
+                        {/*{patientListData.map((item) => {*/}
+                        {/*        let data = item.data()*/}
+                        {/*        return (*/}
+                        {/*            <Route path={'/#/' + data.id.toString() + '/*'}*/}
+                        {/*                   element={<FileSystem/>}/>)*/}
+                        {/*    }*/}
+                        {/*)}*/}
+                        {/*<Route path={currentPerson + '/' + currentTherapist.index + '/*'}*/}
+                        {/*    element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>*/}
+                        {/*</Route>*/}
                     </Routes>
 
 

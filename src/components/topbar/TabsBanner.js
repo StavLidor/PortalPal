@@ -26,11 +26,13 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
         switch (type) {
             case "admin":
                 setTabsComponent(
-                    <Nav justify variant="tabs" defaultActiveKey={'/#/'+ currentPerson +'/sessions'}>
+                    // <Nav justify variant="tabs" defaultActiveKey={'/#/'+ currentPerson +'/sessions'}>
+                    <Nav justify variant="tabs" defaultActiveKey={currentPerson +'/sessions'}>
                         <Nav.Item>
                             <Link onClick={()=>{
                                 setCurrentPage('sessions')
-                            }} to={'/#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                            // }} to={'/#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                            }} to={ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="link-1">הוספת משתמשי פורטל</Nav.Link>
@@ -58,11 +60,13 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
                 // </Routes>
 
                 setTabsComponent(
-                    <Nav justify variant="tabs" defaultActiveKey={'/#/'+ currentPerson +'/sessions'}>
+                    // <Nav justify variant="tabs" defaultActiveKey={'/#/'+ currentPerson +'/sessions'}>
+                    <Nav justify variant="tabs" defaultActiveKey={currentPerson +'/sessions'}>
                         <Nav.Item>
                             <Link onClick={()=>{
                                 setCurrentPage('sessions')
-                                }} to={'/#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                                // }} to={'/#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                                }} to={currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="link-1">תרגילים</Nav.Link>

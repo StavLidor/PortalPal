@@ -37,7 +37,8 @@ function PatientList({list,setPatientListData,listTitle,setCurrentPerson,current
                     console.log("data to show : ", data)
                     // <ListGroup.Item style={{backgroundColor: "beige"}}
                     //                 as="li">{item.data().firstName + " " + item.data().lastName}</ListGroup.Item>
-                     return(<Link to={'/#/'+ data.id.toString() + '/' + currentPage} className="list-group-item list-group-item-action" onClick={(e)=> {
+                    //  return(<Link to={'/#/' + data.id.toString() + '/' + currentPage} className="list-group-item list-group-item-action" onClick={(e)=> {
+                     return(<Link to={data.id.toString() + '/' + currentPage} className="list-group-item list-group-item-action" onClick={(e)=> {
                          // e.preventDefault()
                          setCurrentPerson(data.id.toString())
                      }}>{data.firstName + " " + data.lastName}</Link>)}

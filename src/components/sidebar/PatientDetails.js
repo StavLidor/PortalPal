@@ -5,7 +5,7 @@ import {Link, Route, Routes} from "react-router-dom";
 import {getDate} from "date-fns";
 
 function PatientDetails({details}){
-    console.log("in patient")
+    console.log("in patient!!!!!!!!")
     return(<div>
         <Form.Label style={{fontWeight:'bold'}} >פרטי מטופל</Form.Label>
         <Col>

@@ -49,7 +49,7 @@ function PatientExercises({patient, therapist, type}) {
                     // if (doc.data().client === id){
                     //
                     // }
-                    console.log(arr)
+                    console.log("ARR: ", arr)
                     setExercisesData(arr)
 
                 });
@@ -65,8 +65,9 @@ function PatientExercises({patient, therapist, type}) {
                         data.push({...doc.data(), id: doc.id})
 
                     ))
+                    console.log("DATA: ", data)
                     setExercisesData(data)
-                    console.log(data)
+
                 },
                 (error) => {
                     // TODO: Handle errors!
@@ -82,7 +83,8 @@ function PatientExercises({patient, therapist, type}) {
         await addDoc(collection(db, "patients/" + patient + "/therapists/" + therapist + '/exercises'), {
             ...newExercise,
             // createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            createdAt: firebase.firestore.Timestamp.fromDate(new Date(newExercise.createdAt))
+            createdAt: firebase.firestore.Timestamp.fromDate(new Date(newExercise.createdAt)),
+            // until: firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
         })
         // const docRef = await addDoc(collection(db, "exercises"),
         //     { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
@@ -94,14 +96,18 @@ function PatientExercises({patient, therapist, type}) {
         // await deleteDoc(doc(db, "exercises", docId))
     }
     const handleUpdate = async (docId, data) => {
+        console.log("dataaaaaaaaaaaa:" , data)
+        console.log("dataaaaaaaaaaaa until:" , data.until)
+
         // await updateIDDoc(docId, "exercises", data)
         await updateDoc(doc(collection(db, "patients"), patient, "therapists", therapist, 'exercises',
-            docId),
-            {
-            ...data,
-            // createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
-        }
+            docId),data
+        //     {
+        //     ...data,
+        //     // createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        //     // until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
+        //     until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
+        // }
         )
     }
 
@@ -126,7 +132,7 @@ function PatientExercises({patient, therapist, type}) {
                     exercisesData.map((e, i) => (
                             // <>
 
-                            <Accordion.Item eventKey={i.toString()}>
+                            <Accordion.Item eventKey={e.id}>
                                 <Accordion.Header>
                                     {new Date(e.createdAt.seconds * 1000).toLocaleDateString() + ' ' + e.place}
                                     &nbsp;&nbsp;
@@ -149,6 +155,15 @@ function PatientExercises({patient, therapist, type}) {
                                                 {new Date(e.createdAt.seconds * 1000).toLocaleDateString()}
                                             </Form.Text>
                                         </Row>
+
+                                        <Row>
+                                            <Form.Text>
+                                                תאריך סיום:
+                                                &nbsp;
+                                                {new Date(e.until.seconds * 1000).toLocaleDateString()}
+                                            </Form.Text>
+                                        </Row>
+
 
                                         <Row>
                                             <Form.Text>
@@ -386,7 +401,7 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                         })()}
                                     // value={(new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()).toString()}
 
-                                    onChange={e => setNewExerciseData({...newExerciseData, until: e.target.value})}
+                                    onChange={e => setNewExerciseData({...newExerciseData, until: firebase.firestore.Timestamp.fromDate(new Date(e.target.value))})}
 
                                 />
                             </Form.Group>
@@ -433,12 +448,16 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                     </Button>
                     <Button variant="primary" onClick={() => {
                         handleClose()
-                        console.log(newExerciseData)
+                        console.log("new: ", newExerciseData)
+                        console.log("newExerciseData.until: ", newExerciseData.until)
                         handleUpdate(newExerciseData.id, newExerciseData)
-                        setNewExerciseData({
-                            ...newExerciseData,
-                            until: firebase.firestore.Timestamp.fromDate(new Date(newExerciseData.until))
-                        })
+                        setNewExerciseData(
+                            newExerciseData
+                        // {
+                        //     ...newExerciseData,
+                        //     until: firebase.firestore.Timestamp.fromDate(new Date(newExerciseData.until))
+                        // }
+                        )
                     }}>
                         שמור שינויים
                     </Button>

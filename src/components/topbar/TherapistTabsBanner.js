@@ -27,7 +27,7 @@ function TherapistTabsBanner({type,currentPerson, setCurrentPage}){
             case "admin":
                 setTabsComponent(
                     // <Nav justify variant="tabs" defaultActiveKey={'/#/'+ currentPerson +'/sessions'}>
-                    <Container className="border border-secondary rounded">
+                    <Container className="border border-secondary rounded" >
                     <Nav justify variant="tabs" defaultActiveKey={currentPerson +'/sessions'}>
                         <Nav.Item>
                             <Link  to={'sessions'} onClick={()=>{
@@ -66,7 +66,9 @@ function TherapistTabsBanner({type,currentPerson, setCurrentPage}){
                             }}  className="list-group-item list-group-item-action">תרגילים</Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="link-2">התקשרות</Nav.Link>
+                            <Link to='communication' onClick={()=>{
+                                setCurrentPage('communication')
+                            }}  className="list-group-item list-group-item-action">התקשרות</Link>
                         </Nav.Item>
                     </Nav>
                     </Container>
@@ -76,19 +78,22 @@ function TherapistTabsBanner({type,currentPerson, setCurrentPage}){
             case "therapist":
 
                 setTabsComponent(
-                    <Container className="border border-secondary rounded">
-                    <Nav justify variant="tabs" defaultActiveKey={'/#/'+ currentPerson +'/sessions'}>
+                    <Container className="border border-secondary rounded m-3">
+                    <Nav justify variant="tabs" defaultActiveKey={'sessions'}>
                         <Nav.Item>
                             <Link onClick={()=>{
                                 setCurrentPage('sessions')
-                            }} to={'/#/'+ currentPerson +'/sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                            }} to={'sessions'} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="link-1">תרגילים</Nav.Link>
-                            {/*<Link to={'toko'} className="list-group-item list-group-item-action">sdfasfsd</Link>*/}
+                            <Link to='exercises' onClick={()=>{
+                                setCurrentPage('exercises')
+                            }}  className="list-group-item list-group-item-action">תרגילים</Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="link-2">התקשרות</Nav.Link>
+                            <Link to='communication' onClick={()=>{
+                                setCurrentPage('communication')
+                            }}  className="list-group-item list-group-item-action">התקשרות</Link>
                         </Nav.Item>
                     </Nav>
                     </Container>

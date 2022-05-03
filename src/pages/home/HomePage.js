@@ -63,7 +63,7 @@ function HomePage({userDetails, type, institute}) {
                         <ButtonGroup className="gap-4 p-2">
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
                             <Button className="rounded-3" variant="outline-primary">החשבון שלי</Button>
-                            <Button className="rounded-3" variant="outline-primary" onClick={onLogout}>התנתק</Button>
+                            <Button href={'/'} className="rounded-3" variant="outline-primary" onClick={onLogout}>התנתק</Button>
                         </ButtonGroup>
                     </Col>
                     <Col md='5' className="border border-secondary rounded">
@@ -94,12 +94,13 @@ function HomePage({userDetails, type, institute}) {
 
                     </Row>
                     <Row className="border border-secondary rounded h-50 m-3">
-                        <Routes>
-                            <Route path={"sessions"}
-                                   element={<h4>אנא בחר ילד מהרשימה</h4>}/>
-                        </Routes>
-
-                        {patientListData.map((item) => {
+                        {/*{(type==='parent') &&*/}
+                        {/*<Routes>*/}
+                        {/*    <Route path={"sessions"}*/}
+                        {/*           element={<h4>אנא בחר ילד מהרשימה</h4>}/>*/}
+                        {/*</Routes>}*/}
+                        {(type==='parent') &&
+                            patientListData.map((item) => {
                                 let data = item.data()
                                 return (
                                     <Routes>
@@ -113,6 +114,7 @@ function HomePage({userDetails, type, institute}) {
                             }
                         )}
 
+
                     </Row>
                 </Col>
                 <Col md='5' className="border border-secondary rounded">
@@ -120,15 +122,14 @@ function HomePage({userDetails, type, institute}) {
                     <Route path={currentPerson.toString() +'/documentation'} element={<FileSystem user={userDetails.id} patient={currentPerson}/>} />
                 </Routes>
 
-                    {patientListData.map((item) => {
+                    {type === 'parent' && patientListData.map((item) => {
                         let data = item.data()
                         return (
                             therapistListData.map((therapist, index) => {
-
                                     console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
                                     return (
-                                            <div >
-                                            <Routes>
+                                            <div>
+                                                <Routes>
                                                 <Route path={data.id.toString() + '/' + index.toString() + '/*'}
                                                        element={<TherapistTabsBanner type={type}
                                                                                      currentPerson={currentPerson}
@@ -149,11 +150,40 @@ function HomePage({userDetails, type, institute}) {
                                             </Routes>
                                         </div>
                                     )
-
                                 }
                             )
                         )
                     })}
+
+
+                    {type === 'therapist' && patientListData.map((item) => {
+                        let data = item.data()
+                        return(
+                                        <div >
+                                            <Routes>
+                                                <Route path={data.id.toString() + '/*'}
+                                                       element={<TherapistTabsBanner type={type}
+                                                                                     currentPerson={currentPerson}
+                                                                                     setCurrentPage={setCurrentPage}/>}/>
+                                            </Routes>
+                                            <Routes>
+                                                <Route path={data.id.toString() + '/sessions'}
+                                                    // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
+                                                       element={<SessionsList patientId={currentPerson}
+                                                                              therapistId={userDetails.id}
+                                                                              type={type}/>}/>
+
+                                                <Route path={data.id.toString() +  '/exercises'}
+                                                    // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
+                                                       element={<PatientExercises  patient={currentPerson}
+                                                                                   therapist={userDetails.id}
+                                                                                   type={type}/>}/>
+                                            </Routes>
+                                        </div>
+                                    )
+                                }
+                        )
+                    }
                 </Col>
             </Row>
             <Row className="border border-secondary rounded m-3 w-auto"></Row>

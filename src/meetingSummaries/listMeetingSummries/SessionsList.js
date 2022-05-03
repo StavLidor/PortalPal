@@ -131,7 +131,7 @@ function SessionsList({patientId, therapistId = null, type}) {
 
                             <Accordion.Item eventKey={s.id}>
                                 <Accordion.Header>
-                                    {s.title}
+                                    {s.title+ ', ' +new Date(s.date.seconds * 1000).toLocaleDateString()}
                                     &nbsp;&nbsp;
                                     {/*{e.createdAt.toDate().toUTCString() + e.place}*/}
                                 </Accordion.Header>

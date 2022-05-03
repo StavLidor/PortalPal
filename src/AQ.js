@@ -10,13 +10,13 @@ function AQ() {
     }
     return (
         <div>
-            <Form className="col justify-content-center">
+            <Form className="col justify-content-center" >
                 <Form.Group>
                     <Form.Label className="text-center" style={{fontWeight: "bold", width: "100%"}}>טופס לאבחון
                         אוטיזם</Form.Label>
 
                     <Row>
-                        <Col>
+                        <Col style={{fontSize:17}}>
                             מי ממלא טופס זה:
                         </Col>
                         <Col md="auto">
@@ -35,8 +35,8 @@ function AQ() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col>
-                            Ethnicity:
+                        <Col style={{fontSize:17}}>
+                           אתניות:
                         </Col>
                         <Col md="auto">
                             <Form.Group className="mb-3">
@@ -66,7 +66,7 @@ function AQ() {
                     </Row>
 
                     <Row>
-                        <Col>
+                        <Col style={{fontSize:17}}>
                             גיל:
                         </Col>
                         <Col md="auto">
@@ -80,7 +80,7 @@ function AQ() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col>
+                        <Col style={{fontSize:17}}>
                             מין:
                         </Col>
                         <Col md="auto">
@@ -95,16 +95,16 @@ function AQ() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col>
-                            jaundice:
+                        <Col style={{fontSize:17}}>
+                         רקע עם מחלת צהבת
                         </Col>
                         <Col md="auto">
                             <Form.Group className="mb-3">
-                                <ButtonGroup className="gap-3">
-                                    <Form.Check type="radio" name='jaundice' label="כן"
+                                <ButtonGroup className="gap-3"><Form.Text style={{fontSize:18}}>כן</Form.Text>
+                                    <Form.Check style={{fontSize:18}} type="radio" name='jaundice'
                                         // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
-                                    />
-                                    <Form.Check type="radio" name='jaundice' label="לא"
+                                    /><Form.Text style={{fontSize:18}}>לא</Form.Text>
+                                    <Form.Check style={{fontSize:18}} type="radio" name='jaundice'
                                         // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
                                     />
                                 </ButtonGroup>
@@ -113,16 +113,18 @@ function AQ() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col>
-                            האם קיים בן משפחה עם אוטיזם?
+                        <Col style={{fontSize:17}}>
+                             קיים בן משפחה עם אוטיזם?
                         </Col>
                         <Col md="auto">
                             <Form.Group className="mb-3">
                                 <ButtonGroup className="gap-3">
-                                    <Form.Check type="radio" name='memberFamilyWithAsd' label="כן"
+                                    <Form.Text style={{fontSize:18}}>כן</Form.Text>
+                                    <Form.Check style={{fontSize:18}} type="radio" name='memberFamilyWithAsd'
                                         // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
                                     />
-                                    <Form.Check type="radio" name='memberFamilyWithAsd' label="לא"
+                                    <Form.Text style={{fontSize:18}}>לא</Form.Text>
+                                    <Form.Check style={{fontSize:18}} type="radio" name='memberFamilyWithAsd'
                                         // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
                                     />
                                 </ButtonGroup>
@@ -132,35 +134,35 @@ function AQ() {
                     </Row>
                 </Form.Group>
             </Form>
-            <Form className="col justify-content-center">
+            <Form className="col justify-content-center" >
                 <Form.Group>
-                    <Table className="table-responsive" striped bordered hover size="sm" /*variant="dark"*/>
+                    <Table className="table-responsive" striped bordered hover size="md" variant="dark">
                         <thead>
                         <tr>
-                            <th className="text-end p-2 ">#</th>
-                            <th className="text-end p-2">שאלה</th>
-                            <th className="text-end p-2">מסכים בהחלט</th>
-                            <th className="text-end p-2 ">מסכים</th>
-                            <th className="text-end p-2">לא מסכים</th>
-                            <th className="text-end p-2">בהחלט לא מסכים</th>
+                            <th className="text-center align-baseline p-1 ">#</th>
+                            <th className="text-center align-baseline p-1" style={{fontSize: 18}}>שאלה</th>
+                            <th className="text-center align-baseline p-1" style={{fontSize: 18}}>מסכים בהחלט</th>
+                            <th className="text-center align-baseline p-1 " style={{fontSize: 18}}>מסכים</th>
+                            <th className="text-center align-baseline p-1" style={{fontSize: 18}}>לא מסכים</th>
+                            <th className="text-center align-baseline p-1" style={{fontSize: 18}}>בהחלט לא מסכים</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td className="text-end">1</td>
-                            <td className="text-end p-2" style={{fontSize: 20}}>הוא נוטה להבחין בצלילים קטנים כאשר אחרים
+                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא נוטה להבחין בצלילים קטנים כאשר אחרים
                                 לא מבחינים.
                             </td>
                             <td className="text-center">
-                                <Form.Check name="firstQuestion" type="radio"/>
+                                <Form.Check  name="firstQuestion" type="radio"/>
                             </td>
+                            <td className="text-center"><Form.Check  name="firstQuestion" type="radio"/></td>
                             <td className="text-center"><Form.Check name="firstQuestion" type="radio"/></td>
-                            <td className="text-center"><Form.Check name="firstQuestion" type="radio"/></td>
-                            <td className="text-center"><Form.Check name="firstQuestion" type="radio"/></td>
+                            <td className="text-center"><Form.Check  name="firstQuestion" type="radio"/></td>
                         </tr>
                         <tr>
                             <td className="text-end">2</td>
-                            <td className="text-end p-2" style={{fontSize: 20}}>הוא בדרך כלל מתרכז יותר בתמונה הכללית
+                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא בדרך כלל מתרכז יותר בתמונה הכללית
                                 מאשר בפרטים הקטנים.
                             </td>
                             <td>
@@ -172,7 +174,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">3</td>
-                            <td className="text-end p-2" style={{fontSize: 20}}>במפגש חברתי, הוא מצליח לעקוב בקלות אחר
+                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>במפגש חברתי, הוא מצליח לעקוב בקלות אחר
                                 מספר שיחות עם אנשים שונים.
                             </td>
                             <td>
@@ -184,7 +186,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">4</td>
-                            <td className="text-end p-2" style={{fontSize: 20}}>הוא מצליח לעבור בין פעילויות שונות
+                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא מצליח לעבור בין פעילויות שונות
                                 בקלות.
                             </td>
                             <td>
@@ -196,7 +198,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">5</td>
-                            <td className="text-end p-2" style={{fontSize: 20}}>הוא לא יודע איך להחזיק שיחה עם חבריו.
+                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא לא יודע איך להחזיק שיחה עם חבריו.
                             </td>
                             <td>
                                 <Form.Check className="text-center" name="fifthQuestion" type="radio"/>
@@ -207,7 +209,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">6</td>
-                            <td className="text-end p-2" style={{fontSize: 20}}>הוא טוב בשיחת חולין.</td>
+                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא טוב בשיחת חולין.</td>
                             <td>
                                 <Form.Check className="text-center" name="sixthQuestion" type="radio"/>
                             </td>
@@ -217,7 +219,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">7</td>
-                            <td className="text-end p-2" style={{fontSize: 20}}>כאשר מספרים לו סיפור, קשה לו לגלות
+                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>כאשר מספרים לו סיפור, קשה לו לגלות
                                 ולהבין מה הכוונות והתחושות של כל דמות בסיפור.
                             </td>
                             <td>
@@ -229,7 +231,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">8</td>
-                            <td className="text-end p-2" style={{fontSize: 20}}>כשהיה בגן, הוא אהב לשחק במשחקי העמדת
+                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>כשהיה בגן, הוא אהב לשחק במשחקי העמדת
                                 פנים עם ילדים אחרים.
                             </td>
                             <td>
@@ -241,7 +243,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">9</td>
-                            <td className="text-end p-2" style={{fontSize: 20}}>הוא מצליח להבין בקלות מה אדם אחר חושב או
+                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא מצליח להבין בקלות מה אדם אחר חושב או
                                 מרגיש רק על ידי הבטה בפניו.
                             </td>
                             <td>
@@ -253,7 +255,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">10</td>
-                            <td className="text-end p-2" style={{fontSize: 20}}>הוא מתקשה להכיר וליצור חברים חדשים.</td>
+                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא מתקשה להכיר וליצור חברים חדשים.</td>
                             <td>
                                 <Form.Check className="text-center" name="tenthQuestion" type="radio"/>
                             </td>

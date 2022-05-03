@@ -14,6 +14,9 @@ import SessionsList from "../../meetingSummaries/listMeetingSummries/SessionsLis
 import TherapistTabsBanner from "../../components/topbar/TherapistTabsBanner";
 import Exercises from "../../components/exercises/Exercises";
 import PatientExercises from "../../components/exercises/PatientExercises";
+import AQ from "../../AQ";
+// import "./HomePage.CSS"
+import styles from "./HomePage.CSS"
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
@@ -67,6 +70,12 @@ function HomePage({userDetails, type, institute}) {
                         </ButtonGroup>
                     </Col>
                     <Col md='5' className="border border-secondary rounded">
+                        {/*<Routes>*/}
+                        {/*    <Route path={data.id.toString() + '/' + index.toString() + '/*'}*/}
+                        {/*           element={<TabsBanner type={type}*/}
+                        {/*                                         currentPerson={currentPerson}*/}
+                        {/*                                         setCurrentPage={setCurrentPage}/>}/>*/}
+                        {/*</Routes>*/}
                         <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}/>
                         {/*{tabsComponent}*/}
                     </Col>
@@ -77,8 +86,8 @@ function HomePage({userDetails, type, institute}) {
                 <Col md='2' className="p-3 border border-secondary rounded">
                     {sideListComponent}
                 </Col>
-                <Col md='3' className="w-25 border border-secondary rounded ">
-                    <Row className="p-2 border border-secondary rounded h-25 m-3">
+                <Col md='2' className="border border-secondary rounded  ">
+                    <Row className="p-2 border border-secondary rounded  mb-4 ">
 
                         {patientListData.map((item) => {
                                 let data = item.data()
@@ -93,7 +102,7 @@ function HomePage({userDetails, type, institute}) {
                         )}
 
                     </Row>
-                    <Row className="border border-secondary rounded h-50 m-3">
+                    <Row className="border border-secondary rounded" style={{minHeight: 300}}>
                         {/*{(type==='parent') &&*/}
                         {/*<Routes>*/}
                         {/*    <Route path={"sessions"}*/}
@@ -117,7 +126,7 @@ function HomePage({userDetails, type, institute}) {
 
                     </Row>
                 </Col>
-                <Col md='5' className="border border-secondary rounded">
+                <Col md='7' className="border border-secondary rounded">
                 <Routes>
                     <Route path={currentPerson.toString() +'/documentation'} element={<FileSystem user={userDetails.id} patient={currentPerson}/>} />
                 </Routes>
@@ -133,8 +142,20 @@ function HomePage({userDetails, type, institute}) {
                                                 <Route path={data.id.toString() + '/' + index.toString() + '/*'}
                                                        element={<TherapistTabsBanner type={type}
                                                                                      currentPerson={currentPerson}
-                                                                                     setCurrentPage={setCurrentPage}/>}/>
+                                                                                     setCurrentPage={setCurrentPage}/>}
+                                                       // element={<TabsBanner type={type}
+                                                       //                               currentPerson={currentPerson}
+                                                       //                               setCurrentPage={setCurrentPage}/>}
+                                                />
                                             </Routes>
+                                                <Routes>
+                                                    <Route path={data.id.toString() + '/' + index.toString() + '/*'}
+                                                           element={<AQ/>}
+                                                        // element={<TabsBanner type={type}
+                                                        //                               currentPerson={currentPerson}
+                                                        //                               setCurrentPage={setCurrentPage}/>}
+                                                    />
+                                                </Routes>
                                             <Routes>
                                                 <Route path={data.id.toString() + '/' + index.toString() + '/sessions'}
                                                     // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
@@ -186,7 +207,7 @@ function HomePage({userDetails, type, institute}) {
                     }
                 </Col>
             </Row>
-            <Row className="border border-secondary rounded m-3 w-auto"></Row>
+            {/*<Row className="border border-secondary rounded m-3 w-auto"></Row>*/}
 
         </div>
     )

@@ -82,7 +82,9 @@ export default function AQ10ChildrenForm() {
             questions.push(document.getElementsByName("q" + i.toString()))
         }
         for (i = 0; i < 10; i++) {
+            // answer positive
             if (questions[i][0].checked === true || questions[i][1].checked === true) {
+                //1,5,7,10
                 if (i === 0 || i === 4 || i === 6 || i === 9) {
                     answers["A" + (i + 1).toString()] = 1;
                     answers["Qchat-10-Score"]++;

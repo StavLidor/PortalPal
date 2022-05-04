@@ -17,7 +17,8 @@ import PatientExercises from "../../components/exercises/PatientExercises";
 import AQ from "../../AQ";
 // import "./HomePage.CSS"
 import styles from "./HomePage.CSS"
-import Chats from "../../Chats";
+import Chat from "../../Chat";
+import AQ1 from "../../AQ1";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
@@ -128,10 +129,11 @@ function HomePage({userDetails, type, institute}) {
                     </Row>
                 </Col>
                 <Col md='7' className="border border-secondary rounded">
-                    <Chats/>
-                <Routes>
-                    <Route path={currentPerson.toString() +'/documentation'} element={<FileSystem user={userDetails.id} patient={currentPerson}/>} />
-                </Routes>
+                    {/*<Chats/>*/}
+                    <Routes>
+                        <Route path={currentPerson.toString() +'/documentation'} element={<FileSystem user={userDetails.id} patient={currentPerson}/>} />
+                    </Routes>
+
 
                     {type === 'parent' && patientListData.map((item) => {
                         let data = item.data()
@@ -150,9 +152,13 @@ function HomePage({userDetails, type, institute}) {
                                                        //                               setCurrentPage={setCurrentPage}/>}
                                                 />
                                             </Routes>
+                                                {/*<Routes>*/}
+                                                {/*    <Route path={data.id.toString() + '/' + index.toString()  +'/communication'} element={<Chat*/}
+                                                {/*        otherUser={therapist} patient={data.id}/>} />*/}
+                                                {/*</Routes>*/}
                                                 <Routes>
                                                     <Route path={data.id.toString() + '/' + index.toString() + '/*'}
-                                                           element={<AQ/>}
+                                                           element={<AQ1/>}
                                                         // element={<TabsBanner type={type}
                                                         //                               currentPerson={currentPerson}
                                                         //                               setCurrentPage={setCurrentPage}/>}

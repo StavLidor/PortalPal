@@ -90,8 +90,10 @@ export default function AQ10ChildrenForm() {
                     answers["A" + (i + 1).toString()] = 0;
                 }
                 continue;
+                // answer negative
             } else if (questions[i][2].checked === true || questions[i][3].checked === true) {
                 if (i === 0 || i === 4 || i === 6 || i === 9) {
+                    // לא מסכים=0,בהחלט לא מסכים=0
                     answers["A" + (i + 1).toString()] = 0;
                 } else {
                     answers["A" + (i + 1).toString()] = 1;

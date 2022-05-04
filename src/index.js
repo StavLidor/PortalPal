@@ -8,6 +8,7 @@ import App from './App';
 ReactDOM.render(
     <React.StrictMode>
         <App/>
+        
 
     {/*    <head>*/}
     {/*        <meta charSet="utf-8"/>*/}

@@ -17,6 +17,7 @@ import PatientExercises from "../../components/exercises/PatientExercises";
 import AQ from "../../AQ";
 // import "./HomePage.CSS"
 import styles from "./HomePage.CSS"
+import Chats from "../../Chats";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
@@ -127,6 +128,7 @@ function HomePage({userDetails, type, institute}) {
                     </Row>
                 </Col>
                 <Col md='7' className="border border-secondary rounded">
+                    <Chats/>
                 <Routes>
                     <Route path={currentPerson.toString() +'/documentation'} element={<FileSystem user={userDetails.id} patient={currentPerson}/>} />
                 </Routes>

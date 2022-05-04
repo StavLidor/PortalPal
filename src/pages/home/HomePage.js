@@ -128,7 +128,7 @@ function HomePage({userDetails, type, institute}) {
                     </Row>
                 </Col>
                 <Col md='7' className="border border-secondary rounded">
-                    {/*<Chats/>*/}
+                    <Chats/>
                 <Routes>
                     <Route path={currentPerson.toString() +'/documentation'} element={<FileSystem user={userDetails.id} patient={currentPerson}/>} />
                 </Routes>

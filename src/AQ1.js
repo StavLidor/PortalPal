@@ -1,6 +1,9 @@
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Button, Form, Row, Col, Container, ButtonGroup, Table, Grid} from 'react-bootstrap'
+// import Head from 'next/head'
 import {Dropdown} from "bootstrap";
+// import {PythonShell} from 'python-shell'
+
 
 
 function AQ1() {
@@ -15,10 +18,36 @@ function AQ1() {
         e.preventDefault()
         details['Qchat-10-Score'] =details.A1+details.A2+details.A3+details.A4+
             details.A5+details.A6+details.A7+details.A8+details.A9+details.A10
+
         console.log(details)
+
+        const finalToModel ='1,'
+        +details.A1+','+details.A2+','+details.A3+','+details.A4+','+details.A5+
+        ','+details.A6+','+details.A7+','+details.A8+','+details.A9+','+details.A10+
+        ','+details.Age_Mons+','+details['Qchat-10-Score']+','+details.Sex+','+details.Ethnicity+','+details.Jaundice+
+            ','+details['Family_mem_with_ASD']+','+details['Who completed the test']
+        // const p =
+        // let options = {
+        //     mode: 'text',
+        //     /*pythonPath: 'path/to/python',*/
+        //     pythonOptions: ['-u'], // get print results in real-time
+        //     scriptPath: 'path/to/my/scripts',
+        //     args: [finalToModel]
+        // }
+        // PythonShell.run('./AQmodel/LogisticRegressionModel.py', null, function (err) {
+        //     if (err) throw err;
+        //     console.log('finished');
+        // })
+        // console.log(finalToModel)
+
+
     }
     return (
         <div>
+            {/*<Head>*/}
+            {/*    <script src=*/}
+            {/*                {'https://cdn.jsdelivr.net/pyodide/dev/full/pyodide.js'} />*/}
+            {/*</Head>*/}
             <Form className="col justify-content-center" >
                 <Form.Group>
                     <Form.Label className="text-center" style={{fontWeight: "bold", width: "100%"}}>טופס לאבחון

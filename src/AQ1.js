@@ -1,9 +1,6 @@
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Button, Form, Row, Col, Container, ButtonGroup, Table, Grid} from 'react-bootstrap'
-// import Head from 'next/head'
 import {Dropdown} from "bootstrap";
-// import {PythonShell} from 'python-shell'
-
 
 
 function AQ1() {

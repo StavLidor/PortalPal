@@ -1,4 +1,6 @@
 # Importing libraries
+import pickle
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -34,20 +36,20 @@ from sklearn.svm import SVC
 
 
 # read the csv file
-asd_data = pd.read_csv("./input/Toddler Autism dataset July 2018.csv")
+asd_data = pd.read_csv("C:/Users/Ronli/WebstormProjects/portal_website/AQmodel/input/Toddler Autism dataset July 2018.csv")
 
 # get rid of the data we do not need
 asd_data.drop(['Case_No', 'Who completed the test'], axis=1, inplace=True)
 
 label_encoder = LabelEncoder()
-columns = ['Class/ASD Traits ', 'Family_mem_with_ASD',  'Jaundice', 'Ethnicity', 'Sex',]
+columns = ['Class_ASD Traits', 'Family_mem_with_ASD',  'Jaundice', 'Ethnicity', 'Sex',]
 for col in columns:
     asd_data[col] = label_encoder.fit_transform(asd_data[col])
 
 
-X = asd_data.drop(['Class/ASD Traits '], axis=1)
+X = asd_data.drop(['Class_ASD Traits'], axis=1)
 print("X: ", X)
-Y = asd_data['Class/ASD Traits ']
+Y = asd_data['Class_ASD Traits']
 x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.20, random_state=7)
 
 
@@ -86,7 +88,11 @@ confusion_matrix(y_test, pred)
 
 # logistic regression
 log_reg = LogisticRegression()
-log_reg.fit(x_train, y_train)
+model = log_reg.fit(x_train, y_train)
+# save the model to disk
+filename = 'finalized_model.sav'
+pickle.dump(model, open(filename, 'wb'))
+
 prediction = log_reg.predict(x_test)
 log_reg.score(x_train, y_train)
 
@@ -148,4 +154,6 @@ models.append(('Random forest       :', RandomForestClassifier()))
 for name, model in models:
     model.fit(x_train, y_train)
     pred = model.predict(x_test).astype(int)
+    # print("y_test", y_test)
+    # print("pred", pred)
     print(name, accuracy_score(y_test, pred))

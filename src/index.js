@@ -7,7 +7,12 @@ import App from './App';
 
 ReactDOM.render(
     <React.StrictMode>
+
         <App/>
+        <head>
+            <script src=
+                        {'https://cdn.jsdelivr.net/pyodide/dev/full/pyodide.js'} />
+        </head>
         
 
     {/*    <head>*/}

@@ -1,4 +1,7 @@
 # Importing libraries
+import pickle
+import sys
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -31,38 +34,53 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 # SVM
 from sklearn.svm import SVC
+import csv
 
+# # read the csv file
+# asd_data = pd.read_csv("./input/Toddler Autism dataset July 2018.csv")
+# print("asd_data", asd_data)
+# print("argv1", sys.argv[1])
 
-# read the csv file
-asd_data = pd.read_csv("./input/Toddler Autism dataset July 2018.csv")
+argument = sys.argv[1]
+# create csv from this line
+# f = open('AQ.csv', 'w')
+with open('AQ.csv', 'w', encoding='UTF8', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(
+        [
+            ['Case_No', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'Age_Mons', 'Qchat-10-Score',
+             'Sex',
+             'Ethnicity', 'Jaundice', 'Family_mem_with_ASD', 'Who completed the test'],
+            argument.split(',')]
+    )
+# writer.writerow(argument.split(','))
+asd_data = pd.read_csv('AQ.csv')
 
 # get rid of the data we do not need
 asd_data.drop(['Case_No', 'Who completed the test'], axis=1, inplace=True)
 
 label_encoder = LabelEncoder()
-columns = ['Class/ASD Traits ', 'Family_mem_with_ASD',  'Jaundice', 'Ethnicity', 'Sex',]
+columns = ['Family_mem_with_ASD', 'Jaundice', 'Ethnicity', 'Sex', ]
 for col in columns:
     asd_data[col] = label_encoder.fit_transform(asd_data[col])
 
-
-X = asd_data.drop(['Class/ASD Traits '], axis=1)
+# X = asd_data.drop(['Class_ASD Traits'], axis=1)
+X = asd_data
 print("X: ", X)
-Y = asd_data['Class/ASD Traits ']
-x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.20, random_state=7)
-
+# Y = asd_data['Class_ASD Traits']
+# x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.20, random_state=7)
+# x_test = X
 
 # logistic regression
 log_reg = LogisticRegression()
-log_reg.fit(x_train, y_train)
-prediction = log_reg.predict(x_test)
-log_reg.score(x_train, y_train)
+# log_reg.fit(x_train, y_train)
 
-classification_report(y_test, prediction)
+# load the model from disk
+loaded_model = pickle.load(open('finalized_model.sav', 'rb'))
+# result = loaded_model.score()
 
-models = []
-models.append(('Logistic Regression :', LogisticRegression()))
+prediction = loaded_model.predict(X)
+print(prediction)
+# log_reg.score(x_train, y_train)
 
-for name, model in models:
-    model.fit(x_train, y_train)
-    pred = model.predict(x_test).astype(int)
-    print(name, accuracy_score(y_test, pred))
+# classification_report(y_test, prediction)

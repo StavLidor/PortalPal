@@ -163,6 +163,10 @@ function HomePage({userDetails, type, institute}) {
                         <Route path={currentPerson.toString() + '/documentation'}
                                element={<FileSystem user={userDetails.id} patient={currentPerson}/>}/>
                     </Routes>
+                    <Routes>
+                        <Route path={currentPerson.toString() + '/AQform'}
+                               element={<AQ/>}/>
+                    </Routes>
 
 
                     {type === 'parent' && patientListData.map((item) => {

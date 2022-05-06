@@ -91,9 +91,13 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
                                 }}  className="list-group-item list-group-item-action">מסמכים</Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="link-3">מילוי טופס AQ</Nav.Link>
+                            <Link to={currentPerson + '/AQform'} onClick={()=>{
+                                setCurrentPage('AQform')
+                            }}  className="list-group-item list-group-item-action">מילוי טופס AQ</Link>
+                            {/*<Nav.Link eventKey="link-3">מילוי טופס AQ</Nav.Link>*/}
                         </Nav.Item>
                         <Nav.Item>
+
                             <Nav.Link eventKey="link-4">API</Nav.Link>
                         </Nav.Item>
                     </Nav>

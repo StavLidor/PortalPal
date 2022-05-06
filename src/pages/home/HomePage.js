@@ -109,11 +109,7 @@ function HomePage({userDetails, type, institute}) {
 
                     </Row>
                     <Row className="border border-secondary rounded" style={{minHeight: 300}}>
-                        {/*{(type==='parent') &&*/}
-                        {/*<Routes>*/}
-                        {/*    <Route path={"sessions"}*/}
-                        {/*           element={<h4>אנא בחר ילד מהרשימה</h4>}/>*/}
-                        {/*</Routes>}*/}
+
                         {(type === 'parent') &&
                         patientListData.map((item) => {
                                 let data = item.data()
@@ -132,7 +128,7 @@ function HomePage({userDetails, type, institute}) {
                         patientListData.map((item) => {
                                 let data = item.data()
                                 return (
-                                    <div>
+                                    <>
                                         <Routes>
                                             {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
                                             <Route path={data.id.toString() + '/*'}
@@ -150,7 +146,38 @@ function HomePage({userDetails, type, institute}) {
                                                                         setParentsListData={setParentsListData}
                                                                         setCurrentParent={setCurrentParent}/>}/>
                                         </Routes>
-                                    </div>)
+                                    </>)
+                            }
+                        )}
+
+
+                    </Row>
+
+                    <Row className="border border-secondary rounded" style={{minHeight: 300}}>
+                        {(type === 'therapist') &&
+                        patientListData.map((item) => {
+                                let data = item.data()
+                                return (
+                                        <Routes>
+                                            {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
+                                            <Route path={data.id.toString() + '/*'}
+                                                   element={
+                                                       <Col>
+                                                           <Row>
+                                                               <Link to='sessions' onClick={() => {
+                                                                   setCurrentPage('sessions')
+                                                               }} className="list-group-item list-group-item-action">סיכומי
+                                                                   טיפולים</Link>
+                                                           </Row>
+                                                           <Row>
+                                                               <Link to='exercises' onClick={()=>{
+                                                                   setCurrentPage('exercises')
+                                                               }}  className="list-group-item list-group-item-action">תרגילים</Link>
+                                                           </Row>
+                                                       </Col>
+                                                   }/>
+                                        </Routes>
+                                    )
                             }
                         )}
 
@@ -181,9 +208,6 @@ function HomePage({userDetails, type, institute}) {
                                                            element={<TherapistTabsBanner type={type}
                                                                                          currentPerson={currentPerson}
                                                                                          setCurrentPage={setCurrentPage}/>}
-                                                        // element={<TabsBanner type={type}
-                                                        //                               currentPerson={currentPerson}
-                                                        //                               setCurrentPage={setCurrentPage}/>}
                                                     />
                                                 </Routes>
                                                 <Routes>
@@ -191,14 +215,6 @@ function HomePage({userDetails, type, institute}) {
                                                            element={<Chat
                                                                otherUser={therapist} patient={data.id}/>}/>
                                                 </Routes>
-                                                {/*<Routes>*/}
-                                                {/*    <Route path={data.id.toString() + '/' + index.toString() + '/*'}*/}
-                                                {/*           element={<AQ1/>}*/}
-                                                {/*        // element={<TabsBanner type={type}*/}
-                                                {/*        //                               currentPerson={currentPerson}*/}
-                                                {/*        //                               setCurrentPage={setCurrentPage}/>}*/}
-                                                {/*    />*/}
-                                                {/*</Routes>*/}
                                                 <Routes>
                                                     <Route path={data.id.toString() + '/' + index.toString() + '/sessions'}
                                                         // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
@@ -233,36 +249,8 @@ function HomePage({userDetails, type, institute}) {
                                                 <Routes>
                                                     <Route path={data.id.toString() + '/parent/' + index.toString() + '/*'}
                                                            element={<Chat otherUser={parent} patient={data.id}/>}
-                                                        // element={<TabsBanner type={type}
-                                                        //                               currentPerson={currentPerson}
-                                                        //                               setCurrentPage={setCurrentPage}/>}
                                                     />
                                                 </Routes>
-                                                {/*<Routes>*/}
-                                                {/*    <Route path={data.id.toString() + '/' + index.toString()  +'/communication'} element={<Chat*/}
-                                                {/*        otherUser={parent} patient={data.id}/>} />*/}
-                                                {/*</Routes>*/}
-                                                {/*<Routes>*/}
-                                                {/*    <Route path={data.id.toString() + '/' + index.toString() + '/*'}*/}
-                                                {/*           element={<AQ1/>}*/}
-                                                {/*        // element={<TabsBanner type={type}*/}
-                                                {/*        //                               currentPerson={currentPerson}*/}
-                                                {/*        //                               setCurrentPage={setCurrentPage}/>}*/}
-                                                {/*    />*/}
-                                                {/*</Routes>*/}
-                                                {/*<Routes>*/}
-                                                {/*    <Route path={data.id.toString() + '/' + index.toString() + '/sessions'}*/}
-                                                {/*        // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)*/}
-                                                {/*           element={<SessionsList patientId={currentPerson}*/}
-                                                {/*                                  therapistId={currentTherapist.id}*/}
-                                                {/*                                  type={type}/>}/>*/}
-
-                                                {/*    <Route path={data.id.toString() + '/' + index.toString() + '/exercises'}*/}
-                                                {/*        // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)*/}
-                                                {/*           element={<PatientExercises  patient={currentPerson}*/}
-                                                {/*                                       therapist={currentTherapist.id}*/}
-                                                {/*                                       type={type}/>}/>*/}
-                                                {/*</Routes>*/}
                                             </div>
                                         )
                                     }
@@ -275,28 +263,27 @@ function HomePage({userDetails, type, institute}) {
                     {type === 'therapist' && patientListData.map((item) => {
                             let data = item.data()
                             return (
-                                <div>
-                                    <Routes>
-                                        <Route path={data.id.toString() + '/*'}
-                                               element={<TherapistTabsBanner type={type}
-                                                                             currentPerson={currentPerson}
-                                                                             setCurrentPage={setCurrentPage}/>}/>
-                                    </Routes>
-                                    <Routes>
-                                        <Route path={data.id.toString() + '/sessions'}
-                                            // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
-                                               element={<SessionsList patientId={currentPerson}
-                                                                      therapistId={userDetails.id}
-                                                                      type={type}/>}/>
+                                // <Routes>
+                                //     <Route path={data.id.toString() + '/*'}
+                                //            element={currentPage !== 'documentation' && currentPage !== 'AQform' &&
+                                //            <TherapistTabsBanner type={type}
+                                //                                 currentPerson={currentPerson}
+                                //                                 setCurrentPage={setCurrentPage}/>}/>
+                                // </Routes>
+                            <Routes>
+                                <Route path={data.id.toString() + '/sessions'}
+                                    // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
+                                       element={<SessionsList patientId={currentPerson}
+                                                              therapistId={userDetails.id}
+                                                              type={type}/>}/>
 
-                                        <Route path={data.id.toString() + '/exercises'}
-                                            // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
-                                               element={<PatientExercises patient={currentPerson}
-                                                                          therapist={userDetails.id}
-                                                                          type={type}/>}/>
-                                    </Routes>
-                                </div>
-                            )
+                                <Route path={data.id.toString() + '/exercises'}
+                                    // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
+                                       element={<PatientExercises patient={currentPerson}
+                                                                  therapist={userDetails.id}
+                                                                  type={type}/>}/>
+                            </Routes>
+                        )
                         }
                     )
                     }

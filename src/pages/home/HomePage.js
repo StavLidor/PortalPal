@@ -14,11 +14,11 @@ import SessionsList from "../../meetingSummaries/listMeetingSummries/SessionsLis
 import TherapistTabsBanner from "../../components/topbar/TherapistTabsBanner";
 import Exercises from "../../components/exercises/Exercises";
 import PatientExercises from "../../components/exercises/PatientExercises";
-import AQ from "../../AQ";
+// import AQold from "../../AQold";
 // import "./HomePage.CSS"
 import styles from "./HomePage.CSS"
 import Chat from "../../Chat";
-import AQ1 from "../../AQ1";
+import AQ from "../../AQ";
 import ParentList from "../../ParentList";
 
 function HomePage({userDetails, type, institute}) {
@@ -158,26 +158,27 @@ function HomePage({userDetails, type, institute}) {
                         patientListData.map((item) => {
                                 let data = item.data()
                                 return (
-                                        <Routes>
-                                            {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
-                                            <Route path={data.id.toString() + '/*'}
-                                                   element={
-                                                       <Col>
-                                                           <Row>
-                                                               <Link to='sessions' onClick={() => {
-                                                                   setCurrentPage('sessions')
-                                                               }} className="list-group-item list-group-item-action">סיכומי
-                                                                   טיפולים</Link>
-                                                           </Row>
-                                                           <Row>
-                                                               <Link to='exercises' onClick={()=>{
-                                                                   setCurrentPage('exercises')
-                                                               }}  className="list-group-item list-group-item-action">תרגילים</Link>
-                                                           </Row>
-                                                       </Col>
-                                                   }/>
-                                        </Routes>
-                                    )
+                                    <Routes>
+                                        {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
+                                        <Route path={data.id.toString() + '/*'}
+                                               element={
+                                                   <Col>
+                                                       <Row>
+                                                           <Link to='sessions' onClick={() => {
+                                                               setCurrentPage('sessions')
+                                                           }} className="list-group-item list-group-item-action">סיכומי
+                                                               טיפולים</Link>
+                                                       </Row>
+                                                       <Row>
+                                                           <Link to='exercises' onClick={() => {
+                                                               setCurrentPage('exercises')
+                                                           }}
+                                                                 className="list-group-item list-group-item-action">תרגילים</Link>
+                                                       </Row>
+                                                   </Col>
+                                               }/>
+                                    </Routes>
+                                )
                             }
                         )}
 
@@ -192,7 +193,15 @@ function HomePage({userDetails, type, institute}) {
                     </Routes>
                     <Routes>
                         <Route path={currentPerson.toString() + '/AQform'}
-                               element={<AQ/>}/>
+                               element={(() => {
+                                   if (currentPerson !== '') {
+                                       return <AQ/>
+                                   }
+                                   return <h2>אנא בחר מטופל כדי למלא עבורו את הטופס</h2>
+
+                               })()
+
+                               }/>
                     </Routes>
 
 
@@ -259,6 +268,26 @@ function HomePage({userDetails, type, institute}) {
                         }
                     )}
 
+                    {type === 'therapist' && patientListData.map((item) => {
+                            let data = item.data()
+                            return (
+                                therapistListData.map((therapist, index) => {
+                                        console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
+                                        return (
+                                            <div>
+                                                <Routes>
+                                                    <Route path={data.id.toString() + '/' + index.toString() + '/*'}
+                                                           element={<Chat otherUser={therapist} patient={data.id}/>}
+                                                    />
+                                                </Routes>
+                                            </div>
+                                        )
+                                    }
+                                )
+                            )
+                        }
+                    )}
+
 
                     {type === 'therapist' && patientListData.map((item) => {
                             let data = item.data()
@@ -270,20 +299,20 @@ function HomePage({userDetails, type, institute}) {
                                 //                                 currentPerson={currentPerson}
                                 //                                 setCurrentPage={setCurrentPage}/>}/>
                                 // </Routes>
-                            <Routes>
-                                <Route path={data.id.toString() + '/sessions'}
-                                    // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
-                                       element={<SessionsList patientId={currentPerson}
-                                                              therapistId={userDetails.id}
-                                                              type={type}/>}/>
-
-                                <Route path={data.id.toString() + '/exercises'}
-                                    // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
-                                       element={<PatientExercises patient={currentPerson}
-                                                                  therapist={userDetails.id}
+                                <Routes>
+                                    <Route path={data.id.toString() + '/sessions'}
+                                        // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
+                                           element={<SessionsList patientId={currentPerson}
+                                                                  therapistId={userDetails.id}
                                                                   type={type}/>}/>
-                            </Routes>
-                        )
+
+                                    <Route path={data.id.toString() + '/exercises'}
+                                        // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
+                                           element={<PatientExercises patient={currentPerson}
+                                                                      therapist={userDetails.id}
+                                                                      type={type}/>}/>
+                                </Routes>
+                            )
                         }
                     )
                     }

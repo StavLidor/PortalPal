@@ -43,8 +43,8 @@ import csv
 
 argument = sys.argv[1]
 # create csv from this line
-# f = open('AQ.csv', 'w')
-with open('AQ.csv', 'w', encoding='UTF8', newline='') as f:
+# f = open('AQold.csv', 'w')
+with open('AQold.csv', 'w', encoding='UTF8', newline='') as f:
     writer = csv.writer(f)
     writer.writerows(
         [
@@ -54,7 +54,7 @@ with open('AQ.csv', 'w', encoding='UTF8', newline='') as f:
             argument.split(',')]
     )
 # writer.writerow(argument.split(','))
-asd_data = pd.read_csv('AQ.csv')
+asd_data = pd.read_csv('AQold.csv')
 
 # get rid of the data we do not need
 asd_data.drop(['Case_No', 'Who completed the test'], axis=1, inplace=True)

@@ -92,7 +92,7 @@ function HomePage({userDetails, type, institute}) {
                 </Row>
             </Container>
             {(type === 'admin') ? (
-                    <SecretaryPage/>) :
+                    <SecretaryPage data={userDetails}/>) :
                 <div>
                     <Row className='p-4 gap-4 vh-100'>
                         <Col md='2' className="p-3 border border-secondary rounded">

@@ -6,6 +6,8 @@ import "./tableEdit.css"
 import CsvFile from "./CsvFile"
 import {updatesPatients} from "../../firebase";
 import {Button, Form, Row, Col, Container, ButtonGroup, Table, Grid, Modal} from 'react-bootstrap'
+import firebase from "firebase/compat/app";
+import AddThroughCsvFile from "./AddThroughCsvFile";
 
 
 export default function TableData({
@@ -30,9 +32,10 @@ export default function TableData({
     const [detailsNew, setDetailsNew] = useState(emptyDetails);
     const [contacts, setContacts] = useState([])
     const [addSomeone, setAddSomeone] = useState(false)
+    const [addOrRemoveBatch, setAddOrRemoveBatch] = useState(false)
     const [contactTable, setContactTable] = useState(null)
     const [show, setShow] = useState(false);
-    const closeDialog = () => setShow(false);
+    const closeDialog = () => setAddSomeone(false);
     const handleShow = () => setShow(true);
 
 
@@ -97,9 +100,14 @@ export default function TableData({
         event.preventDefault();
         const fieldName = event.target.getAttribute("name");
         const fieldValue = event.target.value
-        console.log(fieldName, fieldValue)
         const newFormData = {...editFormData}
         newFormData[fieldName] = fieldValue
+        if (event.target.type === 'date') {
+            newFormData[fieldName] = firebase.firestore.Timestamp.fromDate(new Date(fieldValue))
+        }
+        console.log(fieldName, fieldValue)
+        // const newFormData = {...editFormData}
+        // newFormData[fieldName] = fieldValue
         setEditFormData(newFormData)
         console.log(editFormData, 'e1')
     };
@@ -115,9 +123,9 @@ export default function TableData({
         const newContacts = [...contacts];
         console.log(contacts)
         const index = contacts.findIndex((contact) => contact.id === contactId)
-        console.log("IDDDDDDDDDDDDDD: " ,contacts[index])
+        console.log("IDDDDDDDDDDDDDD: ", contacts[index])
         if (await deleteObj(contacts[index]/*contactId*/)) {
-            newContacts.splice(index, 1)
+            // newContacts.splice(index, 1)
             if (contactTable && contactId === contactTable.id) {
                 setContactTable(null)
             }
@@ -162,7 +170,7 @@ export default function TableData({
                         }
                     }
 
-                    if (count == allDetails.length) {
+                    if (count === allDetails.length) {
                         // setContacts(newContacts)
                     }
                 })
@@ -208,7 +216,7 @@ export default function TableData({
                         }
                         newContacts.splice(index, 1)
                     }
-                    if (count == allDetails.length) {
+                    if (count === allDetails.length) {
                         // setContacts(newContacts)
                     }
                 })
@@ -286,7 +294,8 @@ export default function TableData({
 
     return (
         <div>
-            {toAdd && <CsvFile addNews={addNews} remove={remove}/>}
+            {/*{toAdd && <CsvFile addNews={addNews} remove={remove}/>}*/}
+            {/*{toAdd && <AddThroughCsvFile/>}*/}
 
             {/*<input type="file" name="learnCSV" accept="text/csv"/>*/}
             {contacts.length > 0 &&
@@ -297,7 +306,7 @@ export default function TableData({
                         <thead>
                         <tr>
                             {HebrewNames.map((n) => (
-                                <th className="text-center align-baseline p-1">{n}</th>
+                                <th style={{fontSize: 20}} className="text-center align-baseline p-1">{n}</th>
                             ))}
 
                         </tr>
@@ -327,6 +336,7 @@ export default function TableData({
                                                 // namesFiled={['firstName','lastName','dateOfBirth',
                                                 //     'city','street','buildingNumber']}
                                                 columnNames={Object.keys(emptyDetails)}
+                                                columnsInfo={columnsInfoView}
                                                 requiredId={requiredId}
                                                 toEdit={toEdit}
                                                 table={table}
@@ -365,8 +375,11 @@ export default function TableData({
 
             </div>
             }
-            {toAdd && <Button onClick={() => setAddSomeone(true)}>{"הוסף " + type + " חדש"}</Button>}
-            {toAdd && addSomeone && <Modal show={addSomeone} onHide={closeDialog}>
+            {<Button onClick={() => {
+                console.log("show dialog")
+                setAddSomeone(true)
+            }}>{"הוסף " + type + " חדש"}</Button>}
+            {addSomeone && <Modal show={addSomeone} onHide={()=>setAddSomeone(false)}>
                 <Modal.Header>
                     <Modal.Title>{"הוסף " + type + " חדש"}</Modal.Title>
                 </Modal.Header>
@@ -377,31 +390,34 @@ export default function TableData({
                                 {requiredId &&
                                 <div className="form-group">
                                     <Form.Label htmlFor="id">תעודות זהות:</Form.Label>
-                                    <Form.Control type="number" name="id" id="id"
-                                           onChange={e => setDetailsNew({...detailsNew, id: e.target.value})}
-                                           value={detailsNew.id}/>
+                                    <Form.Control type="text" name="id" id="id"
+                                                  onChange={e => setDetailsNew({...detailsNew, id: e.target.value})}
+                                                  value={detailsNew.id}/>
                                 </div>
                                 }
                                 {columnsInfoView.map((i) => (
                                     i.add &&
                                     <div className="form-group">
                                         {'options' in i &&
-                                        <Form.Label>{i.label}</Form.Label>
-                                        // <label>:{i.label}
-                                        //     <select type="text" name="type" id="type"
-                                        //             onChange={e => setDetailsNew({...detailsNew, [i.name]: e.target.value})}
-                                        //             value={detailsNew[i.name]}>
-                                        //         {
-                                        //             i.options.map((op) => (
-                                        //                 <option value={op}>{op}</option>
-                                        //             ))
-                                        //
-                                        //
-                                        //         }
-                                        //
-                                        //     </select>
+                                        <Form.Label>{i.label}
+                                            <Form.Select type="text" name="type" id="type"
+                                                         onChange={e => setDetailsNew({
+                                                             ...detailsNew,
+                                                             [i.name]: e.target.value
+                                                         })}
+                                                         value={detailsNew[i.name]}>
+                                                {
+                                                    i.options.map((op) => (
+                                                        // <option value={op}>{op}</option>
+                                                        <option style={{fontSize: 18}} value={op}>{op}</option>
 
-                                        // </label>
+                                                    ))
+
+
+                                                }
+                                            </Form.Select>
+                                        </Form.Label>
+                                            // </label>
 
                                         }
                                         {!('options' in i) &&
@@ -450,7 +466,7 @@ export default function TableData({
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={()=>setAddSomeone(false)}>
+                    <Button variant="secondary" onClick={() => setAddSomeone(false)}>
                         בטל
                     </Button>
                     <Button variant="primary" onClick={() => {
@@ -463,6 +479,14 @@ export default function TableData({
                     </Button>
                 </Modal.Footer>
             </Modal>}
+            <tr>
+                <br/>
+                {<Button onClick={() => {
+                    console.log("show dialog")
+                    setAddOrRemoveBatch(true)
+                }}>{"הוסף או חסר מקבץ"}</Button>}
+            </tr>
+            {addOrRemoveBatch && <AddThroughCsvFile addBatch={addOrRemoveBatch} setAddBatch={setAddOrRemoveBatch} add={addNews} remove={remove}/>}
             {/*{toAdd && addSomeone &&*/}
             {/*<form onSubmit={submitAdd}>*/}
             {/*    <h2>*/}

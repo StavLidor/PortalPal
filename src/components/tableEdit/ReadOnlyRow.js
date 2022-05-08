@@ -1,27 +1,48 @@
 import React, {Fragment} from "react";
 import {Accordion} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import {convertToNormalDate} from "../../useFunction";
 
-const ReadOnlyRow = ({ contact, handleEditClick, handleDeleteClick,columnNames,requeredId,toEdit,table,handleOpen,handleClose }) => {
-    console.log('ReadOnlyRow',contact.id)
-    console.log('ReadOnlyRow',columnNames)
+const ReadOnlyRow = ({
+                         contact,
+                         handleEditClick,
+                         handleDeleteClick,
+                         columnNames,
+                         requiredId,
+                         toEdit,
+                         table,
+                         handleOpen,
+                         handleClose,
+                         columnsInfo
+                     }) => {
+    console.log('ReadOnlyRow', contact.id)
+    console.log('ReadOnlyRow', columnNames)
     // columnNames.map((name) => (
     //
     //     console.log(contact[name])
     // ))
-  return (
-    <tr>
-        {/*{requeredId && <td>{contact.id}</td>}*/}
+    return (
+        <tr>
+            {requiredId && <td className="text-center">{contact.id}</td>}
 
-        {
-            columnNames.map((columnName) => (
-                <td className="text-center">
-                {contact[columnName]}
-                </td>
+            {
+                columnsInfo.map((colInfo) => (
+                    <>
+                        {colInfo.view && <td className="text-center">
+                            {(() => {
+                                    if (colInfo.type !== 'date')
+                                        return contact[colInfo.name]
+                                    return convertToNormalDate(contact[colInfo.name])
+                                }
+                            )()
 
-            ))
-        }
-        {table !== undefined &&
+                            }
+                        </td>}
+                    </>
+
+                ))
+            }
+            {table !== undefined &&
             <td>
                 <Accordion defaultActiveKey="0">
                     <Accordion.Item eventKey="1">
@@ -54,24 +75,25 @@ const ReadOnlyRow = ({ contact, handleEditClick, handleDeleteClick,columnNames,r
                 {/*}*/}
 
             </td>
-        }
+            }
 
-      <td>
-          {toEdit &&
-              <Button variant="outline-primary" style={{fontWeight: "bold"}}
-                  type="button"
-                  onClick={(event) => handleEditClick(event, contact)}
-              >
-                 ערוך
-              </Button>
-          }
+            <td>
+                {toEdit &&
+                <Button variant="outline-primary" style={{fontWeight: "bold"}}
+                        type="button"
+                        onClick={(event) => handleEditClick(event, contact)}
+                >
+                    ערוך
+                </Button>
+                }
 
-        <Button variant="outline-primary"  style={{fontWeight: "bold"}} type="button" onClick={() => handleDeleteClick(contact.id)}>
-          מחק
-        </Button>
-      </td>
-    </tr>
-  );
+                <Button variant="outline-primary" style={{fontWeight: "bold"}} type="button"
+                        onClick={() => handleDeleteClick(contact.id)}>
+                    מחק
+                </Button>
+            </td>
+        </tr>
+    );
 };
 
 export default ReadOnlyRow;

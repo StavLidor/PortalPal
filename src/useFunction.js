@@ -1,18 +1,20 @@
 import DDPClient from 'ddp-client'
 import hash, {sha256} from 'hash.js'
+import {newChat} from "react-chat-engine";
 // import {sha256} from 'crypto-hash'
 // import hashcode from 'hashcode'
 export function makePassword(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
+    for (var i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() *
             charactersLength));
     }
     return result;
 }
- let ddpClient = new DDPClient({
+
+let ddpClient = new DDPClient({
     host: 'localhost',
     port: '3000',
     // url: <your websocket url>
@@ -24,6 +26,23 @@ ddpClient.sha256 = (password) => {
     };
 }
 
+export const convertToNormalDate = (newSessionData) => {
+    console.log(newSessionData,'NEWW'
+    )
+    let year = new Date(newSessionData.seconds * 1000).getFullYear()
+    let month = new Date(newSessionData.seconds * 1000).getMonth() + 1
+    let day = new Date(newSessionData.seconds * 1000).getDate()
 
+    let dateString = year.toString() + '-'
+    if (month < 10) {
+        dateString += '0'
+    }
+    dateString += month.toString() + '-'
+    if (day < 10) {
+        dateString += '0'
+    }
+    dateString += day.toString()
+    return dateString
+}
 
-export default {makePassword}
+export default {makePassword,convertToNormalDate}

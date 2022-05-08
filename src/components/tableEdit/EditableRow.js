@@ -1,7 +1,8 @@
 import React from "react";
 import DatePicker from "react-datepicker";
 import TableData from "./TableData";
-import {Button,Accordion, Form, Row, Col, Container, ButtonGroup, Table, Grid} from 'react-bootstrap'
+import {Button, Accordion, Form, Row, Col, Container, ButtonGroup, Table, Grid} from 'react-bootstrap'
+import {convertToNormalDate} from '../../useFunction'
 
 const EditableRow = ({
                          contact,
@@ -19,14 +20,21 @@ const EditableRow = ({
 
             {
                 columnsInfo.map((column) => (
-                        <td>
+                    <>
+                        {column.view && <td>
                             {column.edit === true && column.type !== 'tableEdit' && !('options' in column) &&
                             <Form.Control
+
                                 type={column.type}
                                 required={column.required}
                                 placeholder={column.placeholder}
                                 name={column.name}
-                                value={editFormData[column.name]}
+                                value={(() => {
+                                    if (column.type === 'date') {
+                                        return convertToNormalDate(editFormData[column.name])
+                                    }
+                                    return editFormData[column.name]
+                                })()}
                                 onChange={handleEditFormChange}
                             ></Form.Control>
 
@@ -34,22 +42,35 @@ const EditableRow = ({
 
 
                             {column.edit === true && column.type !== 'tableEdit' && 'options' in column &&
-                            <select type={column.type} name={column.name} id={column.name}
-                                    onChange={handleEditFormChange}
-                                    value={editFormData[column.name]}>
+
+                            <Form.Select type={column.type} name={column.name} id={column.name} style={{width: 100}}
+                                         onChange={handleEditFormChange}
+                                         value={editFormData[column.name]}>
                                 {
                                     column.options.map((op) => (
-                                        <option value={op}>{op}</option>
+                                        // <option value={op}>{op}</option>
+                                        <option style={{fontSize: 18}} value={op}>{op}</option>
+
                                     ))
+
                                 }
-                            </select>
+                            </Form.Select>
+                                // <select type={column.type} name={column.name} id={column.name}
+                                //         onChange={handleEditFormChange}
+                                //         value={editFormData[column.name]}>
+                                //     {
+                                //         column.options.map((op) => (
+                                //             <option value={op}>{op}</option>
+                                //         ))
+                                //     }
+                                // </select>
                             }
                             {column.edit === true && column.type === 'tableEdit' &&
                             <TableData data={editFormData[column.name]}
                             />}
                             {column.edit === false && contact[column.name]}
-                        </td>
-
+                        </td>}
+                    </>
 
 
                 ))
@@ -61,7 +82,7 @@ const EditableRow = ({
                         <Accordion.Header>המטופלים שלי</Accordion.Header>
                         <Accordion.Body>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                            tempor incididunt ut ladebore et dolore magna aliqua. Ut enim ad minim
                             veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
                             commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
                             velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
@@ -86,12 +107,13 @@ const EditableRow = ({
             }
             <td>
                 <Button variant="outline-primary" style={{fontWeight: "bold"}} type="submit">שמור</Button>
-                <Button variant="outline-primary" style={{fontWeight: "bold"}} type="button" onClick={handleCancelClick}>
+                <Button variant="outline-primary" style={{fontWeight: "bold"}} type="button"
+                        onClick={handleCancelClick}>
                     בטל
                 </Button>
             </td>
         </tr>
-    );
-};
+    )
+}
 
 export default EditableRow;

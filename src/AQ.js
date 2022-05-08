@@ -4,11 +4,12 @@ import {Dropdown} from "bootstrap";
 
 
 function AQ() {
-    var options = [];
+    const [modelResult, setModelResult] = useState(null);
+    const options = [];
     const [details, setDetails] = useState({['Who completed the test']:'family member',
     ['Family_mem_with_ASD']:'yes',Jaundice:'yes',Ethnicity:'middle eastern',Sex:'m',['Qchat-10-Score']:0,Age_Mons:4*12,
         A10:0, A9:0, A8:0, A7:0,A6:0,A5:0,A4:0,A3:0,A2:0,A1:0})
-    for (var op = 4; op <= 11; op++) {
+    for (let op = 4; op <= 11; op++) {
         options.push(<option style={{fontSize: 18}} id={op} value={op}>{op}</option>);
     }
     const submitHandler = async e => {
@@ -23,28 +24,26 @@ function AQ() {
         ','+details.A6+','+details.A7+','+details.A8+','+details.A9+','+details.A10+
         ','+details.Age_Mons+','+details['Qchat-10-Score']+','+details.Sex+','+details.Ethnicity+','+details.Jaundice+
             ','+details['Family_mem_with_ASD']+','+details['Who completed the test']
-        // const p =
-        // let options = {
-        //     mode: 'text',
-        //     /*pythonPath: 'path/to/python',*/
-        //     pythonOptions: ['-u'], // get print results in real-time
-        //     scriptPath: 'path/to/my/scripts',
-        //     args: [finalToModel]
-        // }
-        // PythonShell.run('./AQmodel/LogisticRegressionModel.py', null, function (err) {
-        //     if (err) throw err;
-        //     console.log('finished');
-        // })
-        // console.log(finalToModel)
 
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 'data': finalToModel})
+        };
+        fetch('https://lironhaim.pythonanywhere.com/predict', requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                if(data['prediction'][0] === 0){
+                    setModelResult('שלילית')
+                }
+                else if(data['prediction'][0] === 1){
+                    setModelResult('חיובית')
+                }
+            });
 
     }
     return (
         <div>
-            {/*<Head>*/}
-            {/*    <script src=*/}
-            {/*                {'https://cdn.jsdelivr.net/pyodide/dev/full/pyodide.js'} />*/}
-            {/*</Head>*/}
             <Form className="col justify-content-center" >
                 <Form.Group>
                     <Form.Label className="text-center" style={{fontWeight: "bold", width: "100%"}}>טופס לאבחון
@@ -349,13 +348,11 @@ function AQ() {
                 <Button className=" rounded-3" style={{width: "10%"}} size="md" variant="outline-primary"
                         onClick={submitHandler}>אישור</Button>
             </Row>
-            {/*<Form>*/}
-            {/*    <Form.Group>*/}
+
             <Row className="justify-content-center text-center">
-                <Form.Text>התוצאה:</Form.Text>
+                <Form.Text>התוצאה: {modelResult}</Form.Text>
             </Row>
-            {/*    </Form.Group>*/}
-            {/*</Form>*/}
+
         </div>
     )
 }

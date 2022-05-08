@@ -22,7 +22,6 @@ def predict():
     result = {
         'prediction': predictions.tolist()
     }
-    print('toko')
     # print(result['prediction'][0])
     return jsonify(result)
 

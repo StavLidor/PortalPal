@@ -6,7 +6,7 @@ import {signOut} from "firebase/auth";
 import {auth, detailsPatient, detailsWorks, getDocCurrentUser, resetPassword, updatesCurrentUser} from "../../firebase"
 import approve from "../../crawler/Crawler"
 import {Route, Routes} from "react-router-dom";
-import TableEdit from "../tableEdit/TableEdit";
+import TableData from "../tableEdit/TableData";
 import AQ10ChildrenForm from "../../AQ10ChildrenForm";
 
 

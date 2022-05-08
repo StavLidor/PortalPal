@@ -21,7 +21,7 @@ import {
     detailsPatient,
     updateDocUser, addConnectionPatientToTherapist, removeConnectionPatientToTherapist, detailsWorks, db
 } from "../../firebase";
-import TableEdit from "../../components/tableEdit/TableEdit";
+import TableData from "../../components/tableEdit/TableData";
 import Patient from "../patient/Patient";
 import {collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import firebase from "firebase/compat/app";
@@ -315,14 +315,14 @@ export default function Secretary({data}){
 
                             </ul>
                             <Routes>
-                            <Route path={"/students"} element={<TableEdit add ={addPatient} update ={updatesPatients} deleteObj={deleteObjPatient}
-                            emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:"זכר"}} emptyEditDetails={{firstName: "",
+                            <Route path={"/students"} element={<TableData add ={addPatient} update ={updatesPatients} deleteObj={deleteObjPatient}
+                                                                          emptyDetails={{id:"",firstName:"",lastName:"",dateOfBirth:new Date(),city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:"זכר"}} emptyEditDetails={{firstName: "",
                             lastName: "",
                             dateOfBirth:new Date()
                             ,city:"",street:"",buildingNumber:"",gender:"זכר"}} data={students} HebrewNames={[
                             "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב","שם פרטי הורה","שם משפחה הורה","אימייל",'מין'/*"מטפלים בית ספריים"*/]
-                        } inputsView={inputsViewPatient}  requeredId={true}
-                            toEdit={true} toAdd={true}/>}/>
+                        } inputsView={inputsViewPatient} requeredId={true}
+                                                                          toEdit={true} toAdd={true}/>}/>
 
                             </Routes>
                             </div>
@@ -340,7 +340,7 @@ export default function Secretary({data}){
                                 </Link>
                             </ul>
                             <Routes>
-                            <Route path={"/works"} element={<TableEdit add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist
+                            <Route path={"/works"} element={<TableData add ={addTherapist} update ={updateTherapist} deleteObj={deleteObjTherapist
                                 }
                             //     email: string
                             // firstName: string
@@ -351,15 +351,15 @@ export default function Secretary({data}){
                             // institute: string (admin only)
                             // institutes: {1: ...patients.  external:...patients.} (therapist only)
                             // childrenIds: [] (parent only)
-                            emptyDetails={{firstName:"",lastName:"",jobs:[],email:"",/*table:[{id:"",firstName:"",lastName:""}]*/}}
-                            emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={employees} HebrewNames={[
+                                                                       emptyDetails={{firstName:"",lastName:"",jobs:[],email:"",/*table:[{id:"",firstName:"",lastName:""}]*/}}
+                                                                       emptyEditDetails={{firstName:"",lastName:"",jobs:[]}} data={employees} HebrewNames={[
                             "שם פרטי","שם משפחה","עבודות","אימייל","מטופלים בית ספריים"]
-                        } inputsView={inputsViewTherapist}  requeredId={false}
-                            find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",connection:"",lastName:"",firstName:""/**/}} toEdit={true} toAdd={true} getTable={getTable}
+                        } inputsView={inputsViewTherapist} requeredId={false}
+                                                                       find={findTherapist} HebrewNamesTable={HebrewNamesTableT} emptyDetailsTable={{id:"",connection:"",lastName:"",firstName:""/**/}} toEdit={true} toAdd={true} getTable={getTable}
                                                                        table={studentsTable}
-                            inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
+                                                                       inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
                                 /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/
-                            deleteObjTable={deleteConnectionToTherapist}
+                                                                       deleteObjTable={deleteConnectionToTherapist}
 
                             />}/>
 

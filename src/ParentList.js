@@ -4,7 +4,7 @@ import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link, Route, Routes} from "react-router-dom";
 import {getDate} from "date-fns";
 import {collection, getDocs, onSnapshot, query, where} from "firebase/firestore";
-import {db} from "./firebase";
+import {auth, db} from "./firebase";
 import firebase from "firebase/compat/app";
 import styles from "./pages/home/HomePage.CSS"
 
@@ -35,15 +35,17 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                     unsubscribe).then((querySnapshot) => {
 
                     let data = []
-                    querySnapshot.forEach((doc) => (
+                    querySnapshot.forEach((doc) => {
                         // console.log(doc)
-                        data.push({
-                            id: doc.id,...doc.data()
-                            // firstName: doc.data().firstName, lastName: doc.data().lastName,
-                            /*institute: dict[doc.id].institute,*/
-                        })
+                        if (doc.id !== auth.currentUser.uid) {
+                            data.push({
+                                id: doc.id, ...doc.data()
+                                // firstName: doc.data().firstName, lastName: doc.data().lastName,
+                                /*institute: dict[doc.id].institute,*/
+                            })
+                        }
                         // console.log()
-                    ))
+                    })
                     setParents(data)
                     setParentsListData(data)
                     console.log("my data: ", data)

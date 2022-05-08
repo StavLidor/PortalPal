@@ -20,7 +20,7 @@ import {signUser} from "./pepole/users/user";
 import Authenticate from "./components/login/Authenticate";
 import HomePage from "./pages/home/HomePage";
 import {signOut} from "firebase/auth";
-import AQ from "./AQ";
+import AQold from "./AQold";
 
 function App() {
     const [isSigneIn, setIsSigneIn] = useState(false);
@@ -87,7 +87,7 @@ function App() {
         <Router>
             <div className="App">
                 {isSigneIn === false && checkUserConnection && <Authenticate login={login}/>}
-                {/*{isSigneIn === false && checkUserConnection && <AQ/>}*/}
+                {/*{isSigneIn === false && checkUserConnection && <AQold/>}*/}
                 {/*{isSigneIn === false && checkUserConnection && <AQ10ChildrenForm/>}*/}
                 {(checkUserConnection===false ||(isSigneIn && hasDetails===false) ) && <div>loading</div>}
                 {displayLoginError && isSigneIn === false && checkUserConnection && <h4>אחד מפרטי ההתחברות לא נכון :(</h4>}

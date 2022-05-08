@@ -4,7 +4,7 @@ import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link, Route, Routes} from "react-router-dom";
 import {getDate} from "date-fns";
 import {collection, getDocs, onSnapshot, query, where} from "firebase/firestore";
-import {db} from "./firebase";
+import {auth, db} from "./firebase";
 import firebase from "firebase/compat/app";
 import styles from "./pages/home/HomePage.CSS"
 
@@ -23,9 +23,11 @@ function TherapistsList({details, setCurrentTherapist, currentPage, setTherapist
             const therapistIds = []
 
             d.forEach((doc) => {
-                // console.log('therapistLIstt',doc.data())
-                therapistIds.push(doc.id)
-                dict[doc.id] = {institute: doc.data().institute, connection: doc.data().connection}
+                if (doc.id !== auth.currentUser.uid) {
+                    // console.log('therapistLIstt',doc.data())
+                    therapistIds.push(doc.id)
+                    dict[doc.id] = {institute: doc.data().institute, connection: doc.data().connection}
+                }
             });
             if (therapistIds.length > 0) {
                 const unsubscribe = query(collection(db, "users"),

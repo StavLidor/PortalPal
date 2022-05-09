@@ -119,6 +119,8 @@ function SecretaryPage({data}) {
                         //     data.push(doc.data())
                     })
                     setStudents(data)
+                     const index = studentsTable.findIndex((s) => s.id === doc.id)
+                    studentsTable[index]=doc.data()
                     console.log('Students1112', data)
                 },
                 (error) => {
@@ -384,63 +386,73 @@ function SecretaryPage({data}) {
 
     }
     const HebrewNamesTableT = [
-        "תעודת זהות של תלמיד", "קשר", "שם משפחה של תלמיד", "שם של תלמיד"
+        "תעודת זהות של תלמיד", "שם משפחה של תלמיד", "שם של תלמיד"
     ]
 
     async function getTable(details) {
+
         if (details === null) {
             setStudentsTable([])
             return
         }
 
         setIdGetTable(details.id)
+        let arrStudents=[]
         console.log('CCCCCCCCCC', details.institutes[data.institute])
-        const unsubscribe = query(collection(db, "patients"),
-            where(firebase.firestore.FieldPath.documentId(), 'in', details.institutes[data.institute]))
-        // setStudents(d.data().students)
-        // setEmployees(d.data().employees)
-        onSnapshot(
-            unsubscribe,
-            (querySnapshot) => {
-                let data = []
-                querySnapshot.forEach((doc) => (
-                    data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
-                ))
-                setStudentsTable(data)
-                console.log(data)
-            },
-            (error) => {
-                // TODO: Handle errors!
-                console.log('error!!', error)
-            })
-        const dataStudents = await detailsPatient(details.institutes[data.institute])
-        console.log('AAAAA', dataStudents)
-        return dataStudents
+        details.institutes[data.institute].map((id)=>{
+            const index = students.findIndex((s) => s.id === id)
+            if(index!=-1)
+                arrStudents.push(students[index])
+
+        })
+        console.log('arrStudents',arrStudents)
+        setStudentsTable(arrStudents)
+        // const unsubscribe = query(collection(db, "patients"),
+        //     where(firebase.firestore.FieldPath.documentId(), 'in', details.institutes[data.institute]))
+        // // setStudents(d.data().students)
+        // // setEmployees(d.data().employees)
+        // onSnapshot(
+        //     unsubscribe,
+        //     (querySnapshot) => {
+        //         let data = []
+        //         querySnapshot.forEach((doc) => (
+        //             data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
+        //         ))
+        //         setStudentsTable(data)
+        //         console.log(data)
+        //     },
+        //     (error) => {
+        //         // TODO: Handle errors!
+        //         console.log('error!!', error)
+        //     })
+        // const dataStudents = await detailsPatient(details.institutes[data.institute])
+        // console.log('AAAAA', dataStudents)
+        // return dataStudents
         //data.works.institutes
 
     }
 
     const inputsViewPOfT = [
-        {
-            type: "text", required: "required",
-            placeholder: "Enter a connection between therapist and patients..."
-            , name: "connection", label: "קשר:",
-            edit: true,
-            add: true
-            /*,value:editFormData.firstName,*/
-        },
+        // {
+        //     type: "text", required: "required",
+        //     placeholder: "Enter a connection between therapist and patients..."
+        //     , name: "connection", label: "קשר:",
+        //     edit: true,
+        //     add: true
+        //     /*,value:editFormData.firstName,*/
+        // },
         {
             type: "text", required: "required",
             placeholder: "Enter a first name..."
             , name: "firstName", label: "שם פרטי:",
-            edit: false,
+            edit: false,view: true,
             add: false
             /*,value:editFormData.firstName,*/
         }, {
             type: "text", required: "required",
             placeholder: "Enter a last name..."
             , name: "lastName", label: "שם משפחה:", edit: false,
-            add: false
+            add: false,view: true
             /*,value:editFormData.lastName,*/
         }
     ]
@@ -477,12 +489,12 @@ function SecretaryPage({data}) {
                                                find={findTherapist} HebrewNamesTable={HebrewNamesTableT}
                                                emptyDetailsTable={{
                                                    id: "",
-                                                   connection: "",
+                                                   /*connection: "",*/
                                                    lastName: "",
                                                    firstName: ""/**/
                                                }} getTable={getTable}
                                                table={studentsTable}
-                                               inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
+                                               columnsInfoViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
                                /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/
                                                deleteObjTable={deleteConnectionToTherapist}
 

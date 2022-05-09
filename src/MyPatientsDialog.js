@@ -2,25 +2,28 @@ import {Button, ButtonGroup, Col, Form, Modal, Row} from "react-bootstrap";
 import React, {useState} from "react";
 import TableData from "./components/tableEdit/TableData";
 
-export function MyPatientsDialog({showMyPatients,setShowMyPatients,add,deleteObj,emptyDetails,emptyEditDetails,table,HebrewNames,columnsInfoView,requiredId}){
+export function MyPatientsDialog({userName,getTable,showMyPatients,setShowMyPatients,add,deleteObj,emptyDetails,emptyEditDetails,data,HebrewNames,columnsInfoView,requiredId}){
     // const [showMyPatients, setShowMyPatients] = useState()
+
     return(
         <div>
-            <Modal show={showMyPatients} onHide={() => setShowMyPatients(false)}>
+            <Modal show={showMyPatients} onHide={() => {setShowMyPatients(false)
+                getTable(null)
+            }}>
                 <Modal.Header>
-                    <Modal.Title>{"המטופלים של"}</Modal.Title>
+                    <Modal.Title>{"המטופלים של"+" "+userName}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h3>kadnflskndflsf</h3>
-                    <TableData type="תלמיד"
+                    <TableData type="eee"
                                add={add} deleteObj={deleteObj}
                                emptyDetails={emptyDetails} emptyEditDetails={emptyEditDetails}
-                               data={table/*contactTable[tableName]*/}
+                               data={data/*contactTable[tableName]*/}
                                HebrewNames={HebrewNames} columnsInfoView={columnsInfoView} requiredId={true}
                         />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={()=>setShowMyPatients(false)}>
+                    <Button variant="secondary" onClick={()=>{setShowMyPatients(false)
+                        getTable(null)}}>
                         סגור
                     </Button>
                     {/*<Button variant="primary" onClick={() => {*/}

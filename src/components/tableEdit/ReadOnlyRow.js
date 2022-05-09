@@ -10,21 +10,20 @@ const ReadOnlyRow = ({
                          deleteObjTable,
                          emptyDetailsTable,
                          emptyEditDetailsTable,
-                         HebrewNamesTable,
+                         HebrewNames,
                          columnsInfoViewTable,
                          contact,
                          handleEditClick,
                          handleDeleteClick,
-                         columnNames,
                          requiredId,
                          toEdit,
                          table,
                          handleOpen,
                          handleClose,
-                         columnsInfo
+                         columnsInfo,getTable,
                      }) => {
         console.log('ReadOnlyRow', contact.id)
-        console.log('ReadOnlyRow', columnNames)
+        // console.log('ReadOnlyRow', columnNames)
         // columnNames.map((name) => (
         //
         //     console.log(contact[name])
@@ -32,19 +31,19 @@ const ReadOnlyRow = ({
 
         const [showMyPatients, setShowMyPatients] = useState(false)
 
-        const handleShowMyPatients = () => {
-            console.log("in dialoggggggggggggggg")
-            return (
-                <div>
-                    <MyPatientsDialog
-                        showMyPatients={showMyPatients} setShowPatients={setShowMyPatients}
-                        add={addTable} deleteObj={deleteObjTable}
-                        emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}
-                        data={table/*contactTable[tableName]*/}
-                        HebrewNames={HebrewNamesTable} columnsInfoView={columnsInfoViewTable} requiredId={true}
-                    />
-                </div>)
-        }
+        // const handleShowMyPatients = () => {
+        //     console.log("in dialoggggggggggggggg")
+        //     return (
+        //         <div>
+        //             <MyPatientsDialog
+        //                 showMyPatients={showMyPatients} setShowPatients={setShowMyPatients}
+        //                 add={addTable} deleteObj={deleteObjTable}
+        //                 emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}
+        //                 data={table/*contactTable[tableName]*/}
+        //                 HebrewNames={HebrewNames} columnsInfoView={columnsInfoViewTable} requiredId={true}
+        //             />
+        //         </div>)
+        // }
 
 
         return (
@@ -105,9 +104,10 @@ const ReadOnlyRow = ({
 
                 <td>
                     {/*{table !== undefined &&*/}
-                    {
+                    {table !== undefined&&
                         <Button variant="outline-primary" style={{fontWeight: "bold"}} type="button"
                                 onClick={() => {
+                                    getTable(contact)
                                     setShowMyPatients(true)
                                     // handleShowMyPatients()
                                 }}
@@ -116,11 +116,13 @@ const ReadOnlyRow = ({
                         </Button>
                     }
                     {showMyPatients &&  <MyPatientsDialog
+                        userName={contact.firstName+" "+contact.lastName}
                         showMyPatients={showMyPatients} setShowMyPatients={setShowMyPatients}
                         add={addTable} deleteObj={deleteObjTable}
                         emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}
                         data={table/*contactTable[tableName]*/}
-                        HebrewNames={HebrewNamesTable} columnsInfoView={columnsInfoViewTable} requiredId={true}
+                        HebrewNames={HebrewNames} columnsInfoView={columnsInfoViewTable} requiredId={true}
+                        getTable={getTable}
                     />}
                     {/*{toEdit &&*/}
                     {

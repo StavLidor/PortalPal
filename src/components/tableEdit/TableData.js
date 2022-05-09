@@ -50,10 +50,12 @@ export default function TableData({
         // }()
     )
     useEffect(() => {
-        console.log("DATAAAAA:", data)
+        if(type === 'eee')
+            console.log("DATAAAAA:", data)
         const p1 = Promise.resolve(data)
         p1.then(arr => {
             setContacts(arr)
+            // console.log(arr)
         })
 
 
@@ -332,39 +334,40 @@ export default function TableData({
                                             <ReadOnlyRow
                                                 add={addTable} deleteObj={deleteObjTable}
                                                 emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}
-                                                data={table/*contactTable[tableName]*/}
-                                                HebrewNames={HebrewNamesTable} columnsInfoView={columnsInfoViewTable}
+                                                /*data={table/*contactTable[tableName]}*/
+                                                HebrewNames={HebrewNamesTable} columnsInfoViewTable={columnsInfoViewTable}
                                                 contact={contact}
                                                 handleEditClick={handleEditClick}
                                                 handleDeleteClick={handleDeleteClick}
                                                 // namesFiled={['firstName','lastName','dateOfBirth',
                                                 //     'city','street','buildingNumber']}
-                                                columnNames={Object.keys(emptyDetails)}
+                                                /*columnNames={Object.keys(emptyDetails)}*/
                                                 columnsInfo={columnsInfoView}
                                                 requiredId={requiredId}
                                                 // toEdit={toEdit}
                                                 table={table}
+                                                getTable={getTable}
 
-                                                handleOpen={
-                                                    function () {
-                                                        if (table !== undefined && contactTable == null) {
-                                                            return handleOpen
-                                                        }
-                                                        return null
-                                                    }
-                                                    ()
-
-                                                }
-                                                handleClose={
-                                                    function () {
-                                                        if (table !== undefined && contactTable == null || table !== undefined &&
-                                                            contact.id == contactTable.id) {
-                                                            return handleClose
-                                                        }
-                                                        return null
-                                                    }
-                                                    ()
-                                                }
+                                                // handleOpen={
+                                                //     function () {
+                                                //         if (table !== undefined && contactTable == null) {
+                                                //             return handleOpen
+                                                //         }
+                                                //         return null
+                                                //     }
+                                                //     ()
+                                                //
+                                                // }
+                                                // handleClose={
+                                                //     function () {
+                                                //         if (table !== undefined && contactTable == null || table !== undefined &&
+                                                //             contact.id == contactTable.id) {
+                                                //             return handleClose
+                                                //         }
+                                                //         return null
+                                                //     }
+                                                //     ()
+                                                // }
                                             />
 
                                         ) :

@@ -75,36 +75,36 @@ const EditableRow = ({
 
                 ))
             }
-            {table !== undefined &&
-            <td>
-                <Accordion defaultActiveKey="0">
-                    <Accordion.Item eventKey="0">
-                        <Accordion.Header>המטופלים שלי</Accordion.Header>
-                        <Accordion.Body>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut ladebore et dolore magna aliqua. Ut enim ad minim
-                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                            est laborum.
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
-                {/*<button*/}
-                {/*    type="button"*/}
-                {/*    onClick={(event) => handleOpen(event, contact)}*/}
-                {/*>*/}
-                {/*    v*/}
-                {/*</button>*/}
-                {/*<button*/}
-                {/*    type="button"*/}
-                {/*    onClick={(event) => handleClose(event, contact)}*/}
-                {/*>*/}
-                {/*    ^*/}
-                {/*</button>*/}
-            </td>
-            }
+            {/*{table !== undefined &&*/}
+            {/*<td>*/}
+            {/*    <Accordion defaultActiveKey="0">*/}
+            {/*        <Accordion.Item eventKey="0">*/}
+            {/*            <Accordion.Header>המטופלים שלי</Accordion.Header>*/}
+            {/*            <Accordion.Body>*/}
+            {/*                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod*/}
+            {/*                tempor incididunt ut ladebore et dolore magna aliqua. Ut enim ad minim*/}
+            {/*                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea*/}
+            {/*                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate*/}
+            {/*                velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat*/}
+            {/*                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id*/}
+            {/*                est laborum.*/}
+            {/*            </Accordion.Body>*/}
+            {/*        </Accordion.Item>*/}
+            {/*    </Accordion>*/}
+            {/*    <button*/}
+            {/*        type="button"*/}
+            {/*        onClick={(event) => handleOpen(event, contact)}*/}
+            {/*    >*/}
+            {/*        v*/}
+            {/*    </button>*/}
+            {/*    <button*/}
+            {/*        type="button"*/}
+            {/*        onClick={(event) => handleClose(event, contact)}*/}
+            {/*    >*/}
+            {/*        ^*/}
+            {/*    </button>*/}
+            {/*</td>*/}
+            {/*}*/}
             <td>
                 <Button variant="outline-primary" style={{fontWeight: "bold"}} type="submit">שמור</Button>
                 <Button variant="outline-primary" style={{fontWeight: "bold"}} type="button"

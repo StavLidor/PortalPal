@@ -74,7 +74,7 @@ export function AddThroughCsvFile({addBatch,setAddBatch, add, remove}) {
         <div>
             <Modal show={addBatch} onHide={() => setAddBatch(false)}>
                 <Modal.Header>
-                    <Modal.Title>{"הוסף או הורד מקבץ"}</Modal.Title>
+                    <Modal.Title>{"הוסף או הסר מקבץ"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
@@ -83,7 +83,7 @@ export function AddThroughCsvFile({addBatch,setAddBatch, add, remove}) {
                                 <ButtonGroup className="gap-3"><Form.Text style={{fontSize: 18}}>הוסף</Form.Text>
                                     <Form.Check style={{fontSize: 18}} type="radio" name='addOrRemove'
                                                 onChange={() => setType("add")}
-                                    /><Form.Text style={{fontSize: 18}}>הורד</Form.Text>
+                                    /><Form.Text style={{fontSize: 18}}>הסר</Form.Text>
                                     <Form.Check style={{fontSize: 18}} type="radio" name='addOrRemove'
                                                 onChange={() => setType("remove")}
                                     />

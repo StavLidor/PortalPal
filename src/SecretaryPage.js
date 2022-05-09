@@ -472,7 +472,7 @@ function SecretaryPage({data}) {
                                                }}
                                                emptyEditDetails={{firstName: "", lastName: "", jobs: []}}
                                                data={employees} HebrewNames={[
-                               "שם פרטי", "שם משפחה", "עבודות", "אימייל", "מטופלים בית ספריים"]
+                               "שם פרטי", "שם משפחה", "עבודות", "אימייל"]
                            } columnsInfoView={columnsViewTherapist} requiredId={false}
                                                find={findTherapist} HebrewNamesTable={HebrewNamesTableT}
                                                emptyDetailsTable={{
@@ -480,7 +480,7 @@ function SecretaryPage({data}) {
                                                    connection: "",
                                                    lastName: "",
                                                    firstName: ""/**/
-                                               }} toEdit={true} toAdd={true} getTable={getTable}
+                                               }} getTable={getTable}
                                                table={studentsTable}
                                                inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
                                /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/
@@ -513,7 +513,7 @@ function SecretaryPage({data}) {
                            }} data={students} HebrewNames={[
                                "תעודת זהות", "שם פרטי", "שם משפחה", "תאריך לידה", "מגדר" ,"עיר", "רחוב", "מספר רחוב"]
                            } columnsInfoView={columnsViewPatient} requiredId={true}
-                                               toEdit={true} toAdd={true}/>}/>
+                                             />}/>
                 </Routes>
 
             </Row>

@@ -24,7 +24,7 @@ export default function TableData({
                                       emptyDetailsTable,
                                       emptyEditDetailsTable
                                       , HebrewNamesTable,
-                                      columnsInfoViewTable, toEdit, toAdd
+                                      columnsInfoViewTable
                                       , table, getTable/*addDetails,addDetailsTable*/
                                   }) {
 
@@ -41,13 +41,13 @@ export default function TableData({
 
     // const [detailsTherapist,setDetailsTherapist]=useState({firstName:"",lastName:"",email:"",jobs:"",institutes:[data.institutionNumber]})
     const [editContactId, setEditContactId] = useState(null);
-    const [editFormData, setEditFormData] = useState(
-        function () {
-            if (toEdit) {
-                return emptyEditDetails
-            }
-            return null
-        }()
+    const [editFormData, setEditFormData] = useState(emptyEditDetails
+        // function () {
+        //     if (toEdit) {
+        //         return emptyEditDetails
+        //     }
+        //     return null
+        // }()
     )
     useEffect(() => {
         console.log("DATAAAAA:", data)
@@ -316,7 +316,7 @@ export default function TableData({
                         {
                             contacts.map((contact) => (
                                 <Fragment>
-                                    {contact !== undefined && toEdit && editContactId === contact.id ? (
+                                    {contact !== undefined  && editContactId === contact.id ? (
                                         <EditableRow
                                             contact={contact}
                                             editFormData={editFormData}
@@ -330,6 +330,10 @@ export default function TableData({
                                     ) : (contact !== undefined) ? (
 
                                             <ReadOnlyRow
+                                                add={addTable} deleteObj={deleteObjTable}
+                                                emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}
+                                                data={table/*contactTable[tableName]*/}
+                                                HebrewNames={HebrewNamesTable} columnsInfoView={columnsInfoViewTable}
                                                 contact={contact}
                                                 handleEditClick={handleEditClick}
                                                 handleDeleteClick={handleDeleteClick}
@@ -338,7 +342,7 @@ export default function TableData({
                                                 columnNames={Object.keys(emptyDetails)}
                                                 columnsInfo={columnsInfoView}
                                                 requiredId={requiredId}
-                                                toEdit={toEdit}
+                                                // toEdit={toEdit}
                                                 table={table}
 
                                                 handleOpen={
@@ -484,7 +488,7 @@ export default function TableData({
                 {<Button onClick={() => {
                     console.log("show dialog")
                     setAddOrRemoveBatch(true)
-                }}>{"הוסף או חסר מקבץ"}</Button>}
+                }}>{"הוסף או הסר מקבץ"}</Button>}
             </tr>
             {addOrRemoveBatch && <AddThroughCsvFile addBatch={addOrRemoveBatch} setAddBatch={setAddOrRemoveBatch} add={addNews} remove={remove}/>}
             {/*{toAdd && addSomeone &&*/}
@@ -546,24 +550,24 @@ export default function TableData({
             {/*</form>*/}
 
             {/*}*/}
-            <Fragment>
-                {contactTable &&
-                <div>
+            {/*<Fragment>*/}
+            {/*    {contactTable &&*/}
+            {/*    <div>*/}
 
 
-                    <div>{contactTable.id}</div>
-                    <TableData type="תלמיד"
-                               add={addTable} deleteObj={deleteObjTable}
-                               emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}
-                               data={table/*contactTable[tableName]*/}
-                               HebrewNames={HebrewNamesTable} columnsInfoView={columnsInfoViewTable} requiredId={true}
-                               toEdit={false} toAdd={true}
-                        /*addDetails={addDetailsTable}*//>
-                </div>
+            {/*        <div>{contactTable.id}</div>*/}
+            {/*        <TableData type="תלמיד"*/}
+            {/*                   add={addTable} deleteObj={deleteObjTable}*/}
+            {/*                   emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}*/}
+            {/*                   data={table/*contactTable[tableName]*!/*/}
+            {/*                   HebrewNames={HebrewNamesTable} columnsInfoView={columnsInfoViewTable} requiredId={true}*/}
+            {/*                   toEdit={false} toAdd={true}*/}
+            {/*            />*/}
+            {/*    </div>*/}
 
 
-                }
-            </Fragment>
+            {/*    }*/}
+            {/*</Fragment>*/}
 
 
         </div>

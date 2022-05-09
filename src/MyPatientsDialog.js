@@ -14,7 +14,7 @@ export function MyPatientsDialog({update,userName,getTable,showMyPatients,setSho
                     <Modal.Title>{"המטופלים של"+" "+userName}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <TableData type="eee"
+                    <TableData type="תלמיד"
                                add={add} deleteObj={deleteObj}
                                emptyDetails={emptyDetails} emptyEditDetails={emptyEditDetails}
                                data={data/*contactTable[tableName]*/}

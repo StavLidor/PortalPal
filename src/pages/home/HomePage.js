@@ -22,6 +22,7 @@ import AQ from "../../AQ";
 import ParentList from "../../ParentList";
 import Secretary from "../secretary/Secretary";
 import SecretaryPage from "../../SecretaryPage";
+import MyProfile from "../../MyProfile";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
@@ -65,6 +66,10 @@ function HomePage({userDetails, type, institute}) {
         }
     }, [currentPage])
 
+    const handleMyProfile = () => {
+
+    }
+
     return (
 
         <div><h3>{currentTherapist.id}</h3>
@@ -74,7 +79,10 @@ function HomePage({userDetails, type, institute}) {
                     <Col md='3' className="w-auto border border-secondary rounded">
                         <ButtonGroup className="gap-4 p-2">
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
-                            <Button className="rounded-3" variant="outline-primary">החשבון שלי</Button>
+                            <Link to="/myProfile">
+                                <Button className="rounded-3" variant="outline-primary" onClick={handleMyProfile}>החשבון
+                                שלי</Button>
+                            </Link>
                             <Button href={'/'} className="rounded-3" variant="outline-primary"
                                     onClick={onLogout}>התנתק</Button>
                         </ButtonGroup>
@@ -207,6 +215,13 @@ function HomePage({userDetails, type, institute}) {
 
                                        })()
 
+                                       }/>
+                            </Routes>
+                            <Routes>
+                                <Route path={'/myProfile'}
+                                       element={(() => {
+                                           return <MyProfile userDetails={userDetails}/>
+                                       })()
                                        }/>
                             </Routes>
 

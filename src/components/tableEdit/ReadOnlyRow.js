@@ -6,7 +6,7 @@ import TableData from "./TableData";
 import MyPatientsDialog from "../../MyPatientsDialog";
 
 const ReadOnlyRow = ({
-                         addTable,
+                         addTable,updateTable,
                          deleteObjTable,
                          emptyDetailsTable,
                          emptyEditDetailsTable,
@@ -122,7 +122,7 @@ const ReadOnlyRow = ({
                         emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}
                         data={table/*contactTable[tableName]*/}
                         HebrewNames={HebrewNames} columnsInfoView={columnsInfoViewTable} requiredId={true}
-                        getTable={getTable}
+                        getTable={getTable} update={updateTable}
                     />}
                     {/*{toEdit &&*/}
                     {

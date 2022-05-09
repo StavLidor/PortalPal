@@ -12,7 +12,7 @@ import {
 import {Link, Route, Routes} from "react-router-dom";
 import PatientDetails from "./components/sidebar/PatientDetails";
 import TableData from "./components/tableEdit/TableData";
-import {collection, doc, getDoc, onSnapshot, query, where} from "firebase/firestore";
+import {collection, doc, getDoc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
 import firebase from "firebase/compat/app";
 import {newPatients} from "./pepole/users/user";
 import se from "react-datepicker";
@@ -25,12 +25,36 @@ function SecretaryPage({data}) {
     const [students, setStudents] = useState([])
     const [employees, setEmployees] = useState([])
     const [studentsTable, setStudentsTable] = useState([])
-    const [idGetTable, setIdGetTable] = useState([])
+    const [userGetTable, setUserGetTable] = useState([])
     const [idEmployees, setIdEmployees] = useState([])
     const [idStudents, setIdStudents] = useState([])
     const [listenerEmployees, setListenerEmployees] = useState(null)
     const [listenerStudents, setListenerStudents] = useState(null)
+    const [listenersTableStudents, setListenersTableStudents] = useState([])
+    const [studentTable, setStudentTable] = useState(null)
+    useEffect(() => {
+        if(studentTable!==null){
+            const index = studentsTable.findIndex((s) => s.id === studentTable.id)
+            console.log('indexSS',index,studentsTable,studentTable)
+            if(index === -1){
+                if(studentTable.active){
+                    setStudentsTable( [...studentsTable,studentTable])
+                }
+            }
+            else{
+                const arr=[...studentsTable]
+                if(!studentTable.active){
+                    arr.splice(index, 1)
+                }
+                else{
+                    arr[index]=studentTable
+                }
+                console.log("deletei from table",arr)
+                setStudentsTable(arr)
+            }
 
+        }
+    },[studentTable])
     useEffect(() => {
         if (listenerEmployees !== null) {
             console.log("קקי")
@@ -119,8 +143,8 @@ function SecretaryPage({data}) {
                         //     data.push(doc.data())
                     })
                     setStudents(data)
-                     const index = studentsTable.findIndex((s) => s.id === doc.id)
-                    studentsTable[index]=doc.data()
+                    //  const index = studentsTable.findIndex((s) => s.id === doc.id)
+                    // studentsTable[index]=doc.data()
                     console.log('Students1112', data)
                 },
                 (error) => {
@@ -386,27 +410,46 @@ function SecretaryPage({data}) {
 
     }
     const HebrewNamesTableT = [
-        "תעודת זהות של תלמיד", "שם משפחה של תלמיד", "שם של תלמיד"
+        "תעודת זהות של תלמיד","שם משפחה של תלמיד","שם של תלמיד","קשר"
     ]
 
     async function getTable(details) {
 
         if (details === null) {
             setStudentsTable([])
+            setUserGetTable(null)
+            listenersTableStudents.map((l)=>{
+                l()
+
+            })
+            setListenersTableStudents([])
             return
         }
 
-        setIdGetTable(details.id)
-        let arrStudents=[]
+        setUserGetTable(details)
+        let arrSnapshot=[]
         console.log('CCCCCCCCCC', details.institutes[data.institute])
         details.institutes[data.institute].map((id)=>{
+
             const index = students.findIndex((s) => s.id === id)
-            if(index!=-1)
-                arrStudents.push(students[index])
+            if(index!=-1){
+
+                let docRef = doc(db, "patients/" + id + "/therapists",details.id)
+                let resultSnap=onSnapshot(docRef, (d) => {
+                    console.log(d.data().connection)
+                    setStudentTable({...students[index],connection:d.data().connection,active:
+                        d.data().active})
+                    // setStudentsTable([...studentsTable,{...students[index],connection:d.data().connection}])
+                    // arrStudents.push(students[index])
+                })
+                arrSnapshot.push(() => resultSnap)
+            }
+
 
         })
-        console.log('arrStudents',arrStudents)
-        setStudentsTable(arrStudents)
+        setListenersTableStudents(arrSnapshot)
+        // console.log('arrStudents',arrStudents)
+        // setStudentsTable(arrStudents)
         // const unsubscribe = query(collection(db, "patients"),
         //     where(firebase.firestore.FieldPath.documentId(), 'in', details.institutes[data.institute]))
         // // setStudents(d.data().students)
@@ -433,14 +476,7 @@ function SecretaryPage({data}) {
     }
 
     const inputsViewPOfT = [
-        // {
-        //     type: "text", required: "required",
-        //     placeholder: "Enter a connection between therapist and patients..."
-        //     , name: "connection", label: "קשר:",
-        //     edit: true,
-        //     add: true
-        //     /*,value:editFormData.firstName,*/
-        // },
+
         {
             type: "text", required: "required",
             placeholder: "Enter a first name..."
@@ -454,16 +490,62 @@ function SecretaryPage({data}) {
             , name: "lastName", label: "שם משפחה:", edit: false,
             add: false,view: true
             /*,value:editFormData.lastName,*/
-        }
+        },
+        {
+            type: "text", required: "required",
+            placeholder: "Enter a connection between therapist and patients..."
+            , name: "connection", label: "קשר:",
+            edit: true,
+            add: true,view: true
+            /*,value:editFormData.firstName,*/
+        },
     ]
     const addConnectionToTherapist = async (details) => {
-        console.log("EEEEEEEEEEEEEE", idGetTable)
+        console.log("EEEEEEEEEEEEEE", userGetTable)
+        const index = students.findIndex((s) => s.id === details.id)
+        if(details.id in userGetTable.institutes[data.institute]|| index == -1){
+            return false
+        }
+
         // TODO: add csv and to inputs of this connections part.
-        return await addConnectionPatientToTherapist(idGetTable, details.id, data.institute, details.connection)
+        if(await addConnectionPatientToTherapist(userGetTable.id, details.id, data.institute, details.connection)) {
+            let docRef = doc(db, "patients/" + details.id + "/therapists",userGetTable.id)
+            const resultSnap=onSnapshot(docRef, (d) => {
+                console.log(d.data().connection)
+                setStudentTable({...students[index],connection:d.data().connection,active:
+                    d.data().active})
+                // setStudentsTable([...studentsTable,{...students[index],connection:d.data().connection}])
+                // arrStudents.push(students[index])
+            })
+            setListenersTableStudents([...listenersTableStudents,() => resultSnap])
+            return true
+        }
+
     }
     const deleteConnectionToTherapist = async (contact/*id*/) => {
         // console.log("EEEEEEEEEEEEEE",idGetTable)
-        return await removeConnectionPatientToTherapist(idGetTable, contact.id, data.institute)
+        if(await removeConnectionPatientToTherapist(userGetTable.id, contact.id, data.institute)) {
+            //TODO: if need to remove the snapshot?
+            return true
+        }
+        return false
+
+    }
+    const updateConnectionToTherapist = async (id, data) => {
+        // console.log("EEEEEEEEEEEEEE",idGetTable)
+        const collection_query_patients = collection(db, "patients")
+        try {
+            await updateDoc(doc(collection_query_patients, id, "therapists",userGetTable.id
+            )/*collection(db, '/patients/001/therapists','Rahbt7jhvugjFSsnrcnBb5VMfUb2')*/, {
+                connection:data.connection
+            })
+            return true
+        }
+        catch (e){
+            console.log(e)
+            return false
+        }
+
 
     }
 
@@ -489,14 +571,15 @@ function SecretaryPage({data}) {
                                                find={findTherapist} HebrewNamesTable={HebrewNamesTableT}
                                                emptyDetailsTable={{
                                                    id: "",
-                                                   /*connection: "",*/
                                                    lastName: "",
                                                    firstName: ""/**/
+                                                   ,connection: "",
                                                }} getTable={getTable}
                                                table={studentsTable}
                                                columnsInfoViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
                                /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/
                                                deleteObjTable={deleteConnectionToTherapist}
+                                               updateTable={updateConnectionToTherapist}
 
                            />}/>
                 </Routes>

@@ -848,11 +848,11 @@ export const deleteTherapistFromInstitute = async (institute,details) => {
             where('id','in',details.institutes[institute])
         )
         const querySnapshot = await getDocs(unsubscribe)
-        querySnapshot.forEach((doc) => (
+        querySnapshot.forEach((doci) => (
             // console.log(doc)
 
             //doc.id
-            updateDoc(doc(db, "patients/"+doc.id+"/therapists",details.id), {active:false})
+            updateDoc(doc(db, "patients/"+doci.id+"/therapists",details.id), {active:false})
 
         ))
     }

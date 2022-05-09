@@ -2,7 +2,7 @@ import {Button, ButtonGroup, Col, Form, Modal, Row} from "react-bootstrap";
 import React, {useState} from "react";
 import TableData from "./components/tableEdit/TableData";
 
-export function MyPatientsDialog({userName,getTable,showMyPatients,setShowMyPatients,add,deleteObj,emptyDetails,emptyEditDetails,data,HebrewNames,columnsInfoView,requiredId}){
+export function MyPatientsDialog({update,userName,getTable,showMyPatients,setShowMyPatients,add,deleteObj,emptyDetails,emptyEditDetails,data,HebrewNames,columnsInfoView,requiredId}){
     // const [showMyPatients, setShowMyPatients] = useState()
 
     return(
@@ -19,6 +19,7 @@ export function MyPatientsDialog({userName,getTable,showMyPatients,setShowMyPati
                                emptyDetails={emptyDetails} emptyEditDetails={emptyEditDetails}
                                data={data/*contactTable[tableName]*/}
                                HebrewNames={HebrewNames} columnsInfoView={columnsInfoView} requiredId={true}
+                               update={update}
                         />
                 </Modal.Body>
                 <Modal.Footer>

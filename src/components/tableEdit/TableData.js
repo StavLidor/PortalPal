@@ -141,9 +141,9 @@ export default function TableData({
         console.log('editedContact', editFormData)
 
         if (await update(editContactId, editedContact)) {
-            const newContacts = [...contacts];
-            const index = contacts.findIndex((contact) => contact.id === editContactId);
-            newContacts[index] = editedContact
+            // const newContacts = [...contacts];
+            // const index = contacts.findIndex((contact) => contact.id === editContactId);
+            // newContacts[index] = editedContact
             // setContacts(newContacts)
             setEditContactId(null)
         }
@@ -332,8 +332,10 @@ export default function TableData({
                                     ) : (contact !== undefined) ? (
 
                                             <ReadOnlyRow
-                                                add={addTable} deleteObj={deleteObjTable}
-                                                emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}
+                                                updateTable={updateTable}
+                                                addTable={addTable} /*deleteObj={deleteObj}*/
+                                                deleteObjTable={deleteObjTable}
+                                                emptyDetailsTable={emptyDetailsTable} emptyEditDetailsTable={emptyEditDetailsTable}
                                                 /*data={table/*contactTable[tableName]}*/
                                                 HebrewNames={HebrewNamesTable} columnsInfoViewTable={columnsInfoViewTable}
                                                 contact={contact}

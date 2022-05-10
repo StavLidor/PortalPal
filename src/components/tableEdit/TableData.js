@@ -131,7 +131,9 @@ export default function TableData({
         allDetails.map(async (details) => {
 
                 // const newContacts = [...contacts]
-                const promiseId = await add(details)
+                const promiseId = await add(details,((messages)=>{
+
+                }))
                 const p = Promise.resolve(promiseId)
                 let modifyContacts = ((flag) => {
                     count++

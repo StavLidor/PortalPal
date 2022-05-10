@@ -129,7 +129,7 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                     <Button variant="secondary" onClick={() => setAddBatch(false)}>
                         בטל
                     </Button>
-                    <Button variant="primary" onClick={() => {
+                    <Button variant="success" onClick={() => {
                         if (type === "" || file === null) {
                             if (type === "") {
                                 setShowMsg(true)
@@ -146,25 +146,10 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                             submit()
                             setAddBatch(false)
                         }
-                        // setSubmitted(true)
-                        // if (type === "") {
-                        //     setShowMsg(true)
-                        // } else {
-                        //     setShowMsg(false)
-                        // }
-                        // if ((type === "") || (file === null)) {
-                        //     setShowMsg(true)
-                        // } else {
-                        //     console.log("file: ", file)
-                        //     submit()
-                        //     setAddBatch(false)
-                        // }
                     }
-
                     }>
                         עדכן
                     </Button>
-
                 </Modal.Footer>
             </Modal>
         </div>

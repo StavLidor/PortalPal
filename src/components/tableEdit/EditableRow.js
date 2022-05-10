@@ -107,8 +107,8 @@ const EditableRow = ({
             {/*</td>*/}
             {/*}*/}
             <td>
-                <Button className="m-1" variant="outline-primary" style={{fontWeight: "bold"}} type="submit"><Check/></Button>
-                <Button className="m-1" variant="outline-primary" style={{fontWeight: "bold"}} type="button"
+                <Button className="m-1" variant="outline-success" style={{fontWeight: "bold"}} type="submit"><Check/></Button>
+                <Button className="m-1" variant="outline-danger" style={{fontWeight: "bold"}} type="button"
                         onClick={handleCancelClick}>
                     <X/>
                 </Button>

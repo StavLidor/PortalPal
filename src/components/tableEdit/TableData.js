@@ -412,7 +412,7 @@ export default function TableData({
                         setMessages(emptyDetails)}}>
                         בטל
                     </Button>
-                    <Button variant="primary" onClick={() => {
+                    <Button variant="success" onClick={() => {
                         // setAddSomeone(false)
                         submitAddDialog()
                     }}>

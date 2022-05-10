@@ -107,10 +107,10 @@ const EditableRow = ({
             {/*</td>*/}
             {/*}*/}
             <td>
-                <Button className="m-1" variant="outline-success" style={{fontWeight: "bold"}} type="submit"><Check/></Button>
-                <Button className="m-1" variant="outline-danger" style={{fontWeight: "bold"}} type="button"
+                <Button  className="p-1 m-1" variant="outline-success" style={{fontWeight: "bold"}} type="submit"><Check style={{fontSize:16}}/></Button>
+                <Button  className="p-1 m-1" variant="outline-danger" style={{fontWeight: "bold"}} type="button"
                         onClick={handleCancelClick}>
-                    <X/>
+                    <X style={{fontSize:16}}/>
                 </Button>
             </td>
         </tr>

@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from "react";
-import {Accordion} from "react-bootstrap";
+import {Accordion, ButtonGroup, Col, Form, Modal, Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {convertToNormalDate} from "../../useFunction";
 import TableData from "./TableData";
@@ -29,6 +29,7 @@ const ReadOnlyRow = ({
         // ))
 
         const [showMyPatients, setShowMyPatients] = useState(false)
+        const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
         // const handleShowMyPatients = () => {
         //     console.log("in dialoggggggggggggggg")
@@ -127,18 +128,34 @@ const ReadOnlyRow = ({
                     />}
                     {/*{toEdit &&*/}
                     {
-                        <Button className="m-1" variant="outline-primary" style={{fontWeight: "bold"}}
+                        <Button className="p-1 m-1" variant="outline-primary" style={{fontWeight: "bold"}}
                                 type="button"
                                 onClick={(event) => handleEditClick(event, contact)}
                         >
-                            <Pencil style={{fontSize: 20}}/>
+                            <Pencil style={{fontSize:16}}/>
                         </Button>
                     }
 
-                    <Button className="m-1" variant="outline-danger" style={{fontWeight: "bold"}} type="button"
-                            onClick={() => handleDeleteClick(contact.id)}>
-                        <Trash  style={{fontSize: 20}}/>
+                    <Button className="p-1 m-1" variant="outline-danger" style={{fontWeight: "bold"}} type="button"
+                            // onClick={() => handleDeleteClick(contact.id)}>
+                            onClick={() => setShowDeleteDialog(true)}>
+                        <Trash style={{fontSize: 16}}/>
                     </Button>
+                    {showDeleteDialog && <Modal show={showDeleteDialog} onHide={() => setShowDeleteDialog(false)}>
+                        <Modal.Header>
+                            <Modal.Title>האם אתה בטוח שברצונך למחוק רשומה זאת?</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={() => setShowDeleteDialog(false)}>
+                                בטל
+                            </Button>
+                            <Button variant="danger" onClick={
+                                () => handleDeleteClick(contact.id)
+                            }>
+                                כן, מחק
+                            </Button>
+                        </Modal.Footer>
+                    </Modal> }
                 </td>
             </tr>
         );

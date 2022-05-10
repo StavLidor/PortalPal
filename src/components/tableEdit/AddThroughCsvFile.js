@@ -78,7 +78,7 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                     <Form>
                         <Col>
                             <Row>
-                                <ButtonGroup className="gap-3"><Form.Text style={{fontSize: 18}}>הוסף</Form.Text>
+                                <ButtonGroup className="gap-3 m-3"><Form.Text style={{fontSize: 18}}>הוסף</Form.Text>
                                     <Form.Check style={{fontSize: 18}} type="radio" name='addOrRemove'
                                                 onChange={() => setType("add")}
                                     /><Form.Text style={{fontSize: 18}}>הסר</Form.Text>
@@ -91,37 +91,26 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                                     }
                                 </ButtonGroup>
                             </Row>
-                            <Row>
-                                <input type="file" name="learnCSV" accept="text/csv" onChange={e => {
+                            {/*<Row>*/}
+
+                            {/*    <input type="file" name="learnCSV" accept="text/csv" onChange={e => {*/}
+                            {/*        setFile(e.target.files[0])*/}
+                            {/*        console.log('change')*/}
+                            {/*    }}/>*/}
+
+                            {/*    {submitted && file === null &&*/}
+                            {/*    <Form.Text className="text-center" style={{fontSize: 10, color: "red"}}>אנא בחר*/}
+                            {/*        קובץ</Form.Text>}*/}
+                            {/*</Row>*/}
+                            <Row className="input-group mb-3">
+                                <input name="learnCSV" accept="text/csv" onChange={e => {
                                     setFile(e.target.files[0])
                                     console.log('change')
-                                }}/>
-                                {submitted && file === null &&
+                                }} type="file" className="form-control m-3" id="inputGroupFile02"/>
+                                {submitted && (file === null || file === undefined) &&
                                 <Form.Text className="text-center" style={{fontSize: 10, color: "red"}}>אנא בחר
                                     קובץ</Form.Text>}
                             </Row>
-                            {/*<Row>*/}
-                            {/*    <Form.Group controlId="summary">*/}
-                            {/*        <Form.Label>סיכום מפגש</Form.Label>*/}
-                            {/*        <Form.Control*/}
-                            {/*            type="text"*/}
-                            {/*            onChange={e => setNewSession({...newSession, summary: e.target.value})}*/}
-
-                            {/*        />*/}
-                            {/*    </Form.Group>*/}
-                            {/*</Row>*/}
-                            {/*<Row>*/}
-                            {/*    <Form.Group controlId="title">*/}
-                            {/*        <Form.Label>כותרת</Form.Label>*/}
-                            {/*        <Form.Control*/}
-                            {/*            type="text"*/}
-                            {/*            onChange={e => setNewSession({...newSession, title: e.target.value})}*/}
-
-                            {/*        />*/}
-                            {/*    </Form.Group>*/}
-                            {/*</Row>*/}
-
-
                         </Col>
                     </Form>
                 </Modal.Body>
@@ -130,17 +119,24 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                         בטל
                     </Button>
                     <Button variant="success" onClick={() => {
-                        if (type === "" || file === null) {
+                        if (file === undefined) {
+                            console.log("hereeeeeeee: ", file)
+                        }
+
+                        if (type === "" || file === null || file === undefined) {
+                            console.log("jslnfskdnfsknfsnf: " , file)
                             if (type === "") {
                                 setShowMsg(true)
                             } else {
                                 setShowMsg(false)
                             }
-                            if (file === null) {
+                            if (file === null || file===undefined) {
+                                console.log("changing")
                                 setSubmitted(true)
                             } else {
                                 setSubmitted(false)
                             }
+
                         } else {
                             console.log("file: ", file)
                             submit()

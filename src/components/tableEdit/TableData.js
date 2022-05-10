@@ -308,7 +308,6 @@ export default function TableData({
                         </tbody>
                     </Table>
                 </form>
-
             </div>
             }
             {<Button className="m-2 p-2" style={{fontWeight: "bold"}} variant="outline-primary" onClick={() => {
@@ -317,7 +316,7 @@ export default function TableData({
             }}><Plus style={{fontSize: 20}}/> {"הוסף " + type + " חדש"}</Button>}
             {addSomeone && <Modal show={addSomeone} onHide={()=>setAddSomeone(false)}>
                 <Modal.Header>
-                    <Modal.Title>{"הוסף " + type + " חדש"}</Modal.Title>
+                    <Modal.Title style={{fontWeight:"bold", fontSize:35}}>{"הוספת " + type + " חדש"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form className="needs-validation" noValidate>
@@ -325,7 +324,7 @@ export default function TableData({
                             <Row>
                                 {requiredId &&
                                     (optionIds!== undefined)?(
-                                    <Form.Label>{"תעודות זהות:"}
+                                    <Form.Label style={{fontSize:20}}>תעודת זהות:
                                             <Form.Select  type="text" name="type" id="type"
                                                     onChange={e => setDetailsNew({
                                                     ...detailsNew,
@@ -338,19 +337,16 @@ export default function TableData({
                                                     <option style={{fontSize: 18}} value={op.id}>{op.id+" "+op.information}</option>
 
                                                     ))
-
-
                                                 }
                                             </Form.Select>
                                     </Form.Label>
                                     ):
                                     <div className="form-group">
-                                    <Form.Label  for="validationDefault01" htmlFor="id">תעודות זהות:</Form.Label>
+                                    <Form.Label style={{fontSize:20}} for="validationDefault01" htmlFor="id">תעודת זהות:</Form.Label>
                                     <Form.Control id='validationDefault01' required type="text" name="id"
                                     onChange={e => setDetailsNew({...detailsNew, id: e.target.value})}
                                     value={detailsNew.id}/>
                                         </div>
-
                                 }
                                 <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
                                     {messages.id}
@@ -359,7 +355,7 @@ export default function TableData({
                                     i.add &&
                                     <div className="form-group">
                                         {'options' in i &&
-                                        <Form.Label>{i.label}
+                                        <Form.Label style={{fontSize:20}}>{i.label}
                                             <Form.Select  type="text" name="type" id="type"
                                                          onChange={e => setDetailsNew({
                                                              ...detailsNew,
@@ -372,17 +368,14 @@ export default function TableData({
                                                         <option style={{fontSize: 18}} value={op}>{op}</option>
 
                                                     ))
-
-
                                                 }
                                             </Form.Select>
                                         </Form.Label>
                                             // </label>
-
                                         }
                                         {!('options' in i) &&
                                         <div>
-                                            <Form.Label for="validationDefault01" htmlFor="name">{i.label}</Form.Label>
+                                            <Form.Label style={{fontSize:20}} for="validationDefault01" htmlFor="name">{i.label}</Form.Label>
                                             <Form.Control id='validationDefault01' required
                                                 autoFocus
                                                 type={i.type}

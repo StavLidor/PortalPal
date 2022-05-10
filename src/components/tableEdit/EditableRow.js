@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import TableData from "./TableData";
 import {Button, Accordion, Form, Row, Col, Container, ButtonGroup, Table, Grid} from 'react-bootstrap'
 import {convertToNormalDate} from '../../useFunction'
+import { Check, X} from 'react-bootstrap-icons';
 
 const EditableRow = ({
                          contact,
@@ -15,7 +16,7 @@ const EditableRow = ({
                      }) => {
     return (
         <tr>
-            {requiredId && <td>{contact.id}</td>}
+            {requiredId && <td style={{fontSize: 20}} className="text-center">{contact.id}</td>}
 
 
             {
@@ -106,10 +107,10 @@ const EditableRow = ({
             {/*</td>*/}
             {/*}*/}
             <td>
-                <Button variant="outline-primary" style={{fontWeight: "bold"}} type="submit">שמור</Button>
-                <Button variant="outline-primary" style={{fontWeight: "bold"}} type="button"
+                <Button className="m-1" variant="outline-primary" style={{fontWeight: "bold"}} type="submit"><Check/></Button>
+                <Button className="m-1" variant="outline-primary" style={{fontWeight: "bold"}} type="button"
                         onClick={handleCancelClick}>
-                    בטל
+                    <X/>
                 </Button>
             </td>
         </tr>

@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import {convertToNormalDate} from "../../useFunction";
 import TableData from "./TableData";
 import MyPatientsDialog from "../../MyPatientsDialog";
+import { Pencil,Plus,Trash} from 'react-bootstrap-icons';
 
 const ReadOnlyRow = ({
                          addTable,updateTable,
@@ -48,12 +49,12 @@ const ReadOnlyRow = ({
 
         return (
             <tr>
-                {requiredId && <td className="text-center">{contact.id}</td>}
+                {requiredId && <td style={{fontSize: 20}} className="text-center">{contact.id}</td>}
 
                 {
                     columnsInfo.map((colInfo) => (
                         <>
-                            {colInfo.view && <td className="text-center">
+                            {colInfo.view && <td style={{fontSize: 20}} className="text-center">
                                 {(() => {
                                         if (colInfo.type !== 'date')
                                             return contact[colInfo.name]
@@ -126,17 +127,17 @@ const ReadOnlyRow = ({
                     />}
                     {/*{toEdit &&*/}
                     {
-                        <Button variant="outline-primary" style={{fontWeight: "bold"}}
+                        <Button className="m-1" variant="outline-primary" style={{fontWeight: "bold"}}
                                 type="button"
                                 onClick={(event) => handleEditClick(event, contact)}
                         >
-                            ערוך
+                            <Pencil style={{fontSize: 20}}/>
                         </Button>
                     }
 
-                    <Button variant="outline-primary" style={{fontWeight: "bold"}} type="button"
+                    <Button className="m-1" variant="outline-danger" style={{fontWeight: "bold"}} type="button"
                             onClick={() => handleDeleteClick(contact.id)}>
-                        מחק
+                        <Trash  style={{fontSize: 20}}/>
                     </Button>
                 </td>
             </tr>

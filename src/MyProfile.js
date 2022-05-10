@@ -5,7 +5,7 @@ import TableData from "./components/tableEdit/TableData";
 import {auth, authAdd, updatesCurrentUser} from "./firebase";
 import {signInWithEmailAndPassword} from "firebase/auth";
 // import { IconName } from "react-icons/bs";
-import {ArrowRight, Pencil,} from 'react-bootstrap-icons';
+import {ArrowRight, Pencil,Person} from 'react-bootstrap-icons';
 
 export function MyProfile({userDetails}) {
     const [showChangeEmailDialog, setShowChangeEmailDialog] = useState(false)
@@ -116,17 +116,17 @@ export function MyProfile({userDetails}) {
                 <Form.Group controlId="formEmail">
                     <Row className="justify-content-lg-between " style={{width: "100%"}}>
                         <Col md={12}>
-                            <Form.Label style={{fontWeight: "bold"}}>
-                                החשבון שלי
-                            </Form.Label>
+                            <Row className="justify-content-around">
+                                <Col md={1}><Person className="m-1"/></Col>
+                                <Col><Form.Label md={10} className="m-1" style={{fontWeight: "bold"}}>
+                                    החשבון שלי
+                                </Form.Label></Col>
+
+                            </Row>
                         </Col>
-                        {/*<Col md={4} >*/}
-                        {/*    /!*<Button className="text-center" onClick={() => {*!/*/}
-                        {/*    /!*}} variant="outline-primary">*!/*/}
-                        {/*    /!*    <Pencil/>*!/*/}
-                        {/*    /!*</Button>*!/*/}
-                        {/*</Col>*/}
                     </Row>
+                    <br/>
+
                     <Row>
                         <Col style={{fontSize: 20}}>
                             שם פרטי:
@@ -197,13 +197,13 @@ export function MyProfile({userDetails}) {
                                 onClick={() => {
                                     changeDetailsHandler()
                                     setEdit(false)
-                                }} variant="outline-primary">שמור</Button>
+                                }} variant="outline-success">שמור</Button>
                         }
                         {edit &&
                         <Button className="rounded-3"
                                 onClick={() => {
                                     setEdit(false)
-                                }} variant="outline-primary">בטל</Button>
+                                }} variant="outline-danger">בטל</Button>
                         }
                         <Button className="rounded-3" variant="outline-primary" onClick={changeEmail}>
                             שנה אימייל
@@ -251,7 +251,7 @@ export function MyProfile({userDetails}) {
                             }}>
                                 בטל
                             </Button>
-                            <Button variant="primary" onClick={() => {
+                            <Button variant="success" onClick={() => {
                                 // TODO: add the logic
                                 changeEmailHandler()
                                 setShowChangeEmailDialog(false)
@@ -309,7 +309,7 @@ export function MyProfile({userDetails}) {
                             }}>
                                 בטל
                             </Button>
-                            <Button variant="primary" onClick={() => {
+                            <Button variant="success" onClick={() => {
                                 // TODO: add the logic
                                 changePasswordHandler()
                                 setShowChangePasswordDialog(false)

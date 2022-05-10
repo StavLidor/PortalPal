@@ -8,6 +8,7 @@ import {updatesPatients} from "../../firebase";
 import {Button, Form, Row, Col, Container, ButtonGroup, Table, Grid, Modal} from 'react-bootstrap'
 import firebase from "firebase/compat/app";
 import AddThroughCsvFile from "./AddThroughCsvFile";
+import { Plus} from 'react-bootstrap-icons';
 
 
 export default function TableData({
@@ -384,10 +385,10 @@ export default function TableData({
 
             </div>
             }
-            {<Button onClick={() => {
+            {<Button className="m-2 p-2" style={{fontWeight: "bold"}} variant="outline-primary" onClick={() => {
                 console.log("show dialog")
                 setAddSomeone(true)
-            }}>{"הוסף " + type + " חדש"}</Button>}
+            }}><Plus style={{fontSize: 20}}/> {"הוסף " + type + " חדש"}</Button>}
             {addSomeone && <Modal show={addSomeone} onHide={()=>setAddSomeone(false)}>
                 <Modal.Header>
                     <Modal.Title>{"הוסף " + type + " חדש"}</Modal.Title>
@@ -475,7 +476,7 @@ export default function TableData({
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setAddSomeone(false)}>
+                    <Button  variant="secondary" onClick={() => setAddSomeone(false)}>
                         בטל
                     </Button>
                     <Button variant="primary" onClick={() => {
@@ -489,8 +490,8 @@ export default function TableData({
                 </Modal.Footer>
             </Modal>}
             <tr>
-                <br/>
-                {<Button onClick={() => {
+
+                {<Button className="m-2 p-2" style={{fontWeight: "bold"}} variant="outline-primary" onClick={() => {
                     console.log("show dialog")
                     setAddOrRemoveBatch(true)
                 }}>{"הוסף או הסר מקבץ"}</Button>}

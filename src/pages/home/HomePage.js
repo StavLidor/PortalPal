@@ -80,10 +80,12 @@ function HomePage({userDetails, type, institute}) {
                         <ButtonGroup className="gap-4 p-2">
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
                             <Link to="/myProfile">
-                                <Button className="rounded-3" variant="outline-primary" onClick={handleMyProfile}>החשבון
-                                שלי</Button>
+                                {type !== 'admin' &&
+                                <Button style={{height:40}} className="rounded-3 h-auto" variant="outline-primary" onClick={handleMyProfile}>החשבון
+                                    שלי</Button>
+                                }
                             </Link>
-                            <Button href={'/'} className="rounded-3" variant="outline-primary"
+                            <Button style={{height:40}} href={'/'} className="rounded-3 " variant="outline-primary"
                                     onClick={onLogout}>התנתק</Button>
                         </ButtonGroup>
                     </Col>

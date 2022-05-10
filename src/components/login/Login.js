@@ -1,16 +1,11 @@
-import React, {useEffect, useState, useCallback, useContext} from "react";
-import {auth, detailsPatient, detailsWorks, getDocCurrentUser, resetPassword, updatesCurrentUser} from "../../firebase"
-import {Button, Form, Row, Col, Container, ButtonGroup, Grid} from 'react-bootstrap'
-import {Redirect, useLocation} from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import firebaseApp, {signIn, signUp, signOutCurrentUser, getCurrentUser} from '../../firebase'
-import {AuthContext} from "./Auth.js";
-// import {setDisplayLoginForm} from "./Authenticate.js";
+import React, {useState} from "react";
+import {Button, Form, Row, Col, Container, ButtonGroup} from 'react-bootstrap'
 
-import App from "../../App";
-import {signUser} from "../../pepole/users/user";
-import {signInWithEmailAndPassword} from "firebase/auth";
-import {func} from "prop-types";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {signIn} from '../../firebase'
+import {validateEmail} from "../../useFunction"
+
+
 
 
 function Login({login, setDisplayLoginForm}) {
@@ -20,17 +15,18 @@ function Login({login, setDisplayLoginForm}) {
         password: "123456",
         type: "therapist",
         institute: 1
-    });
+    })
+    const [messages, setMessages] = useState({
+        email: "",
+        password: "",
+    })
     const [msg, setMsg] = useState('')//TODO: make sure default values are correct
-    const validateEmail = (email) => {
-        return String(email)
-            .toLowerCase()
-            .match(
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            );
-    };
+
     const onLogin = async e => {
+
         e.preventDefault()
+        // setMessages({email: "",
+        //     password: ""})
         console.log(userDetails)
         // console.log("TYPEEEEEE: ", validateEmail(userDetails.email) )
         // if (validateEmail(userDetails.email)) {
@@ -43,10 +39,18 @@ function Login({login, setDisplayLoginForm}) {
         // return false;
         if (validateEmail(userDetails.email) !== null) {
             let result = await signIn(userDetails.email, userDetails.password)
-            login(userDetails.type, userDetails.institute, result)
+            if(result === false){
+                setMessages({email:"",password:"לא נמצא התאמה בין הסיסמא למייל,אנא נסה שנית"})
+            }
+            else{
+                login(userDetails.type, userDetails.institute, result)
+            }
+
         } else {
-            setMsg("אנא הזן אימייל תקין")
-            console.log("MSG: ", msg)
+            //setMsg("אנא הזן אימייל תקין")
+            //console.log("MSG: ", msg)
+            setMessages({password:"",email:"אנא הזן אימייל תקין"})
+
         }
 
 
@@ -71,11 +75,8 @@ function Login({login, setDisplayLoginForm}) {
                             <Col md="auto">
                                 <Form.Control  className="" type='email' placeholder='toko@gmail.com' id='validationDefault01'
                                            required  onChange={e => setUserDetails({...userDetails, email: e.target.value})}/>
-                                {/*{(msg!=='') && <div class="invalid-feedback" >*/}
-                                {/*    {msg}*/}
-                                {/*</div>}*/}
                                 <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
-                                    {msg}
+                                    {messages.email}
                                 </div>
                             </Col>
                         </Row>
@@ -94,12 +95,25 @@ function Login({login, setDisplayLoginForm}) {
                             <Col>
                                 סיסמה:
                             </Col>
+                            {/*<Col md="auto">*/}
+                            {/*    <Form.Control type='password' placeholder='סיסמה' id='password'*/}
+                            {/*                  onChange={e => setUserDetails({*/}
+                            {/*                      ...userDetails,*/}
+                            {/*                      password: e.target.value*/}
+                            {/*                  })}/>*/}
+                            {/*</Col>*/}
                             <Col md="auto">
-                                <Form.Control type='password' placeholder='סיסמה' id='password'
-                                              onChange={e => setUserDetails({
-                                                  ...userDetails,
-                                                  password: e.target.value
-                                              })}/>
+                                <Form.Control  className="" type='password' placeholder='סיסמה' id='validationDefault01'
+                                               required  onChange={e => setUserDetails({
+                                    ...userDetails,
+                                    password: e.target.value
+                                })}/>
+                                {/*{(msg!=='') && <div class="invalid-feedback" >*/}
+                                {/*    {msg}*/}
+                                {/*</div>}*/}
+                                {/*<div style={{fontSize: 10,color: "red"}} id="invalid-feedback">*/}
+                                {/*    {messages.password}*/}
+                                {/*</div>*/}
                             </Col>
                         </Row>
 
@@ -146,6 +160,9 @@ function Login({login, setDisplayLoginForm}) {
 
                         <Form.Text>שכחתי סיסמה...</Form.Text>
                     </Row>
+                    <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                        {messages.password}
+                    </div>
                 </Container>
 
             </Form>

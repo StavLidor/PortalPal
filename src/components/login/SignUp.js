@@ -1,7 +1,8 @@
 import {Button, Form, Row, Col, Container, ButtonGroup, Grid} from 'react-bootstrap'
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import firebaseApp, {signIn, signUp, signOutCurrentUser, getCurrentUser} from '../../firebase'
-// import {setDisplayLoginForm} from "./Authenticate.js";
+// import {setDisplayLoginForm} from "./Authenticate.js"
+import {validateEmail} from "../../useFunction"
 
 function SignUp({setDisplayLoginForm})  {
     //Users Fields:
@@ -15,30 +16,65 @@ function SignUp({setDisplayLoginForm})  {
     // institute: string (admin only)
     // institutes: {1: ...patients.  external:...patients.} (therapist only)
     // childrenIds: [] (parent only)
+    console.log('sign up')
     const [userDetails, setUserDetails] = useState({
         firstName: "",
         lastName: "",jobs:[], license: "",titles:['מטפל'] ,email: "", password: "",institute:"", institutes: {external: []},
         childrenIds:[]
-    });
+    })
+    const [messages, setMessages] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: ""
+    })
     const onSignUp = async e => {
         e.preventDefault()
-        console.log(userDetails)
-        await signUp(userDetails)
+        //console.log(userDetails)
+        const messagesUpdate={
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: ""}
+        //setMessages(messages)
+        if(!userDetails.firstName.trim()){
+            messagesUpdate.firstName ='אנא,הכנס שם פרטי'
+        }
+         if(!userDetails.lastName.trim()){
+             messagesUpdate.lastName ='אנא,הכנס שם משפחה'
+        }
+         if(userDetails.password.length<6){
+             console.log('PASSWOred',userDetails.password)
+             messagesUpdate.password ='אנא,הכנס סיסמא באורך 6 לפחות'
+        }
+        if(!validateEmail(userDetails.email)){
+            messagesUpdate.email ='אנא,הכנס מייל חוקי'
+        }
+
+        setMessages(messagesUpdate)
+        console.log(messagesUpdate)
+        if(messagesUpdate.firstName==='' && messagesUpdate.lastName==='' &&
+            messagesUpdate.password===''&& messagesUpdate.email===''){
+            await signUp(userDetails)
+        }
     }
 
     return (<div className='login'>
         <Form
-            onSubmit={onSignUp}>
+            onSubmit={onSignUp}  className="needs-validation" noValidate>
             <Container className="w-auto" fluid="sm">
                 <Form.Group className="mb-3" controlId="formEmail">
-                    <Form.Label className="text-center" style={{width: "100%"}}>צור חשבון מטפל חדש</Form.Label>
+                    <Form.Label  for="validationDefault01" className="text-center" style={{width: "100%"}}>צור חשבון מטפל חדש</Form.Label>
                     <Row>
                         <Col>
                             שם פרטי:
                         </Col>
                         <Col md="auto">
-                            <Form.Control id='firstName'
+                            <Form.Control id='validationDefault01' required
                                           onChange={e => setUserDetails({...userDetails, firstName: e.target.value})}/>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.firstName}
+                            </div>
                         </Col>
                     </Row>
 
@@ -47,8 +83,11 @@ function SignUp({setDisplayLoginForm})  {
                             שם משפחה:
                         </Col>
                         <Col md="auto">
-                            <Form.Control id='lastName'
+                            <Form.Control id='validationDefault01' required
                                           onChange={e => setUserDetails({...userDetails, lastName: e.target.value})}/>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.lastName}
+                            </div>
                         </Col>
                     </Row>
 
@@ -58,8 +97,11 @@ function SignUp({setDisplayLoginForm})  {
                             אימייל:
                         </Col>
                         <Col md="auto">
-                            <Form.Control type='email' placeholder='toko@gmail.com' id='email'
+                            <Form.Control id='validationDefault01' required type='email' placeholder='toko@gmail.com'
                                           onChange={e => setUserDetails({...userDetails, email: e.target.value})}/>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.email}
+                            </div>
                         </Col>
                     </Row>
 
@@ -68,11 +110,16 @@ function SignUp({setDisplayLoginForm})  {
                             סיסמה:
                         </Col>
                         <Col md="auto">
-                            <Form.Control type='password' placeholder='סיסמה' id='password'
+                            <Form.Control id='validationDefault01' required type='password' placeholder='סיסמה'
                                           onChange={e => setUserDetails({
                                               ...userDetails,
                                               password: e.target.value
-                                          })}/>
+                                          })}
+
+                            />
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.password}
+                            </div>
                         </Col>
                     </Row>
 

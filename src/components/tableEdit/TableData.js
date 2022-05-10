@@ -26,7 +26,7 @@ export default function TableData({
                                       emptyEditDetailsTable
                                       , HebrewNamesTable,
                                       columnsInfoViewTable
-                                      , table, getTable/*addDetails,addDetailsTable*/
+                                      , table, getTable,optionIds,tableOptionIds
                                   }) {
 
 
@@ -38,9 +38,9 @@ export default function TableData({
     const [addSomeone, setAddSomeone] = useState(false)
     const [addOrRemoveBatch, setAddOrRemoveBatch] = useState(false)
     const [contactTable, setContactTable] = useState(null)
-    const [show, setShow] = useState(false);
-    const closeDialog = () => setAddSomeone(false);
-    const handleShow = () => setShow(true);
+    const [show, setShow] = useState(false)
+    const closeDialog = () => setAddSomeone(false)
+    const handleShow = () => setShow(true)
 
 
     // const [detailsTherapist,setDetailsTherapist]=useState({firstName:"",lastName:"",email:"",jobs:"",institutes:[data.institutionNumber]})
@@ -294,6 +294,7 @@ export default function TableData({
                                                 requiredId={requiredId}
                                                 table={table}
                                                 getTable={getTable}
+                                                tableOptionIds={tableOptionIds}
                                             />
 
                                         ) :
@@ -321,16 +322,37 @@ export default function TableData({
                         <Col>
                             <Row>
                                 {requiredId &&
-                                <div className="form-group">
+                                    (optionIds!== undefined)?(
+                                    <Form.Label>{"תעודות זהות:"}
+                                            <Form.Select  type="text" name="type" id="type"
+                                                    onChange={e => setDetailsNew({
+                                                    ...detailsNew,
+                                                    id: e.target.value
+                                                })}
+                                                    value={detailsNew.id}>
+                                                {
+                                                    optionIds.map((op) => (
+                                                    // <option value={op}>{op}</option>
+                                                    <option style={{fontSize: 18}} value={op.id}>{op.id+" "+op.information}</option>
+
+                                                    ))
+
+
+                                                }
+                                            </Form.Select>
+                                    </Form.Label>
+                                    ):
+                                    <div className="form-group">
                                     <Form.Label  for="validationDefault01" htmlFor="id">תעודות זהות:</Form.Label>
                                     <Form.Control id='validationDefault01' required type="text" name="id"
-                                                  onChange={e => setDetailsNew({...detailsNew, id: e.target.value})}
-                                                  value={detailsNew.id}/>
-                                    <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
-                                        {messages.id}
-                                    </div>
-                                </div>
+                                    onChange={e => setDetailsNew({...detailsNew, id: e.target.value})}
+                                    value={detailsNew.id}/>
+                                        </div>
+
                                 }
+                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                    {messages.id}
+                                </div>
                                 {columnsInfoView.map((i) => (
                                     i.add &&
                                     <div className="form-group">

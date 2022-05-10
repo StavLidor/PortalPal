@@ -17,11 +17,9 @@ const ReadOnlyRow = ({
                          handleEditClick,
                          handleDeleteClick,
                          requiredId,
-                         toEdit,
                          table,
-                         handleOpen,
-                         handleClose,
                          columnsInfo,getTable,
+                         tableOptionIds
                      }) => {
         console.log('ReadOnlyRow', contact.id)
         // console.log('ReadOnlyRow', columnNames)
@@ -49,6 +47,7 @@ const ReadOnlyRow = ({
 
         return (
             <tr>
+
                 {requiredId && <td style={{fontSize: 20}} className="text-center">{contact.id}</td>}
 
                 {
@@ -124,6 +123,7 @@ const ReadOnlyRow = ({
                         data={table/*contactTable[tableName]*/}
                         HebrewNames={HebrewNames} columnsInfoView={columnsInfoViewTable} requiredId={true}
                         getTable={getTable} update={updateTable}
+                        optionIds={tableOptionIds}
                     />}
                     {/*{toEdit &&*/}
                     {

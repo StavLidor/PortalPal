@@ -2,10 +2,12 @@ import {Button, ButtonGroup, Col, Form, Modal, Row} from "react-bootstrap";
 import React, {useState} from "react";
 import Papa from "papaparse";
 
-export function AddThroughCsvFile({addBatch,setAddBatch, add, remove}) {
+export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
     // const [addBatch, setAddBatch] = useState(true)
     const [file, setFile] = useState(null)
-    const [type, setType] = useState("add")
+    const [type, setType] = useState("")
+    const [showMsg, setShowMsg] = useState(false)
+    const [submitted, setSubmitted] = useState(false)
     const submit = () => {
         // event.preventDefault();
         //console.log(file)
@@ -17,41 +19,38 @@ export function AddThroughCsvFile({addBatch,setAddBatch, add, remove}) {
             }
 
         }
-
-
     }
-    function parser(file,f){
+
+    function parser(file, f) {
         console.log(file)
         let reader = new FileReader();
 
         reader.addEventListener('load', function (e) {
-            const allObj=[]
+            const allObj = []
             //let csvdata = e.target.result;
-            let arr =  Papa.parse(e.target.result).data
+            let arr = Papa.parse(e.target.result).data
             console.log(arr)
 
             // let arr= data.split("\n");
 
-            let keys=arr[0]
+            let keys = arr[0]
             console.log(keys)
-            let rows=arr.length;
+            let rows = arr.length;
 
-            let cols=keys.length;
+            let cols = keys.length;
 
-
-
-            let i,j=0;
+            let i, j = 0;
             for (i = 1; i < rows; i++) {
                 let line = arr[i];
-                if (line.length!=cols)
+                if (line.length !== cols)
                     continue
                 let obj = {};
 
                 for (j = 0; j < cols; j++) {
 
-                    let header =keys[j]
+                    let header = keys[j]
                     let value = line[j]
-                    obj[header]=value
+                    obj[header] = value
                 }
                 console.log(obj)
                 // if(i==1){
@@ -67,9 +66,8 @@ export function AddThroughCsvFile({addBatch,setAddBatch, add, remove}) {
         });
         reader.readAsText(file)
 
-
-
     }
+
     return (
         <div>
             <Modal show={addBatch} onHide={() => setAddBatch(false)}>
@@ -87,6 +85,10 @@ export function AddThroughCsvFile({addBatch,setAddBatch, add, remove}) {
                                     <Form.Check style={{fontSize: 18}} type="radio" name='addOrRemove'
                                                 onChange={() => setType("remove")}
                                     />
+                                    {showMsg &&
+                                    <Form.Text className="text-center" style={{fontSize: 10, color: "red"}}>אנא בחר באחת
+                                        מהאופציות</Form.Text>
+                                    }
                                 </ButtonGroup>
                             </Row>
                             <Row>
@@ -94,6 +96,9 @@ export function AddThroughCsvFile({addBatch,setAddBatch, add, remove}) {
                                     setFile(e.target.files[0])
                                     console.log('change')
                                 }}/>
+                                {submitted && file === null &&
+                                <Form.Text className="text-center" style={{fontSize: 10, color: "red"}}>אנא בחר
+                                    קובץ</Form.Text>}
                             </Row>
                             {/*<Row>*/}
                             {/*    <Form.Group controlId="summary">*/}
@@ -121,16 +126,45 @@ export function AddThroughCsvFile({addBatch,setAddBatch, add, remove}) {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={()=>setAddBatch(false)}>
+                    <Button variant="secondary" onClick={() => setAddBatch(false)}>
                         בטל
                     </Button>
                     <Button variant="primary" onClick={() => {
-                        submit()
-                        setAddBatch(false)
+                        if (type === "" || file === null) {
+                            if (type === "") {
+                                setShowMsg(true)
+                            } else {
+                                setShowMsg(false)
+                            }
+                            if (file === null) {
+                                setSubmitted(true)
+                            } else {
+                                setSubmitted(false)
+                            }
+                        } else {
+                            console.log("file: ", file)
+                            submit()
+                            setAddBatch(false)
+                        }
+                        // setSubmitted(true)
+                        // if (type === "") {
+                        //     setShowMsg(true)
+                        // } else {
+                        //     setShowMsg(false)
+                        // }
+                        // if ((type === "") || (file === null)) {
+                        //     setShowMsg(true)
+                        // } else {
+                        //     console.log("file: ", file)
+                        //     submit()
+                        //     setAddBatch(false)
+                        // }
                     }
+
                     }>
                         עדכן
                     </Button>
+
                 </Modal.Footer>
             </Modal>
         </div>

@@ -25,6 +25,7 @@ import TableData from "../../components/tableEdit/TableData";
 import Patient from "../patient/Patient";
 import {collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import firebase from "firebase/compat/app";
+import {is_israeli_id_number, validateEmail} from "../../useFunction";
 // import {details_users} from "../../firebase"
 
 export default function Secretary({data}){
@@ -108,31 +109,69 @@ export default function Secretary({data}){
         return await findUserByEmail(details.email)
 
     }
-    const addPatient = async (details)=>{
-        //details.dateOfBirth =firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
-        return await newPatients({...details,institute: data.institute,dateOfBirth:firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
-        })
-        //
-    }
-    const addTherapist = async(details) => {
-        if(details.jobs!==undefined){
-            console.log('JOBBBBBBBBS',details.jobs)
-            details.jobs =details.jobs.split(",")
+    const addPatient = async (details, setMessages)=>{
+        console.log('Messagesssss!!!!!!!!!!!! ')
+        const messages={id:"",firstName:"",lastName:"",dateOfBirth:"",city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:""}
+        if(!is_israeli_id_number(details.id)){
+            messages.id='הכנס תז ישראלית'
         }
-        if (details.email!==undefined){
-            const id =await addUserFromAdmin(details,data.institute)
-            return id
-            const p=Promise.resolve(id)
-
-            p.then(async id => {
-
-                console.log('SEEEEEEEEC',id)
-                return id
+        if(!validateEmail(details.email)){
+            messages.email='הכנס אימייל תקין להורה'
+        }
+        if(!details.firstName.trim()){
+            messages.firstName='הכנס שם הפרטי לתלמיד'
+        }
+        if(!details.lastName.trim()){
+            messages.lastName='הכנס שם משפחה לתלמיד'
+        }
+        if(!details.lastNameParent.trim()){
+            messages.lastNameParent='הכנס שם משפחה להורה'
+        }
+        if(!details.firstNameParent.trim()){
+            messages.firstNameParent='הכנס שם פרטי להורה'
+        }
+        if(!details.city.trim()){
+            messages.city='הכנס עיר מגורים'
+        }
+        if(!details.street.trim()){
+            messages.street='הכנס רחוב מגורים'
+        }
+        if(!details.buildingNumber.trim()){
+            messages.buildingNumber='הכנס מספר רחוב'
+        }
+        setMessages(messages)
+        console.log(messages,'Messagesssss ')
+        if(messages.firstName==='' && messages.lastName==='' &&
+            messages.id && messages.email==='' &&
+            messages.lastNameParent && messages.firstNameParent
+        && messages.city===''&& messages.street===''&& messages.buildingNumber===''){
+            return await newPatients({...details,institute: data.institute,dateOfBirth:firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
             })
-            console.log('IDDDD INN',id)
         }
         return null
+        //id:"",firstName:"",lastName:"",dateOfBirth:new Date(),buildingNumber:"",firstNameParent:"",lastNameParent:""
+        //details.dateOfBirth =firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
 
+        //
+    }
+    const addTherapist = async(details, setMessages) => {
+        const messages={email:"",firstName:"",lastName:"",jobs:""}
+        if(!validateEmail(details.email)){
+            messages.email='הכנס אימייל תקין'
+        }
+        if(!details.firstName.trim()){
+            messages.firstName='הכנס שם פרטי למטפל'
+        }
+        if(!details.lastName.trim()){
+            messages.lastName='הכנס שם משפחה למטפל'
+        }
+        setMessages(messages)
+        details.jobs =details.jobs.split(",")
+        if(messages.firstName==='' && messages.lastName==='' && messages.email===''){
+            const id =await addUserFromAdmin(details,data.institute)
+            return id
+        }
+        return null
     }
     const updateTherapist = async(id,details) => {
         console.log('edit details',details)
@@ -279,9 +318,10 @@ export default function Secretary({data}){
             /*,value:editFormData.lastName,*/
         }
     ]
-    const addConnectionToTherapist = async (details)=>{
+    const addConnectionToTherapist = async (details, setMessages)=>{
         console.log("EEEEEEEEEEEEEE",idGetTable)
         // TODO: add csv and to inputs of this connections part.
+        setMessages({id:"",connection:""})
         return   await addConnectionPatientToTherapist(idGetTable,details.id,data.institute,details.connection)
     }
     const deleteConnectionToTherapist = async (contact/*id*/)=>{
@@ -321,8 +361,7 @@ export default function Secretary({data}){
                             dateOfBirth:new Date()
                             ,city:"",street:"",buildingNumber:"",gender:"זכר"}} data={students} HebrewNames={[
                             "תעודת זהות" ,"שם פרטי","שם משפחה","תאריך לידה","עיר","רחוב","מספר רחוב","שם פרטי הורה","שם משפחה הורה","אימייל",'מין'/*"מטפלים בית ספריים"*/]
-                        } inputsView={inputsViewPatient} requeredId={true}
-                                                                          toEdit={true} toAdd={true}/>}/>
+                        } inputsView={inputsViewPatient} requiredId={true}/>}/>
 
                             </Routes>
                             </div>

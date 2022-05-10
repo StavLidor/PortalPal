@@ -16,6 +16,7 @@ import {collection, doc, getDoc, onSnapshot, query, updateDoc, where} from "fire
 import firebase from "firebase/compat/app";
 import {newPatients} from "./pepole/users/user";
 import se from "react-datepicker";
+import {is_israeli_id_number, validateEmail} from "./useFunction";
 
 
 // import {details_users} from "../../firebase"
@@ -241,34 +242,104 @@ function SecretaryPage({data}) {
         //d.data().students
     }, [])
 
-    const addPatient = async (details) => {
-        //details.dateOfBirth =firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
-        return await newPatients({
-            ...details,
-            institute: data.institute,
-            dateOfBirth: firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
-        })
-        //
-    }
-    const addTherapist = async (details) => {
-        if (details.jobs !== undefined) {
-            console.log('JOBBBBBBBBS', details.jobs)
-            details.jobs = details.jobs.split(",")
+    const addPatient = async (details, setMessages)=>{
+        console.log('Messagesssss!!!!!!!!!!!! ',details.dateOfBirth)
+
+        const messages={id:"",firstName:"",lastName:"",dateOfBirth:"",city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:""}
+        if(!details.id.trim()||!is_israeli_id_number(details.id)){
+            messages.id='הכנס תז ישראלית'
         }
-        if (details.email !== undefined) {
-            const id = await addUserFromAdmin(details, data.institute)
-            return id
-            const p = Promise.resolve(id)
-
-            p.then(async id => {
-
-                console.log('SEEEEEEEEC', id)
-                return id
+        if(!validateEmail(details.email)){
+            messages.email='הכנס אימייל תקין להורה'
+        }
+        if(!details.dateOfBirth.trim()){
+            messages.dateOfBirth='הכנס תאריך לידה'
+        }
+        if(!details.firstName.trim()){
+            messages.firstName='הכנס שם הפרטי לתלמיד'
+        }
+        if(!details.lastName.trim()){
+            messages.lastName='הכנס שם משפחה לתלמיד'
+        }
+        if(!details.lastNameParent.trim()){
+            messages.lastNameParent='הכנס שם משפחה להורה'
+        }
+        if(!details.firstNameParent.trim()){
+            messages.firstNameParent='הכנס שם פרטי להורה'
+        }
+        if(!details.city.trim()){
+            messages.city='הכנס עיר מגורים'
+        }
+        if(!details.street.trim()){
+            messages.street='הכנס רחוב מגורים'
+        }
+        if(!details.buildingNumber.trim()){
+            messages.buildingNumber='הכנס מספר רחוב'
+        }
+        setMessages(messages)
+        console.log('Messagesssss ')
+        if(!messages.firstName.trim() && !messages.lastName.trim() &&
+            !messages.id.trim() && !messages.email.trim() &&
+            !messages.lastNameParent.trim() && !messages.firstNameParent.trim()
+            && !messages.city.trim()&& !messages.street.trim()&& !messages.buildingNumber.trim()
+        &&  !messages.dateOfBirth.trim()){
+            console.log('its GOODDD')
+            return await newPatients({...details,institute: data.institute,dateOfBirth:firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
             })
-            console.log('IDDDD INN', id)
         }
         return null
+        //id:"",firstName:"",lastName:"",dateOfBirth:new Date(),buildingNumber:"",firstNameParent:"",lastNameParent:""
+        //details.dateOfBirth =firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
 
+        //
+    }
+    // const addTherapist = async (details) => {
+    //     if (details.jobs !== undefined) {
+    //         console.log('JOBBBBBBBBS', details.jobs)
+    //         details.jobs = details.jobs.split(",")
+    //     }
+    //     if (details.email !== undefined) {
+    //         const id = await addUserFromAdmin(details, data.institute)
+    //         return id
+    //         const p = Promise.resolve(id)
+    //
+    //         p.then(async id => {
+    //
+    //             console.log('SEEEEEEEEC', id)
+    //             return id
+    //         })
+    //         console.log('IDDDD INN', id)
+    //     }
+    //     return null
+    //
+    // }
+    const addTherapist = async(details, setMessages) => {
+        const messages={email:"",firstName:"",lastName:"",jobs:""}
+        console.log('TTTTTTTTT',details.jobs)
+        if(!validateEmail(details.email)){
+            messages.email='הכנס אימייל תקין'
+        }
+        if(!details.firstName.trim()){
+            messages.firstName='הכנס שם פרטי למטפל'
+        }
+        if(!details.lastName.trim()){
+            messages.lastName='הכנס שם משפחה למטפל'
+        }
+        if(!details.jobs.trim()){
+            messages.jobs='הכנס את תפקדים שלו'
+        }
+        // else {
+        //     details.jobs =details.jobs.split(",")
+        // }
+        setMessages(messages)
+
+        if(!messages.firstName.trim() && !messages.lastName.trim()&& !messages.jobs.trim()
+        &&!messages.email.trim()){
+            // details.jobs =details.jobs.split(",")
+            const id =await addUserFromAdmin({...details,jobs:details.jobs.split(",")},data.institute)
+            return id
+        }
+        return null
     }
     const updatesPatients = async (id, data) => {
         // if('dateOfBirth' in data)
@@ -500,10 +571,14 @@ function SecretaryPage({data}) {
             /*,value:editFormData.firstName,*/
         },
     ]
-    const addConnectionToTherapist = async (details) => {
+    const addConnectionToTherapist = async (details,setMessages) => {
         console.log("EEEEEEEEEEEEEE", userGetTable)
         const index = students.findIndex((s) => s.id === details.id)
         if(details.id in userGetTable.institutes[data.institute]|| index == -1){
+            return false
+        }
+        if(!details.connection.trim()){
+            setMessages({id:"",connection:'הכנס קשר'})
             return false
         }
 
@@ -561,10 +636,10 @@ function SecretaryPage({data}) {
                                                emptyDetails={{
                                                    firstName: "",
                                                    lastName: "",
-                                                   jobs: [],
+                                                   jobs: "",
                                                    email: "",/*table:[{id:"",firstName:"",lastName:""}]*/
                                                }}
-                                               emptyEditDetails={{firstName: "", lastName: "", jobs: []}}
+                                               emptyEditDetails={{firstName: "", lastName: "", jobs: ""}}
                                                data={employees} HebrewNames={[
                                "שם פרטי", "שם משפחה", "עבודות", "אימייל"]
                            } columnsInfoView={columnsViewTherapist} requiredId={false}
@@ -592,7 +667,7 @@ function SecretaryPage({data}) {
                                                    id: "",
                                                    firstName: "",
                                                    lastName: "",
-                                                   dateOfBirth: new Date(),
+                                                   dateOfBirth: "",
                                                    city: "",
                                                    street: "",
                                                    buildingNumber: "",

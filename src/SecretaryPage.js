@@ -136,7 +136,7 @@ function SecretaryPage({data}) {
                 (querySnapshot) => {
                     let data = []
                     querySnapshot.forEach((doc) => {
-                        data.push(doc.data())
+                        data.push({...doc.data(),information:doc.data().firstName +" "+doc.data().lastName})
                         // if (typeof (doc.data().dateOfBirth) !== 'string')
                         //     // data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
                         //     data.push(doc.data())
@@ -572,15 +572,28 @@ function SecretaryPage({data}) {
         },
     ]
     const addConnectionToTherapist = async (details,setMessages) => {
-        console.log("EEEEEEEEEEEEEE", userGetTable)
+        const messages ={id:"",connection:""}
+        if(!details.connection.trim()){
+            messages.connection='הכנס קשר'
+        }
+        //console.log("EEEEEEEEEEEEEE", userGetTable.institutes[data.institute],details)
+        const i = userGetTable.institutes[data.institute].findIndex((id) => id === details.id)
+        if(i!==-1){
+            console.log("EEEEEEEEEEEEEE", userGetTable.institutes[data.institute],details)
+            messages.id="יש קשר בין תלמיד לעובד"
+
+            //return false
+        }
+        setMessages(messages)
+        console.log(messages)
+        if(messages.connection.trim()||messages.id.trim()){
+            return false
+        }
         const index = students.findIndex((s) => s.id === details.id)
         if(details.id in userGetTable.institutes[data.institute]|| index == -1){
             return false
         }
-        if(!details.connection.trim()){
-            setMessages({id:"",connection:'הכנס קשר'})
-            return false
-        }
+
 
         // TODO: add csv and to inputs of this connections part.
         if(await addConnectionPatientToTherapist(userGetTable.id, details.id, data.institute, details.connection)) {
@@ -655,6 +668,7 @@ function SecretaryPage({data}) {
                                /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/
                                                deleteObjTable={deleteConnectionToTherapist}
                                                updateTable={updateConnectionToTherapist}
+                                               tableOptionIds={students}
 
                            />}/>
                 </Routes>

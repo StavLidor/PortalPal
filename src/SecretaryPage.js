@@ -256,7 +256,7 @@ function SecretaryPage({data}) {
             messages.dateOfBirth='הכנס תאריך לידה'
         }
         if(!details.firstName.trim()){
-            messages.firstName='הכנס שם הפרטי לתלמיד'
+            messages.firstName='הכנס שם פרטי לתלמיד'
         }
         if(!details.lastName.trim()){
             messages.lastName='הכנס שם משפחה לתלמיד'

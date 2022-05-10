@@ -67,7 +67,7 @@ export const newPatients= async details=>{
         return details.id
     }
     else {
-        console.log('patient with this id exsist')
+        // console.log('patient with this id exsist')
         return null
     }
 }

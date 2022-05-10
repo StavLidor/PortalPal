@@ -61,7 +61,7 @@ function SignUp({setDisplayLoginForm})  {
 
     return (<div className='login'>
         <Form
-            onSubmit={onSignUp}  className="needs-validation" noValidate>
+            /*onSubmit={onSignUp}*/  className="needs-validation" noValidate>
             <Container className="w-auto" fluid="sm">
                 <Form.Group className="mb-3" controlId="formEmail">
                     <Form.Label  for="validationDefault01" className="text-center" style={{width: "100%"}}>צור חשבון מטפל חדש</Form.Label>

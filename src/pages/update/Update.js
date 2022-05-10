@@ -12,11 +12,11 @@ export default  function Update({details,setData}){
         e.preventDefault()
         let data ={}
         for (const [key, value] of Object.entries(editedDetails)) {
-            if(key in details && value!=details[key])
+            if(key in details && value!==details[key])
                 data[key]=value
         }
         let flag = false
-        if(editPassword &&editedDetails.lastPassword == details.password &&
+        if(editPassword &&editedDetails.lastPassword === details.password &&
         editedDetails.newPassword.length>5){
             data['password']=editedDetails.newPassword
             flag = true
@@ -26,7 +26,7 @@ export default  function Update({details,setData}){
                 details.password=editedDetails.newPassword
             }
             for (const [key, value] of Object.entries(editedDetails)) {
-                if(key in details && value!=details[key])
+                if(key in details && value!==details[key])
                     details[key]=value
             }
             console.log(details.firstName)

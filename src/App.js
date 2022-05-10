@@ -11,7 +11,7 @@ import Login from "./components/login/Login";
 import Chat from "./components/chats/Chat";
 import {BrowserRouter as Router, Route,} from "react-router-dom";
 import AQ10ChildrenForm from "./AQ10ChildrenForm";
-import {signOutCurrentUser} from "./firebase";
+import {db, signOutCurrentUser} from "./firebase";
 import Template from "./template";
 import {Col, Row} from "react-bootstrap";
 import {auth, GetCurrentUser, getDocCurrentUser} from './firebase'
@@ -21,6 +21,7 @@ import Authenticate from "./components/login/Authenticate";
 import HomePage from "./pages/home/HomePage";
 import {signOut} from "firebase/auth";
 import AQold from "./AQold";
+import {doc, getDoc, onSnapshot} from "firebase/firestore";
 
 function App() {
     const [isSigneIn, setIsSigneIn] = useState(false);
@@ -38,28 +39,60 @@ function App() {
             setCheckUserConnection(true)
             if (user) {
                 setIsSigneIn(true)
-                getDocCurrentUser().then(value => {
-                    console.log(value)
-                    console.log(value.data())
-                    console.log(value.data().titles)
+
+                try {
+                    const docRef = doc(db, "users", auth.currentUser.uid);
+                    onSnapshot(docRef,(value)=>{
+                        console.log(value)
+                        console.log(value.data())
+                        console.log(value.data().titles)
                         setUserDetails(value)
                         console.log("data user details: ", value.data().childrenIds)
                         setHasDetails(true)
-                    if(value.data().titles.includes(localStorage.getItem('type'))){
-                        console.log('print hello')
-                        setDisplayLoginError(false)
-                        // setIsSigneIn(true)
-                        setIsFirstLoad(true)
-                    }
-                    else{
-                        signOutCurrentUser()
-                        setDisplayLoginError(true)
-                        localStorage.setItem("type", "")
-                        localStorage.setItem("institute", "")
-                    }
+                        if(value.data().titles.includes(localStorage.getItem('type'))){
+                            console.log('print hello')
+                            setDisplayLoginError(false)
+                            // setIsSigneIn(true)
+                            setIsFirstLoad(true)
+                        }
+                        else{
+                            signOutCurrentUser()
+                            setDisplayLoginError(true)
+                            localStorage.setItem("type", "")
+                            localStorage.setItem("institute", "")
+                        }
 
+                    })
+
+                    // const document = await getDoc(docRef)
+                    // console.log("doc: " ,document)
+                    // return document
+                //     return await getDoc(docRef)
+                } catch (err) {
+                    return null
                 }
-                )
+                // getDocCurrentUser().then(value => {
+                //     console.log(value)
+                //     console.log(value.data())
+                //     console.log(value.data().titles)
+                //         setUserDetails(value)
+                //         console.log("data user details: ", value.data().childrenIds)
+                //         setHasDetails(true)
+                //     if(value.data().titles.includes(localStorage.getItem('type'))){
+                //         console.log('print hello')
+                //         setDisplayLoginError(false)
+                //         // setIsSigneIn(true)
+                //         setIsFirstLoad(true)
+                //     }
+                //     else{
+                //         signOutCurrentUser()
+                //         setDisplayLoginError(true)
+                //         localStorage.setItem("type", "")
+                //         localStorage.setItem("institute", "")
+                //     }
+                //
+                // }
+
 
             } else {
                 localStorage.setItem("type", "")

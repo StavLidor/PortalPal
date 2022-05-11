@@ -4,11 +4,12 @@ import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link, matchPath, Route, useNavigate, useLocation, Routes} from "react-router-dom";
 import Patient from "../../pages/patient/Patient";
 import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
-import {signOutCurrentUser} from "../../firebase";
+import {auth, removeConnectionPatientToTherapist, signOutCurrentUser} from "../../firebase";
 import PatientList from "../sidebar/PatientList";
 import PatientDetails from "../sidebar/PatientDetails";
+import {Plus} from "react-bootstrap-icons";
 
-function TherapistTabsBanner({therapistInstitute,type,currentPerson, setCurrentPage}){
+function TherapistTabsBanner({therapistId,therapistInstitute,type,currentPerson, setCurrentPage}){
 
     const [tabsComponent, setTabsComponent] = useState(<h3>משהו השתבש...</h3>)
 
@@ -70,7 +71,12 @@ function TherapistTabsBanner({therapistInstitute,type,currentPerson, setCurrentP
                             }}  className="list-group-item list-group-item-action">התקשרות</Link>
                         </Nav.Item>
                     </Nav>
-                        { therapistInstitute==='external' && <Button>הסר מטופל</Button>}
+                        { therapistInstitute==='external' &&
+                            <Button className="m-2 p-1 text-center" onClick={async () => {
+                                await removeConnectionPatientToTherapist(therapistId, currentPerson, therapistInstitute)
+                            }
+                            } style={{fontSize: 10, height: 30}} variant="outline-primary"><Plus/>הסר
+                                 מטפל חיצוני</Button>}
 
                     </Container>
 

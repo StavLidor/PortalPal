@@ -50,7 +50,8 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
             <Form.Label style={{fontWeight: 'bold'}}>{listTitle}</Form.Label>
             {institute === 'external' && <Button onClick={() => setAddPatient(true)} className="m-2 p-1 text-center"
                                                  style={{fontSize: 10, height: 30}} variant="outline-primary"><Plus/>הוסף
-                מטופל</Button>}
+                מטופל</Button>
+            }
             <ListGroup as="ul">
                 {listData.map((item) => {
                         let data = item.data()

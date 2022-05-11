@@ -135,7 +135,7 @@ function HomePage({userDetails, type, institute}) {
                                             <Routes>
                                                 {/*<Route path={/#/ + data.id.toString() + '/*'}*/}
                                                 <Route path={data.id.toString() + '/*'}
-                                                       element={<PatientDetails details={data}/>}/>
+                                                       element={<PatientDetails type={type} institute={institute} details={data}/>}/>
 
                                             </Routes>)
                                     }
@@ -193,6 +193,11 @@ function HomePage({userDetails, type, institute}) {
                                             style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
                                             variant="outline-primary">קבל קוד אישי</Button>
                                 </Link>}
+                                {/*{type === 'therapist' && institute==='external' && currentPerson !== '' && <Link to={currentPerson + '/code'}>*/}
+                                {/*    <Button onClick={() => setShowDialogCode(true)} className="text-center"*/}
+                                {/*            style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}*/}
+                                {/*            variant="outline-primary">הסר מטופל</Button>*/}
+                                {/*</Link>}*/}
 
                                 {(type === 'therapist') &&
                                 patientListData.map((item) => {
@@ -265,7 +270,7 @@ function HomePage({userDetails, type, institute}) {
                                                     <div>
                                                         <Routes>
                                                             <Route path={data.id.toString() + '/' + index.toString() + '/*'}
-                                                                   element={<TherapistTabsBanner type={type}
+                                                                   element={<TherapistTabsBanner therapistInstitute={therapist.institute} type={type}
                                                                                                  currentPerson={currentPerson}
                                                                                                  setCurrentPage={setCurrentPage}/>}
                                                             />

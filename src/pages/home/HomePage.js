@@ -270,7 +270,9 @@ function HomePage({userDetails, type, institute}) {
                                                     <div>
                                                         <Routes>
                                                             <Route path={data.id.toString() + '/' + index.toString() + '/*'}
-                                                                   element={<TherapistTabsBanner therapistInstitute={therapist.institute} type={type}
+                                                                   element={<TherapistTabsBanner therapistInstitute={therapist.institute}
+                                                                                                 therapistId={therapist.id}
+                                                                                                 type={type}
                                                                                                  currentPerson={currentPerson}
                                                                                                  setCurrentPage={setCurrentPage}/>}
                                                             />

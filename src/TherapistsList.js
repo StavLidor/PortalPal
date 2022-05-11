@@ -42,7 +42,7 @@ function TherapistsList({details, setCurrentTherapist, currentPage, setTherapist
                         data.push({
                             id: doc.id,
                             firstName: doc.data().firstName, lastName: doc.data().lastName,
-                            /*institute: dict[doc.id].institute,*/ connection: dict[doc.id].connection
+                            institute: dict[doc.id].institute, connection: dict[doc.id].connection
                         })
                         // console.log()
                     ))

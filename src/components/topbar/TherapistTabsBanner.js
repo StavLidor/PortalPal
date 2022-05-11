@@ -8,7 +8,7 @@ import {signOutCurrentUser} from "../../firebase";
 import PatientList from "../sidebar/PatientList";
 import PatientDetails from "../sidebar/PatientDetails";
 
-function TherapistTabsBanner({type,currentPerson, setCurrentPage}){
+function TherapistTabsBanner({therapistInstitute,type,currentPerson, setCurrentPage}){
 
     const [tabsComponent, setTabsComponent] = useState(<h3>משהו השתבש...</h3>)
 
@@ -49,7 +49,6 @@ function TherapistTabsBanner({type,currentPerson, setCurrentPage}){
                 break
             case "parent":
 
-
                 setTabsComponent(
                     <Container className="border border-secondary rounded">
 
@@ -71,6 +70,8 @@ function TherapistTabsBanner({type,currentPerson, setCurrentPage}){
                             }}  className="list-group-item list-group-item-action">התקשרות</Link>
                         </Nav.Item>
                     </Nav>
+                        { therapistInstitute==='external' && <Button>הסר מטופל</Button>}
+
                     </Container>
 
                 )

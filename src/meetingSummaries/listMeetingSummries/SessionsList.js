@@ -17,6 +17,7 @@ import {Link, Route, Routes} from "react-router-dom";
 import {auth, db} from "../../firebase";
 import {addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, updateDoc} from "firebase/firestore";
 import firebase from "firebase/compat/app";
+import { Pencil,Plus,Trash} from 'react-bootstrap-icons';
 
 function SessionsList({patientId, therapistId = null, type}) {
     const [sessionsData, setSessionsData] = useState([])
@@ -164,11 +165,11 @@ function SessionsList({patientId, therapistId = null, type}) {
                                         </Row>
 
                                         {(type === 'therapist') &&
-                                        <Row className='justify-content-end'>
-                                            <Col md={2}>
+                                        <Row className='justify-content-end w-10'>
+                                            <Col className="m-1" md={1}>
                                                 <EditSessionDialog sessionData={s} handleUpdate={handleUpdate}/>
                                             </Col>
-                                            <Col md={2}>
+                                            <Col className="m-1" md={1}>
                                                 <DeleteSessionDialog handleDelete={handleDelete} sessionID={s.id}/>
                                             </Col>
                                         </Row>}
@@ -212,7 +213,7 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
 
     return (
         <>
-            {(type === 'therapist') && <Button variant="outline-dark" onClick={handleShow}>
+            {(type === 'therapist') && <Button  variant="outline-dark" onClick={handleShow}><Plus className= "m-1"/>
                 הוסף מפגש
             </Button>}
 
@@ -266,11 +267,11 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                     <Button variant="secondary" onClick={handleClose}>
                         בטל
                     </Button>
-                    <Button variant="primary" onClick={() => {
+                    <Button variant="success" onClick={() => {
                         handleClose()
                         handleOnSubmit()
                     }}>
-                        שמור
+                         שמור שינויים
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -286,8 +287,7 @@ function DeleteSessionDialog({handleDelete, sessionID}) {
 
     return (
         <>
-            <Button variant="outline-dark" onClick={handleShow}>
-                מחק
+            <Button variant="outline-danger" onClick={handleShow}><Trash/>
             </Button>
 
             <Modal show={show} onHide={handleClose}>
@@ -320,8 +320,7 @@ function EditSessionDialog({handleUpdate, sessionData}) {
 
     return (
         <>
-            <Button variant="outline-dark" onClick={handleShow}>
-                ערוך
+            <Button variant="outline-dark" onClick={handleShow}><Pencil/>
             </Button>
 
             <Modal show={show} onHide={()=> {
@@ -382,8 +381,6 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                         </Row>
 
 
-
-
                         <Row>
                             <Form.Group
 
@@ -410,7 +407,7 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                     }}>
                         בטל
                     </Button>
-                    <Button variant="primary" onClick={() => {
+                    <Button variant="success" onClick={() => {
                         handleClose()
                         console.log("new: ", newSessionData)
                         console.log("newExerciseData.until: ", newSessionData.date)

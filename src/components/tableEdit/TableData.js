@@ -8,6 +8,7 @@ import {updatesPatients} from "../../firebase";
 import {Button, Form, Row, Col, Container, ButtonGroup, Table, Grid, Modal} from 'react-bootstrap'
 import firebase from "firebase/compat/app";
 import AddThroughCsvFile from "./AddThroughCsvFile";
+import { Plus} from 'react-bootstrap-icons';
 
 
 export default function TableData({
@@ -24,36 +25,41 @@ export default function TableData({
                                       emptyDetailsTable,
                                       emptyEditDetailsTable
                                       , HebrewNamesTable,
-                                      columnsInfoViewTable, toEdit, toAdd
-                                      , table, getTable/*addDetails,addDetailsTable*/
+                                      columnsInfoViewTable
+                                      , table, getTable,optionIds,tableOptionIds
                                   }) {
 
 
-    const [detailsNew, setDetailsNew] = useState(emptyDetails);
+    const [detailsNew, setDetailsNew] = useState(emptyDetails)
+    const [messages, setMessages] = useState({
+
+    })
     const [contacts, setContacts] = useState([])
     const [addSomeone, setAddSomeone] = useState(false)
     const [addOrRemoveBatch, setAddOrRemoveBatch] = useState(false)
     const [contactTable, setContactTable] = useState(null)
-    const [show, setShow] = useState(false);
-    const closeDialog = () => setAddSomeone(false);
-    const handleShow = () => setShow(true);
+    const [show, setShow] = useState(false)
+    const closeDialog = () => setAddSomeone(false)
+    const handleShow = () => setShow(true)
 
 
     // const [detailsTherapist,setDetailsTherapist]=useState({firstName:"",lastName:"",email:"",jobs:"",institutes:[data.institutionNumber]})
     const [editContactId, setEditContactId] = useState(null);
-    const [editFormData, setEditFormData] = useState(
-        function () {
-            if (toEdit) {
-                return emptyEditDetails
-            }
-            return null
-        }()
+    const [editFormData, setEditFormData] = useState(emptyEditDetails
+        // function () {
+        //     if (toEdit) {
+        //         return emptyEditDetails
+        //     }
+        //     return null
+        // }()
     )
     useEffect(() => {
-        console.log("DATAAAAA:", data)
+        if(type === 'eee')
+            console.log("DATAAAAA:", data)
         const p1 = Promise.resolve(data)
         p1.then(arr => {
             setContacts(arr)
+            // console.log(arr)
         })
 
 
@@ -63,39 +69,7 @@ export default function TableData({
     //     console.log('Modify',modifyContacts)
     //
     // },contacts)
-    const handleOpen = (event, contact) => {
-        event.preventDefault()
-        if (contactTable === null) {
-            setContactTable(contact)
-            getTable(contact)
-        }
-        // if(contact.id !== contactTable.id){
-        //     //setContactTable(null)
-        //     // handleClose(event,contactTable)
-        //     // console.log('1',contactTable)
-        //     setContactTable(null)
-        //     //handleOpen(event,contact)
-        //     //setContactTable(contact)
-        //     //console.log('2',contactTable)
-        //     //setContactTable(contact)
-        //     // setInterval(function() {
-        //     //     setContactTable(contact)
-        //     //     //call $.ajax here
-        //     // }, 1); //5 seconds
-        //     //setContactTable(contact)
-        //
-        // }
 
-        // console.log('OPENN',contact.id)
-    }
-    const handleClose = (event, contact) => {
-        event.preventDefault()
-        if (contact.id === contactTable.id) {
-            setContactTable(null)
-            getTable(null)
-        }
-
-    }
     const handleEditFormChange = (event) => {
         event.preventDefault();
         const fieldName = event.target.getAttribute("name");
@@ -139,12 +113,13 @@ export default function TableData({
         console.log('editedContact', editFormData)
 
         if (await update(editContactId, editedContact)) {
-            const newContacts = [...contacts];
-            const index = contacts.findIndex((contact) => contact.id === editContactId);
-            newContacts[index] = editedContact
+            // const newContacts = [...contacts];
+            // const index = contacts.findIndex((contact) => contact.id === editContactId);
+            // newContacts[index] = editedContact
             // setContacts(newContacts)
             setEditContactId(null)
         }
+        setEditContactId(null)
     };
     const addNews = allDetails => {
         //console.log('new patinet for csv')
@@ -156,7 +131,9 @@ export default function TableData({
         allDetails.map(async (details) => {
 
                 // const newContacts = [...contacts]
-                const promiseId = await add(details)
+                const promiseId = await add(details,((messages)=>{
+
+                }))
                 const p = Promise.resolve(promiseId)
                 let modifyContacts = ((flag) => {
                     count++
@@ -245,8 +222,9 @@ export default function TableData({
         // setContacts(newContacts)
     }
     const submitAddDialog = () => {
-        console.log("hereeeeeeeeeee")
-        const p = Promise.resolve(add(detailsNew))
+        console.log('ADDDDDDDDDDDDDDDDD')
+        const p = Promise.resolve(add(detailsNew, setMessages))
+        console.log('messagesss',messages)
         p.then(async id => {
             if (id) {
                 const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
@@ -257,6 +235,9 @@ export default function TableData({
                     } else {
                         addToContacts(Object.assign({}, detailsNew, id))
                     }
+                    // setEditContactId(null);
+                    setDetailsNew(emptyDetails)
+                    setAddSomeone(false)
                 } else {
                     // mybe can not change the informtion need to think about
                     //newContacts[index] = detailsNew
@@ -264,40 +245,12 @@ export default function TableData({
 
             }
         })
-        setEditContactId(null);
-        setDetailsNew(emptyDetails)
-    };
-    const submitAdd = (event) => {
-        event.preventDefault();
-        const p = Promise.resolve(add(detailsNew))
-        p.then(async id => {
-            if (id) {
-                const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
-                if (index < 0) {
-                    if (typeof (id) == "string") {
-                        addToContacts({...detailsNew, id: id})
-                        console.log(detailsNew)
-                    } else {
-                        addToContacts(Object.assign({}, detailsNew, id))
-                    }
-                } else {
-                    // mybe can not change the informtion need to think about
-                    //newContacts[index] = detailsNew
-                }
 
-            }
-        })
-        setEditContactId(null);
-        setDetailsNew(emptyDetails)
     };
     console.log("type", type)
 
     return (
         <div>
-            {/*{toAdd && <CsvFile addNews={addNews} remove={remove}/>}*/}
-            {/*{toAdd && <AddThroughCsvFile/>}*/}
-
-            {/*<input type="file" name="learnCSV" accept="text/csv"/>*/}
             {contacts.length > 0 &&
 
             <div className="secretary">
@@ -316,7 +269,7 @@ export default function TableData({
                         {
                             contacts.map((contact) => (
                                 <Fragment>
-                                    {contact !== undefined && toEdit && editContactId === contact.id ? (
+                                    {contact !== undefined  && editContactId === contact.id ? (
                                         <EditableRow
                                             contact={contact}
                                             editFormData={editFormData}
@@ -330,37 +283,20 @@ export default function TableData({
                                     ) : (contact !== undefined) ? (
 
                                             <ReadOnlyRow
+                                                updateTable={updateTable}
+                                                addTable={addTable} /*deleteObj={deleteObj}*/
+                                                deleteObjTable={deleteObjTable}
+                                                emptyDetailsTable={emptyDetailsTable} emptyEditDetailsTable={emptyEditDetailsTable}
+                                                /*data={table/*contactTable[tableName]}*/
+                                                HebrewNames={HebrewNamesTable} columnsInfoViewTable={columnsInfoViewTable}
                                                 contact={contact}
                                                 handleEditClick={handleEditClick}
                                                 handleDeleteClick={handleDeleteClick}
-                                                // namesFiled={['firstName','lastName','dateOfBirth',
-                                                //     'city','street','buildingNumber']}
-                                                columnNames={Object.keys(emptyDetails)}
                                                 columnsInfo={columnsInfoView}
                                                 requiredId={requiredId}
-                                                toEdit={toEdit}
                                                 table={table}
-
-                                                handleOpen={
-                                                    function () {
-                                                        if (table !== undefined && contactTable == null) {
-                                                            return handleOpen
-                                                        }
-                                                        return null
-                                                    }
-                                                    ()
-
-                                                }
-                                                handleClose={
-                                                    function () {
-                                                        if (table !== undefined && contactTable == null || table !== undefined &&
-                                                            contact.id == contactTable.id) {
-                                                            return handleClose
-                                                        }
-                                                        return null
-                                                    }
-                                                    ()
-                                                }
+                                                getTable={getTable}
+                                                tableOptionIds={tableOptionIds}
                                             />
 
                                         ) :
@@ -372,35 +308,55 @@ export default function TableData({
                         </tbody>
                     </Table>
                 </form>
-
             </div>
             }
-            {<Button onClick={() => {
+            {<Button className="m-2 p-2" style={{fontWeight: "bold"}} variant="outline-primary" onClick={() => {
                 console.log("show dialog")
                 setAddSomeone(true)
-            }}>{"הוסף " + type + " חדש"}</Button>}
+            }}><Plus style={{fontSize: 20}}/> {"הוסף " + type + " חדש"}</Button>}
             {addSomeone && <Modal show={addSomeone} onHide={()=>setAddSomeone(false)}>
                 <Modal.Header>
-                    <Modal.Title>{"הוסף " + type + " חדש"}</Modal.Title>
+                    <Modal.Title style={{fontWeight:"bold", fontSize:35}}>{"הוספת " + type + " חדש"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form className="needs-validation" noValidate>
                         <Col>
                             <Row>
                                 {requiredId &&
-                                <div className="form-group">
-                                    <Form.Label htmlFor="id">תעודות זהות:</Form.Label>
-                                    <Form.Control type="text" name="id" id="id"
-                                                  onChange={e => setDetailsNew({...detailsNew, id: e.target.value})}
-                                                  value={detailsNew.id}/>
-                                </div>
+                                    (optionIds!== undefined)?(
+                                    <Form.Label style={{fontSize:20}}>תעודת זהות:
+                                            <Form.Select  type="text" name="type" id="type"
+                                                    onChange={e => setDetailsNew({
+                                                    ...detailsNew,
+                                                    id: e.target.value
+                                                })}
+                                                    value={detailsNew.id}>
+                                                {
+                                                    optionIds.map((op) => (
+                                                    // <option value={op}>{op}</option>
+                                                    <option style={{fontSize: 18}} value={op.id}>{op.id+" "+op.information}</option>
+
+                                                    ))
+                                                }
+                                            </Form.Select>
+                                    </Form.Label>
+                                    ):
+                                    <div className="form-group">
+                                    <Form.Label style={{fontSize:20}} for="validationDefault01" htmlFor="id">תעודת זהות:</Form.Label>
+                                    <Form.Control id='validationDefault01' required type="text" name="id"
+                                    onChange={e => setDetailsNew({...detailsNew, id: e.target.value})}
+                                    value={detailsNew.id}/>
+                                        </div>
                                 }
+                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                    {messages.id}
+                                </div>
                                 {columnsInfoView.map((i) => (
                                     i.add &&
                                     <div className="form-group">
                                         {'options' in i &&
-                                        <Form.Label>{i.label}
-                                            <Form.Select type="text" name="type" id="type"
+                                        <Form.Label style={{fontSize:20}}>{i.label}
+                                            <Form.Select  type="text" name="type" id="type"
                                                          onChange={e => setDetailsNew({
                                                              ...detailsNew,
                                                              [i.name]: e.target.value
@@ -412,27 +368,27 @@ export default function TableData({
                                                         <option style={{fontSize: 18}} value={op}>{op}</option>
 
                                                     ))
-
-
                                                 }
                                             </Form.Select>
                                         </Form.Label>
                                             // </label>
-
                                         }
                                         {!('options' in i) &&
                                         <div>
-                                            <Form.Label htmlFor="name">{i.label}</Form.Label>
-                                            <Form.Control
+                                            <Form.Label style={{fontSize:20}} for="validationDefault01" htmlFor="name">{i.label}</Form.Label>
+                                            <Form.Control id='validationDefault01' required
                                                 autoFocus
                                                 type={i.type}
                                                 // required={i.required}
                                                 // placeholder={i.placeholder}
-                                                id={i.name}
+                                                /*id={i.name}*/
                                                 name={i.name}
                                                 value={detailsNew[i.name]}
                                                 onChange={e => setDetailsNew({...detailsNew, [i.name]: e.target.value})}
                                             ></Form.Control>
+                                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                                {messages[i.name]}
+                                            </div>
 
                                         </div>
                                         }
@@ -440,39 +396,17 @@ export default function TableData({
                                 ))}
 
                             </Row>
-                            {/*<Row>*/}
-                            {/*    <Form.Group controlId="summary">*/}
-                            {/*        <Form.Label>סיכום מפגש</Form.Label>*/}
-                            {/*        <Form.Control*/}
-                            {/*            type="text"*/}
-                            {/*            onChange={e => setNewSession({...newSession, summary: e.target.value})}*/}
-
-                            {/*        />*/}
-                            {/*    </Form.Group>*/}
-                            {/*</Row>*/}
-                            {/*<Row>*/}
-                            {/*    <Form.Group controlId="title">*/}
-                            {/*        <Form.Label>כותרת</Form.Label>*/}
-                            {/*        <Form.Control*/}
-                            {/*            type="text"*/}
-                            {/*            onChange={e => setNewSession({...newSession, title: e.target.value})}*/}
-
-                            {/*        />*/}
-                            {/*    </Form.Group>*/}
-                            {/*</Row>*/}
-
-
                         </Col>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setAddSomeone(false)}>
+                    <Button variant="secondary" onClick={() => {setAddSomeone(false)
+                        setDetailsNew(emptyDetails)
+                        setMessages(emptyDetails)}}>
                         בטל
                     </Button>
-                    <Button variant="primary" onClick={() => {
-                        // handleClose()
-                        // handleOnSubmit()
-                        setAddSomeone(false)
+                    <Button variant="success" onClick={() => {
+                        // setAddSomeone(false)
                         submitAddDialog()
                     }}>
                         שמור
@@ -480,90 +414,13 @@ export default function TableData({
                 </Modal.Footer>
             </Modal>}
             <tr>
-                <br/>
-                {<Button onClick={() => {
+
+                {<Button className="m-2 p-2" style={{fontWeight: "bold"}} variant="outline-primary" onClick={() => {
                     console.log("show dialog")
                     setAddOrRemoveBatch(true)
-                }}>{"הוסף או חסר מקבץ"}</Button>}
+                }}>{"הוסף או הסר מקבץ"}</Button>}
             </tr>
             {addOrRemoveBatch && <AddThroughCsvFile addBatch={addOrRemoveBatch} setAddBatch={setAddOrRemoveBatch} add={addNews} remove={remove}/>}
-            {/*{toAdd && addSomeone &&*/}
-            {/*<form onSubmit={submitAdd}>*/}
-            {/*    <h2>*/}
-            {/*        חדש*/}
-            {/*    </h2>*/}
-            {/*    {requiredId &&*/}
-            {/*    <div className="form-group">*/}
-            {/*        <label htmlFor="id">תעודות זהות:</label>*/}
-            {/*        <input type="number" name="id" id="id"*/}
-            {/*               onChange={e => setDetailsNew({...detailsNew, id: e.target.value})}*/}
-            {/*               value={detailsNew.id}/>*/}
-            {/*    </div>*/}
-            {/*    }*/}
-
-
-            {/*    {columnsInfoView.map((i) => (*/}
-            {/*        i.add &&*/}
-            {/*        <div className="form-group">*/}
-
-            {/*            {'options' in i &&*/}
-            {/*            <label>:{i.label}*/}
-            {/*                <select type="text" name="type" id="type"*/}
-            {/*                        onChange={e => setDetailsNew({...detailsNew, [i.name]: e.target.value})}*/}
-            {/*                        value={detailsNew[i.name]}>*/}
-            {/*                    {*/}
-            {/*                        i.options.map((op) => (*/}
-            {/*                            <option value={op}>{op}</option>*/}
-            {/*                        ))*/}
-
-
-            {/*                    }*/}
-
-            {/*                </select>*/}
-
-            {/*            </label>*/}
-
-            {/*            }*/}
-            {/*            {!('options' in i) &&*/}
-            {/*            <div>*/}
-            {/*                <label htmlFor="name">{i.label}</label>*/}
-            {/*                <input*/}
-            {/*                    type={i.type}*/}
-            {/*                    // required={i.required}*/}
-            {/*                    // placeholder={i.placeholder}*/}
-            {/*                    id={i.name}*/}
-            {/*                    name={i.name}*/}
-            {/*                    value={detailsNew[i.name]}*/}
-            {/*                    onChange={e => setDetailsNew({...detailsNew, [i.name]: e.target.value})}*/}
-            {/*                ></input>*/}
-            {/*            </div>*/}
-            {/*            }*/}
-            {/*        </div>*/}
-            {/*    ))}*/}
-
-
-            {/*    <input type="submit" value="הוסף"/>*/}
-            {/*</form>*/}
-
-            {/*}*/}
-            <Fragment>
-                {contactTable &&
-                <div>
-
-
-                    <div>{contactTable.id}</div>
-                    <TableData type="תלמיד"
-                               add={addTable} deleteObj={deleteObjTable}
-                               emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}
-                               data={table/*contactTable[tableName]*/}
-                               HebrewNames={HebrewNamesTable} columnsInfoView={columnsInfoViewTable} requiredId={true}
-                               toEdit={false} toAdd={true}
-                        /*addDetails={addDetailsTable}*//>
-                </div>
-
-
-                }
-            </Fragment>
 
 
         </div>

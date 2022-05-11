@@ -12,10 +12,11 @@ import {
 import {Link, Route, Routes} from "react-router-dom";
 import PatientDetails from "./components/sidebar/PatientDetails";
 import TableData from "./components/tableEdit/TableData";
-import {collection, doc, getDoc, onSnapshot, query, where} from "firebase/firestore";
+import {collection, doc, getDoc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
 import firebase from "firebase/compat/app";
 import {newPatients} from "./pepole/users/user";
 import se from "react-datepicker";
+import {is_israeli_id_number, validateEmail} from "./useFunction";
 
 
 // import {details_users} from "../../firebase"
@@ -25,12 +26,36 @@ function SecretaryPage({data}) {
     const [students, setStudents] = useState([])
     const [employees, setEmployees] = useState([])
     const [studentsTable, setStudentsTable] = useState([])
-    const [idGetTable, setIdGetTable] = useState([])
+    const [userGetTable, setUserGetTable] = useState([])
     const [idEmployees, setIdEmployees] = useState([])
     const [idStudents, setIdStudents] = useState([])
     const [listenerEmployees, setListenerEmployees] = useState(null)
     const [listenerStudents, setListenerStudents] = useState(null)
+    const [listenersTableStudents, setListenersTableStudents] = useState([])
+    const [studentTable, setStudentTable] = useState(null)
+    useEffect(() => {
+        if(studentTable!==null){
+            const index = studentsTable.findIndex((s) => s.id === studentTable.id)
+            console.log('indexSS',index,studentsTable,studentTable)
+            if(index === -1){
+                if(studentTable.active){
+                    setStudentsTable( [...studentsTable,studentTable])
+                }
+            }
+            else{
+                const arr=[...studentsTable]
+                if(!studentTable.active){
+                    arr.splice(index, 1)
+                }
+                else{
+                    arr[index]=studentTable
+                }
+                console.log("deletei from table",arr)
+                setStudentsTable(arr)
+            }
 
+        }
+    },[studentTable])
     useEffect(() => {
         if (listenerEmployees !== null) {
             console.log("קקי")
@@ -111,7 +136,7 @@ function SecretaryPage({data}) {
                 (querySnapshot) => {
                     let data = []
                     querySnapshot.forEach((doc) => {
-                        data.push(doc.data())
+                        data.push({...doc.data(),information:doc.data().firstName +" "+doc.data().lastName})
                         // if (typeof (doc.data().dateOfBirth) !== 'string')
                         //     // data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
                         //     data.push(doc.data())
@@ -119,6 +144,8 @@ function SecretaryPage({data}) {
                         //     data.push(doc.data())
                     })
                     setStudents(data)
+                    //  const index = studentsTable.findIndex((s) => s.id === doc.id)
+                    // studentsTable[index]=doc.data()
                     console.log('Students1112', data)
                 },
                 (error) => {
@@ -215,34 +242,104 @@ function SecretaryPage({data}) {
         //d.data().students
     }, [])
 
-    const addPatient = async (details) => {
-        //details.dateOfBirth =firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
-        return await newPatients({
-            ...details,
-            institute: data.institute,
-            dateOfBirth: firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
-        })
-        //
-    }
-    const addTherapist = async (details) => {
-        if (details.jobs !== undefined) {
-            console.log('JOBBBBBBBBS', details.jobs)
-            details.jobs = details.jobs.split(",")
+    const addPatient = async (details, setMessages)=>{
+        console.log('Messagesssss!!!!!!!!!!!! ',details.dateOfBirth)
+
+        const messages={id:"",firstName:"",lastName:"",dateOfBirth:"",city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:""}
+        if(!details.id.trim()||!is_israeli_id_number(details.id)){
+            messages.id='הכנס תז ישראלית'
         }
-        if (details.email !== undefined) {
-            const id = await addUserFromAdmin(details, data.institute)
-            return id
-            const p = Promise.resolve(id)
-
-            p.then(async id => {
-
-                console.log('SEEEEEEEEC', id)
-                return id
+        if(!validateEmail(details.email)){
+            messages.email='הכנס אימייל תקין להורה'
+        }
+        if(!details.dateOfBirth.trim()){
+            messages.dateOfBirth='הכנס תאריך לידה'
+        }
+        if(!details.firstName.trim()){
+            messages.firstName='הכנס שם פרטי לתלמיד'
+        }
+        if(!details.lastName.trim()){
+            messages.lastName='הכנס שם משפחה לתלמיד'
+        }
+        if(!details.lastNameParent.trim()){
+            messages.lastNameParent='הכנס שם משפחה להורה'
+        }
+        if(!details.firstNameParent.trim()){
+            messages.firstNameParent='הכנס שם פרטי להורה'
+        }
+        if(!details.city.trim()){
+            messages.city='הכנס עיר מגורים'
+        }
+        if(!details.street.trim()){
+            messages.street='הכנס רחוב מגורים'
+        }
+        if(!details.buildingNumber.trim()){
+            messages.buildingNumber='הכנס מספר רחוב'
+        }
+        setMessages(messages)
+        console.log('Messagesssss ')
+        if(!messages.firstName.trim() && !messages.lastName.trim() &&
+            !messages.id.trim() && !messages.email.trim() &&
+            !messages.lastNameParent.trim() && !messages.firstNameParent.trim()
+            && !messages.city.trim()&& !messages.street.trim()&& !messages.buildingNumber.trim()
+        &&  !messages.dateOfBirth.trim()){
+            console.log('its GOODDD')
+            return await newPatients({...details,institute: data.institute,dateOfBirth:firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
             })
-            console.log('IDDDD INN', id)
         }
         return null
+        //id:"",firstName:"",lastName:"",dateOfBirth:new Date(),buildingNumber:"",firstNameParent:"",lastNameParent:""
+        //details.dateOfBirth =firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
 
+        //
+    }
+    // const addTherapist = async (details) => {
+    //     if (details.jobs !== undefined) {
+    //         console.log('JOBBBBBBBBS', details.jobs)
+    //         details.jobs = details.jobs.split(",")
+    //     }
+    //     if (details.email !== undefined) {
+    //         const id = await addUserFromAdmin(details, data.institute)
+    //         return id
+    //         const p = Promise.resolve(id)
+    //
+    //         p.then(async id => {
+    //
+    //             console.log('SEEEEEEEEC', id)
+    //             return id
+    //         })
+    //         console.log('IDDDD INN', id)
+    //     }
+    //     return null
+    //
+    // }
+    const addTherapist = async(details, setMessages) => {
+        const messages={email:"",firstName:"",lastName:"",jobs:""}
+        console.log('TTTTTTTTT',details.jobs)
+        if(!validateEmail(details.email)){
+            messages.email='הכנס אימייל תקין'
+        }
+        if(!details.firstName.trim()){
+            messages.firstName='הכנס שם פרטי למטפל'
+        }
+        if(!details.lastName.trim()){
+            messages.lastName='הכנס שם משפחה למטפל'
+        }
+        if(!details.jobs.trim()){
+            messages.jobs='הכנס את תפקדים שלו'
+        }
+        // else {
+        //     details.jobs =details.jobs.split(",")
+        // }
+        setMessages(messages)
+
+        if(!messages.firstName.trim() && !messages.lastName.trim()&& !messages.jobs.trim()
+        &&!messages.email.trim()){
+            // details.jobs =details.jobs.split(",")
+            const id =await addUserFromAdmin({...details,jobs:details.jobs.split(",")},data.institute)
+            return id
+        }
+        return null
     }
     const updatesPatients = async (id, data) => {
         // if('dateOfBirth' in data)
@@ -384,74 +481,159 @@ function SecretaryPage({data}) {
 
     }
     const HebrewNamesTableT = [
-        "תעודת זהות של תלמיד", "קשר", "שם משפחה של תלמיד", "שם של תלמיד"
+        "תעודת זהות של תלמיד","שם משפחה של תלמיד","שם של תלמיד","קשר"
     ]
 
     async function getTable(details) {
+
         if (details === null) {
             setStudentsTable([])
+            setUserGetTable(null)
+            listenersTableStudents.map((l)=>{
+                l()
+
+            })
+            setListenersTableStudents([])
             return
         }
 
-        setIdGetTable(details.id)
+        setUserGetTable(details)
+        let arrSnapshot=[]
         console.log('CCCCCCCCCC', details.institutes[data.institute])
-        const unsubscribe = query(collection(db, "patients"),
-            where(firebase.firestore.FieldPath.documentId(), 'in', details.institutes[data.institute]))
-        // setStudents(d.data().students)
-        // setEmployees(d.data().employees)
-        onSnapshot(
-            unsubscribe,
-            (querySnapshot) => {
-                let data = []
-                querySnapshot.forEach((doc) => (
-                    data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
-                ))
-                setStudentsTable(data)
-                console.log(data)
-            },
-            (error) => {
-                // TODO: Handle errors!
-                console.log('error!!', error)
-            })
-        const dataStudents = await detailsPatient(details.institutes[data.institute])
-        console.log('AAAAA', dataStudents)
-        return dataStudents
+        details.institutes[data.institute].map((id)=>{
+
+            const index = students.findIndex((s) => s.id === id)
+            if(index!=-1){
+
+                let docRef = doc(db, "patients/" + id + "/therapists",details.id)
+                let resultSnap=onSnapshot(docRef, (d) => {
+                    console.log(d.data().connection)
+                    setStudentTable({...students[index],connection:d.data().connection,active:
+                        d.data().active})
+                    // setStudentsTable([...studentsTable,{...students[index],connection:d.data().connection}])
+                    // arrStudents.push(students[index])
+                })
+                arrSnapshot.push(() => resultSnap)
+            }
+
+
+        })
+        setListenersTableStudents(arrSnapshot)
+        // console.log('arrStudents',arrStudents)
+        // setStudentsTable(arrStudents)
+        // const unsubscribe = query(collection(db, "patients"),
+        //     where(firebase.firestore.FieldPath.documentId(), 'in', details.institutes[data.institute]))
+        // // setStudents(d.data().students)
+        // // setEmployees(d.data().employees)
+        // onSnapshot(
+        //     unsubscribe,
+        //     (querySnapshot) => {
+        //         let data = []
+        //         querySnapshot.forEach((doc) => (
+        //             data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
+        //         ))
+        //         setStudentsTable(data)
+        //         console.log(data)
+        //     },
+        //     (error) => {
+        //         // TODO: Handle errors!
+        //         console.log('error!!', error)
+        //     })
+        // const dataStudents = await detailsPatient(details.institutes[data.institute])
+        // console.log('AAAAA', dataStudents)
+        // return dataStudents
         //data.works.institutes
 
     }
 
     const inputsViewPOfT = [
-        {
-            type: "text", required: "required",
-            placeholder: "Enter a connection between therapist and patients..."
-            , name: "connection", label: "קשר:",
-            edit: true,
-            add: true
-            /*,value:editFormData.firstName,*/
-        },
+
         {
             type: "text", required: "required",
             placeholder: "Enter a first name..."
             , name: "firstName", label: "שם פרטי:",
-            edit: false,
+            edit: false,view: true,
             add: false
             /*,value:editFormData.firstName,*/
         }, {
             type: "text", required: "required",
             placeholder: "Enter a last name..."
             , name: "lastName", label: "שם משפחה:", edit: false,
-            add: false
+            add: false,view: true
             /*,value:editFormData.lastName,*/
-        }
+        },
+        {
+            type: "text", required: "required",
+            placeholder: "Enter a connection between therapist and patients..."
+            , name: "connection", label: "קשר:",
+            edit: true,
+            add: true,view: true
+            /*,value:editFormData.firstName,*/
+        },
     ]
-    const addConnectionToTherapist = async (details) => {
-        console.log("EEEEEEEEEEEEEE", idGetTable)
+    const addConnectionToTherapist = async (details,setMessages) => {
+        const messages ={id:"",connection:""}
+        if(!details.connection.trim()){
+            messages.connection='הכנס קשר'
+        }
+        //console.log("EEEEEEEEEEEEEE", userGetTable.institutes[data.institute],details)
+        const i = userGetTable.institutes[data.institute].findIndex((id) => id === details.id)
+        if(i!==-1){
+            console.log("EEEEEEEEEEEEEE", userGetTable.institutes[data.institute],details)
+            messages.id="יש קשר בין תלמיד לעובד"
+
+            //return false
+        }
+        setMessages(messages)
+        console.log(messages)
+        if(messages.connection.trim()||messages.id.trim()){
+            return false
+        }
+        const index = students.findIndex((s) => s.id === details.id)
+        if(details.id in userGetTable.institutes[data.institute]|| index == -1){
+            return false
+        }
+
+
         // TODO: add csv and to inputs of this connections part.
-        return await addConnectionPatientToTherapist(idGetTable, details.id, data.institute, details.connection)
+        if(await addConnectionPatientToTherapist(userGetTable.id, details.id, data.institute, details.connection)) {
+            let docRef = doc(db, "patients/" + details.id + "/therapists",userGetTable.id)
+            const resultSnap=onSnapshot(docRef, (d) => {
+                console.log(d.data().connection)
+                setStudentTable({...students[index],connection:d.data().connection,active:
+                    d.data().active})
+                // setStudentsTable([...studentsTable,{...students[index],connection:d.data().connection}])
+                // arrStudents.push(students[index])
+            })
+            setListenersTableStudents([...listenersTableStudents,() => resultSnap])
+            return true
+        }
+
     }
     const deleteConnectionToTherapist = async (contact/*id*/) => {
         // console.log("EEEEEEEEEEEEEE",idGetTable)
-        return await removeConnectionPatientToTherapist(idGetTable, contact.id, data.institute)
+        if(await removeConnectionPatientToTherapist(userGetTable.id, contact.id, data.institute)) {
+            //TODO: if need to remove the snapshot?
+            return true
+        }
+        return false
+
+    }
+    const updateConnectionToTherapist = async (id, data) => {
+        // console.log("EEEEEEEEEEEEEE",idGetTable)
+        const collection_query_patients = collection(db, "patients")
+        try {
+            await updateDoc(doc(collection_query_patients, id, "therapists",userGetTable.id
+            )/*collection(db, '/patients/001/therapists','Rahbt7jhvugjFSsnrcnBb5VMfUb2')*/, {
+                connection:data.connection
+            })
+            return true
+        }
+        catch (e){
+            console.log(e)
+            return false
+        }
+
 
     }
 
@@ -467,24 +649,26 @@ function SecretaryPage({data}) {
                                                emptyDetails={{
                                                    firstName: "",
                                                    lastName: "",
-                                                   jobs: [],
+                                                   jobs: "",
                                                    email: "",/*table:[{id:"",firstName:"",lastName:""}]*/
                                                }}
-                                               emptyEditDetails={{firstName: "", lastName: "", jobs: []}}
+                                               emptyEditDetails={{firstName: "", lastName: "", jobs: ""}}
                                                data={employees} HebrewNames={[
-                               "שם פרטי", "שם משפחה", "עבודות", "אימייל", "מטופלים בית ספריים"]
+                               "שם פרטי", "שם משפחה", "עבודות", "אימייל"]
                            } columnsInfoView={columnsViewTherapist} requiredId={false}
                                                find={findTherapist} HebrewNamesTable={HebrewNamesTableT}
                                                emptyDetailsTable={{
                                                    id: "",
-                                                   connection: "",
                                                    lastName: "",
                                                    firstName: ""/**/
-                                               }} toEdit={true} toAdd={true} getTable={getTable}
+                                                   ,connection: "",
+                                               }} getTable={getTable}
                                                table={studentsTable}
-                                               inputsViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
+                                               columnsInfoViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
                                /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/
                                                deleteObjTable={deleteConnectionToTherapist}
+                                               updateTable={updateConnectionToTherapist}
+                                               tableOptionIds={students}
 
                            />}/>
                 </Routes>
@@ -497,7 +681,7 @@ function SecretaryPage({data}) {
                                                    id: "",
                                                    firstName: "",
                                                    lastName: "",
-                                                   dateOfBirth: new Date(),
+                                                   dateOfBirth: "",
                                                    city: "",
                                                    street: "",
                                                    buildingNumber: "",
@@ -513,7 +697,7 @@ function SecretaryPage({data}) {
                            }} data={students} HebrewNames={[
                                "תעודת זהות", "שם פרטי", "שם משפחה", "תאריך לידה", "מגדר" ,"עיר", "רחוב", "מספר רחוב"]
                            } columnsInfoView={columnsViewPatient} requiredId={true}
-                                               toEdit={true} toAdd={true}/>}/>
+                                             />}/>
                 </Routes>
 
             </Row>

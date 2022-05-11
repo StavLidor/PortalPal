@@ -22,11 +22,14 @@ import AQ from "../../AQ";
 import ParentList from "../../ParentList";
 import Secretary from "../secretary/Secretary";
 import SecretaryPage from "../../SecretaryPage";
+import MyProfile from "../../MyProfile";
+import GetPersonalCode from "../../components/code/GetPersonalCode";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
     const [therapistListData, setTherapistListData] = useState([])
     const [parentsListData, setParentsListData] = useState([])
+    const [showDialogCode, setShowDialogCode] = useState(false)
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
     const [currentPerson, setCurrentPerson] = useState('')
     const [currentPage, setCurrentPage] = useState('')
@@ -38,32 +41,39 @@ function HomePage({userDetails, type, institute}) {
         await signOutCurrentUser()
     }
 
-    useEffect(() => {
-        // console.log("currentTherapist: ", currentTherapist)
-        switch (type) {
-            case "admin":
-                // // TODO: change the given list here
-                // setSideListComponent(<PatientList list={userDetails.students_arr}
-                //                                   setPatientListData={setPatientListData} listTitle={"רשימת תלמידים"}
-                //                                   setCurrentPerson={setCurrentPerson}
-                //                                   currentPage={currentPage}/>)
-                break
-            case "parent":
-                setSideListComponent(<PatientList list={userDetails.childrenIds} setPatientListData={setPatientListData}
-                                                  listTitle={"רשימת ילדים"}
-                                                  setCurrentPerson={setCurrentPerson}
-                                                  currentPage={currentPage}/>)
-                break
-            case "therapist":
-                setSideListComponent(<PatientList list={userDetails.institutes[institute]}
-                                                  setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}
-                                                  setCurrentPerson={setCurrentPerson}
-                                                  currentPage={currentPage}/>)
-                break
-            default:
-                <h3>משהו השתבש...</h3>
-        }
-    }, [currentPage])
+
+    // useEffect(() => {
+    //     // console.log("currentTherapist: ", currentTherapist)
+    //     switch (type) {
+    //         case "admin":
+    //             // // TODO: change the given list here
+    //             // setSideListComponent(<PatientList list={userDetails.students_arr}
+    //             //                                   setPatientListData={setPatientListData} listTitle={"רשימת תלמידים"}
+    //             //                                   setCurrentPerson={setCurrentPerson}
+    //             //                                   currentPage={currentPage}/>)
+    //             break
+    //         case "parent":
+    //             setSideListComponent(<PatientList list={userDetails.childrenIds} setPatientListData={setPatientListData}
+    //                                               listTitle={"רשימת ילדים"}
+    //                                               setCurrentPerson={setCurrentPerson}
+    //                                               currentPage={currentPage}
+    //                                               institute={institute}/>)
+    //             break
+    //         case "therapist":
+    //             setSideListComponent(<PatientList list={userDetails.institutes[institute]}
+    //                                               setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}
+    //                                               setCurrentPerson={setCurrentPerson}
+    //                                               currentPage={currentPage}
+    //                                               institute={institute}/>)
+    //             break
+    //         default:
+    //             <h3>משהו השתבש...</h3>
+    //     }
+    // }, [currentPage])
+
+    const handleMyProfile = () => {
+
+    }
 
     return (
 
@@ -74,8 +84,14 @@ function HomePage({userDetails, type, institute}) {
                     <Col md='3' className="w-auto border border-secondary rounded">
                         <ButtonGroup className="gap-4 p-2">
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
-                            <Button className="rounded-3" variant="outline-primary">החשבון שלי</Button>
-                            <Button href={'/'} className="rounded-3" variant="outline-primary"
+                            <Link to="/myProfile">
+                                {type !== 'admin' &&
+                                <Button style={{height: 40}} className="rounded-3 h-auto" variant="outline-primary"
+                                        onClick={handleMyProfile}>החשבון
+                                    שלי</Button>
+                                }
+                            </Link>
+                            <Button style={{height: 40}} href={'/'} className="rounded-3 " variant="outline-primary"
                                     onClick={onLogout}>התנתק</Button>
                         </ButtonGroup>
                     </Col>
@@ -96,7 +112,19 @@ function HomePage({userDetails, type, institute}) {
                 <div>
                     <Row className='p-4 gap-4 vh-100'>
                         <Col md='2' className="p-3 border border-secondary rounded">
-                            {sideListComponent}
+                            {type==='parent' && <PatientList list={userDetails.childrenIds} setPatientListData={setPatientListData}
+                                                             listTitle={"רשימת ילדים"}
+                                                             setCurrentPerson={setCurrentPerson}
+                                                             currentPage={currentPage}
+                                                             institute={institute}/>}
+
+                            {type==='therapist' && <PatientList list={userDetails.institutes[institute]}
+                                                                setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}
+                                                                setCurrentPerson={setCurrentPerson}
+                                                                currentPage={currentPage}
+                                                                institute={institute}/>}
+
+                            {/*{sideListComponent}*/}
                         </Col>
                         <Col md='2' className="border border-secondary rounded  ">
                             <Row className="p-2 border border-secondary rounded  mb-4 ">
@@ -107,7 +135,7 @@ function HomePage({userDetails, type, institute}) {
                                             <Routes>
                                                 {/*<Route path={/#/ + data.id.toString() + '/*'}*/}
                                                 <Route path={data.id.toString() + '/*'}
-                                                       element={<PatientDetails details={data}/>}/>
+                                                       element={<PatientDetails type={type} institute={institute} details={data}/>}/>
 
                                             </Routes>)
                                     }
@@ -160,6 +188,17 @@ function HomePage({userDetails, type, institute}) {
                             </Row>
 
                             <Row className="border border-secondary rounded" style={{minHeight: 300}}>
+                                {type === 'parent' && currentPerson !== '' && <Link to={currentPerson + '/code'}>
+                                    <Button onClick={() => setShowDialogCode(true)} className="text-center"
+                                            style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
+                                            variant="outline-primary">קבל קוד אישי</Button>
+                                </Link>}
+                                {/*{type === 'therapist' && institute==='external' && currentPerson !== '' && <Link to={currentPerson + '/code'}>*/}
+                                {/*    <Button onClick={() => setShowDialogCode(true)} className="text-center"*/}
+                                {/*            style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}*/}
+                                {/*            variant="outline-primary">הסר מטופל</Button>*/}
+                                {/*</Link>}*/}
+
                                 {(type === 'therapist') &&
                                 patientListData.map((item) => {
                                         let data = item.data()
@@ -209,6 +248,17 @@ function HomePage({userDetails, type, institute}) {
 
                                        }/>
                             </Routes>
+                            <Routes>
+                                <Route path={'/myProfile'}
+                                       element={(() => {
+                                           return <MyProfile userDetails={userDetails}/>
+                                       })()
+                                       }/>
+                            </Routes>
+                            <Routes>
+                                <Route path={currentPerson.toString() + '/code'}
+                                       element={<GetPersonalCode type={type} id={currentPerson}/>}/>
+                            </Routes>
 
 
                             {type === 'parent' && patientListData.map((item) => {
@@ -220,7 +270,7 @@ function HomePage({userDetails, type, institute}) {
                                                     <div>
                                                         <Routes>
                                                             <Route path={data.id.toString() + '/' + index.toString() + '/*'}
-                                                                   element={<TherapistTabsBanner type={type}
+                                                                   element={<TherapistTabsBanner therapistInstitute={therapist.institute} type={type}
                                                                                                  currentPerson={currentPerson}
                                                                                                  setCurrentPage={setCurrentPage}/>}
                                                             />

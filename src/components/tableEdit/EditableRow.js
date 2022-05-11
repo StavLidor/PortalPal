@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import TableData from "./TableData";
 import {Button, Accordion, Form, Row, Col, Container, ButtonGroup, Table, Grid} from 'react-bootstrap'
 import {convertToNormalDate} from '../../useFunction'
+import { Check, X} from 'react-bootstrap-icons';
 
 const EditableRow = ({
                          contact,
@@ -15,7 +16,7 @@ const EditableRow = ({
                      }) => {
     return (
         <tr>
-            {requiredId && <td>{contact.id}</td>}
+            {requiredId && <td style={{fontSize: 20}} className="text-center">{contact.id}</td>}
 
 
             {
@@ -75,41 +76,41 @@ const EditableRow = ({
 
                 ))
             }
-            {table !== undefined &&
+            {/*{table !== undefined &&*/}
+            {/*<td>*/}
+            {/*    <Accordion defaultActiveKey="0">*/}
+            {/*        <Accordion.Item eventKey="0">*/}
+            {/*            <Accordion.Header>המטופלים שלי</Accordion.Header>*/}
+            {/*            <Accordion.Body>*/}
+            {/*                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod*/}
+            {/*                tempor incididunt ut ladebore et dolore magna aliqua. Ut enim ad minim*/}
+            {/*                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea*/}
+            {/*                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate*/}
+            {/*                velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat*/}
+            {/*                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id*/}
+            {/*                est laborum.*/}
+            {/*            </Accordion.Body>*/}
+            {/*        </Accordion.Item>*/}
+            {/*    </Accordion>*/}
+            {/*    <button*/}
+            {/*        type="button"*/}
+            {/*        onClick={(event) => handleOpen(event, contact)}*/}
+            {/*    >*/}
+            {/*        v*/}
+            {/*    </button>*/}
+            {/*    <button*/}
+            {/*        type="button"*/}
+            {/*        onClick={(event) => handleClose(event, contact)}*/}
+            {/*    >*/}
+            {/*        ^*/}
+            {/*    </button>*/}
+            {/*</td>*/}
+            {/*}*/}
             <td>
-                <Accordion defaultActiveKey="0">
-                    <Accordion.Item eventKey="0">
-                        <Accordion.Header>המטופלים שלי</Accordion.Header>
-                        <Accordion.Body>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut ladebore et dolore magna aliqua. Ut enim ad minim
-                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                            est laborum.
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
-                {/*<button*/}
-                {/*    type="button"*/}
-                {/*    onClick={(event) => handleOpen(event, contact)}*/}
-                {/*>*/}
-                {/*    v*/}
-                {/*</button>*/}
-                {/*<button*/}
-                {/*    type="button"*/}
-                {/*    onClick={(event) => handleClose(event, contact)}*/}
-                {/*>*/}
-                {/*    ^*/}
-                {/*</button>*/}
-            </td>
-            }
-            <td>
-                <Button variant="outline-primary" style={{fontWeight: "bold"}} type="submit">שמור</Button>
-                <Button variant="outline-primary" style={{fontWeight: "bold"}} type="button"
+                <Button  className="p-1 m-1" variant="outline-success" style={{fontWeight: "bold"}} type="submit"><Check style={{fontSize:16}}/></Button>
+                <Button  className="p-1 m-1" variant="outline-danger" style={{fontWeight: "bold"}} type="button"
                         onClick={handleCancelClick}>
-                    בטל
+                    <X style={{fontSize:16}}/>
                 </Button>
             </td>
         </tr>

@@ -22,6 +22,7 @@ import ViewExercise from "./ViewExercise";
 import {Button, Collapse, Modal, Form, Row, Col, Accordion} from "react-bootstrap";
 import {render} from "@testing-library/react";
 import ReactDOM from 'react-dom'
+import { Plus} from 'react-bootstrap-icons';
 
 
 function PatientExercises({patient, therapist, type}) {
@@ -210,7 +211,7 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
 
     return (
         <>
-            {(type === 'therapist') && <Button variant="outline-dark" onClick={handleShow}>
+            {(type === 'therapist') && <Button variant="outline-dark" onClick={handleShow}><Plus className="m-1"/>
                 הוסף תרגיל
             </Button>}
 
@@ -277,11 +278,11 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                     <Button variant="secondary" onClick={handleClose}>
                         בטל
                     </Button>
-                    <Button variant="primary" onClick={() => {
+                    <Button variant="success" onClick={() => {
                         handleClose()
                         handleOnSubmit()
                     }}>
-                        שמור
+                        שמור שינויים
                     </Button>
                 </Modal.Footer>
             </Modal>

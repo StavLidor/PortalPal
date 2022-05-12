@@ -64,7 +64,7 @@ function Login({login, setDisplayLoginForm}) {
 
     return (
         <div className='login'>
-            <Form  className="needs-validation" noValidate>
+            <Form  className=" needs-validation" noValidate>
                 <Container className="w-auto" fluid="sm">
                     <Form.Group className="mb-3" controlId="formEmail">
                         <Form.Label for="validationDefault01" className="text-center" style={{width: "100%"}}>התחברות</Form.Label>
@@ -158,7 +158,7 @@ function Login({login, setDisplayLoginForm}) {
                     </Row>
                     <Row>
 
-                        <Form.Text>שכחתי סיסמה...</Form.Text>
+                        <Form.Text style={{fontSize:16,}}>שכחתי סיסמה...</Form.Text>
                     </Row>
                     <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
                         {messages.password}

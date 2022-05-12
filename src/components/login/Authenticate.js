@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import firebaseApp, {signIn, signUp, signOutCurrentUser, getCurrentUser} from '../../firebase'
 import Login from "./Login";
 import SignUp from "./SignUp";
+import Logo from "../../Portapel.png";
 
 export default function Authenticate({login}) {
 
@@ -13,9 +14,14 @@ export default function Authenticate({login}) {
         setDisplayLoginForm(displayLoginForm)
     }, [displayLoginForm])
 
-    return (<div>
-        {displayLoginForm === true && <Login login={login} setDisplayLoginForm={setDisplayLoginForm}/>}
-        {displayLoginForm === false && <SignUp setDisplayLoginForm={setDisplayLoginForm}/>}
-        <h2>{displayLoginForm.toString()}</h2>
-    </div>)
+    return (
+        <div >
+            <div className='text-center m-3 mb-5'><img src={Logo} alt='toko' style={{width: '500px'}}/></div>
+            <Container className="w-auto justify-content-center">
+            <div className={"border border-secondary rounded-3 m-5 p-4"} style={{
+                backgroundColor:'lightgrey'
+            }}> {displayLoginForm === true && <Login login={login} setDisplayLoginForm={setDisplayLoginForm}/>}
+                {displayLoginForm === false && <SignUp setDisplayLoginForm={setDisplayLoginForm}/>}
+              </div></Container>
+        </div>)
 }

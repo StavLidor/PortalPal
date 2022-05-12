@@ -1,4 +1,4 @@
-import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup} from 'react-bootstrap'
+import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Image} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import firebaseApp, {signOutCurrentUser} from '../../firebase'
@@ -24,6 +24,7 @@ import Secretary from "../secretary/Secretary";
 import SecretaryPage from "../../SecretaryPage";
 import MyProfile from "../../MyProfile";
 import GetPersonalCode from "../../components/code/GetPersonalCode";
+import Logo from "../../Portapel.png";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
@@ -80,8 +81,8 @@ function HomePage({userDetails, type, institute}) {
         <div><h3>{currentTherapist.id}</h3>
             <Container className="p-4" fluid>
                 <Row className='gap-4 '>
-                    <Col md='2' className="border border-secondary rounded">פורטלי</Col>
-                    <Col md='3' className="w-auto border border-secondary rounded">
+                    <Col md='2'><img src={Logo} alt='toko' style={{width:'240px'}}/></Col>
+                    <Col md='3' className="w-auto rounded align-self-center" >
                         <ButtonGroup className="gap-4 p-2">
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
                             <Link to="/myProfile">
@@ -95,7 +96,7 @@ function HomePage({userDetails, type, institute}) {
                                     onClick={onLogout}>התנתק</Button>
                         </ButtonGroup>
                     </Col>
-                    <Col md='5' className="border border-secondary rounded">
+                    <Col md='5' className="border align-self-center">
                         {/*<Routes>*/}
                         {/*    <Route path={data.id.toString() + '/' + index.toString() + '/*'}*/}
                         {/*           element={<TabsBanner type={type}*/}

@@ -16,11 +16,11 @@ function TherapistsList({details, setCurrentTherapist, currentPage, setTherapist
     //console.log(talkersIds)
     useEffect(async () => {
 
-
+        console.log('TYPEE',type)
         if(type ==='parent'){
             const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"),
                 where('institute','==',institute))
-            if(type === 'external'){
+            if(institute === 'external'){
                 onSnapshot(
                     collectionRef,
                     (snapshot) => {

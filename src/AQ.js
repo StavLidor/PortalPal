@@ -1,6 +1,8 @@
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Button, Form, Row, Col, Container, ButtonGroup, Table, Grid} from 'react-bootstrap'
 import {Dropdown} from "bootstrap";
+// import APiGraphs from "./Bubble";
+import MultiType from "./components/MultiTypeGraph";
 
 
 function AQ() {
@@ -85,6 +87,7 @@ function AQ() {
 
     return (
         <div>
+
             <Form className="col justify-content-center">
                 <Form.Group>
                     <Form.Label className="text-center" style={{fontWeight: "bold", width: "100%"}}>טופס לאבחון

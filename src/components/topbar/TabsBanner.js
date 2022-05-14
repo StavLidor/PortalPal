@@ -81,8 +81,9 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
                             }}  className="list-group-item list-group-item-action">מילוי טופס AQ</Link>
                         </Nav.Item>
                         <Nav.Item>
-
-                            <Nav.Link eventKey="link-4">API</Nav.Link>
+                            <Link to={currentPerson + '/API'} onClick={()=>{
+                                setCurrentPage('API')
+                            }}  className="list-group-item list-group-item-action">אפליקציות צד שלישי</Link>
                         </Nav.Item>
                     </Nav>
                 )
@@ -102,7 +103,9 @@ function TabsBanner({type,currentPerson, setCurrentPage}){
                             }}  className="list-group-item list-group-item-action">מילוי טופס AQ</Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="link-4">API</Nav.Link>
+                            <Link to={currentPerson + '/API'} onClick={()=>{
+                                setCurrentPage('API')
+                            }}  className="list-group-item list-group-item-action">אפליקציות צד שלישי</Link>
                         </Nav.Item>
                     </Nav>
                 )

@@ -25,6 +25,9 @@ import SecretaryPage from "../../SecretaryPage";
 import MyProfile from "../../MyProfile";
 import GetPersonalCode from "../../components/code/GetPersonalCode";
 import Logo from "../../Portapel.png";
+import MultiType from "../../components/MultiTypeGraph";
+import MultiTypeGraph from "../../components/MultiTypeGraph";
+import ReportsPage from "../../ReportsPage";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
@@ -255,6 +258,18 @@ function HomePage({userDetails, type, institute}) {
                                                return <AQ/>
                                            }
                                            return <h2>אנא בחר מטופל כדי למלא עבורו את הטופס</h2>
+
+                                       })()
+
+                                       }/>
+                            </Routes>
+                            <Routes>
+                                <Route path={currentPerson.toString() + '/API'}
+                                       element={(() => {
+                                           if (currentPerson !== '') {
+                                               return <ReportsPage/>
+                                           }
+                                           return <h2>אנא בחר מטופל כדי לראות דוחות קיימים</h2>
 
                                        })()
 

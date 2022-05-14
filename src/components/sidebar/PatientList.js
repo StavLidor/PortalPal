@@ -24,6 +24,8 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
             console.log("קקי")
             listener()
         }
+        if(list.length=== 0)
+            return
         const queryRequest = query(collection(db, "patients"), where('id', 'in', list))
         const result = onSnapshot(
             queryRequest,

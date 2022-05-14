@@ -8,7 +8,7 @@ import {auth, db} from "./firebase";
 import firebase from "firebase/compat/app";
 import styles from "./pages/home/HomePage.CSS"
 
-function TherapistsList({details, setCurrentTherapist, currentPage, setTherapistListData, currentPerson}) {
+function TherapistsList({details, setCurrentTherapist, currentPage, setTherapistListData, currentPerson,type,institute}) {
     console.log("in therapist!!!!!!!!")
     const [therapists, setTherapists] = useState([])
 
@@ -16,44 +16,77 @@ function TherapistsList({details, setCurrentTherapist, currentPage, setTherapist
     //console.log(talkersIds)
     useEffect(async () => {
 
-        let dict = {}
-        const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"))
-        // const querySnapshot = await getDocs(docRef)
-        getDocs(collectionRef).then((d) => {
-            const therapistIds = []
 
-            d.forEach((doc) => {
-                if (doc.id !== auth.currentUser.uid) {
-                    // console.log('therapistLIstt',doc.data())
-                    therapistIds.push(doc.id)
-                    dict[doc.id] = {institute: doc.data().institute, connection: doc.data().connection}
-                }
-            });
-            if (therapistIds.length > 0) {
-                const unsubscribe = query(collection(db, "users"),
-                    where(firebase.firestore.FieldPath.documentId(), 'in', therapistIds)
-                )
-                getDocs(
-                    unsubscribe).then((querySnapshot) => {
+        if(type ==='parent'){
+            const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"),
+                where('institute','==',institute))
+            if(type === 'external'){
+                onSnapshot(
+                    collectionRef,
+                    (snapshot) => {
+                        console.log('INNNNN',snapshot.docs[0])
+                        getData(snapshot)
 
-                    let data = []
-                    querySnapshot.forEach((doc) => (
-                        // console.log(doc)
-                        data.push({
-                            id: doc.id,
-                            firstName: doc.data().firstName, lastName: doc.data().lastName,
-                            institute: dict[doc.id].institute, connection: dict[doc.id].connection
-                        })
-                        // console.log()
-                    ))
-                    setTherapists(data)
-                    setTherapistListData(data)
-                    console.log("my data: ", data)
+                    })
+            }
+            else {
+                getDocs(collectionRef).then((d) => {
+                    getData(d)
                 })
             }
+        }
+        else{
+            const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"))
 
-        })
+            // const querySnapshot = await getDocs(docRef)
+
+            getDocs(collectionRef).then((d) => {
+                getData(d)
+            })
+        }
+
     }, [])
+    const getData = (d) => {
+        const therapistIds = []
+        let dict = {}
+
+        d.forEach((doc) => {
+            if (doc.id !== auth.currentUser.uid) {
+                // console.log('therapistLIstt',doc.data())
+                therapistIds.push(doc.id)
+                dict[doc.id] = {institute: doc.data().institute, connection: doc.data().connection,
+                active:doc.data().active}
+            }
+        });
+        if (therapistIds.length > 0) {
+            const unsubscribe = query(collection(db, "users"),
+                where(firebase.firestore.FieldPath.documentId(), 'in', therapistIds)
+            )
+            getDocs(
+                unsubscribe).then((querySnapshot) => {
+
+                let data = []
+                querySnapshot.forEach((doc) => (
+                    // console.log(doc)
+                    data.push({
+                        id: doc.id,
+                        firstName: doc.data().firstName, lastName: doc.data().lastName,
+                        institute: dict[doc.id].institute, connection: dict[doc.id].connection,
+                        active:(()=>{
+                            if(dict[doc.id].active)
+                                return 'פעיל'
+                            return 'לא פעיל'
+                        })()
+                    })
+                    // console.log()
+                ))
+                setTherapists(data)
+                setTherapistListData(data)
+                console.log("my data: ", data)
+            })
+        }
+
+    }
     return (
         <div>
             <Form.Label style={{fontWeight: 'bold'}}>רשימת מטפלים</Form.Label>
@@ -72,7 +105,7 @@ function TherapistsList({details, setCurrentTherapist, currentPage, setTherapist
 
                                       setCurrentTherapist({id: data.id, index: index.toString()})
 
-                                  }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection}</Link>
+                                  }}>{data.firstName + " " + data.lastName + ','+data.active +','}<br/>{data.connection}</Link>
                         )
                     }
                 )}

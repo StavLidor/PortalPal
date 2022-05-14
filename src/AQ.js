@@ -5,61 +5,106 @@ import {Dropdown} from "bootstrap";
 
 function AQ() {
     const [modelResult, setModelResult] = useState(null);
+    const [APIResult, setAPIResult] = useState('');
     const options = [];
-    const [details, setDetails] = useState({['Who completed the test']:'family member',
-    ['Family_mem_with_ASD']:'yes',Jaundice:'yes',Ethnicity:'middle eastern',Sex:'m',['Qchat-10-Score']:0,Age_Mons:4*12,
-        A10:0, A9:0, A8:0, A7:0,A6:0,A5:0,A4:0,A3:0,A2:0,A1:0})
+    const [details, setDetails] = useState({
+        ['Who completed the test']: 'family member',
+        ['Family_mem_with_ASD']: 'yes',
+        Jaundice: 'yes',
+        Ethnicity: 'middle eastern',
+        Sex: 'm',
+        ['Qchat-10-Score']: 0,
+        Age_Mons: 4 * 12,
+        A10: 0,
+        A9: 0,
+        A8: 0,
+        A7: 0,
+        A6: 0,
+        A5: 0,
+        A4: 0,
+        A3: 0,
+        A2: 0,
+        A1: 0
+    })
     for (let op = 4; op <= 11; op++) {
         options.push(<option style={{fontSize: 18}} id={op} value={op}>{op}</option>);
     }
     const submitHandler = async e => {
         e.preventDefault()
-        details['Qchat-10-Score'] =details.A1+details.A2+details.A3+details.A4+
-            details.A5+details.A6+details.A7+details.A8+details.A9+details.A10
+        details['Qchat-10-Score'] = details.A1 + details.A2 + details.A3 + details.A4 +
+            details.A5 + details.A6 + details.A7 + details.A8 + details.A9 + details.A10
 
         console.log(details)
 
-        const finalToModel ='1,'
-        +details.A1+','+details.A2+','+details.A3+','+details.A4+','+details.A5+
-        ','+details.A6+','+details.A7+','+details.A8+','+details.A9+','+details.A10+
-        ','+details.Age_Mons+','+details['Qchat-10-Score']+','+details.Sex+','+details.Ethnicity+','+details.Jaundice+
-            ','+details['Family_mem_with_ASD']+','+details['Who completed the test']
+        const finalToModel = '1,'
+            + details.A1 + ',' + details.A2 + ',' + details.A3 + ',' + details.A4 + ',' + details.A5 +
+            ',' + details.A6 + ',' + details.A7 + ',' + details.A8 + ',' + details.A9 + ',' + details.A10 +
+            ',' + details.Age_Mons + ',' + details['Qchat-10-Score'] + ',' + details.Sex + ',' + details.Ethnicity + ',' + details.Jaundice +
+            ',' + details['Family_mem_with_ASD'] + ',' + details['Who completed the test']
 
         const requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 'data': finalToModel})
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({'data': finalToModel})
         };
         fetch('https://lironhaim.pythonanywhere.com/predict', requestOptions)
             .then(response => response.json())
             .then(data => {
-                if(data['prediction'][0] === 0){
+                if (data['prediction'][0] === 0) {
                     setModelResult('שלילית')
-                }
-                else if(data['prediction'][0] === 1){
+                } else if (data['prediction'][0] === 1) {
                     setModelResult('חיובית')
                 }
             });
 
+
+        const APIrequest = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                // 'id': "gOCpJKs43uRr8Y7QHkHL"
+                'auth_code': "tokolocopoco"
+            })
+        };
+        fetch('https://lironhaim15.pythonanywhere.com/get', APIrequest)
+            .then(response => response.json())
+            .then(data => {
+                console.log("dataaaaa")
+
+                console.log("dataaaaa", data)
+                setAPIResult(data)
+
+                // if (data['prediction'][0] === 0) {
+                //     setModelResult('שלילית')
+                // } else if (data['prediction'][0] === 1) {
+                //     setModelResult('חיובית')
+                // }
+            });
+
     }
+
     return (
         <div>
-            <Form className="col justify-content-center" >
+            <Form className="col justify-content-center">
                 <Form.Group>
                     <Form.Label className="text-center" style={{fontWeight: "bold", width: "100%"}}>טופס לאבחון
                         אוטיזם</Form.Label>
 
                     <Row>
-                        <Col style={{fontSize:17}}>
+                        <Col style={{fontSize: 17}}>
                             מי ממלא טופס זה:
                         </Col>
                         <Col md="auto">
                             <Form.Group className="mb-3">
-                                <Form.Select id='type'onChange={e => setDetails({...details, ['Who completed the test']: e.target.value})}
+                                <Form.Select id='type' onChange={e => setDetails({
+                                    ...details,
+                                    ['Who completed the test']: e.target.value
+                                })}
                                     // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
                                 >
                                     <option style={{fontSize: 18}} id='title1' value="family member">בן משפחה</option>
-                                    <option style={{fontSize: 18}} id='title2' value="Health care professional">מטפל</option>
+                                    <option style={{fontSize: 18}} id='title2' value="Health care professional">מטפל
+                                    </option>
                                     <option style={{fontSize: 18}} id='title3' value="Self">מילוי עצמאי</option>
                                     <option style={{fontSize: 18}} id='title4' value="Others">מורה</option>
                                     <option style={{fontSize: 18}} id='title5' value="family member">הורה</option>
@@ -69,24 +114,28 @@ function AQ() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col style={{fontSize:17}}>
+                        <Col style={{fontSize: 17}}>
                             אתניות:
                         </Col>
                         <Col md="auto">
                             <Form.Group className="mb-3">
-                                <Form.Select id='type' onChange={e => setDetails({...details, Ethnicity: e.target.value})}
+                                <Form.Select id='type'
+                                             onChange={e => setDetails({...details, Ethnicity: e.target.value})}
                                     // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
                                 >
-                                    <option style={{fontSize: 18}} id='middle eastern' value="middle eastern">מזרח התיכון
+                                    <option style={{fontSize: 18}} id='middle eastern' value="middle eastern">מזרח
+                                        התיכון
                                     </option>
-                                    <option style={{fontSize: 18}} id='south asian' value="south asian">דרום אסיה</option>
+                                    <option style={{fontSize: 18}} id='south asian' value="south asian">דרום אסיה
+                                    </option>
                                     <option style={{fontSize: 18}} id='Hispanic' value="Hispanic">היספני</option>
 
                                     <option style={{fontSize: 18}} id='asian' value="asian">אסיה</option>
                                     <option style={{fontSize: 18}} id='black' value="black">אפרו-אמריקאים</option>
                                     <option style={{fontSize: 18}} id='Others' value="Others">אחר</option>
                                     <option style={{fontSize: 18}} id='mixed' value="mixed">מעורבב</option>
-                                    <option style={{fontSize: 18}} id='Pacifica' value="Pacifica">פסיפיקה,קליפורניה</option>
+                                    <option style={{fontSize: 18}} id='Pacifica' value="Pacifica">פסיפיקה,קליפורניה
+                                    </option>
                                     <option style={{fontSize: 18}} id='Latino' value="Latino">לטינו</option>
                                     <option style={{fontSize: 18}} id='Native Indian' value="Native Indian">אינדיאנים
                                     </option>
@@ -98,12 +147,13 @@ function AQ() {
                     </Row>
 
                     <Row>
-                        <Col style={{fontSize:17}}>
+                        <Col style={{fontSize: 17}}>
                             גיל:
                         </Col>
                         <Col md="auto">
                             <Form.Group className="mb-3">
-                                <Form.Select id='age' onChange={e => setDetails({...details, Age_Mons: e.target.value * 12})}
+                                <Form.Select id='age'
+                                             onChange={e => setDetails({...details, Age_Mons: e.target.value * 12})}
                                     // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
                                 >
                                     {options}
@@ -112,7 +162,7 @@ function AQ() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col style={{fontSize:17}}>
+                        <Col style={{fontSize: 17}}>
                             מין:
                         </Col>
                         <Col md="auto">
@@ -127,17 +177,17 @@ function AQ() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col style={{fontSize:17}}>
+                        <Col style={{fontSize: 17}}>
                             רקע עם מחלת צהבת
                         </Col>
                         <Col md="auto">
                             <Form.Group className="mb-3">
-                                <ButtonGroup className="gap-3"><Form.Text style={{fontSize:18}}>כן</Form.Text>
-                                    <Form.Check style={{fontSize:18}} type="radio" name='jaundice'
+                                <ButtonGroup className="gap-3"><Form.Text style={{fontSize: 18}}>כן</Form.Text>
+                                    <Form.Check style={{fontSize: 18}} type="radio" name='jaundice'
                                                 onChange={e => setDetails({...details, Jaundice: 'yes'})}
-                                    /><Form.Text style={{fontSize:18}}>לא</Form.Text>
-                                    <Form.Check style={{fontSize:18}} type="radio" name='jaundice'
-                                        onChange={e => setDetails({...details, Jaundice: 'no'})}
+                                    /><Form.Text style={{fontSize: 18}}>לא</Form.Text>
+                                    <Form.Check style={{fontSize: 18}} type="radio" name='jaundice'
+                                                onChange={e => setDetails({...details, Jaundice: 'no'})}
                                     />
                                 </ButtonGroup>
 
@@ -145,18 +195,18 @@ function AQ() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col style={{fontSize:17}}>
+                        <Col style={{fontSize: 17}}>
                             קיים בן משפחה עם אוטיזם?
                         </Col>
                         <Col md="auto">
                             <Form.Group className="mb-3">
                                 <ButtonGroup className="gap-3">
-                                    <Form.Text style={{fontSize:18}}>כן</Form.Text>
-                                    <Form.Check style={{fontSize:18}} type="radio" name='memberFamilyWithAsd'
+                                    <Form.Text style={{fontSize: 18}}>כן</Form.Text>
+                                    <Form.Check style={{fontSize: 18}} type="radio" name='memberFamilyWithAsd'
                                                 onChange={e => setDetails({...details, Family_mem_with_ASD: 'yes'})}
                                     />
-                                    <Form.Text style={{fontSize:18}}>לא</Form.Text>
-                                    <Form.Check style={{fontSize:18}} type="radio" name='memberFamilyWithAsd'
+                                    <Form.Text style={{fontSize: 18}}>לא</Form.Text>
+                                    <Form.Check style={{fontSize: 18}} type="radio" name='memberFamilyWithAsd'
                                                 onChange={e => setDetails({...details, Family_mem_with_ASD: 'no'})}
                                     />
                                 </ButtonGroup>
@@ -166,7 +216,7 @@ function AQ() {
                     </Row>
                 </Form.Group>
             </Form>
-            <Form className="col justify-content-center" >
+            <Form className="col justify-content-center">
                 <Form.Group>
                     <Table className="table-responsive" striped bordered hover size="md" variant="dark">
                         <thead>
@@ -182,27 +232,32 @@ function AQ() {
                         <tbody>
                         <tr>
                             <td className="text-end">1</td>
-                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא נוטה להבחין בצלילים קטנים כאשר אחרים
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא נוטה להבחין בצלילים
+                                קטנים כאשר אחרים
                                 לא מבחינים.
                             </td>
                             {/*מסכים בהחלט*/}
                             <td className="text-center">
-                                <Form.Check  name="firstQuestion" type="radio"
-                                             onChange={e => setDetails({...details, A1: 1})}/>
+                                <Form.Check name="firstQuestion" type="radio"
+                                            onChange={e => setDetails({...details, A1: 1})}/>
                             </td>
                             {/*מסכים*/}
-                            <td className="text-center"><Form.Check  name="firstQuestion" type="radio"
-                                                                     onChange={e => setDetails({...details, A1: 1})}/></td>
+                            <td className="text-center"><Form.Check name="firstQuestion" type="radio"
+                                                                    onChange={e => setDetails({...details, A1: 1})}/>
+                            </td>
                             {/*לא מסכים*/}
                             <td className="text-center"><Form.Check name="firstQuestion" type="radio"
-                                                                    onChange={e => setDetails({...details, A1: 0})}/></td>
+                                                                    onChange={e => setDetails({...details, A1: 0})}/>
+                            </td>
                             {/*בהחלט לא מסכים*/}
-                            <td className="text-center"><Form.Check  name="firstQuestion" type="radio"
-                                                                     onChange={e => setDetails({...details, A1: 0})}/></td>
+                            <td className="text-center"><Form.Check name="firstQuestion" type="radio"
+                                                                    onChange={e => setDetails({...details, A1: 0})}/>
+                            </td>
                         </tr>
                         <tr>
                             <td className="text-end">2</td>
-                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא בדרך כלל מתרכז יותר בתמונה הכללית
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא בדרך כלל מתרכז יותר
+                                בתמונה הכללית
                                 מאשר בפרטים הקטנים.
                             </td>
                             <td>
@@ -218,7 +273,8 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">3</td>
-                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>במפגש חברתי, הוא מצליח לעקוב בקלות אחר
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>במפגש חברתי, הוא מצליח
+                                לעקוב בקלות אחר
                                 מספר שיחות עם אנשים שונים.
                             </td>
                             <td>
@@ -234,7 +290,8 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">4</td>
-                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא מצליח לעבור בין פעילויות שונות
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא מצליח לעבור בין
+                                פעילויות שונות
                                 בקלות.
                             </td>
                             <td>
@@ -250,7 +307,8 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">5</td>
-                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא לא יודע איך להחזיק שיחה עם חבריו.
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא לא יודע איך להחזיק
+                                שיחה עם חבריו.
                             </td>
                             <td>
                                 <Form.Check className="text-center" name="fifthQuestion" type="radio"
@@ -265,7 +323,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">6</td>
-                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא טוב בשיחת חולין.</td>
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא טוב בשיחת חולין.</td>
                             <td>
                                 <Form.Check className="text-center" name="sixthQuestion" type="radio"
                                             onChange={e => setDetails({...details, A6: 0})}/>
@@ -279,7 +337,8 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">7</td>
-                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>כאשר מספרים לו סיפור, קשה לו לגלות
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>כאשר מספרים לו סיפור, קשה
+                                לו לגלות
                                 ולהבין מה הכוונות והתחושות של כל דמות בסיפור.
                             </td>
                             <td>
@@ -295,7 +354,8 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">8</td>
-                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>כשהיה בגן, הוא אהב לשחק במשחקי העמדת
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>כשהיה בגן, הוא אהב לשחק
+                                במשחקי העמדת
                                 פנים עם ילדים אחרים.
                             </td>
                             <td>
@@ -311,7 +371,8 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">9</td>
-                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא מצליח להבין בקלות מה אדם אחר חושב או
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא מצליח להבין בקלות מה
+                                אדם אחר חושב או
                                 מרגיש רק על ידי הבטה בפניו.
                             </td>
                             <td>
@@ -327,7 +388,9 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">10</td>
-                            <td className="text-end p-2" style={{lineHeight: 1 ,fontSize: 13}}>הוא מתקשה להכיר וליצור חברים חדשים.</td>
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא מתקשה להכיר וליצור
+                                חברים חדשים.
+                            </td>
                             <td>
                                 <Form.Check className="text-center" name="tenthQuestion" type="radio"
                                             onChange={e => setDetails({...details, A10: 1})}/>
@@ -351,6 +414,16 @@ function AQ() {
 
             <Row className="justify-content-center text-center">
                 <Form.Text>התוצאה: {modelResult}</Form.Text>
+            </Row>
+
+            <Row className="justify-content-center">
+                <Button className=" rounded-3" style={{width: "10%"}} size="md" variant="outline-primary" onClick={submitHandler}
+                >אוטידוווו</Button>
+            </Row>
+
+            <Row className="justify-content-center text-center">
+
+                <Form.Text>התוצאה מאוטידווו: {APIResult.graph_type}</Form.Text>
             </Row>
 
         </div>

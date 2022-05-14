@@ -36,12 +36,21 @@ function HomePage({userDetails, type, institute}) {
     const [currentPage, setCurrentPage] = useState('')
     const [currentTherapist, setCurrentTherapist] = useState({id: '', index: ''})
     const [currentParent, setCurrentParent] = useState({id: '', index: ''})
+    const [children,setChildren]=useState([])
 
 
     async function onLogout() {
         await signOutCurrentUser()
     }
-
+    useEffect(() => {
+        const childrenLIst=[]
+        for (const [key, value] of Object.entries(userDetails.childrenIds)) {
+            if(value.findIndex((i) => i === institute)!== -1){
+                childrenLIst.push(key)
+            }
+        }
+        setChildren(childrenLIst)
+    },[userDetails.childrenIds])
 
     // useEffect(() => {
     //     // console.log("currentTherapist: ", currentTherapist)
@@ -113,7 +122,7 @@ function HomePage({userDetails, type, institute}) {
                 <div>
                     <Row className='p-4 gap-4 vh-100'>
                         <Col md='2' className="p-3 border border-secondary rounded">
-                            {type==='parent' && <PatientList list={userDetails.childrenIds} setPatientListData={setPatientListData}
+                            {type==='parent' && <PatientList list={children} setPatientListData={setPatientListData}
                                                              listTitle={"רשימת ילדים"}
                                                              setCurrentPerson={setCurrentPerson}
                                                              currentPage={currentPage}
@@ -155,7 +164,9 @@ function HomePage({userDetails, type, institute}) {
                                                        element={<TherapistsList details={data} currentPage={currentPage}
                                                                                 setCurrentTherapist={setCurrentTherapist}
                                                                                 setTherapistListData={setTherapistListData}
-                                                                                currentPerson={currentPerson}/>}/>
+                                                                                currentPerson={currentPerson}
+                                                                                type={type} institute={institute}
+                                                       />}/>
                                             </Routes>)
                                     }
                                 )}

@@ -352,9 +352,14 @@ export const addPatient = async details => {
         console.log('add a patient')
 
         // maybe in this case tableEdit details? add more institute?
-        if ((await getDocs(query(collection_query_patients, where("id", "==", details.id)))).docs.length > 0) {
-            return false
-        }
+        //if the patient in the fireabase
+        // if ((await getDocs(query(collection_query_patients, where("id", "==", details.id)))).docs.length > 0) {
+        //     //return false
+        // }
+        // else{
+        //
+        // }
+
         //     email: string
         // firstName: string
         // lastName: string
@@ -364,51 +369,60 @@ export const addPatient = async details => {
         // institute: string (admin only)
         // institutes: {1: ...patients.  external:...patients.} (therapist only)
         // childrenIds: [] (parent only)
-        const uid_user = await addUser({
-            firstName: details.firstNameParent, lastName: details.lastNameParent, jobs: [],
-            license: "", titles: ['parent'], email: details.email, institute: '',
-            institutes: {}, password: makePassword(7), childrenIds: [details.id],
-            /*idSecretary:details.idSecretary*/
-        })
-        if (!uid_user) {
-            // TODO: add to parent exist is child?
-        }
-        console.log('starttttttt')
-        //
+
+        // if ((await getDocs(query(collection_query_patients, where("id", "==", details.id)))).docs.length > 0) {
+        //     //return false
+        // }
         // else{
-        //     signOutFrom()
         //
         // }
-        // await updatesCurrentUser(/*details.idSecretary,*/{
-        //     students_arr:
-        //         details.id.toString()
-        // })
-
-        const q = query(collection_query_users, where("childrenIds", "array-contains", details.id));
-        const querySnapshot = await getDocs(q);
-        let id_parents = []
-        // let id_Therapists=[]
-        querySnapshot.forEach((doc) => {
-            id_parents.push(doc.id)
-        });
-        //console.log('institutionNumber nnn ',details.institutionNumber)
-        await setDoc(doc(collection_query_patients, details.id), {
-            id: details.id,
-            dateOfBirth: details.dateOfBirth,
-            firstName: details.firstName,
-            lastName: details.lastName,
-            city: details.city,
-            street: details.street,
-            buildingNumber: details.buildingNumber,
-            parents: id_parents,
-            gender: details.gender
-            /*idSecretary:[details.idSecretary]*/
+        let uid_user = await addUser({
+            firstName: details.firstNameParent, lastName: details.lastNameParent, jobs: [],
+            license: "", titles: ['parent'], email: details.email, institute: '',
+            institutes: {}, password: makePassword(7), childrenIds: {
+                [details.id]:[details.institute,'external']}
+            /*idSecretary:details.idSecretary*/
         })
+        let flag = false
+        if (!uid_user) {
+            const userDetails = await getIdAndDataByEmail(details.email)
+            uid_user=userDetails[0]
+            const data=userDetails[1]
+            flag = true
+            if(details.id in data.childrenIds){
+                await updateIDDoc(uid_user, 'users',
+                    {['childrenIds.' + details.id]: firebase.firestore.FieldValue.arrayUnion(details.institute)})
+            }
+            else {
+                await updateIDDoc(uid_user, 'users',
+                    {['childrenIds.' + details.id]: [details.institute,'external']})
+            }
+        }
 
-
-        // await updatesCurrentUser(/*details.idSecretary,*/{students_arr:
-        //         details.id.toString()})
-        // console.log('Add a patinet',details.id)
+        const docPatient=await getDoc(doc(db, "patients", details.id))
+        if(docPatient.exists()){
+                // if patinent exists and not have this parent add him
+            //console.log(docPatient.data().parents,docPatient.data().parents.findIndex((p) => p === uid_user) ,'LOOK')
+            if(docPatient.data().parents.findIndex((p) => p === uid_user) === -1){
+                const patient_data = {'parents': firebase.firestore.FieldValue.arrayUnion(uid_user)}
+                await updateIDDoc(details.id, 'patients', patient_data)
+            }
+        }
+        else{
+            // if doc not exists create the doc
+            await setDoc(doc(collection_query_patients, details.id), {
+                id: details.id,
+                dateOfBirth: details.dateOfBirth,
+                firstName: details.firstName,
+                lastName: details.lastName,
+                city: details.city,
+                street: details.street,
+                buildingNumber: details.buildingNumber,
+                parents: [uid_user],
+                gender: details.gender
+                /*idSecretary:[details.idSecretary]*/
+            })
+        }
         if (await updateIDDoc(details.institute, 'institutes', {students: firebase.firestore.FieldValue.arrayUnion(details.id)}))
             return details.id
         return null
@@ -741,6 +755,14 @@ export const updateDocUser = async (id, data) => {
         return true
     return false
 
+}
+export const getIdAndDataByEmail = async (email) => {
+
+    const q = query(collection_query_users, where("email", "==", email))
+    const querySnapshot = await getDocs(q)
+    if (querySnapshot.docs.length > 0) {
+        return [querySnapshot.docs[0].id,querySnapshot.docs[0].data()]
+    }
 }
 export const findUserByEmail = async (email) => {
 

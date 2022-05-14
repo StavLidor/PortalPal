@@ -136,7 +136,7 @@ function Login({login, setDisplayLoginForm}) {
                                 מוסד:
                             </Col>
                             <Col md="auto">
-                                <Form.Select id='institute' disabled={userDetails.type === 'parent'}
+                                <Form.Select id='institute' /*disabled={userDetails.type === 'parent'}*/
                                              onChange={e => setUserDetails({
                                                  ...userDetails,
                                                  institute: e.target.value

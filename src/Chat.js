@@ -17,7 +17,7 @@ import Message from "./components/chats/message";
 
 // import Button from "react-bootstrap/Button";
 
-function Chat({otherUser, patient}) {
+function Chat({otherUser, patient, isActive}) {
     console.log("otherUser", otherUser.id)
     console.log("patient", patient)
     console.log("user", auth.currentUser.uid)
@@ -169,15 +169,15 @@ function Chat({otherUser, patient}) {
                             </Col>
 
                         </div>
-            <div className="px-2 py-1 bg-white m-3 p-1">
-            <Row className="w-auto">
-                <Form action="#" class="bg-light">
+            {isActive==='active' && <div className="px-2 py-1 bg-white m-3 p-1">
+            {/*<Row className="w-auto">*/}
+                {/*<Form action="#" class="bg-light">*/}
                     {/*<div class="input-group">*/}
 
-                    <ButtonGroup className="w-100">
+                     <ButtonGroup className="w-100">
                         {/*<Col>*/}
                         <Form.Control onChange={handleOnChange} type="text" value={newMessage}
-                                      placeholder="Type a message"
+                                      placeholder="הקלד הודעה..."
                                       aria-describedby="button-addon2"
                                       class="form-control rounded-0 border-0 py-4 bg-light"
                         style={{width:"100%"}}/>
@@ -196,14 +196,14 @@ function Chat({otherUser, patient}) {
                     {/*</Button>*/}
 
                     {/*</div>*/}
-                </Form>
+                {/*</Form>*/}
 
                 {/*</Container>*/}
-            </Row>
+            {/*</Row>*/}
                     {/*</div>*/}
                 {/*</div>*/}
             {/*</div>*/}
-            </div>
+            </div>}
         </div>
     )
 

@@ -90,7 +90,7 @@ function HomePage({userDetails, type, institute}) {
 
     }
 
-    const componentsTherapists = (list, isActive,data ) => {
+    const componentsTherapists = (list, isActive, data) => {
 
         return (list.map((therapist, index) => {
             // let data = item.data()
@@ -110,7 +110,7 @@ function HomePage({userDetails, type, institute}) {
                         <Route
                             path={data.id.toString() + '/' + isActive.toString() + '/' + index.toString() + '/communication'}
                             element={<Chat
-                                otherUser={therapist} patient={data.id}/>}/>
+                                otherUser={therapist} patient={data.id} isActive={isActive}/>}/>
                     </Routes>
                     <Routes>
                         <Route
@@ -233,7 +233,8 @@ function HomePage({userDetails, type, institute}) {
                                                                                     setCurrentTherapist={setCurrentTherapist}
                                                                                     setActiveTherapistListData={setActiveTherapistListData}
                                                                                     setNotActiveTherapistListData={setNotActiveTherapistListData}
-                                                                                    currentPerson={currentPerson} type={type}/>
+                                                                                    currentPerson={currentPerson}
+                                                                                    type={type} institute={institute}/>
 
                                                            }/>
                                                 </Routes>
@@ -341,8 +342,8 @@ function HomePage({userDetails, type, institute}) {
                                     let data = item.data()
                                     return (
                                         <div>
-                                            {activeTherapistListData.length > 0 && componentsTherapists(activeTherapistListData, 'active',data)}
-                                            {notActiveTherapistListData.length > 0 && componentsTherapists(notActiveTherapistListData, 'notActive',data)}
+                                            {activeTherapistListData.length > 0 && componentsTherapists(activeTherapistListData, 'active', data)}
+                                            {notActiveTherapistListData.length > 0 && componentsTherapists(notActiveTherapistListData, 'notActive', data)}
 
                                         </div>
                                     )

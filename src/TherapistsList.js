@@ -121,12 +121,14 @@ function TherapistsList({
     }
     const showList = (list, isActive) => {
         let path = ''
+        let showInstitute = ''
         return (list.map((item, index) => {
             let data = item
             if (type === 'parent') {
                 path = isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
             } else {
                 path = index.toString() + '/' + currentPage.toString();
+                showInstitute = ', ' + institute
             }
             return (
                 <div>
@@ -141,7 +143,7 @@ function TherapistsList({
 
                               setCurrentTherapist({id: data.id, index: index.toString()})
 
-                          }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection}
+                          }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}
                     </Link>
                 </div>
             )

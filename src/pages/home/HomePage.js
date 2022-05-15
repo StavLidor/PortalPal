@@ -31,7 +31,8 @@ import ReportsPage from "../../ReportsPage";
 
 function HomePage({userDetails, type, institute}) {
     const [patientListData, setPatientListData] = useState([])
-    const [therapistListData, setTherapistListData] = useState([])
+    const [activeTherapistListData, setActiveTherapistListData] = useState([])
+    const [notActiveTherapistListData, setNotActiveTherapistListData] = useState([])
     const [parentsListData, setParentsListData] = useState([])
     const [showDialogCode, setShowDialogCode] = useState(false)
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
@@ -39,21 +40,22 @@ function HomePage({userDetails, type, institute}) {
     const [currentPage, setCurrentPage] = useState('')
     const [currentTherapist, setCurrentTherapist] = useState({id: '', index: ''})
     const [currentParent, setCurrentParent] = useState({id: '', index: ''})
-    const [children,setChildren]=useState([])
+    const [children, setChildren] = useState([])
 
 
     async function onLogout() {
         await signOutCurrentUser()
     }
+
     useEffect(() => {
-        const childrenLIst=[]
+        const childrenLIst = []
         for (const [key, value] of Object.entries(userDetails.childrenIds)) {
-            if(value.findIndex((i) => i === institute)!== -1){
+            if (value.findIndex((i) => i === institute) !== -1) {
                 childrenLIst.push(key)
             }
         }
         setChildren(childrenLIst)
-    },[userDetails.childrenIds])
+    }, [userDetails.childrenIds])
 
     // useEffect(() => {
     //     // console.log("currentTherapist: ", currentTherapist)
@@ -87,6 +89,49 @@ function HomePage({userDetails, type, institute}) {
     const handleMyProfile = () => {
 
     }
+
+    const componentsTherapists = (list, isActive,data ) => {
+
+        return (list.map((therapist, index) => {
+            // let data = item.data()
+            console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
+            return (
+                <div>
+                    <Routes>
+                        <Route path={data.id.toString() + '/' + isActive.toString() + '/' + index.toString() + '/*'}
+                               element={<TherapistTabsBanner therapistInstitute={therapist.institute}
+                                                             therapistId={therapist.id}
+                                                             type={type}
+                                                             currentPerson={currentPerson}
+                                                             setCurrentPage={setCurrentPage}/>}
+                        />
+                    </Routes>
+                    <Routes>
+                        <Route
+                            path={data.id.toString() + '/' + isActive.toString() + '/' + index.toString() + '/communication'}
+                            element={<Chat
+                                otherUser={therapist} patient={data.id}/>}/>
+                    </Routes>
+                    <Routes>
+                        <Route
+                            path={data.id.toString() + '/' + isActive.toString() + '/' + index.toString() + '/sessions'}
+                            // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
+                            element={<SessionsList patientId={currentPerson}
+                                                   therapistId={currentTherapist.id}
+                                                   type={type}/>}/>
+
+                        <Route
+                            path={data.id.toString() + '/' + index.toString() + '/exercises'}
+                            // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
+                            element={<PatientExercises patient={currentPerson}
+                                                       therapist={currentTherapist.id}
+                                                       type={type}/>}/>
+                    </Routes>
+                </div>
+            )
+        }))
+    }
+
 
     return (
 
@@ -125,17 +170,18 @@ function HomePage({userDetails, type, institute}) {
                 <div>
                     <Row className='p-4 gap-4 vh-100'>
                         <Col md='2' className="p-3 border border-secondary rounded">
-                            {type==='parent' && <PatientList list={children} setPatientListData={setPatientListData}
-                                                             listTitle={"רשימת ילדים"}
-                                                             setCurrentPerson={setCurrentPerson}
-                                                             currentPage={currentPage}
-                                                             institute={institute}/>}
+                            {type === 'parent' && <PatientList list={children} setPatientListData={setPatientListData}
+                                                               listTitle={"רשימת ילדים"}
+                                                               setCurrentPerson={setCurrentPerson}
+                                                               currentPage={currentPage}
+                                                               institute={institute}/>}
 
-                            {type==='therapist' && <PatientList list={userDetails.institutes[institute]}
-                                                                setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}
-                                                                setCurrentPerson={setCurrentPerson}
-                                                                currentPage={currentPage}
-                                                                institute={institute}/>}
+                            {type === 'therapist' && <PatientList list={userDetails.institutes[institute]}
+                                                                  setPatientListData={setPatientListData}
+                                                                  listTitle={"רשימת מטופלים"}
+                                                                  setCurrentPerson={setCurrentPerson}
+                                                                  currentPage={currentPage}
+                                                                  institute={institute}/>}
 
                             {/*{sideListComponent}*/}
                         </Col>
@@ -148,7 +194,8 @@ function HomePage({userDetails, type, institute}) {
                                             <Routes>
                                                 {/*<Route path={/#/ + data.id.toString() + '/*'}*/}
                                                 <Route path={data.id.toString() + '/*'}
-                                                       element={<PatientDetails type={type} institute={institute} details={data}/>}/>
+                                                       element={<PatientDetails type={type} institute={institute}
+                                                                                details={data}/>}/>
 
                                             </Routes>)
                                     }
@@ -166,7 +213,8 @@ function HomePage({userDetails, type, institute}) {
                                                 <Route path={data.id.toString() + '/*'}
                                                        element={<TherapistsList details={data} currentPage={currentPage}
                                                                                 setCurrentTherapist={setCurrentTherapist}
-                                                                                setTherapistListData={setTherapistListData}
+                                                                                setActiveTherapistListData={setActiveTherapistListData}
+                                                                                setNotActiveTherapistListData={setNotActiveTherapistListData}
                                                                                 currentPerson={currentPerson}
                                                                                 type={type} institute={institute}
                                                        />}/>
@@ -183,8 +231,9 @@ function HomePage({userDetails, type, institute}) {
                                                     <Route path={data.id.toString() + '/*'}
                                                            element={<TherapistsList details={data} currentPage={currentPage}
                                                                                     setCurrentTherapist={setCurrentTherapist}
-                                                                                    setTherapistListData={setTherapistListData}
-                                                                                    currentPerson={currentPerson}/>
+                                                                                    setActiveTherapistListData={setActiveTherapistListData}
+                                                                                    setNotActiveTherapistListData={setNotActiveTherapistListData}
+                                                                                    currentPerson={currentPerson} type={type}/>
 
                                                            }/>
                                                 </Routes>
@@ -291,47 +340,17 @@ function HomePage({userDetails, type, institute}) {
                             {type === 'parent' && patientListData.map((item) => {
                                     let data = item.data()
                                     return (
-                                        therapistListData.map((therapist, index) => {
-                                                console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
-                                                return (
-                                                    <div>
-                                                        <Routes>
-                                                            <Route path={data.id.toString() + '/' + index.toString() + '/*'}
-                                                                   element={<TherapistTabsBanner therapistInstitute={therapist.institute}
-                                                                                                 therapistId={therapist.id}
-                                                                                                 type={type}
-                                                                                                 currentPerson={currentPerson}
-                                                                                                 setCurrentPage={setCurrentPage}/>}
-                                                            />
-                                                        </Routes>
-                                                        <Routes>
-                                                            <Route
-                                                                path={data.id.toString() + '/' + index.toString() + '/communication'}
-                                                                element={<Chat
-                                                                    otherUser={therapist} patient={data.id}/>}/>
-                                                        </Routes>
-                                                        <Routes>
-                                                            <Route
-                                                                path={data.id.toString() + '/' + index.toString() + '/sessions'}
-                                                                // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
-                                                                element={<SessionsList patientId={currentPerson}
-                                                                                       therapistId={currentTherapist.id}
-                                                                                       type={type}/>}/>
+                                        <div>
+                                            {activeTherapistListData.length > 0 && componentsTherapists(activeTherapistListData, 'active',data)}
+                                            {notActiveTherapistListData.length > 0 && componentsTherapists(notActiveTherapistListData, 'notActive',data)}
 
-                                                            <Route
-                                                                path={data.id.toString() + '/' + index.toString() + '/exercises'}
-                                                                // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
-                                                                element={<PatientExercises patient={currentPerson}
-                                                                                           therapist={currentTherapist.id}
-                                                                                           type={type}/>}/>
-                                                        </Routes>
-                                                    </div>
-                                                )
-                                            }
-                                        )
+                                        </div>
                                     )
                                 }
                             )}
+
+                            {/*{activeTherapistListData.length > 0 && componentsTherapists(activeTherapistListData, 'active')}*/}
+                            {/*{notActiveTherapistListData.length > 0 && componentsTherapists(notActiveTherapistListData, 'notActive')}*/}
 
 
                             {type === 'therapist' && patientListData.map((item) => {
@@ -360,7 +379,7 @@ function HomePage({userDetails, type, institute}) {
                             {type === 'therapist' && patientListData.map((item) => {
                                     let data = item.data()
                                     return (
-                                        therapistListData.map((therapist, index) => {
+                                        activeTherapistListData.map((therapist, index) => {
                                                 console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
                                                 return (
                                                     <div>

@@ -73,6 +73,7 @@ function TherapistTabsBanner({therapistId,therapistInstitute,type,currentPerson,
                     </Nav>
                         { therapistInstitute==='external' &&
                             <Button className="m-2 p-1 text-center" onClick={async () => {
+                                console.log( currentPerson)
                                 await removeConnectionPatientToTherapist(therapistId, currentPerson, therapistInstitute)
                             }
                             } style={{fontSize: 10, height: 30}} variant="outline-primary"><Plus/>הסר

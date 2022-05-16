@@ -5,9 +5,10 @@ import MultiTypeGraph from "./components/MultiTypeGraph";
 
 Chart.register(...registerables);
 
-function ReportsPage({data}) {
+function ReportsPage({appKey}) {
     const [hasData, setHasData] = useState(false);
     const [APIResult, setAPIResult] = useState('');
+    const APImap = {AutiDo: 'https://lironhaim15.pythonanywhere.com/get' }
     useEffect(() => {
         const APIrequest = {
             method: 'POST',
@@ -17,7 +18,7 @@ function ReportsPage({data}) {
                 'auth_code': "tokolocopoco"
             })
         };
-        fetch('https://lironhaim15.pythonanywhere.com/get', APIrequest)
+        fetch(APImap[appKey], APIrequest)
             .then(response => response.json())
             .then(data => {
                 console.log("dataaaaa")
@@ -38,7 +39,7 @@ function ReportsPage({data}) {
         <div>
 
             {hasData === false && <h2>טוען נתונים...</h2>}
-            {hasData && <MultiTypeGraph data={APIResult}/>}
+            {hasData && <MultiTypeGraph appKey={appKey} data={APIResult}/>}
 
         </div>
     )

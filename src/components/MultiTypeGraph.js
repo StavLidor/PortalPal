@@ -1,10 +1,26 @@
 import React, {useState, useEffect} from 'react';
-import {Bar,Scatter} from 'react-chartjs-2';
-import { Chart, registerables } from 'chart.js';
+import {Bar, Scatter} from 'react-chartjs-2';
+import {Chart, registerables} from 'chart.js';
+import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup} from 'react-bootstrap'
+import {auth, removeConnectionPatientToTherapist} from "../firebase";
+import {Plus} from "react-bootstrap-icons";
+
 Chart.register(...registerables);
 
-function MultiTypeGraph({data}) {
+function MultiTypeGraph({appKey, data}) {
     console.log("data from liron: ", data)
+    console.log("data from last played : ", typeof data['last_played'])
+    console.log("AAAAA: ", data['options']['plugins']['tooltip'])
+    console.log("label before: ", data['options']['plugins']['tooltip']['callbacks']['label'])
+    console.log("label before type: ", typeof data['options']['plugins']['tooltip']['callbacks']['label'])
+    console.log("tooltip_callback:", data['tooltip_callback'])
+
+    data['options']['plugins']['tooltip']['callbacks']['label'] = Function("context", data['tooltip_callback'])
+    // data['options']['plugins']['tooltip']['callbacks']['afterLabel'] = Function("context", data['tooltip_callback'])
+
+
+    console.log("label after: ", data['options']['plugins']['tooltip']['callbacks']['label'])
+
 
     const rand = () => Math.round(Math.random() * 20 - 10)
 
@@ -69,9 +85,22 @@ function MultiTypeGraph({data}) {
     return (
         <div>
             <div className='header'>
-                <h1 className='title'>{data.title}</h1>
+                <h1 className='title'>דוח התקדמות ב {appKey}</h1>
             </div>
-            <Scatter data={data['data']} type={'scatter'} />
+            <div>
+                <Row><Form.Label className="p-2 m-1" style={{fontWeight: 'bold'}}>פרטים אישיים באפליקציה</Form.Label>
+                </Row>
+                <Row>
+                    <Col md={1}></Col>
+                    <Col className="p-2">
+                        <Row>שם פרטי: {data['first_name']}</Row>
+                        <Row>שם משפחה: {data['last_name']}</Row>
+                        <Row>תאריך הרשמה: {data['date_registered']}</Row>
+                    </Col>
+                </Row>
+            </div>
+            <br/>
+            <Scatter data={data['data']} options={data['options']} type={'scatter'}/>
         </div>
     )
 }

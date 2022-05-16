@@ -314,10 +314,10 @@ function HomePage({userDetails, type, institute}) {
                                        }/>
                             </Routes>
                             <Routes>
-                                <Route path={currentPerson.toString() + '/API'}
+                                <Route path={currentPerson.toString() + '/AUTIDO'}
                                        element={(() => {
                                            if (currentPerson !== '') {
-                                               return <ReportsPage/>
+                                               return <ReportsPage appKey={'AutiDo'}/>
                                            }
                                            return <h2>אנא בחר מטופל כדי לראות דוחות קיימים</h2>
 

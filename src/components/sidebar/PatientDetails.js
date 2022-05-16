@@ -21,28 +21,28 @@ function PatientDetails({details, type, institute}) {
             </Row>
             <Col>
                 <Row>
-                    <Form.Text>
+                    <Form.Label>
                         שם:
                         &nbsp;
                         {details.firstName + ' ' + details.lastName}
-                    </Form.Text>
+                    </Form.Label>
                 </Row>
 
                 <Row>
-                    <Form.Text>
+                    <Form.Label>
                         תאריך לידה:
                         &nbsp;
                         {new Date(details.dateOfBirth.seconds * 1000).toLocaleDateString()}
                         {/*{details.dateOfBirth.toDate().toDateString()}*/}
-                    </Form.Text>
+                    </Form.Label>
                 </Row>
 
                 <Row>
-                    <Form.Text>
+                    <Form.Label>
                         מגדר:
                         &nbsp;
                         {details.gender}
-                    </Form.Text>
+                    </Form.Label>
                 </Row>
                 {/*<Row>*/}
                 {/*    <Form.Text>*/}
@@ -52,11 +52,11 @@ function PatientDetails({details, type, institute}) {
                 {/*    </Form.Text>*/}
                 {/*</Row>*/}
                 <Row>
-                    <Form.Text>
+                    <Form.Label>
                         כתובת:
                         &nbsp;
                         {details.street + ' ' + details.buildingNumber + ', ' + details.city}
-                    </Form.Text>
+                    </Form.Label>
                 </Row>
             </Col>
         </div>

@@ -1,24 +1,47 @@
-import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup} from 'react-bootstrap'
+import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Modal} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link, Route, Routes} from "react-router-dom";
 import {getDate} from "date-fns";
-import {Plus} from "react-bootstrap-icons";
+import {Plus, Dash} from "react-bootstrap-icons";
 import {auth, removeConnectionPatientToTherapist} from "../../firebase";
+import TableData from "../tableEdit/TableData";
 
 function PatientDetails({details, type, institute}) {
+    const [showRemovePatientDialog, setShowRemovePatientDialog] = useState(false)
     console.log("in patient!!!!!!!!")
     return (<div>
-            <Row><Col><Form.Label style={{fontWeight: 'bold'}}>פרטי מטופל</Form.Label></Col>
-                <Col>{type === "therapist" && institute === "external" &&
-                <Button className="m-2 p-1 text-center" onClick={async () => {
-                    await removeConnectionPatientToTherapist(auth.currentUser.uid, details.id, institute)
-                }
-                }
-                        style={{fontSize: 10, height: 30}} variant="outline-primary"><Plus/>הסר
-                    מטופל</Button>}</Col>
+            <ButtonGroup>
+                <Form.Label style={{fontWeight: 'bold'}}>פרטי מטופל</Form.Label>
 
-            </Row>
+                {type === "therapist" && institute === "external" &&
+                <Button className="m-2 p-1 text-center" onClick={() => {
+                    setShowRemovePatientDialog(true)
+                    // await removeConnectionPatientToTherapist(auth.currentUser.uid, details.id, institute)
+                }
+                } style={{fontSize: 10, width: 80, height: 32}} variant="outline-primary"><Dash/>הסר
+                    מטופל</Button>}
+            </ButtonGroup>
+            {showRemovePatientDialog && <Modal show={showRemovePatientDialog} onHide={() => {
+                setShowRemovePatientDialog(false)
+            }}>
+                <Modal.Header>
+                    <Modal.Title>האם אתה בטוח שברצונך להסיר מטופל זה?</Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={async () => {
+                        setShowRemovePatientDialog(false)
+                        await removeConnectionPatientToTherapist(auth.currentUser.uid, details.id, institute)
+                    }}>
+                        כן
+                    </Button>
+                    <Button variant="primary" onClick={() => {
+                        setShowRemovePatientDialog(false)
+                    }}>
+                        לא, אל תמחק
+                    </Button>
+                </Modal.Footer>
+            </Modal>}
             <Col>
                 <Row>
                     <Form.Label>

@@ -47,7 +47,6 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
             //     )
             //     break
             case "parent":
-
                 setTabsComponent(
                     <Container className="border border-secondary rounded">
 
@@ -81,7 +80,6 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
                 )
                 break
             case "therapist":
-
                 setTabsComponent(
                     <Container className="border border-secondary rounded m-3">
                         <Nav justify variant="tabs" defaultActiveKey={'sessions'}>

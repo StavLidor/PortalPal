@@ -21,11 +21,15 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
 
     function getListData() {
         if (listener !== null) {
-            console.log("קקי")
             listener()
         }
         if(list.length=== 0)
+        {
+            setListData([])
+            setPatientListData([])
             return
+        }
+
         const queryRequest = query(collection(db, "patients"), where('id', 'in', list))
         const result = onSnapshot(
             queryRequest,

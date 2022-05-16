@@ -89,7 +89,7 @@ function TabsBanner({type, currentPerson, setCurrentPage}) {
                     //         <a className="nav-link disabled" href="#" tabIndex="-1" aria-disabled="true">Disabled</a>
                     //     </li>
                     // </ul>
-                    <Nav justify variant="tabs" /*defaultActiveKey={'sessions'}*/>
+                    <Nav justify variant="tabs" defaultActiveKey={'sessions'}>
                         <Nav.Item>
                             <Link to={currentPerson + '/documentation'} onClick={() => {
                                 setCurrentPage('documentation')
@@ -130,9 +130,16 @@ function TabsBanner({type, currentPerson, setCurrentPage}) {
                             }} className="list-group-item list-group-item-action">מילוי טופס AQ</Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Link to={currentPerson + '/API'} onClick={() => {
-                                setCurrentPage('API')
-                            }} className="list-group-item list-group-item-action">אפליקציות צד שלישי</Link>
+                            <NavDropdown title="אפליקציות צד שלישי">
+                                <NavDropdown.Item as={Link} to={currentPerson + '/AUTIDO'} onClick={() => {
+                                    setCurrentPage('AUTIDO')
+                                }}>AutiDo</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to={currentPerson + '/KAZABUBU'}  onClick={() => {
+                                    setCurrentPage('KAZABUBU')
+                                }}>
+                                    KAZABUBU
+                                </NavDropdown.Item>
+                            </NavDropdown>
                         </Nav.Item>
                     </Nav>
                 )

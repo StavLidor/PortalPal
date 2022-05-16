@@ -30,13 +30,19 @@ import MultiTypeGraph from "../../components/MultiTypeGraph";
 import ReportsPage from "../../ReportsPage";
 
 function HomePage({userDetails, type, institute}) {
+    // const [patientListData, setPatientListData] = useState((() => {
+    //     if (JSON.parse(localStorage.getItem("currentPatientsListData")) === "") {
+    //         return []
+    //     }
+    //     return JSON.parse(localStorage.getItem("currentPatientsListData"))
+    // })())
     const [patientListData, setPatientListData] = useState([])
     const [activeTherapistListData, setActiveTherapistListData] = useState([])
     const [notActiveTherapistListData, setNotActiveTherapistListData] = useState([])
     const [parentsListData, setParentsListData] = useState([])
     const [showDialogCode, setShowDialogCode] = useState(false)
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
-    const [currentPerson, setCurrentPerson] = useState('')
+    const [currentPerson, setCurrentPerson] = useState(localStorage.getItem("currentPerson"))
     const [currentPage, setCurrentPage] = useState('')
     const [currentTherapist, setCurrentTherapist] = useState({id: '', index: ''})
     const [currentParent, setCurrentParent] = useState({id: '', index: ''})
@@ -48,14 +54,42 @@ function HomePage({userDetails, type, institute}) {
     }
 
     useEffect(() => {
-        const childrenLIst = []
+        console.log("current person: ", currentPerson)
+        localStorage.setItem("currentPerson", currentPerson)
+    }, [currentPerson])
+
+    // useEffect(() => {
+    //     localStorage.setItem("currentPatientsListData", JSON.stringify(patientListData))
+    //     // const index = patientListData.findIndex((s) => s.id === id)
+    //     if (patientListData.findIndex((s) => s.id === currentPerson) === -1) {
+    //         setCurrentPerson("")
+    //     }
+    // }, [patientListData])
+
+    useEffect(() => {
+        if (type === "therapist") {
+            return
+        }
+        console.log("children: ", children)
+        const childrenList = []
         for (const [key, value] of Object.entries(userDetails.childrenIds)) {
             if (value.findIndex((i) => i === institute) !== -1) {
-                childrenLIst.push(key)
+                childrenList.push(key)
+
             }
         }
-        setChildren(childrenLIst)
+        setChildren(childrenList)
     }, [userDetails.childrenIds])
+
+    useEffect(() => {
+        if (type === "parent") {
+            return
+        }
+        console.log("in use effect: ", userDetails.institutes[institute])
+        if (userDetails.institutes[institute].findIndex((s) => s === currentPerson) === -1) {
+            setCurrentPerson("")
+        }
+    }, [userDetails.institutes[institute]])
 
     // useEffect(() => {
     //     // console.log("currentTherapist: ", currentTherapist)
@@ -135,11 +169,13 @@ function HomePage({userDetails, type, institute}) {
 
     return (
 
-        <div><h3>{currentTherapist.id}</h3>
+        <div>
             <Container className="p-4" fluid>
                 <Row className='gap-4 '>
-                    <Col md='2' className="border border-secondary rounded">פורטלי</Col>
-                    <Col md='3' className="w-auto border border-secondary rounded">
+                    <Col md='2'><img src={Logo} alt='toko' style={{width: '240px'}}/></Col>
+                    {/*<Col md='2' className="border border-secondary rounded">פורטלי</Col>*/}
+                    {/*<Col md='3' className="w-auto border border-secondary rounded">*/}
+                    <Col md='3' className="w-auto rounded align-self-center">
                         <ButtonGroup className="gap-4 p-2">
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
                             <Link to="/myProfile">
@@ -366,7 +402,8 @@ function HomePage({userDetails, type, institute}) {
                                                         <Routes>
                                                             <Route
                                                                 path={data.id.toString() + '/parent/' + index.toString() + '/*'}
-                                                                element={<Chat otherUser={parent} patient={data.id}/>}
+                                                                element={<Chat otherUser={parent} patient={data.id}
+                                                                               isActive={"active"}/>}
                                                             />
                                                         </Routes>
                                                     </div>
@@ -386,7 +423,8 @@ function HomePage({userDetails, type, institute}) {
                                                     <div>
                                                         <Routes>
                                                             <Route path={data.id.toString() + '/' + index.toString() + '/*'}
-                                                                   element={<Chat otherUser={therapist} patient={data.id}/>}
+                                                                   element={<Chat otherUser={therapist} patient={data.id}
+                                                                                  isActive={"active"}/>}
                                                             />
                                                         </Routes>
                                                     </div>

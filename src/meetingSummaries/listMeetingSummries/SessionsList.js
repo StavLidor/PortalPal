@@ -219,7 +219,7 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>הוספת תרגיל חדש</Modal.Title>
+                    <Modal.Title>הוספת מפגש חדש</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
 

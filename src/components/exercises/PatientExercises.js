@@ -112,8 +112,8 @@ function PatientExercises({patient, therapist, type}) {
             newExercise.until = firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
             await addDoc(collection(db, "patients/" + patient + "/therapists/" + therapist + '/exercises'), {
                 ...newExercise,
-                // createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                createdAt: firebase.firestore.Timestamp.fromDate(new Date(newExercise.createdAt)),
+                 createdAt: firebase.firestore.Timestamp.fromDate(new Date())
+                //createdAt: firebase.firestore.Timestamp.fromDate(new Date(newExercise.createdAt)),
                 // until: firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
             })
             return true
@@ -171,7 +171,7 @@ function PatientExercises({patient, therapist, type}) {
 
                             <Accordion.Item eventKey={e.id}>
                                 <Accordion.Header>
-                                    {new Date(e.createdAt.seconds * 1000).toLocaleDateString() + ' ' + e.place}
+                                    {e.createdAt!==null &&new Date(e.createdAt.seconds * 1000).toLocaleDateString() + ' ' + e.place}
                                     &nbsp;&nbsp;
                                     {/*{e.createdAt.toDate().toUTCString() + e.place}*/}
                                 </Accordion.Header>
@@ -270,16 +270,16 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                 <Modal.Body>
 
                     <Form className="needs-validation" noValidate><Col>
-                        <Row>
-                            <Form.Group controlId="start_date">
-                                <Form.Label for="validationDefault01">תאריך יצירה</Form.Label>
-                                <Form.Control id='validationDefault01'
-                                              type="date"
-                                    autoFocus
-                                    onChange={e => setNewExercise({...newExercise, createdAt: e.target.value})}
-                                />
-                            </Form.Group>
-                        </Row>
+                        {/*<Row>*/}
+                        {/*    <Form.Group controlId="start_date">*/}
+                        {/*        <Form.Label for="validationDefault01">תאריך יצירה</Form.Label>*/}
+                        {/*        <Form.Control id='validationDefault01'*/}
+                        {/*                      type="date"*/}
+                        {/*            autoFocus*/}
+                        {/*            onChange={e => setNewExercise({...newExercise, createdAt: e.target.value})}*/}
+                        {/*        />*/}
+                        {/*    </Form.Group>*/}
+                        {/*</Row>*/}
 
                         <Row>
                             <Form.Group controlId="end_date">

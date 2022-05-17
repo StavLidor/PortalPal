@@ -419,7 +419,8 @@ export const addPatient = async details => {
                 street: details.street,
                 buildingNumber: details.buildingNumber,
                 parents: [uid_user],
-                gender: details.gender
+                gender: details.gender,
+                thirdPartyCodes:{}
                 /*idSecretary:[details.idSecretary]*/
             })
         }
@@ -969,6 +970,21 @@ export const getUserConnections = async (details) => {
     }
     //parents,therapistsOutside,institutes
 }
+export  const addThirdPartyCodes=async (patientId, nameApp, code) => {
+    if (!await updateIDDoc(patientId, 'patients', {["thirdPartyCodes." + nameApp]: code}))
+        return false
+    return true
+
+}
+export  const removeThirdPartyCodes=async (patientId, nameApp) => {
+    const deleteApp= {['thirdPartyCodes.' + nameApp]: firebase.firestore.FieldValue.delete()}/*{institutes:firebase.firestore.FieldValue.arrayRemove(institute)}*/
+    if (!await updateIDDoc(patientId, 'patients', deleteApp)) {
+        return false
+    }
+    return true
+    //await updateIDDoc(patientId, 'patients', {["thirdPartyCodes." + nameApp]: code})
+
+}
 export const Therapists = async (details) => {
 
     try {
@@ -993,6 +1009,7 @@ export const Therapists = async (details) => {
 
 
 }
+
 
 export default {
     addUser,

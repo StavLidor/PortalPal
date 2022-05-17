@@ -88,33 +88,9 @@ function SecretaryPage({data}) {
             setListenerEmployees(() => resultEmployee)
             console.log("listenerEmployees: ", listenerEmployees)
         }
-
-        // if (idStudents.length > 0) {
-        //     const unsubscribe1 = query(collection(db, "patients"),
-        //         where("id", 'in', d.data().students))
-        //     // setStudents(d.data().students)
-        //     // setEmployees(d.data().employees)
-        //
-        //     // TODO: needed the return?
-        //     onSnapshot(
-        //         unsubscribe1,
-        //         (querySnapshot) => {
-        //             let data = []
-        //             querySnapshot.forEach((doc) => {
-        //                 if (typeof (doc.data().dateOfBirth) !== 'string')
-        //                     data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
-        //                 else
-        //                     data.push(doc.data)
-        //             })
-        //             setStudents(data)
-        //             console.log('Students1112', data)
-        //         },
-        //         (error) => {
-        //             // TODO: Handle errors!
-        //             console.log('error!!', error)
-        //         })
-        // }
-
+        else {
+            setEmployees([])
+        }
 
     }, [idEmployees])
 
@@ -156,6 +132,9 @@ function SecretaryPage({data}) {
             setListenerStudents(() => resultStudent)
             console.log("listenerStudents: ", listenerStudents)
         }
+        else {
+            setStudents([])
+        }
 
 
     }, [idStudents])
@@ -175,71 +154,11 @@ function SecretaryPage({data}) {
                 console.log("listener: ", listenerEmployees)
 
                 console.log("d.data().employees: ", d.data().employees)
-                // const unsubscribe = query(collection(db, "users"),
-                //     where(firebase.firestore.FieldPath.documentId(), 'in', d.data().employees))
-                // // setListenerEmployees(unsubscribe)
-                // // TODO: needed the return?
-                // const result =
-                //     onSnapshot(
-                //         unsubscribe,
-                //         (querySnapshot) => {
-                //             // if (listenerEmployees !== null) {
-                //             //     console.log("קקי")
-                //             //     listenerEmployees()()
-                //             // }
-                //
-                //             let data = []
-                //             querySnapshot.forEach((doc) => (
-                //                 data.push({...doc.data(), id: doc.id})
-                //             ))
-                //             setEmployees(data)
-                //
-                //             console.log("DATA HERE:", data)
-                //             console.log("EMPLOYEES HERE:", employees)
-                //         },
-                //         (error) => {
-                //             // TODO: Handle errors!
-                //             console.log('error!!', error)
-                //         }
-                //     )
-                // console.log("result: ", result)
-                // setListenerEmployees(() => result)
-                // console.log("listenerEmployees: ", listenerEmployees)
+
 
             }
 
-            // setListenerEmployees([result])
-
-
-            // const unsubscribe1 = query(collection(db, "patients"),
-            //     where("id", 'in', d.data().students))
-            // // setStudents(d.data().students)
-            // // setEmployees(d.data().employees)
-            //
-            // // TODO: needed the return?
-            // onSnapshot(
-            //     unsubscribe1,
-            //     (querySnapshot) => {
-            //         let data = []
-            //         querySnapshot.forEach((doc) => {
-            //             if (typeof (doc.data().dateOfBirth) !== 'string')
-            //                 data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
-            //             else
-            //                 data.push(doc.data)
-            //         })
-            //         setStudents(data)
-            //         console.log('Students1112', data)
-            //     },
-            //     (error) => {
-            //         // TODO: Handle errors!
-            //         console.log('error!!', error)
-            //     })
-
         })
-
-
-        //d.data().employees
-        //d.data().students
     }, [])
 
     const addPatient = async (details, setMessages)=>{

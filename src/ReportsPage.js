@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Bar} from 'react-chartjs-2';
 import {Chart, registerables} from 'chart.js';
 import MultiTypeGraph from "./components/MultiTypeGraph";
-import {Button, Form, ButtonGroup, Row} from 'react-bootstrap'
+import {Button, Form, ButtonGroup, Row, Col} from 'react-bootstrap'
 import {addThirdPartyCodes, removeThirdPartyCodes} from "./firebase";
 import CheckHasAPICode from "./checkHasAPICode";
 
@@ -58,13 +58,14 @@ function ReportsPage({appKey, patientDetails, setHasCode, setWasCodeRemoved, cod
             {APIResult.error === '' && hasData && <MultiTypeGraph appKey={appKey} data={APIResult}/>}
             {APIResult.error !== '' && hasData && <h2>אירעה שגיאה, {APIResult.error}</h2>}
             {((APIResult.error === '' && hasData) || (APIResult.error !== '' && hasData)) &&
-            <Row className="text-center">
-                <Button className="text-center m-3" variant="outline-primary" onClick={async () => {
+            <Row className="justify-content-center" style={{display:"flex", width: "100%"}}>
+                <Col className="text-center"><Form.Label style={{fontSize:15}}>לביטול הקישוריות בין משתמש האפליקציה לבין הפורטפל לחץ כאן </Form.Label>
+                <Button style={{width:"25%"}} className="rounded-3 m-2 pb-2" variant="outline-primary" onClick={async () => {
                     setHasCode(false)
                     setWasCodeRemoved(true)
                     await removeThirdPartyCodes(patientDetails.id, appKey)
                 }
-                }>הסר קוד</Button>
+                }>הסר קוד</Button></Col>
             </Row>}
 
         </div>

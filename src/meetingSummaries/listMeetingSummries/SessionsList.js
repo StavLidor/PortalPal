@@ -27,6 +27,29 @@ function SessionsList({patientId, therapistId = null, type}) {
         summary: '',
         date: ''
     })
+    const checkData=(setMessages,session)=>{
+        console.log(session)
+        const messagesSubmit={ title: '',
+            summary: '',
+            date: ''}
+        // e.preventDefault()
+        console.log(session.date ==="")
+        if(session.date ===""){
+            messagesSubmit.date='הכנס תאריך מפגש'
+        }
+        if(!session.title.trim()){
+            messagesSubmit.title='הכנס כותרת פגישב'
+        }
+        if(!session.summary.trim()){
+            messagesSubmit.summary='הכנס תיאור פגישה'
+        }
+        setMessages(messagesSubmit)
+        console.log(messagesSubmit)
+        if(!messagesSubmit.date.trim() && !messagesSubmit.title.trim()&& !messagesSubmit.summary.trim()){
+            return true
+        }
+        return false
+    }
     useEffect(async () => {
         console.log('useEffect')
         let q
@@ -76,7 +99,9 @@ function SessionsList({patientId, therapistId = null, type}) {
 
     }, [])
 
-    const handleOnSubmit = async e => {
+    const handleOnSubmit = async (setMessages) => {
+        if(!checkData(setMessages,newSession))
+            return false
         console.log("new session: " ,newSession)
         console.log("path:" ,"patients/" + patientId + "/therapists/" + auth.currentUser.uid + '/sessions')
         // e.preventDefault()
@@ -91,6 +116,7 @@ function SessionsList({patientId, therapistId = null, type}) {
         )
         // const docRef = await addDoc(collection(db, "exercises"),
         //     { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+        return true
 
     }
     const handleDelete = async docId => {
@@ -98,7 +124,9 @@ function SessionsList({patientId, therapistId = null, type}) {
             docId))
         // await deleteDoc(doc(db, "exercises", docId))
     }
-    const handleUpdate = async (docId, data) => {
+    const handleUpdate = async (docId, data,setMessages) => {
+        if(!checkData(setMessages,data))
+            return false
         console.log("dataaaaaaaaaaaa:" , data)
 
         // await updateIDDoc(docId, "exercises", data)
@@ -111,6 +139,7 @@ function SessionsList({patientId, therapistId = null, type}) {
             //     until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
             // }
         )
+        return true
     }
 
     return (
@@ -207,8 +236,16 @@ function SessionsList({patientId, therapistId = null, type}) {
 export default SessionsList
 
 function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
+    const [messages, setMessages] = useState({
+        title: '',
+        summary: '',
+        date: ''
+    })
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {setShow(false)
+        setMessages({title: '',
+            summary: '',
+            date: ''})}
     const handleShow = () => setShow(true);
 
     return (
@@ -234,7 +271,11 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                                         {...newSession, date: firebase.firestore.Timestamp.fromDate(new Date(e.target.value))}
                                     )}
                                 />
+
                             </Form.Group>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.date}
+                            </div>
                         </Row>
                         <Row>
                             <Form.Group controlId="summary">
@@ -244,7 +285,11 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                                     onChange={e => setNewSession({...newSession, summary: e.target.value})}
 
                                 />
+
                             </Form.Group>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.summary}
+                            </div>
                         </Row>
                         <Row>
                             <Form.Group controlId="title">
@@ -255,6 +300,9 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
 
                                 />
                             </Form.Group>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.title}
+                            </div>
                         </Row>
 
 
@@ -267,9 +315,11 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                     <Button variant="secondary" onClick={handleClose}>
                         בטל
                     </Button>
-                    <Button variant="success" onClick={() => {
-                        handleClose()
-                        handleOnSubmit()
+                    <Button variant="success" onClick={async () => {
+
+                        if (await handleOnSubmit(setMessages)) {
+                            handleClose()
+                        }
                     }}>
                          שמור שינויים
                     </Button>
@@ -282,7 +332,8 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
 
 function DeleteSessionDialog({handleDelete, sessionID}) {
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    const handleClose = () => setShow(false)
+
     const handleShow = () => setShow(true);
 
     return (
@@ -314,8 +365,16 @@ function DeleteSessionDialog({handleDelete, sessionID}) {
 
 function EditSessionDialog({handleUpdate, sessionData}) {
     const [show, setShow] = useState(false);
+    const [messages, setMessages] = useState({
+        title: '',
+        summary: '',
+        date: ''
+    })
     const [newSessionData, setNewSessionData] = useState(sessionData);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {setShow(false)
+        setMessages({title: '',
+            summary: '',
+            date: ''})}
     const handleShow = () => setShow(true);
 
     return (
@@ -345,6 +404,9 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                                               })}
                                 />
                             </Form.Group>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.title}
+                            </div>
                         </Row>
                         <Row>
                             <Form.Group controlId="end_date">
@@ -378,6 +440,9 @@ function EditSessionDialog({handleUpdate, sessionData}) {
 
                                 />
                             </Form.Group>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.date}
+                            </div>
                         </Row>
 
 
@@ -395,6 +460,9 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                                               })}
                                 />
                             </Form.Group>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.summary}
+                            </div>
                         </Row>
 
                     </Col>
@@ -407,18 +475,16 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                     }}>
                         בטל
                     </Button>
-                    <Button variant="success" onClick={() => {
-                        handleClose()
+                    <Button variant="success" onClick={async () => {
+
                         console.log("new: ", newSessionData)
                         console.log("newExerciseData.until: ", newSessionData.date)
-                        handleUpdate(newSessionData.id, newSessionData)
-                        setNewSessionData(
-                            newSessionData
-                            // {
-                            //     ...newExerciseData,
-                            //     until: firebase.firestore.Timestamp.fromDate(new Date(newExerciseData.until))
-                            // }
-                        )
+                        if (await handleUpdate(newSessionData.id, newSessionData, setMessages))
+
+                        {
+                            setNewSessionData(newSessionData)
+                            handleClose()
+                        }
                     }}>
                         שמור שינויים
                     </Button>

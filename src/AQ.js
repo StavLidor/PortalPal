@@ -75,12 +75,6 @@ function AQ() {
 
                 console.log("dataaaaa", data)
                 setAPIResult(data)
-
-                // if (data['prediction'][0] === 0) {
-                //     setModelResult('שלילית')
-                // } else if (data['prediction'][0] === 1) {
-                //     setModelResult('חיובית')
-                // }
             });
 
     }
@@ -418,17 +412,6 @@ function AQ() {
             <Row className="justify-content-center text-center">
                 <Form.Text>התוצאה: {modelResult}</Form.Text>
             </Row>
-
-            <Row className="justify-content-center">
-                <Button className=" rounded-3" style={{width: "10%"}} size="md" variant="outline-primary" onClick={submitHandler}
-                >אוטידוווו</Button>
-            </Row>
-
-            <Row className="justify-content-center text-center">
-
-                <Form.Text>התוצאה מאוטידווו: {APIResult.graph_type}</Form.Text>
-            </Row>
-
         </div>
     )
 }

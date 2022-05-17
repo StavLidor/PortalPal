@@ -57,8 +57,6 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
     return (
         <div>
             <Form.Label style={{fontWeight: 'bold'}}>הורי המטופל</Form.Label>
-            <ListGroup as="ul">
-                {/*{therapists}*/}
                 {parents.map((item, index) => {
                         let data = item
 
@@ -76,7 +74,6 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                         )
                     }
                 )}
-            </ListGroup>
         </div>
 
     )

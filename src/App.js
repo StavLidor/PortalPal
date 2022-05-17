@@ -1,26 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import "./app.css"
-import Button from 'react-bootstrap/Button';
-
-import LoginFrom from "./components/login/LoginFrom";
-// import { AuthProvider } from "components/login/Auth.js";
-// import PrivateRoute from "components/login/PrivateRoute";
-import Home from "./pages/home/Home.js";
-import Login from "./components/login/Login";
-
-import Chat from "./components/chats/Chat";
+// import "./app.css"
+import './chat.css'
 import {BrowserRouter as Router, Route,} from "react-router-dom";
-import AQ10ChildrenForm from "./AQ10ChildrenForm";
 import {db, signOutCurrentUser} from "./firebase";
-import Template from "./template";
-import {Col, Row} from "react-bootstrap";
 import {auth, GetCurrentUser, getDocCurrentUser} from './firebase'
-import {Routes} from "react-router";
-import {signUser} from "./pepole/users/user";
 import Authenticate from "./components/login/Authenticate";
 import HomePage from "./pages/home/HomePage";
-import {signOut} from "firebase/auth";
-import AQold from "./AQold";
 import {doc, getDoc, onSnapshot} from "firebase/firestore";
 
 function App() {
@@ -31,10 +16,7 @@ function App() {
     const [displayLoginError, setDisplayLoginError] = useState(false);
     const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-    // signOutCurrentUser()
-    // console.log("new",window.localStorage.saveSignedIn)
     useEffect(() => {
-        // let isFirstLoad = true
         const unsubscribe = auth.onAuthStateChanged(async user => {
             setCheckUserConnection(true)
             if (user) {
@@ -52,7 +34,6 @@ function App() {
                         if(value.data().titles.includes(localStorage.getItem('type'))){
                             console.log('print hello')
                             setDisplayLoginError(false)
-                            // setIsSigneIn(true)
                             setIsFirstLoad(true)
                         }
                         else{
@@ -63,37 +44,9 @@ function App() {
                         }
 
                     })
-
-                    // const document = await getDoc(docRef)
-                    // console.log("doc: " ,document)
-                    // return document
-                //     return await getDoc(docRef)
                 } catch (err) {
                     return null
                 }
-                // getDocCurrentUser().then(value => {
-                //     console.log(value)
-                //     console.log(value.data())
-                //     console.log(value.data().titles)
-                //         setUserDetails(value)
-                //         console.log("data user details: ", value.data().childrenIds)
-                //         setHasDetails(true)
-                //     if(value.data().titles.includes(localStorage.getItem('type'))){
-                //         console.log('print hello')
-                //         setDisplayLoginError(false)
-                //         // setIsSigneIn(true)
-                //         setIsFirstLoad(true)
-                //     }
-                //     else{
-                //         signOutCurrentUser()
-                //         setDisplayLoginError(true)
-                //         localStorage.setItem("type", "")
-                //         localStorage.setItem("institute", "")
-                //     }
-                //
-                // }
-
-
             } else {
                 localStorage.setItem("type", "")
                 localStorage.setItem("institute", "")
@@ -111,7 +64,6 @@ function App() {
     const login = async (type, institute, isSuccessfulSignIn) => {
         localStorage.setItem("type", type)
         localStorage.setItem("institute", institute)
-        // setIsFirstLoad(isSuccessfulSignIn)
         setDisplayLoginError(!isSuccessfulSignIn)
     }
 

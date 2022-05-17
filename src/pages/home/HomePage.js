@@ -64,14 +64,6 @@ function HomePage({userDetails, type, institute}) {
         localStorage.setItem("currentPerson", currentPerson)
     }, [currentPerson])
 
-    // useEffect(() => {
-    //     localStorage.setItem("currentPatientsListData", JSON.stringify(patientListData))
-    //     // const index = patientListData.findIndex((s) => s.id === id)
-    //     if (patientListData.findIndex((s) => s.id === currentPerson) === -1) {
-    //         setCurrentPerson("")
-    //     }
-    // }, [patientListData])
-
     useEffect(() => {
         if (type === "therapist") {
             return
@@ -97,37 +89,7 @@ function HomePage({userDetails, type, institute}) {
         }
     }, [userDetails.institutes[institute]])
 
-    // useEffect(() => {
-    //     // console.log("currentTherapist: ", currentTherapist)
-    //     switch (type) {
-    //         case "admin":
-    //             // // TODO: change the given list here
-    //             // setSideListComponent(<PatientList list={userDetails.students_arr}
-    //             //                                   setPatientListData={setPatientListData} listTitle={"רשימת תלמידים"}
-    //             //                                   setCurrentPerson={setCurrentPerson}
-    //             //                                   currentPage={currentPage}/>)
-    //             break
-    //         case "parent":
-    //             setSideListComponent(<PatientList list={userDetails.childrenIds} setPatientListData={setPatientListData}
-    //                                               listTitle={"רשימת ילדים"}
-    //                                               setCurrentPerson={setCurrentPerson}
-    //                                               currentPage={currentPage}
-    //                                               institute={institute}/>)
-    //             break
-    //         case "therapist":
-    //             setSideListComponent(<PatientList list={userDetails.institutes[institute]}
-    //                                               setPatientListData={setPatientListData} listTitle={"רשימת מטופלים"}
-    //                                               setCurrentPerson={setCurrentPerson}
-    //                                               currentPage={currentPage}
-    //                                               institute={institute}/>)
-    //             break
-    //         default:
-    //             <h3>משהו השתבש...</h3>
-    //     }
-    // }, [currentPage])
-
     const handleMyProfile = () => {
-
     }
 
     const componentsTherapists = (list, isActive, data) => {
@@ -195,14 +157,16 @@ function HomePage({userDetails, type, institute}) {
                                     onClick={onLogout}>התנתק</Button>
                         </ButtonGroup>
                     </Col>
-                    <Col md='5' className="border align-self-center">
+                    <Col md='5' className="border align-self-center" id='floating-tabs-bar'>
                         {/*<Routes>*/}
                         {/*    <Route path={data.id.toString() + '/' + index.toString() + '/*'}*/}
                         {/*           element={<TabsBanner type={type}*/}
                         {/*                                         currentPerson={currentPerson}*/}
                         {/*                                         setCurrentPage={setCurrentPage}/>}/>*/}
                         {/*</Routes>*/}
+                        <Container className='p-2'>
                         <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}/>
+                        </Container>
                         {/*{tabsComponent}*/}
                     </Col>
                 </Row>
@@ -210,8 +174,8 @@ function HomePage({userDetails, type, institute}) {
             {(type === 'admin') ? (
                     <SecretaryPage data={userDetails}/>) :
                 <div>
-                    <Row className='p-4 gap-4 vh-100'>
-                        <Col md='2' className="p-3 border border-secondary rounded">
+                    <Row className='p-4 gap-4' >
+                        <Col md='2' style={{width:"13%"}}  id='right-floating-box' className="p-3">
                             {type === 'parent' && <PatientList list={children} setPatientListData={setPatientListData}
                                                                listTitle={"רשימת ילדים"}
                                                                setCurrentPerson={setCurrentPerson}
@@ -227,8 +191,8 @@ function HomePage({userDetails, type, institute}) {
 
                             {/*{sideListComponent}*/}
                         </Col>
-                        <Col md='2' className="border border-secondary rounded  ">
-                            <Row className="p-2 border border-secondary rounded  mb-4 ">
+                        <Col md='2' style={{width:"13%"}}>
+                            <Row className="p-2 mb-4" id='middle-floating-box'>
 
                                 {patientListData.map((item) => {
                                         let data = item.data()
@@ -244,7 +208,7 @@ function HomePage({userDetails, type, institute}) {
                                 )}
 
                             </Row>
-                            <Row className="border border-secondary rounded" style={{minHeight: 300}}>
+                            <Row className="mb-4 " style={{minHeight: 300}} id='middle-floating-box'>
 
                                 {(type === 'parent') &&
                                 patientListData.map((item) => {
@@ -294,7 +258,7 @@ function HomePage({userDetails, type, institute}) {
 
                             </Row>
 
-                            <Row className="border border-secondary rounded" style={{minHeight: 300}}>
+                            <Row style={{minHeight: 300}} id='middle-floating-box'>
                                 {type === 'parent' && currentPerson !== '' && <Link to={currentPerson + '/code'}>
                                     <Button onClick={() => setShowDialogCode(true)} className="text-center"
                                             style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}

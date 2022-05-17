@@ -133,7 +133,7 @@ function TherapistsList({
             return (
                 <div>
 
-                    {type === 'parent' && isActive === 'active' && <Form.Label>מטפלים פעילים:</Form.Label>}
+                    {type === 'parent' && isActive === 'active' && <Form.Label >מטפלים פעילים:</Form.Label>}
                     {type === 'parent' && isActive === 'notActive' && <Form.Label>מטפלים לא פעילים:</Form.Label>}
                     <Link to={path}
                           className="list-group-item list-group-item-action" style={{fontSize: 14}}
@@ -152,29 +152,8 @@ function TherapistsList({
     return (
         <div>
             <Form.Label style={{fontWeight: 'bold'}}>רשימת מטפלים</Form.Label>
-            <ListGroup as="ul">
-                {/*{therapists}*/}
                 {activeTherapistsList.length > 0 && showList(activeTherapistsList, 'active')}
                 {notActiveTherapistsList.length > 0 && showList(notActiveTherapistsList, 'notActive')}
-                {/*{notActiveTherapistsList !== [] && notActiveTherapistsList.map((item, index) => {*/}
-                {/*        let data = item*/}
-
-                {/*        return (*/}
-                {/*            // <div>{data.firstName + " " + data.lastName+', '+data.connection}</div>*/}
-                {/*            <Link to={index.toString() + '/' + currentPage.toString()}*/}
-                {/*                  className="list-group-item list-group-item-action" style={{fontSize: 14}}*/}
-                {/*                  onClick={(e) => {*/}
-                {/*                      // e.preventDefault()*/}
-                {/*                      // setCurrentPerson(data.id.toString())*/}
-
-                {/*                      setCurrentTherapist({id: data.id, index: index.toString()})*/}
-
-                {/*                  }}>{data.firstName + " " + data.lastName + ',' + data.active + ','}<br/>{data.connection}*/}
-                {/*            </Link>*/}
-                {/*        )*/}
-                {/*    }*/}
-                {/*)}*/}
-            </ListGroup>
         </div>
 
     )

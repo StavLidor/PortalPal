@@ -58,7 +58,7 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                                                  style={{fontSize: 10, height: 30}} variant="outline-primary"><Plus/>הוסף
                 מטופל</Button>
             }
-            <ListGroup as="ul">
+
                 {listData.map((item) => {
                         let data = item.data()
                         return (<Link to={data.id.toString() + (() => {
@@ -72,7 +72,7 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                         }}>{data.firstName + " " + data.lastName}</Link>)
                     }
                 )}
-            </ListGroup>
+
             {addPatient && <Modal show={addPatient} onHide={() => {
                 setAddPatient(false)
             }}>
@@ -117,13 +117,6 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                     }} type="submit">
                         הוסף
                     </Button>
-                    {/*<Button variant="primary" onClick={() => {*/}
-                    {/*    submit()*/}
-                    {/*    setAddBatch(false)*/}
-                    {/*}*/}
-                    {/*}>*/}
-                    {/*    עדכן*/}
-                    {/*</Button>*/}
                 </Modal.Footer>
             </Modal>}
         </div>

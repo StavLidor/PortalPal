@@ -6,10 +6,36 @@
 *
 */
 body {
-    background-color: #74EBD5;
-    background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
+    /*background-color: #eb7474;*/
+    /*background-image: linear-gradient(90deg, #acb1b1 0%, #f1f1f1 100%);*/
+    background-color: #fafafa;
     min-height: 100vh;
 }
+
+#middle-floating-box{
+    box-shadow: 6px 4px 8px 0px rgba(0, 0, 0, 0.34);
+    background-color: #c7c7c7;
+    /*border-radius: 20px;*/
+
+    border-radius: 40px 9px 9px 40px;
+}
+
+#right-floating-box{
+    box-shadow: 6px 4px 8px 0px rgba(0, 0, 0, 0.34);
+    background-color: #d9d9d9;
+    /*border-radius: 20px;*/
+
+    border-radius: 9px;
+}
+
+#floating-tabs-bar{
+    box-shadow: 6px 4px 8px 0px rgba(0, 0, 0, 0.34);
+    background-color: #d9d9d9;
+    /*border-radius: 20px;*/
+
+    border-radius: 9px;
+}
+
 ::-webkit-scrollbar {
     width: 5px;
 }

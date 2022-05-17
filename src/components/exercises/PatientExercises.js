@@ -22,7 +22,7 @@ import ViewExercise from "./ViewExercise";
 import {Button, Collapse, Modal, Form, Row, Col, Accordion} from "react-bootstrap";
 import {render} from "@testing-library/react";
 import ReactDOM from 'react-dom'
-import { Plus} from 'react-bootstrap-icons';
+import {Plus, Pencil, Trash} from 'react-bootstrap-icons';
 
 
 function PatientExercises({patient, therapist, type}) {
@@ -361,8 +361,8 @@ function DeleteExerciseDialog({handleDelete, exerciseID}) {
 
     return (
         <>
-            <Button variant="outline-dark" onClick={handleShow}>
-                מחק
+            <Button variant="outline-danger" onClick={handleShow}>
+                <Trash></Trash>
             </Button>
 
             <Modal show={show} onHide={handleClose}>
@@ -408,7 +408,7 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
     return (
         <>
             <Button variant="outline-dark" onClick={handleShow}>
-                ערוך
+                <Pencil></Pencil>
             </Button>
 
             <Modal show={show} onHide={()=> {

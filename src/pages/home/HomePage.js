@@ -28,6 +28,7 @@ import Logo from "../../Portapel.png";
 import MultiType from "../../components/MultiTypeGraph";
 import MultiTypeGraph from "../../components/MultiTypeGraph";
 import ReportsPage from "../../ReportsPage";
+import CheckHasAPICode from "../../checkHasAPICode";
 
 function HomePage({userDetails, type, institute}) {
     // const [patientListData, setPatientListData] = useState((() => {
@@ -356,7 +357,8 @@ function HomePage({userDetails, type, institute}) {
                                 <Route path={currentPerson.toString() + '/AUTIDO'}
                                        element={(() => {
                                            if (currentPerson !== '') {
-                                               return <ReportsPage appKey={'AutiDo'}/>
+                                               // return <ReportsPage appKey={'AutiDo'}/>
+                                               return <CheckHasAPICode appKey={'AutiDo'}/>
                                            }
                                            return <h2>אנא בחר מטופל כדי לראות דוחות קיימים</h2>
 

@@ -42,12 +42,15 @@ function HomePage({userDetails, type, institute}) {
     const [parentsListData, setParentsListData] = useState([])
     const [showDialogCode, setShowDialogCode] = useState(false)
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
-    const [currentPerson, setCurrentPerson] = useState(localStorage.getItem("currentPerson"))
+    const [currentPerson, setCurrentPerson] = useState((()=>{
+        if(localStorage.getItem("currentPerson") === null)
+            return ""
+            return localStorage.getItem("currentPerson")})())
     const [currentPage, setCurrentPage] = useState('')
     const [currentTherapist, setCurrentTherapist] = useState({id: '', index: ''})
     const [currentParent, setCurrentParent] = useState({id: '', index: ''})
     const [children, setChildren] = useState([])
-
+    console.log('Currents',currentPerson)
 
     async function onLogout() {
         await signOutCurrentUser()

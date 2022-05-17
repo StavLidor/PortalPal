@@ -27,7 +27,8 @@ import { Plus} from 'react-bootstrap-icons';
 
 function PatientExercises({patient, therapist, type}) {
     const [exercisesData, setExercisesData] = useState([])
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
+
     const [newExercise, setNewExercise] = useState({
         until: '',
         description: '',
@@ -35,6 +36,12 @@ function PatientExercises({patient, therapist, type}) {
         place: '',
         // therapist: therapist
     })
+    // const [messages, setMessages] = useState({
+    //     until: '',
+    //     description: '',
+    //     // patient: patient,
+    //     place: '',
+    // })
     // const [addExercise, setAddExercise] = useState(false)
     useEffect(async () => {
         //console.log('useEffect')
@@ -77,16 +84,42 @@ function PatientExercises({patient, therapist, type}) {
         }
     }, [])
 
-
-    const handleOnSubmit = async e => {
+    const checkData=(setMessages,exercise)=>{
+        const messagesSubmit={until: '',
+            description: '',
+            // patient: patient,
+            place: '',}
         // e.preventDefault()
-        newExercise.until = firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
-        await addDoc(collection(db, "patients/" + patient + "/therapists/" + therapist + '/exercises'), {
-            ...newExercise,
-            // createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            createdAt: firebase.firestore.Timestamp.fromDate(new Date(newExercise.createdAt)),
-            // until: firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
-        })
+        console.log(exercise.until ==="")
+        if(exercise.until ===""){
+            messagesSubmit.until='הכנס תאריך סיום'
+        }
+        if(!exercise.description.trim()){
+            messagesSubmit.description='הכנס תיאור תרגיל'
+        }
+        if(!exercise.place.trim()){
+            messagesSubmit.place='הכנס מקום תרגיל'
+        }
+        setMessages(messagesSubmit)
+        console.log(messagesSubmit)
+        if(!messagesSubmit.until.trim() && !messagesSubmit.description.trim()&& !messagesSubmit.place.trim()){
+            return true
+        }
+        return false
+    }
+    const handleOnSubmit = async (setMessages) => {
+        if(checkData(setMessages,newExercise)) {
+            newExercise.until = firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
+            await addDoc(collection(db, "patients/" + patient + "/therapists/" + therapist + '/exercises'), {
+                ...newExercise,
+                // createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: firebase.firestore.Timestamp.fromDate(new Date(newExercise.createdAt)),
+                // until: firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
+            })
+            return true
+        }
+        console.log('false')
+        return false
         // const docRef = await addDoc(collection(db, "exercises"),
         //     { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
 
@@ -96,10 +129,12 @@ function PatientExercises({patient, therapist, type}) {
             docId))
         // await deleteDoc(doc(db, "exercises", docId))
     }
-    const handleUpdate = async (docId, data) => {
+    const handleUpdate = async (docId, data,setMessages) => {
         console.log("dataaaaaaaaaaaa:" , data)
         console.log("dataaaaaaaaaaaa until:" , data.until)
-
+        if(!checkData(setMessages,data)) {
+            return false
+        }
         // await updateIDDoc(docId, "exercises", data)
         await updateDoc(doc(collection(db, "patients"), patient, "therapists", therapist, 'exercises',
             docId),data
@@ -110,6 +145,7 @@ function PatientExercises({patient, therapist, type}) {
         //     until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
         // }
         )
+        return true
     }
 
     // console.log(new Date(exercisesData[0].createdAt.seconds * 1000).getYear() + '-'+new Date(exercisesData[0].createdAt.seconds * 1000).getMonth()+ '-'+new Date(exercisesData[0].createdAt.seconds * 1000).getDay())
@@ -206,7 +242,19 @@ export default PatientExercises
 
 function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) {
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    const [messages, setMessages] = useState({
+        until: '',
+        description: '',
+        // patient: patient,
+        place: '',
+    })
+    const handleClose = () => {setShow(false)
+        setMessages({
+            until: '',
+            description: '',
+            // patient: patient,
+            place: '',
+        })};
     const handleShow = () => setShow(true);
 
     return (
@@ -221,12 +269,12 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                 </Modal.Header>
                 <Modal.Body>
 
-                    <Form><Col>
+                    <Form className="needs-validation" noValidate><Col>
                         <Row>
                             <Form.Group controlId="start_date">
-                                <Form.Label>תאריך יצירה</Form.Label>
-                                <Form.Control
-                                    type="date"
+                                <Form.Label for="validationDefault01">תאריך יצירה</Form.Label>
+                                <Form.Control id='validationDefault01'
+                                              type="date"
                                     autoFocus
                                     onChange={e => setNewExercise({...newExercise, createdAt: e.target.value})}
                                 />
@@ -236,11 +284,14 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                         <Row>
                             <Form.Group controlId="end_date">
                                 <Form.Label>תאריך סיום</Form.Label>
-                                <Form.Control
+                                <Form.Control  id='validationDefault01'
                                     type="date"
                                     onChange={e => setNewExercise({...newExercise, until: e.target.value})}
 
                                 />
+                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                    {messages.until}
+                                </div>
                             </Form.Group>
                         </Row>
 
@@ -256,6 +307,9 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                                                   description: e.target.value
                                               })}
                                 />
+                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                    {messages.description}
+                                </div>
                             </Form.Group>
                         </Row>
 
@@ -268,6 +322,9 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                                 <Form.Control type='text'
                                               onChange={e => setNewExercise({...newExercise, place: e.target.value})}
                                 />
+                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                    {messages.place}
+                                </div>
                             </Form.Group>
                         </Row>
 
@@ -278,9 +335,15 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                     <Button variant="secondary" onClick={handleClose}>
                         בטל
                     </Button>
-                    <Button variant="success" onClick={() => {
-                        handleClose()
-                        handleOnSubmit()
+                    <Button variant="success" onClick={async () => {
+                        const flag = handleOnSubmit(setMessages)
+                        console.log('flag', flag)
+                        if (await flag) {
+                            handleClose()
+                        } else {
+                            console.log('FALSEE')
+                        }
+
                     }}>
                         שמור שינויים
                     </Button>
@@ -327,7 +390,19 @@ function DeleteExerciseDialog({handleDelete, exerciseID}) {
 function EditExerciseDialog({handleUpdate, exerciseData}) {
     const [show, setShow] = useState(false);
     const [newExerciseData, setNewExerciseData] = useState(exerciseData);
-    const handleClose = () => setShow(false);
+    const [messages, setMessages] = useState({
+        until: '',
+        description: '',
+        // patient: patient,
+        place: '',
+    })
+    const handleClose = () => {setShow(false)
+        setMessages({
+            until: '',
+            description: '',
+            // patient: patient,
+            place: '',
+        })};
     const handleShow = () => setShow(true);
 
     return (
@@ -371,6 +446,7 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                         })()}
                                     onChange={e => setNewExerciseData({...newExerciseData, createdAt: e.target.value})}
                                 />
+
                             </Form.Group>
                         </Row>
 
@@ -405,6 +481,9 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                     onChange={e => setNewExerciseData({...newExerciseData, until: firebase.firestore.Timestamp.fromDate(new Date(e.target.value))})}
 
                                 />
+                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                    {messages.until}
+                                </div>
                             </Form.Group>
                         </Row>
 
@@ -421,6 +500,9 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                                   description: e.target.value
                                               })}
                                 />
+                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                    {messages.description}
+                                </div>
                             </Form.Group>
                         </Row>
 
@@ -434,6 +516,9 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                               value={newExerciseData.place}
                                               onChange={e => setNewExerciseData({...newExerciseData, place: e.target.value})}
                                 />
+                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                    {messages.place}
+                                </div>
                             </Form.Group>
                         </Row>
 
@@ -447,17 +532,19 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                     }}>
                         בטל
                     </Button>
-                    <Button variant="primary" onClick={() => {
-                        handleClose()
+                    <Button variant="primary" onClick={async () => {
+
                         console.log("new: ", newExerciseData)
                         console.log("newExerciseData.until: ", newExerciseData.until)
-                        handleUpdate(newExerciseData.id, newExerciseData)
+                        if (await handleUpdate(newExerciseData.id, newExerciseData, setMessages)) {
+                            handleClose()
+                        }
                         setNewExerciseData(
                             newExerciseData
-                        // {
-                        //     ...newExerciseData,
-                        //     until: firebase.firestore.Timestamp.fromDate(new Date(newExerciseData.until))
-                        // }
+                            // {
+                            //     ...newExerciseData,
+                            //     until: firebase.firestore.Timestamp.fromDate(new Date(newExerciseData.until))
+                            // }
                         )
                     }}>
                         שמור שינויים

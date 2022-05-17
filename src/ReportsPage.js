@@ -3,12 +3,15 @@ import {Bar} from 'react-chartjs-2';
 import {Chart, registerables} from 'chart.js';
 import MultiTypeGraph from "./components/MultiTypeGraph";
 import {Button, Form, ButtonGroup, Row} from 'react-bootstrap'
+import {addThirdPartyCodes, removeThirdPartyCodes} from "./firebase";
+import CheckHasAPICode from "./checkHasAPICode";
 
 Chart.register(...registerables);
 
-function ReportsPage({appKey}) {
+function ReportsPage({appKey, patientDetails, setHasCode, setWasCodeRemoved, code}) {
     const [hasData, setHasData] = useState(false);
     const [APIResult, setAPIResult] = useState('');
+    // const [codeRemoved, setCodeRemoved] = useState(false);
     // const [hasCode, setHasCode] = useState(false);
     const APImap = {AutiDo: 'https://lironhaim15.pythonanywhere.com/get'}
     useEffect(() => {
@@ -17,7 +20,7 @@ function ReportsPage({appKey}) {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 // 'id': "gOCpJKs43uRr8Y7QHkHL"
-                'auth_code': "tokolocopoco"
+                'auth_code': code
             })
         };
         fetch(APImap[appKey], APIrequest)
@@ -54,6 +57,15 @@ function ReportsPage({appKey}) {
             {hasData === false && <h2>טוען נתונים...</h2>}
             {APIResult.error === '' && hasData && <MultiTypeGraph appKey={appKey} data={APIResult}/>}
             {APIResult.error !== '' && hasData && <h2>אירעה שגיאה, {APIResult.error}</h2>}
+            {((APIResult.error === '' && hasData) || (APIResult.error !== '' && hasData)) &&
+            <Row className="text-center">
+                <Button className="text-center m-3" variant="outline-primary" onClick={async () => {
+                    setHasCode(false)
+                    setWasCodeRemoved(true)
+                    await removeThirdPartyCodes(patientDetails.id, appKey)
+                }
+                }>הסר קוד</Button>
+            </Row>}
 
         </div>
     )

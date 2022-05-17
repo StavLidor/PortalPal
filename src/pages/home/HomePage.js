@@ -43,21 +43,23 @@ function HomePage({userDetails, type, institute}) {
     const [parentsListData, setParentsListData] = useState([])
     const [showDialogCode, setShowDialogCode] = useState(false)
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
-    const [currentPerson, setCurrentPerson] = useState((()=>{
-        if(localStorage.getItem("currentPerson") === null)
+    const [currentPerson, setCurrentPerson] = useState((() => {
+        if (localStorage.getItem("currentPerson") === null)
             return ""
-            return localStorage.getItem("currentPerson")})())
+        return localStorage.getItem("currentPerson")
+    })())
     const [currentPage, setCurrentPage] = useState('')
     const [currentTherapist, setCurrentTherapist] = useState({id: '', index: ''})
     const [currentParent, setCurrentParent] = useState({id: '', index: ''})
     const [children, setChildren] = useState([])
-    console.log('Currents',currentPerson)
+    console.log('Currents', currentPerson)
 
     async function onLogout() {
         await signOutCurrentUser()
     }
 
     useEffect(() => {
+        console.log("patients: ", patientListData)
         console.log("current person: ", currentPerson)
         localStorage.setItem("currentPerson", currentPerson)
     }, [currentPerson])
@@ -358,7 +360,15 @@ function HomePage({userDetails, type, institute}) {
                                        element={(() => {
                                            if (currentPerson !== '') {
                                                // return <ReportsPage appKey={'AutiDo'}/>
-                                               return <CheckHasAPICode appKey={'AutiDo'}/>
+                                               const index = patientListData.findIndex((s) => s.id === currentPerson)
+                                               if (index === -1) {
+                                                   return <div></div>
+                                               }
+                                               // console.log("index: ", index)
+                                               // console.log("patientListData: ", patientListData)
+                                               // console.log("patientListData[index]: ", patientListData[index].data())
+                                               return <CheckHasAPICode appKey={'AutiDo'}
+                                                                       patientDetails={patientListData[index].data()}/>
                                            }
                                            return <h2>אנא בחר מטופל כדי לראות דוחות קיימים</h2>
 

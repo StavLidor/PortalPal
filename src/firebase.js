@@ -970,7 +970,7 @@ export const getUserConnections = async (details) => {
     }
     //parents,therapistsOutside,institutes
 }
-export  const addThirdPartyCodes=async (patientId, nameApp, code) => {
+export const addThirdPartyCodes=async (patientId, nameApp, code) => {
     if (!await updateIDDoc(patientId, 'patients', {["thirdPartyCodes." + nameApp]: code}))
         return false
     return true

@@ -491,9 +491,13 @@ function SecretaryPage({data}) {
         },
     ]
     const addConnectionToTherapist = async (details,setMessages) => {
+        console.log(details)
         const messages ={id:"",connection:""}
         if(!details.connection.trim()){
             messages.connection='הכנס קשר'
+        }
+        if(!details.id.trim()){
+            messages.id='אין תלמדים שאפשר לקשר'
         }
         //console.log("EEEEEEEEEEEEEE", userGetTable.institutes[data.institute],details)
         const i = userGetTable.institutes[data.institute].findIndex((id) => id === details.id)
@@ -577,7 +581,12 @@ function SecretaryPage({data}) {
                            } columnsInfoView={columnsViewTherapist} requiredId={false}
                                                find={findTherapist} HebrewNamesTable={HebrewNamesTableT}
                                                emptyDetailsTable={{
-                                                   id: "",
+                                                   id: (()=>{
+                                                       if(students.length>0){
+                                                           return students[0].id
+                                                       }
+                                                       return ""
+                                                   })(),
                                                    lastName: "",
                                                    firstName: ""/**/
                                                    ,connection: "",

@@ -340,13 +340,14 @@ export default function TableData({
                                                 }
                                             </Form.Select>
                                     </Form.Label>
-                                    ):
-                                    <div className="form-group">
+                                    ):(requiredId)?(<div className="form-group">
+
                                     <Form.Label style={{fontSize:20}} for="validationDefault01" htmlFor="id">תעודת זהות:</Form.Label>
                                     <Form.Control id='validationDefault01' required type="text" name="id"
                                     onChange={e => setDetailsNew({...detailsNew, id: e.target.value})}
                                     value={detailsNew.id}/>
-                                        </div>
+                                    </div>):<div></div>
+
                                 }
                                 <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
                                     {messages.id}

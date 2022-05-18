@@ -53,9 +53,9 @@ function AQ() {
             .then(response => response.json())
             .then(data => {
                 if (data['prediction'][0] === 0) {
-                    setModelResult('שלילית')
+                    setModelResult('בהתאם לנתונים שיש לנו, ובשילוב עם תוצאות הטופס שלך, התוצאה היא: שלילית. לדעתנו, איו צורך ללכת כרגע לבדיקות נוספות.')
                 } else if (data['prediction'][0] === 1) {
-                    setModelResult('חיובית')
+                    setModelResult('בהתאם לנתונים שיש לנו, ובשילוב עם תוצאות הטופס שלך, התוצאה היא: חיובית. מומלץ ללכת לבדיקות נוספות או למטפלים להמשך סיוע.')
                 }
             });
 

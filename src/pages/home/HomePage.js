@@ -136,16 +136,16 @@ function HomePage({userDetails, type, institute}) {
         }))
     }
 
-const [patientIsClicked,setPatientIsClicked] = useState(false)
+    const [patientIsClicked, setPatientIsClicked] = useState(false)
     return (
 
         <div>
             <Container className="p-4" fluid>
                 <Row className='gap-4 '>
-                    <Col md='2' style={{maxWidth:'250px'}}><img src={Logo} alt='toko' style={{width: '240px'}}/></Col>
+                    <Col md='2' style={{maxWidth: '250px'}}><img src={Logo} alt='toko' style={{width: '240px'}}/></Col>
                     {/*<Col md='2' className="border border-secondary rounded">פורטלי</Col>*/}
                     {/*<Col md='3' className="w-auto border border-secondary rounded">*/}
-                    <Col md='2'  className="w-auto rounded align-self-center">
+                    <Col md='2' className="w-auto rounded align-self-center">
                         <ButtonGroup className="gap-4 p-2">
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
                             <Link to="/myProfile">
@@ -166,8 +166,9 @@ const [patientIsClicked,setPatientIsClicked] = useState(false)
                         {/*                                         currentPerson={currentPerson}*/}
                         {/*                                         setCurrentPage={setCurrentPage}/>}/>*/}
                         {/*</Routes>*/}
-                        <Container >
-                        <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage} currentPage={currentPage}/>
+                        <Container>
+                            <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}
+                                        currentPage={currentPage}/>
                         </Container>
                         {/*{tabsComponent}*/}
                     </Col>
@@ -175,8 +176,9 @@ const [patientIsClicked,setPatientIsClicked] = useState(false)
             </Container>
             {(type === 'admin') ? (
                     <SecretaryPage data={userDetails}/>) :
-                <Row className='p-4 gap-4' >
-                    <Col md='2' style={{width:"13%",maxWidth:'350px'}}  id='right-floating-box' className="p-3" /*onMouseEnter={()=>setA(true)} onMouseLeave={()=>setA(false)}*/>
+                <Row className='p-4 gap-4'>
+                    <Col md='2' style={{width: "13%", maxWidth: '350px'}} id='right-floating-box'
+                         className="p-3" /*onMouseEnter={()=>setA(true)} onMouseLeave={()=>setA(false)}*/>
                         {type === 'parent' && <PatientList list={children} setPatientListData={setPatientListData}
                                                            listTitle={"רשימת ילדים"}
                                                            setCurrentPerson={setCurrentPerson}
@@ -196,8 +198,9 @@ const [patientIsClicked,setPatientIsClicked] = useState(false)
 
                         {/*{sideListComponent}*/}
                     </Col>
-                    <Col md='2' style={{width:"13%",maxWidth:'350px'}}>
-                        <Animated animationIn="fadeInRight" animationOut="fadeOutRight" animationInDuration={1000} animationOutDuration={1000} isVisible={currentPerson !== ''}>
+                    <Col md='2' style={{width: "13%", maxWidth: '350px'}}>
+                        <Animated animationIn="fadeInRight" animationOut="fadeOutRight" animationInDuration={1000}
+                                  animationOutDuration={1000} isVisible={currentPerson !== ''}>
                             <Row className="p-2 mb-4 patient-details" id='middle-floating-box' style={{minHeight: 200}}>
 
                                 {patientListData.map((item) => {
@@ -289,14 +292,16 @@ const [patientIsClicked,setPatientIsClicked] = useState(false)
                                                                <Row>
                                                                    <Link to='sessions' onClick={() => {
                                                                        setCurrentPage('sessions')
-                                                                   }} className="list-group-item list-group-item-action" id='sessions-side-top-button'>סיכומי
+                                                                   }} className="list-group-item list-group-item-action"
+                                                                         id='sessions-side-top-button'>סיכומי
                                                                        טיפולים</Link>
                                                                </Row>
                                                                <Row>
                                                                    <Link to='exercises' onClick={() => {
                                                                        setCurrentPage('exercises')
                                                                    }}
-                                                                         className="list-group-item list-group-item-action" id='sessions-side-bottom-button'>תרגילים</Link>
+                                                                         className="list-group-item list-group-item-action"
+                                                                         id='sessions-side-bottom-button'>תרגילים</Link>
                                                                </Row>
                                                            </Col>
                                                        }/>
@@ -319,7 +324,7 @@ const [patientIsClicked,setPatientIsClicked] = useState(false)
                                            return <h2>אנא בחר מטופל כדי למלא עבורו את הטופס</h2>
 
                                        })()
-                                }/>
+                                   }/>
                         </Routes>
                         <Routes>
                             <Route path={currentPerson.toString() + '/AQform'}

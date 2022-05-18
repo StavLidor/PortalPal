@@ -19,7 +19,7 @@ function SignUp({setDisplayLoginForm})  {
     console.log('sign up')
     const [userDetails, setUserDetails] = useState({
         firstName: "",
-        lastName: "",jobs:[], license: "",titles:['מטפל'] ,email: "", password: "",institute:"", institutes: {external: []},
+        lastName: "",jobs:[], license: "",titles:['therapist'] ,email: "", password: "",institute:"", institutes: {external: []},
         childrenIds:[]
     })
     const [messages, setMessages] = useState({

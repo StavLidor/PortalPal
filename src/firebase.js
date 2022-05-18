@@ -102,6 +102,21 @@ export async function signUp(userDetails) {
         console.log(err)
         // console.log("Email error", userDetails.email)
         await authAdd.signOut()
+        const dataUser = await getIdAndDataByEmail(userDetails.email)
+        const uid_user = dataUser[0]
+        const data = dataUser[1]
+        if(!('external' in data.institutes) && data.firstName ===userDetails.firstName &&data.lastName === userDetails.lastName){
+            // TODO: need to check if its good password?
+            if (data.titles.findIndex((t) => t === 'therapist') === -1) {
+
+                await updateIDDoc(uid_user, 'users', {license: userDetails.license, 'institutes.external': [],
+                    titles: firebase.firestore.FieldValue.arrayUnion('therapist')})
+            }
+            else{
+                await updateIDDoc(uid_user, 'users', {license: userDetails.license, 'institutes.external': []})
+            }
+            return uid_user
+        }
         return null
     }
 }
@@ -202,6 +217,9 @@ export const resetPassword = email => {
         });
 
 }
+export const addTherapist= async details => {
+
+}
 export const addUser = async details => {
     try {
         //sentToEmail(details)
@@ -241,7 +259,17 @@ export const addUserFromAdmin = async (details, institute) => {
     })
     // if user exists
     if (!uid_user) {
-        uid_user = await updateAccordingEmail(details.email, {['institutes.' + institute]: []})
+        const dataUser = await getIdAndDataByEmail(details.email)
+        uid_user = dataUser[0]
+        const data = dataUser[1]
+        if (data.titles.findIndex((t) => t === 'therapist') === -1) {
+            await updateIDDoc(uid_user, 'users', {
+                ['institutes.' + institute]: [],
+                titles: firebase.firestore.FieldValue.arrayUnion('therapist')
+            })
+        } else {
+            await updateIDDoc(uid_user, 'users', {['institutes.' + institute]: []})
+        }
     }
     // add to doc of institute
     if (uid_user) {

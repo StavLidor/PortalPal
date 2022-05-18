@@ -6,7 +6,8 @@ import MultiType from "./components/MultiTypeGraph";
 
 
 function AQ() {
-    const [modelResult, setModelResult] = useState(null);
+    const [modelResult, setModelResult] = useState('טרם נקבעה');
+    const [modelResultMessage, setModelResultMessage] = useState('יש למלא את הטופס במלואו');
     const [APIResult, setAPIResult] = useState('');
     const options = [];
     const [details, setDetails] = useState({
@@ -53,9 +54,11 @@ function AQ() {
             .then(response => response.json())
             .then(data => {
                 if (data['prediction'][0] === 0) {
-                    setModelResult('בהתאם לנתונים שיש לנו, ובשילוב עם תוצאות הטופס שלך, התוצאה היא: שלילית. לדעתנו, איו צורך ללכת כרגע לבדיקות נוספות.')
+                    setModelResultMessage('בהתאם לנתונים שיש לנו, ובשילוב עם תוצאות הטופס שלך, התוצאה היא: שלילית. לדעתנו, איו צורך ללכת כרגע לבדיקות נוספות.')
+                    setModelResult('שלילית')
                 } else if (data['prediction'][0] === 1) {
-                    setModelResult('בהתאם לנתונים שיש לנו, ובשילוב עם תוצאות הטופס שלך, התוצאה היא: חיובית. מומלץ ללכת לבדיקות נוספות או למטפלים להמשך סיוע.')
+                    setModelResultMessage('בהתאם לנתונים שיש לנו, ובשילוב עם תוצאות הטופס שלך, התוצאה היא: חיובית. מומלץ ללכת לבדיקות נוספות או למטפלים להמשך סיוע.')
+                    setModelResult('חיובית')
                 }
             });
 
@@ -81,154 +84,195 @@ function AQ() {
 
     return (
         <div>
-            <Form className="col justify-content-center">
+            <Form className="col justify-content-center" >
                 <Form.Group>
                     <Form.Label className="text-center" style={{fontWeight: "bold", width: "100%"}}>טופס לאבחון
                         אוטיזם</Form.Label>
 
-                    <Row>
-                        <Col style={{fontSize: 17}}>
-                            מי ממלא טופס זה:
-                        </Col>
-                        <Col md="auto">
-                            <Form.Group className="mb-3">
-                                <Form.Select id='type' onChange={e => setDetails({
-                                    ...details,
-                                    ['Who completed the test']: e.target.value
-                                })}
-                                    // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
-                                >
-                                    <option style={{fontSize: 18}} id='title1' value="family member">בן משפחה</option>
-                                    <option style={{fontSize: 18}} id='title2' value="Health care professional">מטפל
-                                    </option>
-                                    <option style={{fontSize: 18}} id='title3' value="Self">מילוי עצמאי</option>
-                                    <option style={{fontSize: 18}} id='title4' value="Others">מורה</option>
-                                    <option style={{fontSize: 18}} id='title5' value="family member">הורה</option>
-                                    <option style={{fontSize: 18}} id='title6' value="Others">אחר</option>
-                                </Form.Select>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style={{fontSize: 17}}>
-                            אתניות:
-                        </Col>
-                        <Col md="auto">
-                            <Form.Group className="mb-3">
-                                <Form.Select id='type'
-                                             onChange={e => setDetails({...details, Ethnicity: e.target.value})}
-                                    // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
-                                >
-                                    <option style={{fontSize: 18}} id='middle eastern' value="middle eastern">מזרח
-                                        התיכון
-                                    </option>
-                                    <option style={{fontSize: 18}} id='south asian' value="south asian">דרום אסיה
-                                    </option>
-                                    <option style={{fontSize: 18}} id='Hispanic' value="Hispanic">היספני</option>
+                    <Container className='align-self-center p-4' style={{alignSelf: 'center'}}>
 
-                                    <option style={{fontSize: 18}} id='asian' value="asian">אסיה</option>
-                                    <option style={{fontSize: 18}} id='black' value="black">אפרו-אמריקאים</option>
-                                    <option style={{fontSize: 18}} id='Others' value="Others">אחר</option>
-                                    <option style={{fontSize: 18}} id='mixed' value="mixed">מעורבב</option>
-                                    <option style={{fontSize: 18}} id='Pacifica' value="Pacifica">פסיפיקה,קליפורניה
-                                    </option>
-                                    <option style={{fontSize: 18}} id='Latino' value="Latino">לטינו</option>
-                                    <option style={{fontSize: 18}} id='Native Indian' value="Native Indian">אינדיאנים
-                                    </option>
-                                    <option style={{fontSize: 18}} id='White European' value="White European">אירופה
-                                    </option>
-                                </Form.Select>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col style={{fontSize: 17}}>
-                            גיל:
-                        </Col>
-                        <Col md="auto">
-                            <Form.Group className="mb-3">
-                                <Form.Select id='age'
-                                             onChange={e => setDetails({...details, Age_Mons: e.target.value * 12})}
-                                    // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
-                                >
-                                    {options}
-                                </Form.Select>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style={{fontSize: 17}}>
-                            מין:
-                        </Col>
-                        <Col md="auto">
-                            <Form.Group className="mb-3">
-                                <Form.Select id='gender' onChange={e => setDetails({...details, Sex: e.target.value})}
-                                    // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
-                                >
-                                    <option style={{fontSize: 18}} id='male' value='m'>זכר</option>
-                                    <option style={{fontSize: 18}} id='female' value="f">נקבה</option>
-                                </Form.Select>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style={{fontSize: 17}}>
-                            רקע עם מחלת צהבת
-                        </Col>
-                        <Col md="auto">
-                            <Form.Group className="mb-3">
-                                <ButtonGroup className="gap-3"><Form.Text style={{fontSize: 18}}>כן</Form.Text>
-                                    <Form.Check style={{fontSize: 18}} type="radio" name='jaundice'
-                                                onChange={e => setDetails({...details, Jaundice: 'yes'})}
-                                    /><Form.Text style={{fontSize: 18}}>לא</Form.Text>
-                                    <Form.Check style={{fontSize: 18}} type="radio" name='jaundice'
-                                                onChange={e => setDetails({...details, Jaundice: 'no'})}
-                                    />
-                                </ButtonGroup>
-
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style={{fontSize: 17}}>
-                            קיים בן משפחה עם אוטיזם?
-                        </Col>
-                        <Col md="auto">
-                            <Form.Group className="mb-3">
-                                <ButtonGroup className="gap-3">
-                                    <Form.Text style={{fontSize: 18}}>כן</Form.Text>
-                                    <Form.Check style={{fontSize: 18}} type="radio" name='memberFamilyWithAsd'
-                                                onChange={e => setDetails({...details, Family_mem_with_ASD: 'yes'})}
-                                    />
-                                    <Form.Text style={{fontSize: 18}}>לא</Form.Text>
-                                    <Form.Check style={{fontSize: 18}} type="radio" name='memberFamilyWithAsd'
-                                                onChange={e => setDetails({...details, Family_mem_with_ASD: 'no'})}
-                                    />
-                                </ButtonGroup>
-
-                            </Form.Group>
-                        </Col>
-                    </Row>
+                        <Form.Label>מהו טופס AQ-10?</Form.Label>
+                        <Row className='justify-content-center' style={{fontSize: 20}}>
+                            טופס AQ-10 הוא שאלון המשמש לאבחון מוקדם של אוטיזם.
+                            הוא מיועד עבור אנשים עם לקות למידה בינונית-קשה אשר עלולים להיות חשודים למאובחנים באוטיזם.
+                            השאלון עצמו מורכב מ-10 שאלות פשוטות כאשר לכל תשובה ישנן 4 אפשרויות: מסכים, מסכים בהחלט, לא
+                            מסכים, לא מסכים בהחלט.
+                        </Row>
+                        <br/>
+                        <Form.Label>איך ממלאים?</Form.Label>
+                        <Row className='justify-content-center' style={{fontSize: 20}}>
+                            יש למנות את הניקוד לשאלון באופן הבא:
+                            תשובות של מסכים/מסכים בהחלט עבור שאלות: 1,5,7,10 מזכות בנקודה, אחרת לא מקבלים נקודה.
+                            תשובות של לא מסכים/בהחלט לא מסכים עבור שאלות: 2,3,4,6,8,9 מזכות בנקודה, אחרת לא מקבלים
+                            נקודה.
+                        </Row>
+                        <br/>
+                        <Form.Label>מה אומרת התוצאה?</Form.Label>
+                        <Row className='justify-content-center' style={{fontSize: 20}}>
+                            אם התקבל ניקוד של 6 ומעלה, אזי קיים חשד לאוטיזם וכדאי לפנות לגורם מקצועי לביצוע בדיקה מעמיקה
+                            ומקיפה יותר.
+                        </Row>
+                        <br/>
+                        <Form.Label>הטופס שלנו...</Form.Label>
+                        <Row className='justify-content-center' style={{fontSize: 20}}>
+                            ניתן למלא את הטופס באופן נוח ומונגש. בנוסף, הנתונים יעובדו דרך מודל למידת מכונה למען תוצאה
+                            מדויקת יותר.
+                        </Row>
+                    </Container>
                 </Form.Group>
             </Form>
+            <Container className='border-4 border'  >
+            <Form className="col justify-content-center" >
+            <Form.Group>
+                    <Container className='m-3'  >
+
+                        <Row>
+                            <Col style={{fontSize: 17}}>
+                                מי ממלא טופס זה:
+                            </Col>
+                            <Col md="auto">
+                                <Form.Group className="mb-3">
+                                    <Form.Select id='type' onChange={e => setDetails({
+                                        ...details,
+                                        ['Who completed the test']: e.target.value
+                                    })}
+                                    >
+                                        <option style={{fontSize: 18}} id='title1' value="family member">בן משפחה
+                                        </option>
+                                        <option style={{fontSize: 18}} id='title2' value="Health care professional">מטפל
+                                        </option>
+                                        <option style={{fontSize: 18}} id='title3' value="Self">מילוי עצמאי</option>
+                                        <option style={{fontSize: 18}} id='title4' value="Others">מורה</option>
+                                        <option style={{fontSize: 18}} id='title5' value="family member">הורה</option>
+                                        <option style={{fontSize: 18}} id='title6' value="Others">אחר</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col style={{fontSize: 17}}>
+                                אתניות:
+                            </Col>
+                            <Col md="auto">
+                                <Form.Group className="mb-3">
+                                    <Form.Select id='type'
+                                                 onChange={e => setDetails({...details, Ethnicity: e.target.value})}
+                                    >
+                                        <option style={{fontSize: 18}} id='middle eastern' value="middle eastern">מזרח
+                                            התיכון
+                                        </option>
+                                        <option style={{fontSize: 18}} id='south asian' value="south asian">דרום אסיה
+                                        </option>
+                                        <option style={{fontSize: 18}} id='Hispanic' value="Hispanic">היספני</option>
+
+                                        <option style={{fontSize: 18}} id='asian' value="asian">אסיה</option>
+                                        <option style={{fontSize: 18}} id='black' value="black">אפרו-אמריקאים</option>
+                                        <option style={{fontSize: 18}} id='Others' value="Others">אחר</option>
+                                        <option style={{fontSize: 18}} id='mixed' value="mixed">מעורבב</option>
+                                        <option style={{fontSize: 18}} id='Pacifica' value="Pacifica">פסיפיקה,קליפורניה
+                                        </option>
+                                        <option style={{fontSize: 18}} id='Latino' value="Latino">לטינו</option>
+                                        <option style={{fontSize: 18}} id='Native Indian'
+                                                value="Native Indian">אינדיאנים
+                                        </option>
+                                        <option style={{fontSize: 18}} id='White European' value="White European">אירופה
+                                        </option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col style={{fontSize: 17}}>
+                                גיל:
+                            </Col>
+                            <Col md="auto">
+                                <Form.Group className="mb-3">
+                                    <Form.Select id='age'
+                                                 onChange={e => setDetails({...details, Age_Mons: e.target.value * 12})}
+                                        // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
+                                    >
+                                        {options}
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col style={{fontSize: 17}}>
+                                מין:
+                            </Col>
+                            <Col md="auto">
+                                <Form.Group className="mb-3">
+                                    <Form.Select id='gender'
+                                                 onChange={e => setDetails({...details, Sex: e.target.value})}
+                                        // onChange={e => setUserDetails({...userDetails, type: e.target.value})}
+                                    >
+                                        <option style={{fontSize: 18}} id='male' value='m'>זכר</option>
+                                        <option style={{fontSize: 18}} id='female' value="f">נקבה</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col style={{fontSize: 17}}>
+                                רקע עם מחלת צהבת
+                            </Col>
+                            <Col md="auto">
+                                <Form.Group className="mb-3">
+                                    <ButtonGroup className="gap-3"><Form.Text style={{fontSize: 18}}>כן</Form.Text>
+                                        <Form.Check style={{fontSize: 18}} type="radio" name='jaundice'
+                                                    onChange={e => setDetails({...details, Jaundice: 'yes'})}
+                                        /><Form.Text style={{fontSize: 18}}>לא</Form.Text>
+                                        <Form.Check style={{fontSize: 18}} type="radio" name='jaundice'
+                                                    onChange={e => setDetails({...details, Jaundice: 'no'})}
+                                        />
+                                    </ButtonGroup>
+
+                                </Form.Group>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col style={{fontSize: 17}}>
+                                קיים בן משפחה עם אוטיזם?
+                            </Col>
+                            <Col md="auto">
+                                <Form.Group className="mb-3">
+                                    <ButtonGroup className="gap-3">
+                                        <Form.Text style={{fontSize: 18}}>כן</Form.Text>
+                                        <Form.Check style={{fontSize: 18}} type="radio" name='memberFamilyWithAsd'
+                                                    onChange={e => setDetails({...details, Family_mem_with_ASD: 'yes'})}
+                                        />
+                                        <Form.Text style={{fontSize: 18}}>לא</Form.Text>
+                                        <Form.Check style={{fontSize: 18}} type="radio" name='memberFamilyWithAsd'
+                                                    onChange={e => setDetails({...details, Family_mem_with_ASD: 'no'})}
+                                        />
+                                    </ButtonGroup>
+
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Form.Group>
+            </Form>
+
             <Form className="col justify-content-center">
                 <Form.Group>
                     <Table className="table-responsive" striped bordered hover size="md" variant="dark">
                         <thead>
                         <tr>
                             <th className="text-center align-baseline p-1 ">#</th>
-                            <th className="text-center align-baseline p-1" style={{fontSize: 18}}>שאלה</th>
-                            <th className="text-center align-baseline p-1" style={{fontSize: 18}}>מסכים בהחלט</th>
-                            <th className="text-center align-baseline p-1 " style={{fontSize: 18}}>מסכים</th>
-                            <th className="text-center align-baseline p-1" style={{fontSize: 18}}>לא מסכים</th>
-                            <th className="text-center align-baseline p-1" style={{fontSize: 18}}>בהחלט לא מסכים</th>
+                            <th className="text-center align-baseline p-1" style={{fontSize: 16}}>שאלה</th>
+                            <th className="text-center align-baseline p-1" style={{fontSize: 16,minWidth:'80px'}}>מסכים בהחלט</th>
+                            <th className="text-center align-baseline p-1 " style={{fontSize: 16,minWidth:'80px'}}>מסכים</th>
+                            <th className="text-center align-baseline p-1" style={{fontSize: 16,minWidth:'80px'}}>לא מסכים</th>
+                            <th className="text-center align-baseline p-1" style={{fontSize: 16,minWidth:'80px'}}>בהחלט לא מסכים</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td className="text-end">1</td>
-                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא נוטה להבחין בצלילים
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא נוטה להבחין בצלילים
                                 קטנים כאשר אחרים
                                 לא מבחינים.
                             </td>
@@ -252,7 +296,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">2</td>
-                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא בדרך כלל מתרכז יותר
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא בדרך כלל מתרכז יותר
                                 בתמונה הכללית
                                 מאשר בפרטים הקטנים.
                             </td>
@@ -269,7 +313,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">3</td>
-                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>במפגש חברתי, הוא מצליח
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>במפגש חברתי, הוא מצליח
                                 לעקוב בקלות אחר
                                 מספר שיחות עם אנשים שונים.
                             </td>
@@ -286,7 +330,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">4</td>
-                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא מצליח לעבור בין
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא מצליח לעבור בין
                                 פעילויות שונות
                                 בקלות.
                             </td>
@@ -303,7 +347,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">5</td>
-                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא לא יודע איך להחזיק
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא לא יודע איך להחזיק
                                 שיחה עם חבריו.
                             </td>
                             <td>
@@ -319,7 +363,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">6</td>
-                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא טוב בשיחת חולין.</td>
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא טוב בשיחת חולין.</td>
                             <td>
                                 <Form.Check className="text-center" name="sixthQuestion" type="radio"
                                             onChange={e => setDetails({...details, A6: 0})}/>
@@ -333,7 +377,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">7</td>
-                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>כאשר מספרים לו סיפור, קשה
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>כאשר מספרים לו סיפור, קשה
                                 לו לגלות
                                 ולהבין מה הכוונות והתחושות של כל דמות בסיפור.
                             </td>
@@ -350,7 +394,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">8</td>
-                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>כשהיה בגן, הוא אהב לשחק
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>כשהיה בגן, הוא אהב לשחק
                                 במשחקי העמדת
                                 פנים עם ילדים אחרים.
                             </td>
@@ -367,7 +411,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">9</td>
-                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא מצליח להבין בקלות מה
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא מצליח להבין בקלות מה
                                 אדם אחר חושב או
                                 מרגיש רק על ידי הבטה בפניו.
                             </td>
@@ -384,7 +428,7 @@ function AQ() {
                         </tr>
                         <tr>
                             <td className="text-end">10</td>
-                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 13}}>הוא מתקשה להכיר וליצור
+                            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא מתקשה להכיר וליצור
                                 חברים חדשים.
                             </td>
                             <td>
@@ -408,14 +452,31 @@ function AQ() {
                     </Table>
                 </Form.Group>
             </Form>
+        </Container>
+            <br/>
             <Row className="justify-content-center">
-                <Button className=" rounded-3" style={{width: "10%"}} size="md" variant="outline-primary"
-                        onClick={submitHandler}>אישור</Button>
+                <Button className=" rounded-3" style={{width: "20%"}} size="md" variant="outline-primary"
+                        onClick={submitHandler}>שלח טופס לבדיקה</Button>
             </Row>
+            <br/>
 
-            <Row className="justify-content-center text-center">
-                <Form.Text>התוצאה: {modelResult}</Form.Text>
-            </Row>
+
+            {modelResult !== null &&
+            <Container className='align-self-center' style={{alignSelf: 'center'}}>
+                <Row className='w-25 align-self-center'>
+                    <ButtonGroup className='align-self-center'>
+                        <Col className={1}><Form.Label
+                            style={{fontWeight: 'normal', fontSize: 24,}}>{'התוצאה:  '}</Form.Label></Col>
+                        {/*<Form.Label  style={{fontWeight:'bold'}}>&nbsp;&nbsp;&nbsp;</Form.Label>*/}
+                        <Col className={1}> <Form.Label
+                            style={{fontWeight: 'bolder', fontSize: 24}}>{modelResult}</Form.Label></Col>
+                    </ButtonGroup>
+                </Row>
+                <Row className='justify-content-center' style={{fontSize: 20}}>
+                    {modelResultMessage}
+                </Row>
+            </Container>
+            }
         </div>
     )
 }

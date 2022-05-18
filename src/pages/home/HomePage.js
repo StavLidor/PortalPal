@@ -30,6 +30,7 @@ import MultiType from "../../components/MultiTypeGraph";
 import MultiTypeGraph from "../../components/MultiTypeGraph";
 import ReportsPage from "../../ReportsPage";
 import CheckHasAPICode from "../../checkHasAPICode";
+import {isClick} from "../../useFunction";
 
 function HomePage({userDetails, type, institute}) {
     // const [patientListData, setPatientListData] = useState((() => {
@@ -114,6 +115,7 @@ function HomePage({userDetails, type, institute}) {
     }, [patientListData])
 
     const handleMyProfile = () => {
+        setCurrentPerson("")
     }
 
     const componentsTherapists = (list, isActive, data) => {
@@ -170,7 +172,7 @@ const [patientIsClicked,setPatientIsClicked] = useState(false)
                     <Col md='2'  className="w-auto rounded align-self-center">
                         <ButtonGroup className="gap-4 p-2">
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
-                            <Link to="/myProfile">
+                            <Link to="/myProfile"  >
                                 {type !== 'admin' &&
                                 <Button style={{height: 40}} className="rounded-3 h-auto" variant="outline-primary"
                                         onClick={handleMyProfile}>החשבון

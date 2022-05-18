@@ -2,6 +2,7 @@ import {Nav, NavDropdown} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link} from "react-router-dom";
+import {isClick} from "../../useFunction"
 
 
 function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
@@ -19,13 +20,14 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
                         <Nav.Item>
                             <Link to={'/students'} onClick={() => {
                                 setCurrentPage('students')
-                            }} className="list-group-item list-group-item-action">תלמידים</Link>
+                            }}
+                                  active={isClick('students')} className="list-group-item list-group-item-action">תלמידים</Link>
                             {/*<Nav.Link eventKey="link-1">תלמידים</Nav.Link>*/}
                         </Nav.Item>
                         <Nav.Item>
                             <Link to={'/employees'} onClick={() => {
                                 setCurrentPage('employees')
-                            }} className="list-group-item list-group-item-action">עובדים</Link>
+                            }} active={isClick('employees')} className="list-group-item list-group-item-action">עובדים</Link>
                             {/*<Nav.Link eventKey="link-2">עובדים</Nav.Link>*/}
                         </Nav.Item>
                     </Nav>
@@ -37,21 +39,22 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
                         <Nav.Item>
                             <Link to={currentPerson + '/documentation'} onClick={() => {
                                 setCurrentPage('documentation')
-                            }} className="list-group-item list-group-item-action">מסמכים</Link>
+                            }} active={isClick('documentation')} className="list-group-item list-group-item-action">מסמכים</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Link to={currentPerson + '/AQform'} onClick={() => {
                                 setCurrentPage('AQform')
-                            }} className="list-group-item list-group-item-action">מילוי טופס AQ</Link>
+                            }} active={isClick('AQform')} className="list-group-item list-group-item-action">מילוי טופס AQ</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <NavDropdown title="אפליקציות צד שלישי">
                                 <NavDropdown.Item as={Link} to={currentPerson + '/AUTIDO'} onClick={() => {
                                     setCurrentPage('AUTIDO')
-                                }}>AutiDo</NavDropdown.Item>
-                                <NavDropdown.Item as={Link} to={currentPerson + '/KAZABUBU'} onClick={() => {
+                                }}active={isClick('AUTIDO')}>AutiDo</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to={currentPerson + '/KAZABUBU'}
+                                                  active={isClick('KAZABUBU')} onClick={() => {
                                     setCurrentPage('KAZABUBU')
-                                }}>
+                                }} >
                                     KAZABUBU
                                 </NavDropdown.Item>
                             </NavDropdown>
@@ -68,23 +71,23 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
                             <Nav.Link as={Link} to={currentPerson + '/documentation'} onClick={() => {
                                 setCurrentPage('documentation')
                             }}
-                                      active={currentPage==='documentation'}
+                                      active={isClick('documentation')}
                             >מסמכים</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link as={Link} to={currentPerson + '/AQform'} onClick={() => {
                                 setCurrentPage('AQform')
                             }}
-                                      active={currentPage==='AQform'}>מילוי טופס AQ</Nav.Link>
+                                      active={isClick('AQform')}>מילוי טופס AQ</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <NavDropdown title="אפליקציות צד שלישי">
-                                <NavDropdown.Item as={Link} to={currentPerson + '/AUTIDO'} onClick={() => {
+                                <NavDropdown.Item as={Link} active={isClick('AQform')} to={currentPerson + '/AUTIDO'} onClick={() => {
                                     setCurrentPage('AUTIDO')
                                 }}>AutiDo</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to={currentPerson + '/KAZABUBU'} onClick={() => {
                                     setCurrentPage('KAZABUBU')
-                                }}>
+                                }} active={isClick('AQform')}>
                                     KAZABUBU
                                 </NavDropdown.Item>
                             </NavDropdown>

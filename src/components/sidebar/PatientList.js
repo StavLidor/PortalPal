@@ -7,6 +7,7 @@ import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from
 import {addPatientToExternalTherapist, db} from "../../firebase";
 import {Pencil, Plus, Trash} from 'react-bootstrap-icons';
 import TableData from "../tableEdit/TableData";
+import {isClick} from "../../useFunction";
 
 export let patientList = []
 
@@ -65,7 +66,8 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                         if(currentPerson===id) {
                             id = ''
                         }
-                        return (<Link to={id + (() => {
+                        return (<Link /*active={isClick(id)}*/
+                            to={id + (() => {
                             if (currentPage === 'documentation')
                                 return '/documentation'
                             return ''

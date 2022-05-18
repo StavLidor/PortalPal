@@ -8,6 +8,7 @@ import {auth, removeConnectionPatientToTherapist, signOutCurrentUser} from "../.
 import PatientList from "../sidebar/PatientList";
 import PatientDetails from "../sidebar/PatientDetails";
 import {Plus} from "react-bootstrap-icons";
+import {isClick} from "../../useFunction";
 
 function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPerson, setCurrentPage}) {
 
@@ -55,17 +56,18 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
                             <Nav.Item>
                                 <Nav.Link as={Link} to='sessions' onClick={() => {
                                     setCurrentPage('sessions')
-                                }} className="list-group-item list-group-item-action">סיכומי טיפולים</Nav.Link>
+                                }} active={isClick('sessions')} className="list-group-item list-group-item-action">סיכומי טיפולים</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link as={Link} to='exercises' onClick={() => {
                                     setCurrentPage('exercises')
-                                }} className="list-group-item list-group-item-action">תרגילים</Nav.Link>
+                                }} active={isClick('exercises')} className="list-group-item list-group-item-action">תרגילים</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link as={Link} to='communication' onClick={() => {
                                     setCurrentPage('communication')
-                                }} className="list-group-item list-group-item-action">התקשרות</Nav.Link>
+                                }} className="list-group-item list-group-item-action"
+                                          active={isClick('communication')}>התקשרות</Nav.Link>
                             </Nav.Item>
                         </Nav>
                         {therapistInstitute === 'external' &&
@@ -84,19 +86,19 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
                     <Container className="border border-secondary rounded m-3">
                         <Nav justify variant="tabs" defaultActiveKey={'sessions'}>
                             <Nav.Item>
-                                <Button as={Link} onClick={() => {
+                                <Button as={Link} active={isClick('sessions')}onClick={() => {
                                     setCurrentPage('sessions')
                                 }} to={'sessions'} className="list-group-item list-group-item-action"
                                           style={{borderRadius: 10}} id='sessions-side-button'>סיכומי
                                     טיפולים</Button>
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link as={Link} to='exercises' onClick={() => {
+                                <Nav.Link as={Link} to='exercises' active={isClick('exercises')} onClick={() => {
                                     setCurrentPage('exercises')
                                 }} className="list-group-item list-group-item-action">תרגילים</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link as={Link} to='communication' onClick={() => {
+                                <Nav.Link as={Link} to='communication' active={isClick('communication')} onClick={() => {
                                     setCurrentPage('communication')
                                 }} className="list-group-item list-group-item-action">התקשרות</Nav.Link>
                             </Nav.Item>

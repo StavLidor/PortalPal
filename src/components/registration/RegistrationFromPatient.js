@@ -5,7 +5,7 @@ export default function RegistrationFromPatient({data,new_patients}){
     const [detailsPatients,setDetailsPatients] = useState({id:"",name:"",email:"",nameParent:""});
     const submitNewPatient=e=>{
         e.preventDefault();
-        console.log('add a patient')
+        // console.log('add a patient')
 //         const myMap=new Map({idSecretary:data.id},detailsPatients)
 //         console.log('mymap',myMap)
 //         _.merge(data1, _.map(data2, x => ({ myNewAttribute: x })))

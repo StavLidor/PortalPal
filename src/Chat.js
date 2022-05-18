@@ -6,7 +6,7 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 
 //import 'react-discussion-board/dist/index.css'
 
-import './chat.css'
+// import './chat.css'
 import HomePage from "./pages/home/HomePage";
 import {Link} from "react-router-dom";
 import {Col, ListGroup, Row, Form, Container, Button, ButtonGroup} from "react-bootstrap";
@@ -18,9 +18,9 @@ import Message from "./components/chats/message";
 // import Button from "react-bootstrap/Button";
 
 function Chat({otherUser, patient, isActive}) {
-    console.log("otherUser", otherUser.id)
-    console.log("patient", patient)
-    console.log("user", auth.currentUser.uid)
+    // console.log("otherUser", otherUser.id)
+    // console.log("patient", patient)
+    // console.log("user", auth.currentUser.uid)
     const [messages, setMessages] = useState([])
     const [talkers, setTalkers] = useState([])
     const [therapists, setTherapists] = useState([])
@@ -51,7 +51,7 @@ function Chat({otherUser, patient, isActive}) {
                 [{receiver: auth.currentUser.uid, sender: otherUser.id},
                     {sender: auth.currentUser.uid, receiver: otherUser.id}]), orderBy("createdAt", "asc"), limit(100),
         )
-        console.log("unsubscribe", unsubscribe)
+        // console.log("unsubscribe", unsubscribe)
 
         return onSnapshot(
             unsubscribe,
@@ -64,7 +64,7 @@ function Chat({otherUser, patient, isActive}) {
                     data.push({...doc.data(), id: doc.id})
 
                 ))
-                console.log("DATA: ", data)
+                // console.log("DATA: ", data)
                 setMessages(data)
 
             },

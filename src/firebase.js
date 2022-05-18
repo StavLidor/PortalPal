@@ -86,21 +86,21 @@ export async function signUp(userDetails) {
             .then(() => {
                 // Email verification sent!
                 // ...
-                console.log('sent the email now')
+                // console.log('sent the email now')
             })
-        console.log('before set doc of', user.uid)
+        // console.log('before set doc of', user.uid)
         await authAdd.signOut()
-        console.log('details', userDetails)
+        // console.log('details', userDetails)
         // TODO: Delete the password field when creating new user on Firestore
         await setDoc(doc(collection_query_users, user.uid), userDetails/*{
             name:details.name,type:details.type,email:details.email,password:details.password,ids:details.ids}*/);
         // Maybe just to a new Therapist?
-        console.log('after set doc of', user.uid)
+        // console.log('after set doc of', user.uid)
 
         return user.uid;
     } catch (err) {
         console.log(err)
-        console.log("Email error", userDetails.email)
+        // console.log("Email error", userDetails.email)
         await authAdd.signOut()
         return null
     }

@@ -29,7 +29,7 @@ export default function LoginFrom(){
     useEffect(()=>{
        const unsubscribe= auth.onAuthStateChanged(async user => {
            if (user) {
-               console.log('user',user.uid)
+               // console.log('user',user.uid)
               /* if(user.emailVerified){*/
                    const p=Promise.resolve(user.uid)
                    p.then(id => {
@@ -56,7 +56,7 @@ export default function LoginFrom(){
            //     setInitializing(false)
            // }
        })
-        console.log("prefix: ",unsubscribe)
+        // console.log("prefix: ",unsubscribe)
         return unsubscribe
 
     },[])
@@ -67,7 +67,7 @@ export default function LoginFrom(){
         p.then(doc => {
             const data = doc.data()
             const id = doc.id
-            console.log('lalalala')
+            // console.log('lalalala')
             if(details.email!==''){
                 if(details.type !=="admin" && details.type !=="parent" ){
                     updatesCurrentUser({lastLogin:details.type+","+details.institute})

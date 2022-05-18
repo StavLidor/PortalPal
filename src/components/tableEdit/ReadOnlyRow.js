@@ -21,7 +21,7 @@ const ReadOnlyRow = ({
                          columnsInfo,getTable,
                          tableOptionIds
                      }) => {
-        console.log('ReadOnlyRow', contact.id)
+        // console.log('ReadOnlyRow', contact.id)
         // console.log('ReadOnlyRow', columnNames)
         // columnNames.map((name) => (
         //

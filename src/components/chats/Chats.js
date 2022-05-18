@@ -14,10 +14,10 @@ export default function Chats({patient,userId,talkersIds,details}){
         // const try1 =  await getUserConnections(details)
         const p1 = Promise.resolve(talkersIds)
         p1.then(async arr => {
-            console.log('talkers',talkersIds)
+            // console.log('talkers',talkersIds)
             if(arr.length>0)
                 setTalkers(arr)
-            console.log(arr)
+            // console.log(arr)
             // if (await arr.length > 0) {
             //
             // }

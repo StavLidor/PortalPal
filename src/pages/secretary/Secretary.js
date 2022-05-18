@@ -72,7 +72,7 @@ export default function Secretary({data}){
                             data.push(doc.data)
                     })
                     setStudents(data)
-                    console.log('Students1112',data)
+                    // console.log('Students1112',data)
                 },
                     (error) => {
                         // TODO: Handle errors!

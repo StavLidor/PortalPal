@@ -53,19 +53,19 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
                         <Nav fill justify variant="tabs" defaultActiveKey={'sessions'}>
 
                             <Nav.Item>
-                                <Link to='sessions' onClick={() => {
+                                <Nav.Link as={Link} to='sessions' onClick={() => {
                                     setCurrentPage('sessions')
-                                }} className="list-group-item list-group-item-action">סיכומי טיפולים</Link>
+                                }} className="list-group-item list-group-item-action">סיכומי טיפולים</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Link to='exercises' onClick={() => {
+                                <Nav.Link as={Link} to='exercises' onClick={() => {
                                     setCurrentPage('exercises')
-                                }} className="list-group-item list-group-item-action">תרגילים</Link>
+                                }} className="list-group-item list-group-item-action">תרגילים</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Link to='communication' onClick={() => {
+                                <Nav.Link as={Link} to='communication' onClick={() => {
                                     setCurrentPage('communication')
-                                }} className="list-group-item list-group-item-action">התקשרות</Link>
+                                }} className="list-group-item list-group-item-action">התקשרות</Nav.Link>
                             </Nav.Item>
                         </Nav>
                         {therapistInstitute === 'external' &&
@@ -84,20 +84,21 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
                     <Container className="border border-secondary rounded m-3">
                         <Nav justify variant="tabs" defaultActiveKey={'sessions'}>
                             <Nav.Item>
-                                <Link onClick={() => {
+                                <Button as={Link} onClick={() => {
                                     setCurrentPage('sessions')
-                                }} to={'sessions'} className="list-group-item list-group-item-action">סיכומי
-                                    טיפולים</Link>
+                                }} to={'sessions'} className="list-group-item list-group-item-action"
+                                          style={{borderRadius: 10}} id='sessions-side-button'>סיכומי
+                                    טיפולים</Button>
                             </Nav.Item>
                             <Nav.Item>
-                                <Link to='exercises' onClick={() => {
+                                <Nav.Link as={Link} to='exercises' onClick={() => {
                                     setCurrentPage('exercises')
-                                }} className="list-group-item list-group-item-action">תרגילים</Link>
+                                }} className="list-group-item list-group-item-action">תרגילים</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Link to='communication' onClick={() => {
+                                <Nav.Link as={Link} to='communication' onClick={() => {
                                     setCurrentPage('communication')
-                                }} className="list-group-item list-group-item-action">התקשרות</Link>
+                                }} className="list-group-item list-group-item-action">התקשרות</Nav.Link>
                             </Nav.Item>
                         </Nav>
                     </Container>

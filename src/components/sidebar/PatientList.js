@@ -10,7 +10,7 @@ import TableData from "../tableEdit/TableData";
 
 export let patientList = []
 
-function PatientList({institute, list, setPatientListData, listTitle, setCurrentPerson, currentPage}) {
+function PatientList({institute, list, setPatientListData, listTitle, setCurrentPerson,currentPerson, currentPage,setPatientIsClicked}) {
 
     const [listData, setListData] = useState([])
     const [addPatient, setAddPatient] = useState(false)
@@ -61,14 +61,27 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
 
                 {listData.map((item) => {
                         let data = item.data()
-                        return (<Link to={data.id.toString() + (() => {
+                        let id = data.id.toString()
+                        if(currentPerson===id) {
+                            id = ''
+                        }
+                        return (<Link to={id + (() => {
                             if (currentPage === 'documentation')
                                 return '/documentation'
                             return ''
                         })()
                         } className="list-group-item list-group-item-action" onClick={(e) => {
                             // e.preventDefault()
-                            setCurrentPerson(data.id.toString())
+                            if(currentPerson===data.id.toString()){
+                                setPatientIsClicked(false)
+                                setCurrentPerson('')
+                            }
+                            else {
+                                setPatientIsClicked(true)
+                                setCurrentPerson(data.id.toString())
+                            }
+
+
                         }}>{data.firstName + " " + data.lastName}</Link>)
                     }
                 )}

@@ -22,19 +22,19 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
     }
 
     function parser(file, f) {
-        console.log(file)
+        // console.log(file)
         let reader = new FileReader();
 
         reader.addEventListener('load', function (e) {
             const allObj = []
             //let csvdata = e.target.result;
             let arr = Papa.parse(e.target.result).data
-            console.log(arr)
+            // console.log(arr)
 
             // let arr= data.split("\n");
 
             let keys = arr[0]
-            console.log(keys)
+            // console.log(keys)
             let rows = arr.length;
 
             let cols = keys.length;
@@ -52,7 +52,7 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                     let value = line[j]
                     obj[header] = value
                 }
-                console.log(obj)
+                // console.log(obj)
                 // if(i==1){
                 //     f(obj)
                 // }

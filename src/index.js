@@ -7,13 +7,14 @@ import App from './App';
 
 ReactDOM.render(
     <React.StrictMode>
+        {/*<link rel="stylesheet" href="chat.css"/>*/}
 
-        <App/>
         <head>
-            <script src=
-                        {'https://cdn.jsdelivr.net/pyodide/dev/full/pyodide.js'} />
+            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"/>
+            {/*<script src=*/}
+            {/*            {'https://cdn.jsdelivr.net/pyodide/dev/full/pyodide.js'} />*/}
         </head>
-        
+        <App/>
 
     {/*    <head>*/}
     {/*        <meta charSet="utf-8"/>*/}

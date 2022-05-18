@@ -12,7 +12,7 @@ import ViewExercise from "../exercises/ViewExercise";
 // import {Container} from "@mui/material";
 
 export default function FeaturedInfo({details,type}){
-    console.log('FeaturedInfo',details)
+    // console.log('FeaturedInfo',details)
     return(
         <div className="featured">
             <div className="featuredWrapper">

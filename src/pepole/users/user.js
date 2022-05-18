@@ -26,10 +26,10 @@ export const newUser=async details=>{
         /*ids: arr_ids*/
         details
     })){
-        console.log("HI user",details.name.toString(),details.password.toString());
+        // console.log("HI user",details.name.toString(),details.password.toString());
     }
     else{
-        console.log('user with this mail exsist')
+        // console.log('user with this mail exsist')
     }
 
 }

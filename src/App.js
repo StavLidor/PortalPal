@@ -69,8 +69,10 @@ function App() {
 
 
     return (
+
         <Router>
             <div className="App">
+
                 {isSigneIn === false && checkUserConnection && <Authenticate login={login}/>}
                 {/*{isSigneIn === false && checkUserConnection && <AQold/>}*/}
                 {/*{isSigneIn === false && checkUserConnection && <AQ10ChildrenForm/>}*/}

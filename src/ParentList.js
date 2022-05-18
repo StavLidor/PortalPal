@@ -9,10 +9,10 @@ import firebase from "firebase/compat/app";
 import styles from "./pages/home/HomePage.CSS"
 
 function ParentList({details, setCurrentParent, currentPage, setParentsListData, currentPerson}) {
-    console.log("in therapist!!!!!!!!")
+    // console.log("in therapist!!!!!!!!")
     const [parents, setParents] = useState([])
 
-    console.log('therapistLIstt')
+    // console.log('therapistLIstt')
     //console.log(talkersIds)
     useEffect(async () => {
 
@@ -48,7 +48,7 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                     })
                     setParents(data)
                     setParentsListData(data)
-                    console.log("my data: ", data)
+                    // console.log("my data: ", data)
                 })
             }
         }

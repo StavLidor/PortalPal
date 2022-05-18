@@ -1,6 +1,6 @@
 import React,{useState} from "react"
 export default function ViewExercise({exercise}){
-    console.log('exercise222',exercise)
+    // console.log('exercise222',exercise)
     return(
         <div>
             <div className="form-group">

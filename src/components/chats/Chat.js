@@ -19,7 +19,7 @@ export default function Chat({userUid1=null,userUid2=null,patient}){
                 {sender: userUid2, receiver: userUid1}]),orderBy("createdAt", "asc"), limit(100),
 
         )
-        console.log('blb')
+        // console.log('blb')
         const querySnapshot = await getDocs(unsubscribe)
         let data=[]
         querySnapshot.forEach((doc) => (
@@ -29,7 +29,7 @@ export default function Chat({userUid1=null,userUid2=null,patient}){
 
         ))
 
-        console.log('data',data)
+        // console.log('data',data)
         setMessages(data)
         return unsubscribe
 

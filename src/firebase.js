@@ -254,7 +254,7 @@ export const addUser = async details => {
 
 export const addUserFromAdmin = async (details, institute) => {
     let uid_user = await addUser({
-        ...details, institutes: {[institute]: []}, license: "",
+        ...details, institutes: {[institute]: [],external:[]}, license: "",
         titles: ["therapist"], institute: "", childrenIds: [], password: makePassword(7)
     })
     // if user exists

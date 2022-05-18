@@ -57,6 +57,7 @@ function HomePage({userDetails, type, institute}) {
 
     async function onLogout() {
         await signOutCurrentUser()
+        setCurrentPerson("")
     }
 
     useEffect(() => {
@@ -310,7 +311,15 @@ const [patientIsClicked,setPatientIsClicked] = useState(false)
                         {/*<Chats/>*/}
                         <Routes>
                             <Route path={currentPerson.toString() + '/documentation'}
-                                   element={<FileSystem user={userDetails.id} patient={currentPerson}/>}/>
+                                   element={
+                                       (() => {
+                                           if (currentPerson !== '') {
+                                               return <FileSystem user={userDetails.id} patient={currentPerson}/>
+                                           }
+                                           return <h2>אנא בחר מטופל כדי למלא עבורו את הטופס</h2>
+
+                                       })()
+                                }/>
                         </Routes>
                         <Routes>
                             <Route path={currentPerson.toString() + '/AQform'}

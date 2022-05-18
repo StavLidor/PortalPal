@@ -50,6 +50,7 @@ function App() {
             } else {
                 localStorage.setItem("type", "")
                 localStorage.setItem("institute", "")
+                localStorage.setItem("currentPerson", "")
                 setIsSigneIn(false)
                 if(isFirstLoad === false){
                     setDisplayLoginError(true)

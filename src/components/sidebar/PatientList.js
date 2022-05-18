@@ -66,8 +66,7 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                         if(currentPerson===id) {
                             id = ''
                         }
-                        return (<Link /*active={isClick(id)}*/
-                            to={id + (() => {
+                        return (<Link to={id + (() => {
                             if (currentPage === 'documentation')
                                 return '/documentation'
                             return ''

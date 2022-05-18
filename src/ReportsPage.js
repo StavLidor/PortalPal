@@ -25,11 +25,7 @@ function ReportsPage({appKey, patientDetails, setHasCode, setWasCodeRemoved, cod
         };
         console.log(code)
         fetch(APImap[appKey], APIrequest)
-            .then(response => {
-                // console.log(response)
-                // console.log(response.json())
-                // response.json()
-            })
+            .then(response => response.json())
             .then(data => {
                 console.log("dataaaaa")
                 console.log("dataaaaa", data)
@@ -62,14 +58,16 @@ function ReportsPage({appKey, patientDetails, setHasCode, setWasCodeRemoved, cod
             {APIResult.error === '' && hasData && <MultiTypeGraph appKey={appKey} data={APIResult}/>}
             {APIResult.error !== '' && hasData && <h2>אירעה שגיאה, {APIResult.error}</h2>}
             {((APIResult.error === '' && hasData) || (APIResult.error !== '' && hasData)) &&
-            <Row className="justify-content-center" style={{display:"flex", width: "100%"}}>
-                <Col className="text-center"><Form.Label style={{fontSize:15}}>לביטול הקישוריות בין משתמש האפליקציה לבין הפורטפל לחץ כאן </Form.Label>
-                <Button style={{width:"25%"}} className="rounded-3 m-2 pb-2" variant="outline-primary" onClick={async () => {
-                    setHasCode(false)
-                    setWasCodeRemoved(true)
-                    await removeThirdPartyCodes(patientDetails.id, appKey)
-                }
-                }>הסר קוד</Button></Col>
+            <Row className="justify-content-center" style={{display: "flex", width: "100%"}}>
+                <Col className="text-center"><Form.Label style={{fontSize: 15}}>לביטול הקישוריות בין משתמש האפליקציה
+                    לבין הפורטפל לחץ כאן </Form.Label>
+                    <Button style={{width: "25%"}} className="rounded-3 m-2 pb-2" variant="outline-primary"
+                            onClick={async () => {
+                                setHasCode(false)
+                                setWasCodeRemoved(true)
+                                await removeThirdPartyCodes(patientDetails.id, appKey)
+                            }
+                            }>הסר קוד</Button></Col>
             </Row>}
 
         </div>

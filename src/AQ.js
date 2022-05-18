@@ -81,7 +81,6 @@ function AQ() {
 
     return (
         <div>
-
             <Form className="col justify-content-center">
                 <Form.Group>
                     <Form.Label className="text-center" style={{fontWeight: "bold", width: "100%"}}>טופס לאבחון

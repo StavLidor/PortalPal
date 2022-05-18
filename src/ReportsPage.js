@@ -23,11 +23,15 @@ function ReportsPage({appKey, patientDetails, setHasCode, setWasCodeRemoved, cod
                 'auth_code': code
             })
         };
+        console.log(code)
         fetch(APImap[appKey], APIrequest)
-            .then(response => response.json())
+            .then(response => {
+                // console.log(response)
+                // console.log(response.json())
+                // response.json()
+            })
             .then(data => {
                 console.log("dataaaaa")
-
                 console.log("dataaaaa", data)
                 setAPIResult(data)
                 setHasData(true)

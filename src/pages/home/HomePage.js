@@ -197,7 +197,7 @@ const [patientIsClicked,setPatientIsClicked] = useState(false)
                         {/*{sideListComponent}*/}
                     </Col>
                     <Col md='2' style={{width:"13%",maxWidth:'350px'}}>
-                        <Animated animationIn="fadeInRight" animationOut="fadeOutRight" animationInDuration={1000} animationOutDuration={1000} isVisible={patientIsClicked}>
+                        <Animated animationIn="fadeInRight" animationOut="fadeOutRight" animationInDuration={1000} animationOutDuration={1000} isVisible={currentPerson !== ''}>
                             <Row className="p-2 mb-4 patient-details" id='middle-floating-box' style={{minHeight: 200}}>
 
                                 {patientListData.map((item) => {

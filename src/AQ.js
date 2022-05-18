@@ -392,14 +392,19 @@ function AQ() {
                                 <Form.Check className="text-center" name="tenthQuestion" type="radio"
                                             onChange={e => setDetails({...details, A10: 1})}/>
                             </td>
-                            <td><Form.Check className="text-center" name="tenthQuestion" type="radio"
-                                            onChange={e => setDetails({...details, A10: 1})}/></td>
-                            <td><Form.Check className="text-center" name="tenthQuestion" type="radio"
-                                            onChange={e => setDetails({...details, A10: 0})}/></td>
-                            <td><Form.Check className="text-center" name="tenthQuestion" type="radio"
-                                            onChange={e => setDetails({...details, A10: 0})}/></td>
+                            <td>
+                                <Form.Check className="text-center" name="tenthQuestion" type="radio"
+                                            onChange={e => setDetails({...details, A10: 1})}/>
+                            </td>
+                            <td>
+                                <Form.Check className="text-center" name="tenthQuestion" type="radio"
+                                            onChange={e => setDetails({...details, A10: 0})}/>
+                            </td>
+                            <td>
+                                <Form.Check className="text-center" name="tenthQuestion" type="radio"
+                                            onChange={e => setDetails({...details, A10: 0})}/>
+                            </td>
                         </tr>
-
                         </tbody>
                     </Table>
                 </Form.Group>

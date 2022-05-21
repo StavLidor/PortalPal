@@ -92,31 +92,36 @@ export async function signUp(userDetails) {
         await authAdd.signOut()
         // console.log('details', userDetails)
         // TODO: Delete the password field when creating new user on Firestore
-        await setDoc(doc(collection_query_users, user.uid), userDetails/*{
+        const setDetails={...userDetails}
+        delete setDetails.password
+        await setDoc(doc(collection_query_users, user.uid), setDetails/*{
             name:details.name,type:details.type,email:details.email,password:details.password,ids:details.ids}*/);
         // Maybe just to a new Therapist?
         // console.log('after set doc of', user.uid)
 
         return user.uid;
     } catch (err) {
-        console.log(err)
+       // console.log(err)
         // console.log("Email error", userDetails.email)
         await authAdd.signOut()
         const dataUser = await getIdAndDataByEmail(userDetails.email)
         const uid_user = dataUser[0]
         const data = dataUser[1]
-        if(!('external' in data.institutes) && data.firstName ===userDetails.firstName &&data.lastName === userDetails.lastName){
-            // TODO: need to check if its good password?
-            if (data.titles.findIndex((t) => t === 'therapist') === -1) {
-
-                await updateIDDoc(uid_user, 'users', {license: userDetails.license, 'institutes.external': [],
-                    titles: firebase.firestore.FieldValue.arrayUnion('therapist')})
-            }
-            else{
-                await updateIDDoc(uid_user, 'users', {license: userDetails.license, 'institutes.external': []})
-            }
-            return uid_user
+        if('external' in data.institutes){
+            return null
         }
+        // if(!('external' in data.institutes) && data.firstName ===userDetails.firstName &&data.lastName === userDetails.lastName){
+        //     // TODO: need to check if its good password?
+        //     if (data.titles.findIndex((t) => t === 'therapist') === -1) {
+        //
+        //         await updateIDDoc(uid_user, 'users', {license: userDetails.license, 'institutes.external': [],
+        //             titles: firebase.firestore.FieldValue.arrayUnion('therapist')})
+        //     }
+        //     else{
+        //         await updateIDDoc(uid_user, 'users', {license: userDetails.license, 'institutes.external': []})
+        //     }
+        //     return uid_user
+        // }
         return null
     }
 }
@@ -203,18 +208,25 @@ const sentToEmail = details => {
         });
 
 }
-export const resetPassword = email => {
-    sendPasswordResetEmail(auth, email)
-        .then(() => {
-            // Password reset email sent!
-            console.log('Reset password')
-            // ..
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // ..
-        });
+export const resetPassword = async email => {
+    try {
+        await sendPasswordResetEmail(auth, email)
+        return true
+    }
+    catch (err){
+        return false
+    }
+
+    // .then(() => {
+    //     // Password reset email sent!
+    //     console.log('Reset password')
+    //     // ..
+    // })
+    // .catch((error) => {
+    //     const errorCode = error.code;
+    //     const errorMessage = error.message;
+    //     // ..
+    // });
 
 }
 export const addTherapist= async details => {
@@ -224,17 +236,19 @@ export const addUser = async details => {
     try {
         //sentToEmail(details)
         const res = await createUserWithEmailAndPassword(authAdd, details.email, details.password)
-
+        //const firstPass =details.password
 
         const user = res.user
-        await sendEmailVerification(authAdd.currentUser/*,actionCodeSettings*/)
-            .then(() => {
-                // Email verification sent!
-                // ...
-                console.log('sent the email now')
-            })
+        // await sendEmailVerification(authAdd.currentUser/*,actionCodeSettings*/)
+        //     .then(() => {
+        //         // Email verification sent!
+        //         // ...
+        //         console.log('sent the email now')
+        //     })
+        await resetPassword(details.email)
         console.log('before set doc of', user.uid)
         await authAdd.signOut()
+        delete details.password
         await setDoc(doc(collection_query_users, user.uid), details/*{
             name:details.name,type:details.type,email:details.email,password:details.password,ids:details.ids}*/);
         // Maybe just to a new Therapist?

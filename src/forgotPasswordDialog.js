@@ -2,7 +2,7 @@ import {Button, ButtonGroup, Col, Container, Form, Modal, Row} from "react-boots
 import React, {useState} from "react";
 import TableData from "./components/tableEdit/TableData";
 
-import {resetPassword, signIn} from "./firebase"
+import {resetPassword, signIn, signUp} from "./firebase"
 import {validateEmail} from "./useFunction"
 
 export function ForgotPasswordDialog({showDialog, setShowDialog,}) {
@@ -11,7 +11,12 @@ export function ForgotPasswordDialog({showDialog, setShowDialog,}) {
     const [message,setMessage]=useState('')
 
     const onFormSubmit = async () => {
-        if (validateEmail(email.email) !== null) {
+
+        if (validateEmail(email) !== null) {
+            if(!await resetPassword(email)){
+                setMessage("לא קיים חשבון עם האימייל הזה")
+                return false
+            }
             await resetPassword(email)
             return true
         }

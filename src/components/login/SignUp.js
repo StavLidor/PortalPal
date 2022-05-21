@@ -20,7 +20,7 @@ function SignUp({setDisplayLoginForm})  {
     const [userDetails, setUserDetails] = useState({
         firstName: "",
         lastName: "",jobs:[], license: "",titles:['therapist'] ,email: "", password: "",institute:"", institutes: {external: []},
-        childrenIds:[]
+        childrenIds:{}
     })
     const [messages, setMessages] = useState({
         firstName: "",
@@ -55,7 +55,12 @@ function SignUp({setDisplayLoginForm})  {
         console.log(messagesUpdate)
         if(messagesUpdate.firstName==='' && messagesUpdate.lastName==='' &&
             messagesUpdate.password===''&& messagesUpdate.email===''){
-            await signUp(userDetails)
+            if(await signUp(userDetails)){
+                setDisplayLoginForm(true)
+            }
+            else {
+                messagesUpdate.email ='קיים חשבון עם מייל זה'
+            }
         }
     }
 

@@ -35,19 +35,19 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
             case "parent":
             case "therapist":
                 setTabsComponent(
-                    <ButtonGroup className='gap-5'>
+                    <ButtonGroup className='gap-2'>
                         {/*<Nav.Item>*/}
                         {/*    <Link to={currentPerson + '/documentation'} onClick={() => {*/}
                         {/*        setCurrentPage('documentation')*/}
                         {/*    }} className="list-group-item list-group-item-action">מסמכים</Link>*/}
                         {/*</Nav.Item>*/}
-                        <Button  id='top-menu-button' as={Link} to={currentPerson + '/AQform'} onClick={() => {
+                        <Button  id='aq-button' as={Link} to={currentPerson + '/AQform'} onClick={() => {
                             setCurrentPage('AQform')
                         }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
                             מילוי טופס AQ
                         </Button>
 
-                        <Button id='top-menu-button' as={Link} to={currentPerson + '/AQform'} onClick={() => {
+                        <Button id='top-menu-button' as={Link} variant='primary' to={currentPerson + '/AQform'} onClick={() => {
                             setCurrentPage('AQform')
                         }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
                             אודות

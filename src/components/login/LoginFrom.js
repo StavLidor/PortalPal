@@ -4,10 +4,6 @@ import Home from "../../pages/home/Home";
 import {signUser, unSignUser,newUser} from "../../pepole/users/user";
 import {signOut} from "firebase/auth";
 import {auth, detailsPatient, detailsWorks, getDocCurrentUser, resetPassword, updatesCurrentUser} from "../../firebase"
-import approve from "../../crawler/Crawler"
-import {Route, Routes} from "react-router-dom";
-import TableData from "../tableEdit/TableData";
-import AQ10ChildrenForm from "../../AQ10ChildrenForm";
 
 
 export default function LoginFrom(){

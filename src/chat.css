@@ -179,7 +179,10 @@ hr.rounded {
 }
 
 #top-menu-button{
-    background: #0b5ed7;
+    background: #90ea4c;
+    width: auto;
+    height: auto;
+
 }
 
 ::-webkit-scrollbar {

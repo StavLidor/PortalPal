@@ -152,11 +152,13 @@ function HomePage({userDetails, type, institute}) {
                                     onClick={onLogout}>התנתק</Button>
                         </ButtonGroup>
                     </Col>
-                    <Col md='7' className="border align-self-center" id='floating-tabs-bar'>
-                        <Container>
+
+                    <Col md='8' className="border align-self-center w-auto" id='floating-tabs-bar'>
+                        {/*<Container>*/}
+
                             <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}
                                         currentPage={currentPage}/>
-                        </Container>
+                        {/*</Container>*/}
                     </Col>
                 </Row>
             </Container>

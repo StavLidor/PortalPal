@@ -7,9 +7,13 @@
 */
 
 body {
+
     /*background-color: #eb7474;*/
-    background-image: linear-gradient(90deg, #acb1b1 0%, #f1f1f1 100%);
-    background-color: #fafafa;
+    /*background-image: linear-gradient(90deg, #acb1b1 0%, #f1f1f1 100%);*/
+    /*background-image: linear-gradient(90deg, #ffd9b7 0%,  #ffd9b7 0%);*/
+    background-image: url('therapy.png');
+    background-repeat: no-repeat;
+    background-color: #761dc9;
     /*min-height: 100vh;*/
     min-width: 100px;
 }
@@ -126,7 +130,10 @@ hr.rounded {
 }
 
 #top-menu-button{
-    background: #0b5ed7;
+    background: #90ea4c;
+    width: auto;
+    height: auto;
+
 }
 
 ::-webkit-scrollbar {

@@ -125,6 +125,11 @@ export async function signUp(userDetails) {
         return null
     }
 }
+export async function  addExternal(license){
+    await updatesCurrentUser({license: license, 'institutes.external': [],
+        titles: firebase.firestore.FieldValue.arrayUnion('therapist')})
+
+}
 
 export async function signIn(email, password) {
     if (email !== '' && password !== '') {
@@ -268,7 +273,8 @@ export const addUser = async details => {
 
 export const addUserFromAdmin = async (details, institute) => {
     let uid_user = await addUser({
-        ...details, institutes: {[institute]: [],external:[]}, license: "",
+        // TODO: need to add external in the institute?
+        ...details, institutes: {[institute]: [],external:[]}, license: "משרד החינוך",
         titles: ["therapist"], institute: "", childrenIds: [], password: makePassword(7)
     })
     // if user exists

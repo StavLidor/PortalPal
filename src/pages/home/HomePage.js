@@ -1,4 +1,4 @@
-import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Image} from 'react-bootstrap'
+import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Image, NavDropdown} from 'react-bootstrap'
 import {Animated} from 'react-animated-css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
@@ -32,12 +32,7 @@ import ReportsPage from "../../ReportsPage";
 import CheckHasAPICode from "../../checkHasAPICode";
 
 function HomePage({userDetails, type, institute}) {
-    // const [patientListData, setPatientListData] = useState((() => {
-    //     if (JSON.parse(localStorage.getItem("currentPatientsListData")) === "") {
-    //         return []
-    //     }
-    //     return JSON.parse(localStorage.getItem("currentPatientsListData"))
-    // })())
+
     const [patientListData, setPatientListData] = useState([])
     const [activeTherapistListData, setActiveTherapistListData] = useState([])
     const [notActiveTherapistListData, setNotActiveTherapistListData] = useState([])
@@ -97,7 +92,6 @@ function HomePage({userDetails, type, institute}) {
     const componentsTherapists = (list, isActive, data) => {
 
         return (list.map((therapist, index) => {
-            // let data = item.data()
             console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
             return (
                 <div>
@@ -138,7 +132,6 @@ function HomePage({userDetails, type, institute}) {
 
     const [patientIsClicked, setPatientIsClicked] = useState(false)
     return (
-
         <div>
             <Container className="p-4" fluid>
                 <Row className='gap-4 '>
@@ -146,7 +139,7 @@ function HomePage({userDetails, type, institute}) {
                     {/*<Col md='2' className="border border-secondary rounded">פורטלי</Col>*/}
                     {/*<Col md='3' className="w-auto border border-secondary rounded">*/}
                     <Col md='2' className="w-auto rounded align-self-center">
-                        <ButtonGroup className="gap-4 p-2">
+                        <ButtonGroup className="gap-4">
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
                             <Link to="/myProfile">
                                 {type !== 'admin' &&
@@ -160,23 +153,17 @@ function HomePage({userDetails, type, institute}) {
                         </ButtonGroup>
                     </Col>
                     <Col md='7' className="border align-self-center" id='floating-tabs-bar'>
-                        {/*<Routes>*/}
-                        {/*    <Route path={data.id.toString() + '/' + index.toString() + '/*'}*/}
-                        {/*           element={<TabsBanner type={type}*/}
-                        {/*                                         currentPerson={currentPerson}*/}
-                        {/*                                         setCurrentPage={setCurrentPage}/>}/>*/}
-                        {/*</Routes>*/}
                         <Container>
                             <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}
                                         currentPage={currentPage}/>
                         </Container>
-                        {/*{tabsComponent}*/}
                     </Col>
                 </Row>
             </Container>
+            {/*<hr className="rounded"/>*/}
             {(type === 'admin') ? (
                     <SecretaryPage data={userDetails}/>) :
-                <Row className='p-4 gap-4'>
+                <Row className='gap-4 justify-content-center'>
                     <Col md='2' style={{width: "13%", maxWidth: '350px'}} id='right-floating-box'
                          className="p-3" /*onMouseEnter={()=>setA(true)} onMouseLeave={()=>setA(false)}*/>
                         {type === 'parent' && <PatientList list={children} setPatientListData={setPatientListData}
@@ -196,22 +183,19 @@ function HomePage({userDetails, type, institute}) {
                                                               institute={institute}
                                                               setPatientIsClicked={setPatientIsClicked}/>}
 
-                        {/*{sideListComponent}*/}
                     </Col>
                     <Col md='2' style={{width: "13%", maxWidth: '350px'}}>
-                        <Animated animationIn="fadeInRight" animationOut="fadeOutRight" animationInDuration={1000}
-                                  animationOutDuration={1000} isVisible={currentPerson !== ''}>
+                        <Animated animationIn="fadeInRight" animationOut="fadeOutRight" animationInDuration={500}
+                                  animationOutDuration={500} isVisible={currentPerson !== ''}>
                             <Row className="p-2 mb-4 patient-details" id='middle-floating-box' style={{minHeight: 200}}>
 
                                 {patientListData.map((item) => {
                                         let data = item.data()
                                         return (
                                             <Routes>
-                                                {/*<Route path={/#/ + data.id.toString() + '/*'}*/}
                                                 <Route path={data.id.toString() + '/*'}
                                                        element={<PatientDetails type={type} institute={institute}
                                                                                 details={data}/>}/>
-
                                             </Routes>)
                                     }
                                 )}
@@ -265,7 +249,6 @@ function HomePage({userDetails, type, institute}) {
                                     }
                                 )}
 
-
                             </Row>
 
                             <Row style={{minHeight: 100}} id='middle-floating-box'>
@@ -293,15 +276,44 @@ function HomePage({userDetails, type, institute}) {
                                                                    <Link to='sessions' onClick={() => {
                                                                        setCurrentPage('sessions')
                                                                    }} className="list-group-item list-group-item-action"
-                                                                         id='sessions-side-top-button'>סיכומי
+                                                                         id='lower-side-menu-top-button'>סיכומי
                                                                        טיפולים</Link>
                                                                </Row>
+
                                                                <Row>
                                                                    <Link to='exercises' onClick={() => {
                                                                        setCurrentPage('exercises')
                                                                    }}
                                                                          className="list-group-item list-group-item-action"
-                                                                         id='sessions-side-bottom-button'>תרגילים</Link>
+                                                                         id='lower-side-menu-middle-button'>תרגילים</Link>
+                                                               </Row>
+
+                                                               <Row>
+                                                                   <Link to='exercises' onClick={() => {
+                                                                       setCurrentPage('exercises')
+                                                                   }}
+                                                                         className="list-group-item list-group-item-action"
+                                                                         id='lower-side-menu-middle-button'>מגמת התקדמות</Link>
+                                                               </Row>
+
+                                                               <Row>
+                                                                   <div id='lower-side-menu-bottom-button' style={{backgroundColor:"white",textDecoration:'black'}}>
+                                                                   <NavDropdown drop='start' title="אפליקציות צד שלישי">
+                                                                       <NavDropdown.Item as={Link} to={'AUTIDO'} onClick={() => {
+                                                                           setCurrentPage('AUTIDO')
+                                                                       }}>AutiDo</NavDropdown.Item>
+                                                                       <NavDropdown.Item as={Link} to={'KAZABUBU'} onClick={() => {
+                                                                           setCurrentPage('KAZABUBU')
+                                                                       }}>
+                                                                           KAZABUBU
+                                                                       </NavDropdown.Item>
+                                                                   </NavDropdown>
+                                                               </div>
+                                                                   {/*<Link to='exercises' onClick={() => {*/}
+                                                                   {/*    setCurrentPage('exercises')*/}
+                                                                   {/*}}*/}
+                                                                   {/*      className="list-group-item list-group-item-action"*/}
+                                                                   {/*      id='lower-side-menu-bottom-button'>אפליקציות צד שלישי</Link>*/}
                                                                </Row>
                                                            </Col>
                                                        }/>
@@ -388,8 +400,6 @@ function HomePage({userDetails, type, institute}) {
                                             console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
                                             return (
                                                 <div>
-
-
                                                     <Routes>
                                                         <Route
                                                             path={data.id.toString() + '/parent/' + index.toString() + '/*'}

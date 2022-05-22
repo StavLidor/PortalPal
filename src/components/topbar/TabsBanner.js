@@ -1,7 +1,8 @@
-import {Nav, NavDropdown} from 'react-bootstrap'
+import {ButtonGroup, Nav, NavDropdown} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link} from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
 
 function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
@@ -33,30 +34,42 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
                 break
             case "parent":
                 setTabsComponent(
-                    <Nav justify variant="tabs" defaultActiveKey={'sessions'}>
-                        <Nav.Item>
-                            <Link to={currentPerson + '/documentation'} onClick={() => {
-                                setCurrentPage('documentation')
-                            }} className="list-group-item list-group-item-action">מסמכים</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Link to={currentPerson + '/AQform'} onClick={() => {
-                                setCurrentPage('AQform')
-                            }} className="list-group-item list-group-item-action">מילוי טופס AQ</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <NavDropdown title="אפליקציות צד שלישי">
-                                <NavDropdown.Item as={Link} to={currentPerson + '/AUTIDO'} onClick={() => {
-                                    setCurrentPage('AUTIDO')
-                                }}>AutiDo</NavDropdown.Item>
-                                <NavDropdown.Item as={Link} to={currentPerson + '/KAZABUBU'} onClick={() => {
-                                    setCurrentPage('KAZABUBU')
-                                }}>
-                                    KAZABUBU
-                                </NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav.Item>
-                    </Nav>
+                    <ButtonGroup className='gap-5'>
+                        {/*<Nav.Item>*/}
+                        {/*    <Link to={currentPerson + '/documentation'} onClick={() => {*/}
+                        {/*        setCurrentPage('documentation')*/}
+                        {/*    }} className="list-group-item list-group-item-action">מסמכים</Link>*/}
+                        {/*</Nav.Item>*/}
+                        <Button id='top-menu-button' as={Link} to={currentPerson + '/AQform'} onClick={() => {
+                            setCurrentPage('AQform')
+                        }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
+                            מילוי טופס AQ
+                        </Button>
+
+                        <Button id='top-menu-button' as={Link} to={currentPerson + '/AQform'} onClick={() => {
+                            setCurrentPage('AQform')
+                        }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
+                            אודות
+                        </Button>
+
+                        <Button id='top-menu-button' as={Link} to={currentPerson + '/AQform'} onClick={() => {
+                            setCurrentPage('AQform')
+                        }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
+                            צרו קשר
+                        </Button>
+                        {/*<Nav.Item>*/}
+                        {/*    <NavDropdown title="אפליקציות צד שלישי">*/}
+                        {/*        <NavDropdown.Item as={Link} to={currentPerson + '/AUTIDO'} onClick={() => {*/}
+                        {/*            setCurrentPage('AUTIDO')*/}
+                        {/*        }}>AutiDo</NavDropdown.Item>*/}
+                        {/*        <NavDropdown.Item as={Link} to={currentPerson + '/KAZABUBU'} onClick={() => {*/}
+                        {/*            setCurrentPage('KAZABUBU')*/}
+                        {/*        }}>*/}
+                        {/*            KAZABUBU*/}
+                        {/*        </NavDropdown.Item>*/}
+                        {/*    </NavDropdown>*/}
+                        {/*</Nav.Item>*/}
+                    </ButtonGroup>
                 )
                 break
             case "therapist":
@@ -64,31 +77,31 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
                 setTabsComponent(
                     <Nav justify variant="tabs"
                          defaultActiveKey={'/#/' + currentPerson + '/sessions'}>
-                        <Nav.Item>
-                            <Nav.Link as={Link} to={currentPerson + '/documentation'} onClick={() => {
-                                setCurrentPage('documentation')
-                            }}
-                                      active={currentPage==='documentation'}
-                            >מסמכים</Nav.Link>
-                        </Nav.Item>
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link as={Link} to={currentPerson + '/documentation'} onClick={() => {*/}
+                        {/*        setCurrentPage('documentation')*/}
+                        {/*    }}*/}
+                        {/*              active={currentPage==='documentation'}*/}
+                        {/*    >מסמכים</Nav.Link>*/}
+                        {/*</Nav.Item>*/}
                         <Nav.Item>
                             <Nav.Link as={Link} to={currentPerson + '/AQform'} onClick={() => {
                                 setCurrentPage('AQform')
                             }}
                                       active={currentPage==='AQform'}>מילוי טופס AQ</Nav.Link>
                         </Nav.Item>
-                        <Nav.Item>
-                            <NavDropdown title="אפליקציות צד שלישי">
-                                <NavDropdown.Item as={Link} to={currentPerson + '/AUTIDO'} onClick={() => {
-                                    setCurrentPage('AUTIDO')
-                                }}>AutiDo</NavDropdown.Item>
-                                <NavDropdown.Item as={Link} to={currentPerson + '/KAZABUBU'} onClick={() => {
-                                    setCurrentPage('KAZABUBU')
-                                }}>
-                                    KAZABUBU
-                                </NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav.Item>
+                        {/*<Nav.Item>*/}
+                        {/*    <NavDropdown title="אפליקציות צד שלישי">*/}
+                        {/*        <NavDropdown.Item as={Link} to={currentPerson + '/AUTIDO'} onClick={() => {*/}
+                        {/*            setCurrentPage('AUTIDO')*/}
+                        {/*        }}>AutiDo</NavDropdown.Item>*/}
+                        {/*        <NavDropdown.Item as={Link} to={currentPerson + '/KAZABUBU'} onClick={() => {*/}
+                        {/*            setCurrentPage('KAZABUBU')*/}
+                        {/*        }}>*/}
+                        {/*            KAZABUBU*/}
+                        {/*        </NavDropdown.Item>*/}
+                        {/*    </NavDropdown>*/}
+                        {/*</Nav.Item>*/}
                     </Nav>
                 )
                 break

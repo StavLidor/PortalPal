@@ -39,10 +39,6 @@ function Login({login, setDisplayLoginForm}) {
         }
     }
 
-    const onForgotPassword = () => {
-        //resetPassword
-    }
-
     const changeForm = e => {
         e.preventDefault()
         setDisplayLoginForm(false)

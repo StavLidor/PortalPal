@@ -62,15 +62,16 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
 
                         return (
                             // <div>{data.firstName + " " + data.lastName+', '+data.connection}</div>
-                            <Link to={'parent' + '/' + index.toString() + '/' + currentPage.toString()}
-                                  className="list-group-item list-group-item-action" style={{fontSize: 14}}
+                            <Button as={Link} to={'parent' + '/' + index.toString() + '/' + currentPage.toString()}
+                                  className="list-group-item list-group-item-action"
+                                    id='therapist-button'
                                   onClick={(e) => {
                                       // e.preventDefault()
                                       // setCurrentPerson(data.id.toString())
 
                                       setCurrentParent({id: data.id, index: index.toString()})
 
-                                  }}>{data.firstName + " " + data.lastName}</Link>
+                                  }}>{data.firstName + " " + data.lastName}</Button>
                         )
                     }
                 )}

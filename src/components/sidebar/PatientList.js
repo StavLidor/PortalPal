@@ -65,12 +65,15 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                         if(currentPerson===id) {
                             id = ''
                         }
-                        return (<Link to={id + (() => {
+                        return (
+                            <Button id='patient-button' as={Link} active={currentPerson ===data.id.toString()}
+                                    style={{backgroundColor:'transparent',border:'transparent'}}
+                                    to={id + (() => {
                             if (currentPage === 'documentation')
                                 return '/documentation'
                             return ''
                         })()
-                        } className="list-group-item list-group-item-action" onClick={(e) => {
+                        } className="list-group-item list-group-item-action mb-1" onClick={(e) => {
                             // e.preventDefault()
                             if(currentPerson===data.id.toString()){
                                 setPatientIsClicked(false)
@@ -82,7 +85,8 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                             }
 
 
-                        }}>{data.firstName + " " + data.lastName}</Link>)
+                        }}>{data.firstName + " " + data.lastName}</Button>
+                        )
                     }
                 )}
 

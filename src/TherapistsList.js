@@ -135,8 +135,8 @@ function TherapistsList({
 
                     {type === 'parent' && isActive === 'active' && <Form.Label >מטפלים פעילים:</Form.Label>}
                     {type === 'parent' && isActive === 'notActive' && <Form.Label>מטפלים לא פעילים:</Form.Label>}
-                    <Link to={path}
-                          className="list-group-item list-group-item-action" style={{fontSize: 14}}
+                    <Button as={Link} to={path} id='therapist-button'
+                          className="list-group-item list-group-item-action mb-2"
                           onClick={(e) => {
                               // e.preventDefault()
                               // setCurrentPerson(data.id.toString())
@@ -144,7 +144,7 @@ function TherapistsList({
                               setCurrentTherapist({id: data.id, index: index.toString()})
 
                           }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}
-                    </Link>
+                    </Button>
                 </div>
             )
         }))

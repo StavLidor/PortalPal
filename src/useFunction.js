@@ -60,5 +60,13 @@ export function is_israeli_id_number(id) {
         return counter + (step > 9 ? step - 9 : step);
     }) % 10 === 0;
 }
+export function isClick(item) {
+    const pathSpilt= window.location.pathname.split("/")
+    if(pathSpilt.findIndex((p) => p === item) === -1){
+        return false
+    }
+    return true
 
-export default {makePassword,convertToNormalDate,validateEmail,is_israeli_id_number}
+}
+
+export default {makePassword,convertToNormalDate,validateEmail,is_israeli_id_number,isClick}

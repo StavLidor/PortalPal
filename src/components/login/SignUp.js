@@ -20,13 +20,14 @@ function SignUp({setDisplayLoginForm})  {
     const [userDetails, setUserDetails] = useState({
         firstName: "",
         lastName: "",jobs:[], license: "",titles:['therapist'] ,email: "", password: "",institute:"", institutes: {external: []},
-        childrenIds:[]
+        childrenIds:{}
     })
     const [messages, setMessages] = useState({
         firstName: "",
         lastName: "",
         email: "",
-        password: ""
+        password: "",
+        license: ""
     })
     const onSignUp = async e => {
         e.preventDefault()
@@ -35,16 +36,19 @@ function SignUp({setDisplayLoginForm})  {
             firstName: "",
             lastName: "",
             email: "",
-            password: ""}
+            password: "",license: ""}
         //setMessages(messages)
         if(!userDetails.firstName.trim()){
             messagesUpdate.firstName ='אנא,הכנס שם פרטי'
+        }
+        if(!userDetails.license.trim()){
+            messagesUpdate.license ='אנא,הכנס מספר רישיון'
         }
          if(!userDetails.lastName.trim()){
              messagesUpdate.lastName ='אנא,הכנס שם משפחה'
         }
          if(userDetails.password.length<6){
-             console.log('PASSWOred',userDetails.password)
+             //console.log('PASSWOred',userDetails.password)
              messagesUpdate.password ='אנא,הכנס סיסמא באורך 6 לפחות'
         }
         if(!validateEmail(userDetails.email)){
@@ -54,8 +58,14 @@ function SignUp({setDisplayLoginForm})  {
         setMessages(messagesUpdate)
         console.log(messagesUpdate)
         if(messagesUpdate.firstName==='' && messagesUpdate.lastName==='' &&
-            messagesUpdate.password===''&& messagesUpdate.email===''){
-            await signUp(userDetails)
+            messagesUpdate.password===''&& messagesUpdate.email==='' &&
+            messagesUpdate.license===''){
+            if(await signUp(userDetails)){
+                setDisplayLoginForm(true)
+            }
+            else {
+                messagesUpdate.email ='קיים חשבון עם מייל זה'
+            }
         }
     }
 
@@ -130,6 +140,9 @@ function SignUp({setDisplayLoginForm})  {
                         <Col md="auto">
                             <Form.Control id='license'
                                           onChange={e => setUserDetails({...userDetails, license: e.target.value})}/>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.license}
+                            </div>
                         </Col>
                     </Row>
 

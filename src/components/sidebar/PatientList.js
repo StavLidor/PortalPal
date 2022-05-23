@@ -7,6 +7,7 @@ import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from
 import {addPatientToExternalTherapist, db} from "../../firebase";
 import {Pencil, Plus, Trash} from 'react-bootstrap-icons';
 import TableData from "../tableEdit/TableData";
+import {isClick} from "../../useFunction";
 
 export let patientList = []
 

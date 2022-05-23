@@ -122,7 +122,12 @@ function TherapistsList({
     const showList = (list, isActive) => {
         let path = ''
         let showInstitute = ''
-        return (list.map((item, index) => {
+
+        return (
+
+
+
+            list.map((item, index) => {
             let data = item
             if (type === 'parent') {
                 path = isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
@@ -132,9 +137,6 @@ function TherapistsList({
             }
             return (
                 <div>
-
-                    {type === 'parent' && isActive === 'active' && <Form.Label >מטפלים פעילים:</Form.Label>}
-                    {type === 'parent' && isActive === 'notActive' && <Form.Label>מטפלים לא פעילים:</Form.Label>}
                     <Link to={path}
                           className="list-group-item list-group-item-action" style={{fontSize: 14}}
                           onClick={(e) => {
@@ -152,7 +154,9 @@ function TherapistsList({
     return (
         <div>
             <Form.Label style={{fontWeight: 'bold'}}>רשימת מטפלים</Form.Label>
+                {type === 'parent' && <Form.Label >מטפלים פעילים:</Form.Label>}
                 {activeTherapistsList.length > 0 && showList(activeTherapistsList, 'active')}
+                {type === 'parent' && <Form.Label >מטפלים לא פעילים:</Form.Label>}
                 {notActiveTherapistsList.length > 0 && showList(notActiveTherapistsList, 'notActive')}
         </div>
 

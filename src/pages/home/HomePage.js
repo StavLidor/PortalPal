@@ -30,6 +30,7 @@ import MultiType from "../../components/MultiTypeGraph";
 import MultiTypeGraph from "../../components/MultiTypeGraph";
 import ReportsPage from "../../ReportsPage";
 import CheckHasAPICode from "../../checkHasAPICode";
+import {isClick} from "../../useFunction";
 
 function HomePage({userDetails, type, institute}) {
 
@@ -40,9 +41,21 @@ function HomePage({userDetails, type, institute}) {
     const [showDialogCode, setShowDialogCode] = useState(false)
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
     const [currentPerson, setCurrentPerson] = useState((() => {
-        if (localStorage.getItem("currentPerson") === null)
+        //console.log('Localtion',window.location.href, window.location.host,window.location.pathname)
+        const pathSpilt= window.location.pathname.split("/")
+
+        if(pathSpilt.length === 1)
             return ""
-        return localStorage.getItem("currentPerson")
+        // console.log('BEGINN localStoeage',,localStorage.getItem("currentPerson"))
+        // console.log('BEGINN localStoeage',,localStorage.getItem("currentPerson"))
+        if(localStorage.getItem("currentPerson")!==null && pathSpilt[1] ===localStorage.getItem("currentPerson")){
+            return pathSpilt[1]
+        }
+
+        // if (localStorage.getItem("currentPerson") === null)
+        //     return ""
+        // return localStorage.getItem("currentPerson")
+        return ""
     })())
     const [currentPage, setCurrentPage] = useState('')
     const [currentTherapist, setCurrentTherapist] = useState({id: '', index: ''})
@@ -85,8 +98,19 @@ function HomePage({userDetails, type, institute}) {
             setCurrentPerson("")
         }
     }, [userDetails.institutes[institute]])
+    useEffect(() => {
+        const pathSpilt= window.location.pathname.split("/")
+        //if(pathSpilt.length === 0)
+
+        if(pathSpilt.length>1 && patientListData.length>0 &&
+            patientListData.findIndex((s) => s.id === pathSpilt[1]) !== -1){
+            setCurrentPerson(pathSpilt[1])
+
+        }
+    }, [patientListData])
 
     const handleMyProfile = () => {
+        setCurrentPerson("")
     }
 
     const componentsTherapists = (list, isActive, data) => {
@@ -141,7 +165,7 @@ function HomePage({userDetails, type, institute}) {
                     <Col md='2' className="w-auto rounded align-self-center">
                         <ButtonGroup className="gap-4">
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
-                            <Link to="/myProfile">
+                            <Link to="/myProfile"  >
                                 {type !== 'admin' &&
                                 <Button style={{height: 40}} className="rounded-3 h-auto" variant="outline-primary"
                                         onClick={handleMyProfile}>החשבון

@@ -7,14 +7,15 @@ import {auth, GetCurrentUser, getDocCurrentUser} from './firebase'
 import Authenticate from "./components/login/Authenticate";
 import HomePage from "./pages/home/HomePage";
 import {doc, getDoc, onSnapshot} from "firebase/firestore";
-
+import {AddTypeExternalTherapist} from "./AddTypeExternalTherapist"
 function App() {
     const [isSigneIn, setIsSigneIn] = useState(false);
     const [userDetails, setUserDetails] = useState(null);
     const [hasDetails, setHasDetails] = useState(false);
     const [checkUserConnection, setCheckUserConnection] = useState(false);
     const [displayLoginError, setDisplayLoginError] = useState(false);
-    const [isFirstLoad, setIsFirstLoad] = useState(true);
+    const [isFirstLoad, setIsFirstLoad] = useState(true)
+    const [addExternal, setAddExternal] = useState(false)
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async user => {
@@ -30,17 +31,26 @@ function App() {
                         console.log(value.data().titles)
                         setUserDetails(value)
                         console.log("data user details: ", value.data().childrenIds)
-                        setHasDetails(true)
+
                         if(value.data().titles.includes(localStorage.getItem('type'))){
+                            setHasDetails(true)
                             console.log('print hello')
                             setDisplayLoginError(false)
                             setIsFirstLoad(true)
                         }
                         else{
-                            signOutCurrentUser()
-                            setDisplayLoginError(true)
-                            localStorage.setItem("type", "")
-                            localStorage.setItem("institute", "")
+                            if(localStorage.getItem('type') === 'therapist' &&localStorage.getItem("institute")===
+                                'external'
+                            ){
+                                setAddExternal(true)
+                            }
+                            else {
+                                signOutCurrentUser()
+                                setDisplayLoginError(true)
+                                localStorage.setItem("type", "")
+                                localStorage.setItem("institute", "")
+                            }
+
                         }
 
                     })
@@ -73,7 +83,7 @@ function App() {
 
         <Router>
             <div className="App">
-
+                {addExternal && <AddTypeExternalTherapist setAddExternal={setAddExternal}/>}
                 {isSigneIn === false && checkUserConnection && <Authenticate login={login}/>}
                 {/*{isSigneIn === false && checkUserConnection && <AQold/>}*/}
                 {/*{isSigneIn === false && checkUserConnection && <AQ10ChildrenForm/>}*/}

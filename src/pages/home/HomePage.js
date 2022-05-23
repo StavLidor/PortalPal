@@ -1,4 +1,4 @@
-import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Image, NavDropdown} from 'react-bootstrap'
+import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Image} from 'react-bootstrap'
 import {Animated} from 'react-animated-css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
@@ -33,7 +33,12 @@ import CheckHasAPICode from "../../checkHasAPICode";
 import {isClick} from "../../useFunction";
 
 function HomePage({userDetails, type, institute}) {
-
+    // const [patientListData, setPatientListData] = useState((() => {
+    //     if (JSON.parse(localStorage.getItem("currentPatientsListData")) === "") {
+    //         return []
+    //     }
+    //     return JSON.parse(localStorage.getItem("currentPatientsListData"))
+    // })())
     const [patientListData, setPatientListData] = useState([])
     const [activeTherapistListData, setActiveTherapistListData] = useState([])
     const [notActiveTherapistListData, setNotActiveTherapistListData] = useState([])
@@ -116,6 +121,7 @@ function HomePage({userDetails, type, institute}) {
     const componentsTherapists = (list, isActive, data) => {
 
         return (list.map((therapist, index) => {
+            // let data = item.data()
             console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
             return (
                 <div>
@@ -154,45 +160,11 @@ function HomePage({userDetails, type, institute}) {
         }))
     }
 
-    const [patientIsClicked, setPatientIsClicked] = useState(false)
+    const [patientIsClicked,setPatientIsClicked] = useState(false)
     return (
+
         <div>
             <Container className="p-4" fluid>
-<<<<<<<<< Temporary merge branch 1
-                <Row className='gap-4'>
-                    <Col md='2' style={{maxWidth: '250px'}}><img src={Logo} alt='toko' style={{width: '240px'}}/></Col>
-                    <Col className="align-self-center">
-                        <Row id='top-banner' >
-                            <Col md='2' className="w-auto rounded justify-content-center">
-                                <ButtonGroup className="gap-4 align-items-center">
-                                    <Form.Label>
-                                        שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}
-                                    </Form.Label>
-                                    {/*<Link to="/myProfile">*/}
-                                        {type !== 'admin' &&
-                                        <Button  as={Link}  to="/myProfile" variant='secondary'
-                                                 className="rounded-3"
-                                                id='account-button'
-                                                onClick={()=>{setCurrentPerson('')}}>החשבון
-                                            שלי</Button>
-                                        }
-                                    {/*</Link>*/}
-                                    <Button href={'/'} className="rounded-3" variant='secondary'
-                                            id='account-button'
-                                            onClick={onLogout}>התנתק</Button>
-                                </ButtonGroup>
-                            </Col>
-                            <Col md='7'/>
-                            {/*<Col md='3' className="border align-self-center w-auto" id='floating-tabs-bar'>*/}
-                            <Col md='3' className=" align-self-center w-auto">
-                                {/*<Container>*/}
-
-                                <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}
-                                            currentPage={currentPage}/>
-                                {/*</Container>*/}
-                            </Col>
-                        </Row>
-=========
                 <Row className='gap-4 '>
                     <Col md='2' style={{maxWidth:'250px'}}><img src={Logo} alt='toko' style={{width: '240px'}}/></Col>
                     {/*<Col md='2' className="border border-secondary rounded">פורטלי</Col>*/}
@@ -202,9 +174,9 @@ function HomePage({userDetails, type, institute}) {
                             <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
                             <Link to="/myProfile"  >
                                 {type !== 'admin' &&
-                                <Button style={{height: 40}} className="rounded-3 h-auto" variant="outline-primary"
-                                        onClick={handleMyProfile}>החשבון
-                                    שלי</Button>
+                                    <Button style={{height: 40}} className="rounded-3 h-auto" variant="outline-primary"
+                                            onClick={handleMyProfile}>החשבון
+                                        שלי</Button>
                                 }
                             </Link>
                             <Button style={{height: 40}} href={'/'} className="rounded-3 " variant="outline-primary"
@@ -219,19 +191,16 @@ function HomePage({userDetails, type, institute}) {
                         {/*                                         setCurrentPage={setCurrentPage}/>}/>*/}
                         {/*</Routes>*/}
                         <Container >
-                        <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage} currentPage={currentPage}/>
+                            <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage} currentPage={currentPage}/>
                         </Container>
                         {/*{tabsComponent}*/}
->>>>>>>>> Temporary merge branch 2
                     </Col>
                 </Row>
             </Container>
-            {/*<hr className="rounded"/>*/}
             {(type === 'admin') ? (
                     <SecretaryPage data={userDetails}/>) :
-                <Row className='gap-4 justify-content-center'>
-                    <Col md='2' style={{width: "13%", maxWidth: '350px'}} id='right-floating-box'
-                         className="p-3" /*onMouseEnter={()=>setA(true)} onMouseLeave={()=>setA(false)}*/>
+                <Row className='p-4 gap-4' >
+                    <Col md='2' style={{width:"13%",maxWidth:'350px'}}  id='right-floating-box' className="p-3" /*onMouseEnter={()=>setA(true)} onMouseLeave={()=>setA(false)}*/>
                         {type === 'parent' && <PatientList list={children} setPatientListData={setPatientListData}
                                                            listTitle={"רשימת ילדים"}
                                                            setCurrentPerson={setCurrentPerson}
@@ -249,19 +218,21 @@ function HomePage({userDetails, type, institute}) {
                                                               institute={institute}
                                                               setPatientIsClicked={setPatientIsClicked}/>}
 
+                        {/*{sideListComponent}*/}
                     </Col>
-                    <Col md='2' style={{width: "13%", maxWidth: '350px'}}>
-                        <Animated animationIn="fadeInRight" animationOut="fadeOutRight" animationInDuration={500}
-                                  animationOutDuration={500} isVisible={currentPerson !== ''}>
+                    <Col md='2' style={{width:"13%",maxWidth:'350px'}}>
+                        <Animated animationIn="fadeInRight" animationOut="fadeOutRight" animationInDuration={1000} animationOutDuration={1000} isVisible={currentPerson !== ''}>
                             <Row className="p-2 mb-4 patient-details" id='middle-floating-box' style={{minHeight: 200}}>
 
                                 {patientListData.map((item) => {
                                         let data = item.data()
                                         return (
                                             <Routes>
+                                                {/*<Route path={/#/ + data.id.toString() + '/*'}*/}
                                                 <Route path={data.id.toString() + '/*'}
                                                        element={<PatientDetails type={type} institute={institute}
                                                                                 details={data}/>}/>
+
                                             </Routes>)
                                     }
                                 )}
@@ -271,27 +242,9 @@ function HomePage({userDetails, type, institute}) {
                             <Row className="mb-4 " style={{minHeight: 300}} id='middle-floating-box'>
 
                                 {(type === 'parent') &&
-                                patientListData.map((item) => {
-                                        let data = item.data()
-                                        return (
-                                            <Routes>
-                                                {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
-                                                <Route path={data.id.toString() + '/*'}
-                                                       element={<TherapistsList details={data} currentPage={currentPage}
-                                                                                setCurrentTherapist={setCurrentTherapist}
-                                                                                setActiveTherapistListData={setActiveTherapistListData}
-                                                                                setNotActiveTherapistListData={setNotActiveTherapistListData}
-                                                                                currentPerson={currentPerson}
-                                                                                type={type} institute={institute}
-                                                       />}/>
-                                            </Routes>)
-                                    }
-                                )}
-                                {(type === 'therapist') &&
-                                patientListData.map((item) => {
-                                        let data = item.data()
-                                        return (
-                                            <>
+                                    patientListData.map((item) => {
+                                            let data = item.data()
+                                            return (
                                                 <Routes>
                                                     {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
                                                     <Route path={data.id.toString() + '/*'}
@@ -300,20 +253,39 @@ function HomePage({userDetails, type, institute}) {
                                                                                     setActiveTherapistListData={setActiveTherapistListData}
                                                                                     setNotActiveTherapistListData={setNotActiveTherapistListData}
                                                                                     currentPerson={currentPerson}
-                                                                                    type={type} institute={institute}/>
+                                                                                    type={type} institute={institute}
+                                                           />}/>
+                                                </Routes>)
+                                        }
+                                    )}
+                                {(type === 'therapist') &&
+                                    patientListData.map((item) => {
+                                            let data = item.data()
+                                            return (
+                                                <>
+                                                    <Routes>
+                                                        {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
+                                                        <Route path={data.id.toString() + '/*'}
+                                                               element={<TherapistsList details={data} currentPage={currentPage}
+                                                                                        setCurrentTherapist={setCurrentTherapist}
+                                                                                        setActiveTherapistListData={setActiveTherapistListData}
+                                                                                        setNotActiveTherapistListData={setNotActiveTherapistListData}
+                                                                                        currentPerson={currentPerson}
+                                                                                        type={type} institute={institute}/>
 
-                                                           }/>
-                                                </Routes>
-                                                <Routes>
-                                                    <Route path={data.id.toString() + '/*'}
-                                                           element={<ParentList currentPage={currentPage} details={data}
-                                                                                currentPerson={currentPerson}
-                                                                                setParentsListData={setParentsListData}
-                                                                                setCurrentParent={setCurrentParent}/>}/>
-                                                </Routes>
-                                            </>)
-                                    }
-                                )}
+                                                               }/>
+                                                    </Routes>
+                                                    <Routes>
+                                                        <Route path={data.id.toString() + '/*'}
+                                                               element={<ParentList currentPage={currentPage} details={data}
+                                                                                    currentPerson={currentPerson}
+                                                                                    setParentsListData={setParentsListData}
+                                                                                    setCurrentParent={setCurrentParent}/>}/>
+                                                    </Routes>
+                                                </>)
+                                        }
+                                    )}
+
 
                             </Row>
 
@@ -323,69 +295,39 @@ function HomePage({userDetails, type, institute}) {
                                             style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
                                             variant="outline-primary">קבל קוד אישי</Button>
                                 </Link>}
-
+                                {/*{type === 'therapist' && institute==='external' && currentPerson !== '' && <Link to={currentPerson + '/code'}>*/}
+                                {/*    <Button onClick={() => setShowDialogCode(true)} className="text-center"*/}
+                                {/*            style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}*/}
+                                {/*            variant="outline-primary">הסר מטופל</Button>*/}
+                                {/*</Link>}*/}
 
                                 {(type === 'therapist') &&
-                                patientListData.map((item) => {
-                                        let data = item.data()
-                                        return (
-                                            <Routes>
-                                                {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
-                                                <Route path={data.id.toString() + '/*'}
-                                                       element={
-                                                           <Col>
-                                                               <Row>
-                                                                   <Button as={Link} to='sessions' onClick={() => {
-                                                                       setCurrentPage('sessions')
-                                                                   }} className="list-group-item list-group-item-action"
-                                                                         id='lower-side-menu-top-button'>סיכומי
-                                                                       טיפולים</Button>
-                                                               </Row>
-
-                                                               <Row>
-                                                                   <Button as={Link} to='exercises' onClick={() => {
-                                                                       setCurrentPage('exercises')
-                                                                   }}
-                                                                         className="list-group-item list-group-item-action"
-                                                                         id='lower-side-menu-middle-button'>תרגילים</Button>
-                                                               </Row>
-
-                                                               <Row>
-                                                                   <Button as={Link} to='exercises' onClick={() => {
-                                                                       setCurrentPage('exercises')
-                                                                   }}
-                                                                         className="list-group-item list-group-item-action"
-                                                                         id='lower-side-menu-middle-button'>מגמת
-                                                                       התקדמות</Button>
-                                                               </Row>
-
-                                                               <Row>
-                                                                   <div id='lower-side-menu-bottom-button'>
-                                                                       <NavDropdown drop='start' title="אפליקציות צד שלישי" id='lower-side-menu-bottom-button'>
-                                                                           <NavDropdown.Item as={Link} to={'AUTIDO'}
-                                                                                             onClick={() => {
-                                                                                                 setCurrentPage('AUTIDO')
-                                                                                             }}>AutiDo</NavDropdown.Item>
-                                                                           <NavDropdown.Item as={Link} to={'KAZABUBU'}
-                                                                                             onClick={() => {
-                                                                                                 setCurrentPage('KAZABUBU')
-                                                                                             }}>
-                                                                               KAZABUBU
-                                                                           </NavDropdown.Item>
-                                                                       </NavDropdown>
-                                                                   </div>
-                                                                   {/*<Link to='exercises' onClick={() => {*/}
-                                                                   {/*    setCurrentPage('exercises')*/}
-                                                                   {/*}}*/}
-                                                                   {/*      className="list-group-item list-group-item-action"*/}
-                                                                   {/*      id='lower-side-menu-bottom-button'>אפליקציות צד שלישי</Link>*/}
-                                                               </Row>
-                                                           </Col>
-                                                       }/>
-                                            </Routes>
-                                        )
-                                    }
-                                )}
+                                    patientListData.map((item) => {
+                                            let data = item.data()
+                                            return (
+                                                <Routes>
+                                                    {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
+                                                    <Route path={data.id.toString() + '/*'}
+                                                           element={
+                                                               <Col>
+                                                                   <Row>
+                                                                       <Link to='sessions' onClick={() => {
+                                                                           setCurrentPage('sessions')
+                                                                       }} className="list-group-item list-group-item-action" id='sessions-side-top-button'>סיכומי
+                                                                           טיפולים</Link>
+                                                                   </Row>
+                                                                   <Row>
+                                                                       <Link to='exercises' onClick={() => {
+                                                                           setCurrentPage('exercises')
+                                                                       }}
+                                                                             className="list-group-item list-group-item-action" id='sessions-side-bottom-button'>תרגילים</Link>
+                                                                   </Row>
+                                                               </Col>
+                                                           }/>
+                                                </Routes>
+                                            )
+                                        }
+                                    )}
                             </Row>
                         </Animated>
                     </Col>
@@ -406,13 +348,13 @@ function HomePage({userDetails, type, institute}) {
                         <Routes>
                             <Route path={currentPerson.toString() + '/AQform'}
                                    element={(() => {
-                                       return <AQ/>
+                                       if (currentPerson !== '') {
+                                           return <AQ/>
+                                       }
+                                       return <h2>אנא בחר מטופל כדי למלא עבורו את הטופס</h2>
+
                                    })()
-                                   }/>
-                            <Route path={'/AQform'}
-                                   element={(() => {
-                                       return <AQ/>
-                                   })()
+
                                    }/>
                         </Routes>
                         <Routes>
@@ -465,6 +407,8 @@ function HomePage({userDetails, type, institute}) {
                                             console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
                                             return (
                                                 <div>
+
+
                                                     <Routes>
                                                         <Route
                                                             path={data.id.toString() + '/parent/' + index.toString() + '/*'}

@@ -253,6 +253,11 @@ footer {
     height: auto;
 }
 
+
+#aboutUs{
+    font-size: 25px;
+}
+
 ::-webkit-scrollbar {
     width: 5px;
 }

@@ -30,6 +30,8 @@ import MultiType from "../../components/MultiTypeGraph";
 import MultiTypeGraph from "../../components/MultiTypeGraph";
 import ReportsPage from "../../ReportsPage";
 import CheckHasAPICode from "../../checkHasAPICode";
+import ContactUs from "../../ContactUs"
+import AboutUs from "../../AboutUs"
 
 function HomePage({userDetails, type, institute}) {
 
@@ -335,6 +337,18 @@ function HomePage({userDetails, type, institute}) {
                     </Col>
                     <Col md='8' className="border border-secondary rounded" id='display-window'>
                         {/*<Chats/>*/}
+                        <Routes>
+                            <Route path={'ContactUs'}
+                                   element={
+                                       <ContactUs></ContactUs>
+                                   }/>
+                        </Routes>
+                        <Routes>
+                            <Route path={'AboutUs'}
+                                   element={
+                                       <AboutUs></AboutUs>
+                                   }/>
+                        </Routes>
                         <Routes>
                             <Route path={currentPerson.toString() + '/documentation'}
                                    element={

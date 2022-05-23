@@ -30,7 +30,6 @@ import MultiType from "../../components/MultiTypeGraph";
 import MultiTypeGraph from "../../components/MultiTypeGraph";
 import ReportsPage from "../../ReportsPage";
 import CheckHasAPICode from "../../checkHasAPICode";
-import {isClick} from "../../useFunction";
 
 function HomePage({userDetails, type, institute}) {
 
@@ -41,21 +40,9 @@ function HomePage({userDetails, type, institute}) {
     const [showDialogCode, setShowDialogCode] = useState(false)
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
     const [currentPerson, setCurrentPerson] = useState((() => {
-        //console.log('Localtion',window.location.href, window.location.host,window.location.pathname)
-        const pathSpilt= window.location.pathname.split("/")
-
-        if(pathSpilt.length === 1)
+        if (localStorage.getItem("currentPerson") === null)
             return ""
-        // console.log('BEGINN localStoeage',,localStorage.getItem("currentPerson"))
-        // console.log('BEGINN localStoeage',,localStorage.getItem("currentPerson"))
-        if(localStorage.getItem("currentPerson")!==null && pathSpilt[1] ===localStorage.getItem("currentPerson")){
-            return pathSpilt[1]
-        }
-
-        // if (localStorage.getItem("currentPerson") === null)
-        //     return ""
-        // return localStorage.getItem("currentPerson")
-        return ""
+        return localStorage.getItem("currentPerson")
     })())
     const [currentPage, setCurrentPage] = useState('')
     const [currentTherapist, setCurrentTherapist] = useState({id: '', index: ''})
@@ -98,19 +85,8 @@ function HomePage({userDetails, type, institute}) {
             setCurrentPerson("")
         }
     }, [userDetails.institutes[institute]])
-    useEffect(() => {
-        const pathSpilt= window.location.pathname.split("/")
-        //if(pathSpilt.length === 0)
-
-        if(pathSpilt.length>1 && patientListData.length>0 &&
-            patientListData.findIndex((s) => s.id === pathSpilt[1]) !== -1){
-            setCurrentPerson(pathSpilt[1])
-
-        }
-    }, [patientListData])
 
     const handleMyProfile = () => {
-        setCurrentPerson("")
     }
 
     const componentsTherapists = (list, isActive, data) => {
@@ -158,31 +134,39 @@ function HomePage({userDetails, type, institute}) {
     return (
         <div>
             <Container className="p-4" fluid>
-                <Row className='gap-4 '>
+                <Row className='gap-4'>
                     <Col md='2' style={{maxWidth: '250px'}}><img src={Logo} alt='toko' style={{width: '240px'}}/></Col>
-                    {/*<Col md='2' className="border border-secondary rounded">פורטלי</Col>*/}
-                    {/*<Col md='3' className="w-auto border border-secondary rounded">*/}
-                    <Col md='2' className="w-auto rounded align-self-center">
-                        <ButtonGroup className="gap-4">
-                            <Form.Text>שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}</Form.Text>
-                            <Link to="/myProfile"  >
-                                {type !== 'admin' &&
-                                <Button style={{height: 40}} className="rounded-3 h-auto" variant="outline-primary"
-                                        onClick={handleMyProfile}>החשבון
-                                    שלי</Button>
-                                }
-                            </Link>
-                            <Button style={{height: 40}} href={'/'} className="rounded-3 " variant="outline-primary"
-                                    onClick={onLogout}>התנתק</Button>
-                        </ButtonGroup>
-                    </Col>
+                    <Col className="align-self-center">
+                        <Row id='top-banner' >
+                            <Col md='2' className="w-auto rounded justify-content-center">
+                                <ButtonGroup className="gap-4 align-items-center">
+                                    <Form.Label>
+                                        שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}
+                                    </Form.Label>
+                                    {/*<Link to="/myProfile">*/}
+                                        {type !== 'admin' &&
+                                        <Button  as={Link}  to="/myProfile" variant='secondary'
+                                                 className="rounded-3"
+                                                id='account-button'
+                                                onClick={()=>{setCurrentPerson('')}}>החשבון
+                                            שלי</Button>
+                                        }
+                                    {/*</Link>*/}
+                                    <Button href={'/'} className="rounded-3" variant='secondary'
+                                            id='account-button'
+                                            onClick={onLogout}>התנתק</Button>
+                                </ButtonGroup>
+                            </Col>
+                            <Col md='7'/>
+                            {/*<Col md='3' className="border align-self-center w-auto" id='floating-tabs-bar'>*/}
+                            <Col md='3' className=" align-self-center w-auto">
+                                {/*<Container>*/}
 
-                    <Col md='8' className="border align-self-center w-auto" id='floating-tabs-bar'>
-                        {/*<Container>*/}
-
-                            <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}
-                                        currentPage={currentPage}/>
-                        {/*</Container>*/}
+                                <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}
+                                            currentPage={currentPage}/>
+                                {/*</Container>*/}
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
             </Container>
@@ -283,11 +267,7 @@ function HomePage({userDetails, type, institute}) {
                                             style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
                                             variant="outline-primary">קבל קוד אישי</Button>
                                 </Link>}
-                                {/*{type === 'therapist' && institute==='external' && currentPerson !== '' && <Link to={currentPerson + '/code'}>*/}
-                                {/*    <Button onClick={() => setShowDialogCode(true)} className="text-center"*/}
-                                {/*            style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}*/}
-                                {/*            variant="outline-primary">הסר מטופל</Button>*/}
-                                {/*</Link>}*/}
+
 
                                 {(type === 'therapist') &&
                                 patientListData.map((item) => {
@@ -299,42 +279,45 @@ function HomePage({userDetails, type, institute}) {
                                                        element={
                                                            <Col>
                                                                <Row>
-                                                                   <Link to='sessions' onClick={() => {
+                                                                   <Button as={Link} to='sessions' onClick={() => {
                                                                        setCurrentPage('sessions')
                                                                    }} className="list-group-item list-group-item-action"
                                                                          id='lower-side-menu-top-button'>סיכומי
-                                                                       טיפולים</Link>
+                                                                       טיפולים</Button>
                                                                </Row>
 
                                                                <Row>
-                                                                   <Link to='exercises' onClick={() => {
+                                                                   <Button as={Link} to='exercises' onClick={() => {
                                                                        setCurrentPage('exercises')
                                                                    }}
                                                                          className="list-group-item list-group-item-action"
-                                                                         id='lower-side-menu-middle-button'>תרגילים</Link>
+                                                                         id='lower-side-menu-middle-button'>תרגילים</Button>
                                                                </Row>
 
                                                                <Row>
-                                                                   <Link to='exercises' onClick={() => {
+                                                                   <Button as={Link} to='exercises' onClick={() => {
                                                                        setCurrentPage('exercises')
                                                                    }}
                                                                          className="list-group-item list-group-item-action"
-                                                                         id='lower-side-menu-middle-button'>מגמת התקדמות</Link>
+                                                                         id='lower-side-menu-middle-button'>מגמת
+                                                                       התקדמות</Button>
                                                                </Row>
 
                                                                <Row>
-                                                                   <div id='lower-side-menu-bottom-button' style={{backgroundColor:"white",textDecoration:'black'}}>
-                                                                   <NavDropdown drop='start' title="אפליקציות צד שלישי">
-                                                                       <NavDropdown.Item as={Link} to={'AUTIDO'} onClick={() => {
-                                                                           setCurrentPage('AUTIDO')
-                                                                       }}>AutiDo</NavDropdown.Item>
-                                                                       <NavDropdown.Item as={Link} to={'KAZABUBU'} onClick={() => {
-                                                                           setCurrentPage('KAZABUBU')
-                                                                       }}>
-                                                                           KAZABUBU
-                                                                       </NavDropdown.Item>
-                                                                   </NavDropdown>
-                                                               </div>
+                                                                   <div id='lower-side-menu-bottom-button'>
+                                                                       <NavDropdown drop='start' title="אפליקציות צד שלישי" id='lower-side-menu-bottom-button'>
+                                                                           <NavDropdown.Item as={Link} to={'AUTIDO'}
+                                                                                             onClick={() => {
+                                                                                                 setCurrentPage('AUTIDO')
+                                                                                             }}>AutiDo</NavDropdown.Item>
+                                                                           <NavDropdown.Item as={Link} to={'KAZABUBU'}
+                                                                                             onClick={() => {
+                                                                                                 setCurrentPage('KAZABUBU')
+                                                                                             }}>
+                                                                               KAZABUBU
+                                                                           </NavDropdown.Item>
+                                                                       </NavDropdown>
+                                                                   </div>
                                                                    {/*<Link to='exercises' onClick={() => {*/}
                                                                    {/*    setCurrentPage('exercises')*/}
                                                                    {/*}}*/}
@@ -367,13 +350,13 @@ function HomePage({userDetails, type, institute}) {
                         <Routes>
                             <Route path={currentPerson.toString() + '/AQform'}
                                    element={(() => {
-                                       if (currentPerson !== '') {
-                                           return <AQ/>
-                                       }
-                                       return <h2>אנא בחר מטופל כדי למלא עבורו את הטופס</h2>
-
+                                       return <AQ/>
                                    })()
-
+                                   }/>
+                            <Route path={'/AQform'}
+                                   element={(() => {
+                                       return <AQ/>
+                                   })()
                                    }/>
                         </Routes>
                         <Routes>

@@ -279,12 +279,14 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                         </Row>
                         <Row>
                             <Form.Group controlId="summary">
-                                <Form.Label>סיכום מפגש</Form.Label>
-                                <Form.Control
+                                <Col><Form.Label>סיכום מפגש</Form.Label></Col>
+                                <Col>
+                                <textarea style={{width:"460px"}}
                                     type="text"
                                     onChange={e => setNewSession({...newSession, summary: e.target.value})}
 
                                 />
+                                </Col>
 
                             </Form.Group>
                             <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">

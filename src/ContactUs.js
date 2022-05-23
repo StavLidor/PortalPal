@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {addExternal} from "./firebase";
 import {Button, ButtonGroup, Col, Container, Form, Row} from "react-bootstrap";
 
-export function ContactUs() {
+function ContactUs() {
     const [details, setDetails] = useState({
         name:"",email:"",subject:"",content:""
     })
@@ -59,7 +59,7 @@ export function ContactUs() {
                                 תוכן פניה:
                             </Col>
                             <Col md="auto">
-                                <Form.Control id='validationDefault01' required
+                                <textarea id='validationDefault01' required
                                               onChange={e => setDetails({...details, content: e.target.value})}/>
                                 <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
                                     {messages.content}
@@ -78,3 +78,4 @@ export function ContactUs() {
             </Form>
         </div>)
 }
+export default ContactUs

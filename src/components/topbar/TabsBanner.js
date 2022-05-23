@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link} from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import {Telephone} from 'react-bootstrap-icons';
 
 
 function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
@@ -47,16 +48,17 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
                             מילוי טופס AQ
                         </Button>
 
-                        <Button id='top-menu-button' as={Link} variant='primary' to={currentPerson + '/AQform'} onClick={() => {
-                            setCurrentPage('AQform')
+                        <Button id='top-menu-button' as={Link} variant='primary' to={'AboutUs'} onClick={() => {
+                            setCurrentPage('AboutUs')
                         }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
                             אודות
                         </Button>
 
-                        <Button id='top-menu-button' as={Link} to={currentPerson + '/AQform'} onClick={() => {
-                            setCurrentPage('AQform')
+                        <Button id='top-menu-button' as={Link} to={'ContactUs'} onClick={() => {
+                            setCurrentPage('ContactUs')
                         }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
-                            צרו קשר
+                             צרו קשר   &nbsp;
+                            <Telephone/>
                         </Button>
                         {/*<Nav.Item>*/}
                         {/*    <NavDropdown title="אפליקציות צד שלישי">*/}

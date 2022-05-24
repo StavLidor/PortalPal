@@ -174,6 +174,9 @@ function SecretaryPage({data}) {
         if(!details.dateOfBirth.trim()){
             messages.dateOfBirth='הכנס תאריך לידה'
         }
+        if(!details.diagnosticCode.trim()){
+            messages.diagnosticCode='הכנס קוד אבחון'
+        }
         if(!details.firstName.trim()){
             messages.firstName='הכנס שם פרטי לתלמיד'
         }
@@ -359,6 +362,13 @@ function SecretaryPage({data}) {
             , name: "gender", label: "מגדר",
             edit: true, add: true, view: true
         },
+        {
+            type: "text", required: "required",
+            placeholder: "הכנס קוד אבחון"
+            , name: "diagnosticCode", label: "קוד אבחון:", edit: true, add: true, view: true
+            /*,value:editFormData.lastName,*/
+        },
+
         {
             type: "text", required: "required",
             placeholder: "Enter a last city..."
@@ -609,6 +619,7 @@ function SecretaryPage({data}) {
                                                    id: "",
                                                    firstName: "",
                                                    lastName: "",
+                                                   diagnosticCode:"",
                                                    dateOfBirth: "",
                                                    city: "",
                                                    street: "",
@@ -620,10 +631,11 @@ function SecretaryPage({data}) {
                                                }} emptyEditDetails={{
                                firstName: "",
                                lastName: "",
+                               diagnosticCode:"",
                                dateOfBirth: new Date()
                                , city: "", street: "", buildingNumber: "", gender: "זכר"
                            }} data={students} HebrewNames={[
-                               "תעודת זהות", "שם פרטי", "שם משפחה", "תאריך לידה", "מגדר" ,"עיר", "רחוב", "מספר רחוב"]
+                               "תעודת זהות", "שם פרטי", "שם משפחה", "תאריך לידה", "מגדר","קוד אבחון" ,"עיר", "רחוב", "מספר רחוב"]
                            } columnsInfoView={columnsViewPatient} requiredId={true}
                                              />}/>
                 </Routes>

@@ -463,6 +463,7 @@ export const addPatient = async details => {
                 dateOfBirth: details.dateOfBirth,
                 firstName: details.firstName,
                 lastName: details.lastName,
+                diagnosticCode:details.diagnosticCode,
                 city: details.city,
                 street: details.street,
                 buildingNumber: details.buildingNumber,
@@ -630,6 +631,7 @@ export const addPatientToExternalTherapist = async (id, code, connection) => {
         await setDoc(doc(collection_query_patients, id, "therapists", auth.currentUser.uid
         ), {
             active: true,
+            fromDate:firebase.firestore.Timestamp.fromDate(new Date()),
             //TODO:add a connection
             connection: connection,
             institute: 'external',
@@ -711,6 +713,7 @@ export const addConnectionPatientToTherapist = async (id, idAdd, institutionNumb
     try {
         await setDoc(doc(collection_query_patients, idAdd, "therapists", id
         )/*collection(db, '/patients/001/therapists','Rahbt7jhvugjFSsnrcnBb5VMfUb2')*/, {
+            fromDate:firebase.firestore.Timestamp.fromDate(new Date()),
             active: true,
             connection: connection,
             institute: institutionNumber,

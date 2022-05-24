@@ -33,14 +33,16 @@ function Chat({otherUser, patient, isActive}) {
 
     const sendMessage = async e => {
         e.preventDefault()
-        if (newMessage.trim()) {
+        const message=newMessage
+        setNewMessage('')
+        if (message.trim()) {
             const docRef = await addDoc(collection(db, "messages"), {
-                text: newMessage,
+                text: message,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 senderAndReceiver: {sender: auth.currentUser.uid, receiver: otherUser.id},
                 patient: patient
             })
-            setNewMessage('')
+
         }
     }
 

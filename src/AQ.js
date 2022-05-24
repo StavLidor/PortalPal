@@ -7,7 +7,7 @@ import AQ10AdultForm from "./AQ10Adult";
 import AQ10ChildrenForm from "./AQ10Children";
 
 
-function AQ() {
+function AQ({ref}) {
     const [modelType, setModelType] = useState('adult');
     const [modelResult, setModelResult] = useState('בבדיקה...');
     const [formResult, setFormResult] = useState('טרם נקבעה');
@@ -100,7 +100,7 @@ function AQ() {
             .then(response => response.json())
             .then(data => {
                 if (data['prediction'][0] === 0) {
-                    setModelResultMessage('בהתאם לנתונים שיש לנו, ובשילוב עם תוצאות הטופס שלך, התוצאה היא: שלילית. לדעתנו, איו צורך ללכת כרגע לבדיקות נוספות.')
+                    setModelResultMessage('בהתאם לנתונים שיש לנו, ובשילוב עם תוצאות הטופס שלך, התוצאה היא: שלילית. לדעתנו, אין צורך ללכת כרגע לבדיקות נוספות.')
                     setModelResult('שלילית')
                 } else if (data['prediction'][0] === 1) {
                     setModelResultMessage('בהתאם לנתונים שיש לנו, ובשילוב עם תוצאות הטופס שלך, התוצאה היא: חיובית. מומלץ ללכת לבדיקות נוספות או למטפלים להמשך סיוע.')
@@ -111,6 +111,7 @@ function AQ() {
 
     return (
         <div>
+            <div ref={ref}>
             <Form className="col justify-content-center p-4" >
                 <Form.Group>
                     <Form.Label className="text-center" style={{fontWeight: "bold", width: "100%"}}>טופס לאבחון
@@ -331,8 +332,9 @@ function AQ() {
             </Form>
         </Container>
             <br/>
+            </div>
             <Row className="justify-content-center">
-                <Button className=" rounded-3" style={{width: "20%"}} size="md" variant="outline-primary"
+                <Button  className=" rounded-3" style={{width: "20%"}} size="md" variant="outline-primary"
                         onClick={submitHandler}>שלח טופס לבדיקה</Button>
             </Row>
             <br/>

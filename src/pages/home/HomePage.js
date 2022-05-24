@@ -1,7 +1,7 @@
 import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Image, NavDropdown} from 'react-bootstrap'
 import {Animated} from 'react-animated-css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useEffect, useState, useCallback, useContext} from "react";
+import React, {useEffect, useState, useCallback, useContext, useRef} from "react";
 import firebaseApp, {signOutCurrentUser} from '../../firebase'
 import {Link, Route, Routes} from "react-router-dom";
 import Patient from "../patient/Patient";
@@ -32,8 +32,19 @@ import ReportsPage from "../../ReportsPage";
 import CheckHasAPICode from "../../checkHasAPICode";
 import ContactUs from "../../ContactUs"
 import AboutUs from "../../AboutUs"
+import ReactToPrint, {useReactToPrint} from 'react-to-print'
+import {styled, TableCell} from "@mui/material";
+
 
 function HomePage({userDetails, type, institute}) {
+//     const PrintCell = styled(TableCell)`
+//     width: 100px;
+//     justify-content: flex-end;
+// `;
+    const componentRef = useRef()
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    })
 
     const [patientListData, setPatientListData] = useState([])
     const [activeTherapistListData, setActiveTherapistListData] = useState([])
@@ -193,7 +204,7 @@ function HomePage({userDetails, type, institute}) {
                                 {/*<Container>*/}
 
                                 <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}
-                                            currentPage={currentPage}/>
+                                            currentPage={currentPage} handlePrint={handlePrint}/>
                             </Col>
                             {/*</Container>*/}
                         </Row>
@@ -367,18 +378,19 @@ function HomePage({userDetails, type, institute}) {
                             </Row>
                         </Animated>
                     </Col>
-                    <Col md='8' className="border border-secondary rounded" id='display-window'>
+                    <Col   md='8' className="border border-secondary rounded" id='display-window'>
                         {/*<Chats/>*/}
+                        <div ref={componentRef}>
                         <Routes>
                             <Route path={'ContactUs'}
                                    element={
-                                       <ContactUs></ContactUs>
+                                       <ContactUs/>
                                    }/>
                         </Routes>
                         <Routes>
                             <Route path={'AboutUs'}
                                    element={
-                                       <AboutUs></AboutUs>
+                                       <AboutUs/>
                                    }/>
                         </Routes>
                         <Routes>
@@ -513,7 +525,7 @@ function HomePage({userDetails, type, institute}) {
                             }
                         )
                         }
-
+                    </div>
                     </Col>
                 </Row>
 

@@ -289,3 +289,50 @@ input::placeholder {
     color: #999;
 }
 strong{color: blue;}
+@media print
+{
+    button
+    {
+        display: none !important;
+    }
+    /*style{*/
+
+    /*}*/
+    /*.widget {*/
+    /*    direction: rtl !important;*/
+    /*}*/
+    html {
+        direction: rtl;
+    }
+    @page  {
+        size: A4 landscape;
+        margin: 10mm;
+
+        /*direction: rtl !important;*/
+
+
+        /*textAlign: 'right'*/
+        /*unicode-bidi: bidi-override*/
+
+    }
+
+
+    /*element_selector {*/
+    /*    direction: rtl;*/
+    /*}*/
+    /*.rtl {*/
+    /*    direction: rtl;*/
+    /*}*/
+    /*.element { direction: rtl; }*/
+    /*p.rtl {*/
+    /*    direction: rtl;*/
+    /*}*/
+    /*style*/
+    /*{*/
+    /*    !*unicode-bidi: bidi-override*!*/
+    /*    */
+    /*}*/
+    /*.main-content {*/
+    /*    direction: rtl;  !* Right to Left *!*/
+    /*}*/
+}

@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import {Telephone} from 'react-bootstrap-icons';
 
 
-function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
+function TabsBanner({type, currentPerson, setCurrentPage, currentPage,handlePrint}) {
 
     const [tabsComponent, setTabsComponent] = useState(<h3>משהו השתבש...</h3>)
     const [selectedTab, setSelectedTab] = useState(false)
@@ -52,6 +52,9 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage}) {
                             setCurrentPage('AboutUs')
                         }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
                             אודות
+                        </Button>
+                        <Button id='top-menu-button' /*as={Link} */variant='primary' /*to={'print'}*/ onClick={handlePrint} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
+                            הדפסה
                         </Button>
 
                         <Button id='top-menu-button' as={Link} to={'ContactUs'} onClick={() => {

@@ -38,10 +38,10 @@ function SessionsList({patientId, therapistId = null, type}) {
             messagesSubmit.date='הכנס תאריך מפגש'
         }
         if(!session.title.trim()){
-            messagesSubmit.title='הכנס כותרת פגישב'
+            messagesSubmit.title='הכנס כותרת פגישה'
         }
         if(!session.summary.trim()){
-            messagesSubmit.summary='הכנס תיאור פגישה'
+            messagesSubmit.summary='הכנס סיכום פגישה'
         }
         setMessages(messagesSubmit)
         console.log(messagesSubmit)

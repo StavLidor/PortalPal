@@ -34,6 +34,8 @@ import ContactUs from "../../ContactUs"
 import AboutUs from "../../AboutUs"
 import ReactToPrint, {useReactToPrint} from 'react-to-print'
 import {styled, TableCell} from "@mui/material";
+import TestsList from "../../TestsList";
+import ProgressTrendTabsBanner from "../../ProgressTrendTabsBanner";
 
 
 function HomePage({userDetails, type, institute}) {
@@ -339,8 +341,8 @@ function HomePage({userDetails, type, institute}) {
                                                                </Row>
 
                                                                <Row>
-                                                                   <Button as={Link} to='exercises' onClick={() => {
-                                                                       setCurrentPage('exercises')
+                                                                   <Button as={Link} to='ProgressTrend/*' onClick={() => {
+                                                                       setCurrentPage('ProgressTrend')
                                                                    }}
                                                                            className="list-group-item list-group-item-action"
                                                                            id='lower-side-menu-middle-button'>מגמת
@@ -510,6 +512,7 @@ function HomePage({userDetails, type, institute}) {
                         {type === 'therapist' && patientListData.map((item) => {
                                 let data = item.data()
                                 return (
+                                    <>
                                     <Routes>
                                         <Route path={data.id.toString() + '/sessions'}
                                                element={<SessionsList patientId={currentPerson}
@@ -520,7 +523,48 @@ function HomePage({userDetails, type, institute}) {
                                                element={<PatientExercises patient={currentPerson}
                                                                           therapist={userDetails.id}
                                                                           type={type}/>}/>
+                                        <Route path={data.id.toString() + '/ProgressTrend/*'}
+                                               element={
+                                            <ProgressTrendTabsBanner type={type} currentPerson={currentPerson}
+                                            setCurrentPage={setCurrentPage}/>
+                                            /*<TestsList patientId={currentPerson}
+                                                                      therapistId={userDetails.id}
+                                                                      type={type} category={'קשר בין אישי'}/>*/
+                                        }/>
+
+
                                     </Routes>
+                                    <Routes>
+                                        <Route path={data.id.toString() + '/ProgressTrend/interpersonalConnection'}
+                                               element={
+                                                   <TestsList patientId={currentPerson}
+                                                              therapistId={userDetails.id}
+                                                              type={type} category={'קשר בין אישי'}/>
+                                               }/>
+                                        <Route path={data.id.toString() + '/ProgressTrend/groupDiscourse'}
+                                               element={
+                                                   <TestsList patientId={currentPerson}
+                                                              therapistId={userDetails.id}
+                                                              type={type} category={'שיח בקבוצתי'}/>
+                                               }/>
+                                        <Route path={data.id.toString() + '/ProgressTrend/academic'}
+                                               element={
+                                                   <TestsList patientId={currentPerson}
+                                                              therapistId={userDetails.id}
+                                                              type={type} category={'אקדמאי'}/>
+                                               }/>
+                                        <Route path={data.id.toString() + '/ProgressTrend/KeepingEyeContact'}
+                                               element={
+                                                   <TestsList patientId={currentPerson}
+                                                              therapistId={userDetails.id}
+                                                              type={type} category={'קשר עין'}/>
+                                               }/>
+                                        <Route path={data.id.toString() + '/ProgressTrend/plots'}
+                                               element={
+                                                   <div>גרפים לפי כלל תחומים</div>
+                                               }/>
+                                    </Routes>
+                                    </>
                                 )
                             }
                         )

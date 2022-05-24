@@ -535,34 +535,45 @@ function HomePage({userDetails, type, institute}) {
 
                                     </Routes>
                                     <Routes>
+                                        <Route path={data.id.toString() + '/ProgressTrend/groupDiscourse'}
+                                               element={
+                                                   <TestsList patientId={currentPerson}
+                                                              therapistId={userDetails.id}
+                                                              type={type} category={'שיח קבוצתי'}/>
+                                               }/>
+                                        </Routes>
+                                        <Routes>
                                         <Route path={data.id.toString() + '/ProgressTrend/interpersonalConnection'}
                                                element={
                                                    <TestsList patientId={currentPerson}
                                                               therapistId={userDetails.id}
                                                               type={type} category={'קשר בין אישי'}/>
                                                }/>
-                                        <Route path={data.id.toString() + '/ProgressTrend/groupDiscourse'}
-                                               element={
-                                                   <TestsList patientId={currentPerson}
-                                                              therapistId={userDetails.id}
-                                                              type={type} category={'שיח בקבוצתי'}/>
-                                               }/>
+                                        </Routes>
+                                        <Routes>
+
                                         <Route path={data.id.toString() + '/ProgressTrend/academic'}
                                                element={
                                                    <TestsList patientId={currentPerson}
                                                               therapistId={userDetails.id}
-                                                              type={type} category={'אקדמאי'}/>
+                                                              type={type} category={'אקדמי'}/>
                                                }/>
+                                        </Routes>
+                                        <Routes>
                                         <Route path={data.id.toString() + '/ProgressTrend/KeepingEyeContact'}
                                                element={
                                                    <TestsList patientId={currentPerson}
                                                               therapistId={userDetails.id}
                                                               type={type} category={'קשר עין'}/>
                                                }/>
+                                        </Routes>
+                                        <Routes>
                                         <Route path={data.id.toString() + '/ProgressTrend/plots'}
                                                element={
-                                                   <div>גרפים לפי כלל תחומים</div>
-                                               }/>
+                                                   <TestsList patientId={currentPerson}
+                                                              therapistId={userDetails.id}
+                                                              type={type} category={null}/>
+                                               }/>/>
                                     </Routes>
                                     </>
                                 )

@@ -71,9 +71,10 @@ function SessionsList({patientId, therapistId = null, type}) {
                     // if (doc.sessionsData().client === id){
                     //
                     // }
-                    setSessionsData(sessions)
+
 
                 });
+                setSessionsData(sessions)
             })
 
         } else {

@@ -1,0 +1,1 @@
+// function TestsAllGraph({patientId, therapistId = null, type,category}) {}

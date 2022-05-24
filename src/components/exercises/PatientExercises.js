@@ -58,9 +58,10 @@ function PatientExercises({patient, therapist, type}) {
                     //
                     // }
                     console.log("ARR: ", arr)
-                    setExercisesData(arr)
+
 
                 });
+                setExercisesData(arr)
             })
         } else {
             return onSnapshot(

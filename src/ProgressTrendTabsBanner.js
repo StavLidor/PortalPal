@@ -76,7 +76,7 @@ function ProgressTrendTabsBanner({type, currentPerson, setCurrentPage}) {
                                 <Nav.Link as={Link} to='plots' onClick={() => {
                                     setCurrentPage('ProgressTrend/plots')
                                 }} active={isClick('plots')} className="list-group-item list-group-item-action">
-                                    גרפים של כלל התחומים
+                                    הכל
                                 </Nav.Link>
                             </Nav.Item>
                         </Nav>

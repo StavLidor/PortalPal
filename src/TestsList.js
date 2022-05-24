@@ -1,5 +1,6 @@
 import {Accordion, Button, ButtonGroup, Col, Container, Form, Modal, Row} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
+import {Bar, Scatter, Bubble,Line, Radar} from 'react-chartjs-2';
 import TableData from "./components/tableEdit/TableData";
 
 import firebase from "firebase/compat/app";
@@ -17,9 +18,31 @@ import {
     updateDoc,
     where
 } from "firebase/firestore";
+// import {max} from "moment";
 
-function TestsList({patientId, therapistId = null, type,category}) {
+function TestsList({patientId, therapistId = null, type,category = null}) {
     const [testsList, setTestsList] = useState([])
+    const [dates, setDates] = useState([])
+    const [scores, setScores] = useState((()=>{
+        if(category)
+            return []
+        return {['קשר בין אישי']:[],['שיח קבוצתי']:[],['שמירת קשר עין']:[],['אקדמי']:[]}
+    })())
+    // const data2 = {
+    //     labels: dates,
+    //     datasets: [
+    //         {
+    //             label: 'ציון',
+    //             data: scores,
+    //             backgroundColor: 'rgb(54, 162, 235)',
+    //         },
+    //         // {
+    //         //     label: 'כשלונות',
+    //         //     data: failures,
+    //         //     backgroundColor: 'rgb(255, 99, 132)',
+    //         // },
+    //     ],
+    // }
     useEffect(async () => {
         console.log('useEffect')
         let q
@@ -28,23 +51,39 @@ function TestsList({patientId, therapistId = null, type,category}) {
                 return therapistId
             return auth.currentUser.uid
         })()
-        q = query(collection(db, "patients/" + patientId + "/therapists/" + therapistIDForSession + "/tests"),
-            where('category','==',category),orderBy("executionDate", "desc"))
+        if(category){
+            q = query(collection(db, "patients/" + patientId + "/therapists/" + therapistIDForSession + "/tests"),
+                /*where('status','==','done'),*/
+                where('category','==',category),orderBy("executionDate", "desc"))
+        }
+        else{
+            q = query(collection(db, "patients/" + patientId + "/therapists/" + therapistIDForSession + "/tests"),
+                where('status','==','done')/*,
+                orderBy("category", "desc")*/,orderBy("executionDate", "asc"))
+        }
+
         console.log("q: ", q)
         if (type === 'parent') {
            // console.log('allDetailsMeetings222')
 
             const tests = []
+            let datesArr=[]
+            let scoresArr=[]
             getDocs(q).then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     tests.push({...doc.data(), id: doc.id})
+                    datesArr.push(new Date(doc.data().executionDate.seconds * 1000).toLocaleDateString())
+                    scoresArr.push(doc.data().score)
                     console.log('id', doc.id)
                     // if (doc.sessionsData().client === id){
                     //
                     // }
-                    setTestsList(tests)
+
 
                 });
+                setTestsList(tests)
+                setDates(datesArr.reverse())
+                setScores(scoresArr.reverse())
             })
 
         } else {
@@ -52,14 +91,39 @@ function TestsList({patientId, therapistId = null, type,category}) {
                 q,
                 (querySnapshot) => {
                     let tests = []
-                    querySnapshot.forEach((doc) => (
+                    let datesArr=[]
+                    let scoresArr=[]
+                    let scoresDic={['קשר בין אישי']:[],['שיח קבוצתי']:[],['שמירת קשר עין']:[],['אקדמי']:[]}
+                    querySnapshot.forEach((doc) => {
+                            tests.push({...doc.data(), id: doc.id})
+                            if(category){
+                                if(doc.data().status ==='done'){
+                                    datesArr.push(new Date(doc.data().executionDate.seconds * 1000).toLocaleDateString())
+                                    scoresArr.push(doc.data().score)
+                                }
+
+                            }
+                            else{
+                                scoresDic[doc.data().category].push(doc.data().score)
+                            }
+
+                    }
+
                         // console.log(doc)
 
-                        tests.push({...doc.data(), id: doc.id})
 
-                    ))
+
+                    )
+                    setDates(datesArr.reverse())
                     console.log("tests: ", tests)
-                    setTestsList(tests)
+                    if(category){
+                        setTestsList(tests)
+                        setScores(scoresArr.reverse())
+                    }
+                    else{
+                        setScores(scoresDic)
+                    }
+
                     //console.log("sessionsData: ", sessionsData)
                 },
                 (error) => {
@@ -144,6 +208,7 @@ function TestsList({patientId, therapistId = null, type,category}) {
         return true
     }
     return (
+        (category)?(
         <div>
             <Row className='p-2'>
                 <Col>
@@ -154,7 +219,7 @@ function TestsList({patientId, therapistId = null, type,category}) {
                 </Col>
             </Row>
             {/*// sessionsData.map((s)=>(*/}
-            <Accordion>
+            <Accordion alwaysOpen={true}>
                 {
                     testsList.map((t, i) => (
                             <Accordion.Item eventKey={t.id}>
@@ -218,11 +283,50 @@ function TestsList({patientId, therapistId = null, type,category}) {
                                     </Col>
                                 </Accordion.Body>
                             </Accordion.Item>
+
                         )
                     )
                 }
             </Accordion>
-        </div>
+            <Bar type="bar" data={ {
+                labels: dates,
+                datasets: [
+                    {
+                        label: 'ציון',
+                        data: scores,
+                        backgroundColor: 'rgb(54, 162, 235)',
+                    },
+                ],
+            }}  />
+        </div>):(
+            // ['קשר בין אישי']:[],['שיח קבוצתי']:[],['שמירת קשר עין']:[],['אקדמי']:[]
+            <Bar type="bar" data={ {
+                labels:[...Array(Math.max(scores['אקדמי'].length,scores['שמירת קשר עין'].length,
+                    scores['שיח קבוצתי'].length,scores['קשר בין אישי'].length)).keys()],
+                datasets: [
+                    {
+                        label: 'אקדמי',
+                        data: scores['אקדמי'],
+                        backgroundColor: 'rgb(54, 162, 235)',
+                    },
+                    {
+                        label: 'שמירת קשר עין',
+                        data: scores['שמירת קשר עין'],
+                        backgroundColor: 'rgb(235,54,138)',
+                    },
+                    {
+                        label: 'שיח קבוצתי',
+                        data: scores['שיח קבוצתי'],
+                        backgroundColor: 'rgb(223,235,54)',
+                    },
+                    {
+                        label: 'קשר בין אישי',
+                        data: scores['קשר בין אישי'],
+                        backgroundColor: 'rgb(54,229,235)',
+                    },
+                ],
+            }}  />
+        )
     )
 
 }
@@ -241,7 +345,16 @@ function AddTestDialog({category,handleOnSubmit}) {
         setMessages({description: '',
             executionDate: '',
             difficulty:'',
-            score:'',summary:''})}
+            score:'',summary:''})
+        setNewTest({
+
+            description: '',
+            executionDate: '',
+            status: 'not done',
+            difficulty:'',
+            score:'',summary:''
+        })
+    }
     const handleShow = () => setShow(true);
     const [newTest, setNewTest] = useState({
 
@@ -259,9 +372,7 @@ function AddTestDialog({category,handleOnSubmit}) {
             <Button  variant="outline-dark" onClick={handleShow}><Plus className= "m-1"/>
                 הוסף תרגיל
             </Button>
-            <Modal show={show} onHide={() => {
-                setShow(false)
-            }}>
+            <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
                     <Modal.Title>{"הוספת מבחן "+category} </Modal.Title>
                 </Modal.Header>
@@ -301,7 +412,7 @@ function AddTestDialog({category,handleOnSubmit}) {
                             <Form.Group controlId="difficulty">
                                 <Form.Label>קושי</Form.Label>
                                 <Form.Control
-                                    type="text"
+                                    type="number"
                                     onChange={e => setNewTest({...newTest, difficulty: e.target.value})}
 
                                 />
@@ -362,7 +473,7 @@ function AddTestDialog({category,handleOnSubmit}) {
                                 <Form.Group controlId="score">
                                     <Form.Label>ניקוד</Form.Label>
                                     <Form.Control
-                                        type="text"
+                                        type="number"
                                         onChange={e => setNewTest({...newTest, score: e.target.value})}
 
                                     />
@@ -439,6 +550,7 @@ function EditTestDialog({handleUpdate, testData,category}) {
             executionDate: '',
             difficulty:'',
             score:'',summary:''})}
+
     const handleShow = () => setShow(true);
 
     return (

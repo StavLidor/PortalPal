@@ -30,7 +30,7 @@ footer {
 #middle-floating-box{
     box-shadow: 6px 4px 8px 0px rgba(0, 0, 0, 0.34);
     /*background-color: #c7c7c7;*/
-    background-color: #fec89a;
+    background-color: #68A7AD;
     /*color: #ffffff;*/
     /*border-radius: 20px;*/
 
@@ -58,7 +58,7 @@ footer {
 #right-floating-box{
     box-shadow: 6px 4px 8px 0px rgba(0, 0, 0, 0.34);
     /*background-color: #d9d9d9;*/
-    background-color: #f9dcc4;
+    background-color: #99C4C8;
     /*border-radius: 20px;*/
     border-radius: 9px;
 }
@@ -67,7 +67,7 @@ footer {
     border-radius: 40px 9px 0px 0px;
     max-width: 90%;
     margin: 5% 5% 0% 5%;
-    background-color: #f8efed;
+    background-color: #e7ecef;
     /*color: black;*/
 }
 #lower-side-menu-middle-button{
@@ -90,7 +90,7 @@ footer {
 }
 
 #lower-side-menu-middle-button::before{
-    background:  #e7ecef;
+    background:  #E8F9FD;
     z-index: -1;
     border-radius: 9px;
 }
@@ -149,7 +149,7 @@ footer {
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
     inset: 0 0 0 0;
-    background:  #fec89a;
+    background:  #68A7AD;
     z-index: -1;
     border-radius: 9px;
     /*transition: transform .3s ease;*/
@@ -213,7 +213,7 @@ footer {
 #top-banner{
     /*background-color:white;*/
     border-radius: 10px;
-    background: linear-gradient(to right, #f9dcc4, rgba(255, 122, 89,0));
+    background: linear-gradient(to right, #99C4C8, rgba(255, 122, 89,0));
     /*opacity: 1;*/
 }
 
@@ -225,7 +225,7 @@ footer {
     height: auto;
 }
 #aq-button{
-    background:  #fec89a;
+    background:  #99C4C8;
     border-width: 2px;
     width: auto;
     height: auto;
@@ -235,7 +235,7 @@ footer {
     transform: scaleX(1);
     /*transform-origin: bottom left;*/
     color: black;
-    background: #fca561;
+    background: #99C4C8;
     border-width: 2px;
 }
 #account-button{
@@ -246,7 +246,7 @@ footer {
     height: auto;
 }
 #account-button:hover{
-    background: #fec89a;
+    background: #99C4C8;
     border-width: 2px;
     color: black;
     width: auto;

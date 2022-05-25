@@ -7,6 +7,7 @@ import {collection, getDocs, onSnapshot, query, where} from "firebase/firestore"
 import {auth, db} from "./firebase";
 import firebase from "firebase/compat/app";
 import styles from "./pages/home/HomePage.CSS"
+import {isClick} from "./useFunction";
 
 function TherapistsList({
                             details,
@@ -21,6 +22,7 @@ function TherapistsList({
     console.log("in therapist!!!!!!!!")
     const [activeTherapistsList, setActiveTherapistsList] = useState([])
     const [notActiveTherapistsList, setNotActiveTherapistList] = useState([])
+    const [current, setCurrent] = useState({id: "", index: ""})
 
     console.log('therapistLIstt')
     //console.log(talkersIds)
@@ -137,30 +139,43 @@ function TherapistsList({
                 }
                 return (
                     <div>
-                        <Link to={path}
-                              className="list-group-item list-group-item-action" style={{fontSize: 14}}
-                              onClick={(e) => {
-                                  // e.preventDefault()
-                                  // setCurrentPerson(data.id.toString())
+                        <Button id='therapistList-button' as={Link} to={path} active={
+                            /*isClick(path)*/
+                            current.id === data.id &&!isClick('parent')
+                        }
+                                style={{backgroundColor:'transparent',border:'transparent'}}
+                                 className="list-group-item list-group-item-action mb-1" onClick={(e) => {
+                            // e.preventDefault()
+                            setCurrentTherapist({id: data.id, index: index.toString()})
+                            setCurrent({id: data.id, index: index.toString()})
 
-                                  setCurrentTherapist({id: data.id, index: index.toString()})
 
-                              }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}
-                        </Link>
+                        }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}</Button>
+                        {/*<Link to={path}*/}
+                        {/*      className="list-group-item list-group-item-action" style={{fontSize: 14}}*/}
+                        {/*      onClick={(e) => {*/}
+                        {/*          // e.preventDefault()*/}
+                        {/*          // setCurrentPerson(data.id.toString())*/}
+
+                        {/*          setCurrentTherapist({id: data.id, index: index.toString()})*/}
+
+                        {/*      }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}*/}
+                        {/*</Link>*/}
                     </div>
                 )
             }))
     }
     return (
         <div>
-            <Form.Label style={{fontWeight: 'bold'}}>רשימת מטפלים</Form.Label>
+            {type === 'parent' &&<Form.Label style={{fontWeight: 'bold'}}>רשימת מטפלים</Form.Label>}
+            {type === 'therapist' &&<Form.Label style={{fontWeight: 'bold'}}>צאט עם מטפלים אחרים</Form.Label>}
             <div>
-            {type === 'parent' && <Form.Label >מטפלים פעילים:</Form.Label>}
+            {type === 'parent' && <Form.Label  style={{fontWeight: 'bold'}}>מטפלים פעילים:</Form.Label>}
             </div>
             <div>
             {activeTherapistsList.length > 0 && showList(activeTherapistsList, 'active')}
             </div>
-            {type === 'parent' && <Form.Label >מטפלים לא פעילים:</Form.Label>}
+            {type === 'parent' && <Form.Label style={{fontWeight: 'bold'}} >מטפלים לא פעילים:</Form.Label>}
             {notActiveTherapistsList.length > 0 && showList(notActiveTherapistsList, 'notActive')}
         </div>
 

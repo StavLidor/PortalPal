@@ -7,10 +7,12 @@ import {collection, getDocs, onSnapshot, query, where} from "firebase/firestore"
 import {auth, db} from "./firebase";
 import firebase from "firebase/compat/app";
 import styles from "./pages/home/HomePage.CSS"
+import {isClick} from "./useFunction";
 
 function ParentList({details, setCurrentParent, currentPage, setParentsListData, currentPerson}) {
     // console.log("in therapist!!!!!!!!")
     const [parents, setParents] = useState([])
+    const [current, setCurrent] = useState({id: "", index: ""})
 
     // console.log('therapistLIstt')
     //console.log(talkersIds)
@@ -56,20 +58,24 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
 
     return (
         <div>
-            <Form.Label style={{fontWeight: 'bold'}}>הורי המטופל</Form.Label>
+            <Form.Label style={{fontWeight: 'bold'}}>צאט עם הורי מטופל</Form.Label>
                 {parents.map((item, index) => {
                         let data = item
 
                         return (
                             // <div>{data.firstName + " " + data.lastName+', '+data.connection}</div>
+
                             <Button as={Link} to={'parent' + '/' + index.toString() + '/' + currentPage.toString()}
-                                  className="list-group-item list-group-item-action"
-                                    id='therapist-button'
+                                    active={isClick('parent') && current.id === data.id}
+                                    className="list-group-item list-group-item-action mb-1"
+                                    style={{backgroundColor:'transparent',border:'transparent'}}
+                                    id='therapistList-button'
                                   onClick={(e) => {
                                       // e.preventDefault()
                                       // setCurrentPerson(data.id.toString())
 
                                       setCurrentParent({id: data.id, index: index.toString()})
+                                      setCurrent({id: data.id, index: index.toString()})
 
                                   }}>{data.firstName + " " + data.lastName}</Button>
                         )

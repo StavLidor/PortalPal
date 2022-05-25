@@ -158,7 +158,7 @@ function HomePage({userDetails, type, institute}) {
                                                    type={type}/>}/>
 
                         <Route
-                            path={data.id.toString() + '/' + index.toString() + '/exercises'}
+                            path={data.id.toString() + '/' + isActive.toString() + '/'  + index.toString() + '/exercises'}
                             // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
                             element={<PatientExercises patient={currentPerson}
                                                        therapist={currentTherapist.id}

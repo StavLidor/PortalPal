@@ -122,38 +122,46 @@ function TherapistsList({
     const showList = (list, isActive) => {
         let path = ''
         let showInstitute = ''
-        return (list.map((item, index) => {
-            let data = item
-            if (type === 'parent') {
-                path = isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
-            } else {
-                path = index.toString() + '/' + currentPage.toString();
-                showInstitute = ', ' + institute
-            }
-            return (
-                <div>
 
-                    {type === 'parent' && isActive === 'active' && <Form.Label >מטפלים פעילים:</Form.Label>}
-                    {type === 'parent' && isActive === 'notActive' && <Form.Label>מטפלים לא פעילים:</Form.Label>}
-                    <Button as={Link} to={path} id='therapist-button'
-                          className="list-group-item list-group-item-action mb-2"
-                          onClick={(e) => {
-                              // e.preventDefault()
-                              // setCurrentPerson(data.id.toString())
+        return (
 
-                              setCurrentTherapist({id: data.id, index: index.toString()})
 
-                          }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}
-                    </Button>
-                </div>
-            )
-        }))
+
+            list.map((item, index) => {
+                let data = item
+                if (type === 'parent') {
+                    path = isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
+                } else {
+                    path = index.toString() + '/' + currentPage.toString();
+                    showInstitute = ', ' + institute
+                }
+                return (
+                    <div>
+                        <Link to={path}
+                              className="list-group-item list-group-item-action" style={{fontSize: 14}}
+                              onClick={(e) => {
+                                  // e.preventDefault()
+                                  // setCurrentPerson(data.id.toString())
+
+                                  setCurrentTherapist({id: data.id, index: index.toString()})
+
+                              }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}
+                        </Link>
+                    </div>
+                )
+            }))
     }
     return (
         <div>
             <Form.Label style={{fontWeight: 'bold'}}>רשימת מטפלים</Form.Label>
-                {activeTherapistsList.length > 0 && showList(activeTherapistsList, 'active')}
-                {notActiveTherapistsList.length > 0 && showList(notActiveTherapistsList, 'notActive')}
+            <div>
+            {type === 'parent' && <Form.Label >מטפלים פעילים:</Form.Label>}
+            </div>
+            <div>
+            {activeTherapistsList.length > 0 && showList(activeTherapistsList, 'active')}
+            </div>
+            {type === 'parent' && <Form.Label >מטפלים לא פעילים:</Form.Label>}
+            {notActiveTherapistsList.length > 0 && showList(notActiveTherapistsList, 'notActive')}
         </div>
 
     )

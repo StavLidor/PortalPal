@@ -257,7 +257,13 @@ function HomePage({userDetails, type, institute}) {
 
                             </Row>
 
-                            <Row className="mb-4 " style={{minHeight: 300}} id='middle-floating-box'>
+                            <Row className="mb-4 " style={(()=>{
+                                if(type === 'parent'){
+                                    return {minHeight: 300}
+                                }
+                                return {minHeight: 100}
+
+                            })()} id='middle-floating-box'>
 
                                 {(type === 'parent') &&
                                 patientListData.map((item) => {
@@ -276,6 +282,87 @@ function HomePage({userDetails, type, institute}) {
                                             </Routes>)
                                     }
                                 )}
+
+                                {(type === 'therapist') &&
+                                    patientListData.map((item) => {
+                                            let data = item.data()
+                                            return (
+                                                <Routes>
+                                                    {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
+                                                    <Route path={data.id.toString() + '/*'}
+                                                           element={
+                                                               <Col>
+                                                                   <Row>
+                                                                       <Button as={Link} to='sessions' onClick={() => {
+                                                                           setCurrentPage('sessions')
+                                                                       }} className="list-group-item list-group-item-action"
+                                                                               id='lower-side-menu-top-button'>סיכומי
+                                                                           טיפולים</Button>
+                                                                   </Row>
+
+                                                                   <Row>
+                                                                       <Button as={Link} to='exercises' onClick={() => {
+                                                                           setCurrentPage('exercises')
+                                                                       }}
+                                                                               className="list-group-item list-group-item-action"
+                                                                               id='lower-side-menu-middle-button'>תרגילים</Button>
+                                                                   </Row>
+
+                                                                   <Row>
+                                                                       <Button as={Link} to='ProgressTrend/*' onClick={() => {
+                                                                           setCurrentPage('ProgressTrend')
+                                                                       }}
+                                                                               className="list-group-item list-group-item-action"
+                                                                               id='lower-side-menu-middle-button'>מגמת
+                                                                           התקדמות</Button>
+                                                                   </Row>
+
+                                                                   <Row>
+                                                                       <div id='lower-side-menu-bottom-button'>
+                                                                           <NavDropdown drop='start' title="אפליקציות צד שלישי"
+                                                                                        id='lower-side-menu-bottom-button'>
+                                                                               <NavDropdown.Item as={Link} to={'AUTIDO'}
+                                                                                                 onClick={() => {
+                                                                                                     setCurrentPage('AUTIDO')
+                                                                                                 }}>AutiDo</NavDropdown.Item>
+                                                                               <NavDropdown.Item as={Link} to={'KAZABUBU'}
+                                                                                                 onClick={() => {
+                                                                                                     setCurrentPage('KAZABUBU')
+                                                                                                 }}>
+                                                                                   KAZABUBU
+                                                                               </NavDropdown.Item>
+                                                                           </NavDropdown>
+                                                                       </div>
+                                                                       {/*<Link to='exercises' onClick={() => {*/}
+                                                                       {/*    setCurrentPage('exercises')*/}
+                                                                       {/*}}*/}
+                                                                       {/*      className="list-group-item list-group-item-action"*/}
+                                                                       {/*      id='lower-side-menu-bottom-button'>אפליקציות צד שלישי</Link>*/}
+                                                                   </Row>
+                                                               </Col>
+                                                           }/>
+                                                </Routes>
+                                            )
+                                        }
+                                    )}
+
+
+                            </Row>
+
+                            <Row style={(()=>{
+                                if(type === 'parent'){
+                                    return  {minHeight: 100}
+                                }
+                                return {minHeight: 300}
+
+                            })()} id='middle-floating-box'>
+                                {type === 'parent' && currentPerson !== '' && <Link to={currentPerson + '/code'}>
+                                    <Button onClick={() => setShowDialogCode(true)} className="text-center"
+                                            style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
+                                            variant="outline-primary">קבל קוד אישי</Button>
+                                </Link>}
+
+
                                 {(type === 'therapist') &&
                                 patientListData.map((item) => {
                                         let data = item.data()
@@ -302,81 +389,8 @@ function HomePage({userDetails, type, institute}) {
                                                 </Routes>
                                             </>)
                                     }
-                                )}
-
-
-                            </Row>
-
-                            <Row style={{minHeight: 100}} id='middle-floating-box'>
-                                {type === 'parent' && currentPerson !== '' && <Link to={currentPerson + '/code'}>
-                                    <Button onClick={() => setShowDialogCode(true)} className="text-center"
-                                            style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
-                                            variant="outline-primary">קבל קוד אישי</Button>
-                                </Link>}
-
-
-                                {(type === 'therapist') &&
-                                patientListData.map((item) => {
-                                        let data = item.data()
-                                        return (
-                                            <Routes>
-                                                {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
-                                                <Route path={data.id.toString() + '/*'}
-                                                       element={
-                                                           <Col>
-                                                               <Row>
-                                                                   <Button as={Link} to='sessions' onClick={() => {
-                                                                       setCurrentPage('sessions')
-                                                                   }} className="list-group-item list-group-item-action"
-                                                                           id='lower-side-menu-top-button'>סיכומי
-                                                                       טיפולים</Button>
-                                                               </Row>
-
-                                                               <Row>
-                                                                   <Button as={Link} to='exercises' onClick={() => {
-                                                                       setCurrentPage('exercises')
-                                                                   }}
-                                                                           className="list-group-item list-group-item-action"
-                                                                           id='lower-side-menu-middle-button'>תרגילים</Button>
-                                                               </Row>
-
-                                                               <Row>
-                                                                   <Button as={Link} to='ProgressTrend/*' onClick={() => {
-                                                                       setCurrentPage('ProgressTrend')
-                                                                   }}
-                                                                           className="list-group-item list-group-item-action"
-                                                                           id='lower-side-menu-middle-button'>מגמת
-                                                                       התקדמות</Button>
-                                                               </Row>
-
-                                                               <Row>
-                                                                   <div id='lower-side-menu-bottom-button'>
-                                                                       <NavDropdown drop='start' title="אפליקציות צד שלישי"
-                                                                                    id='lower-side-menu-bottom-button'>
-                                                                           <NavDropdown.Item as={Link} to={'AUTIDO'}
-                                                                                             onClick={() => {
-                                                                                                 setCurrentPage('AUTIDO')
-                                                                                             }}>AutiDo</NavDropdown.Item>
-                                                                           <NavDropdown.Item as={Link} to={'KAZABUBU'}
-                                                                                             onClick={() => {
-                                                                                                 setCurrentPage('KAZABUBU')
-                                                                                             }}>
-                                                                               KAZABUBU
-                                                                           </NavDropdown.Item>
-                                                                       </NavDropdown>
-                                                                   </div>
-                                                                   {/*<Link to='exercises' onClick={() => {*/}
-                                                                   {/*    setCurrentPage('exercises')*/}
-                                                                   {/*}}*/}
-                                                                   {/*      className="list-group-item list-group-item-action"*/}
-                                                                   {/*      id='lower-side-menu-bottom-button'>אפליקציות צד שלישי</Link>*/}
-                                                               </Row>
-                                                           </Col>
-                                                       }/>
-                                            </Routes>
-                                        )
-                                    }
-                                )}
+                                )
+                                }
                             </Row>
                         </Animated>
                     </Col>

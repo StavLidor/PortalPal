@@ -150,7 +150,9 @@ const ReadOnlyRow = ({
                                 בטל
                             </Button>
                             <Button variant="danger" onClick={
-                                () => handleDeleteClick(contact.id)
+                                () =>{ handleDeleteClick(contact.id)
+                                setShowDeleteDialog(false)}
+
                             }>
                                 כן, מחק
                             </Button>

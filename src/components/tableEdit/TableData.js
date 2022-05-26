@@ -3,12 +3,13 @@ import "react-datepicker/dist/react-datepicker.css"
 import ReadOnlyRow from "./ReadOnlyRow"
 import EditableRow from "./EditableRow"
 import "./tableEdit.css"
-import CsvFile from "./CsvFile"
+import FromCsvFile from "./FromCsvFile"
 import {updatesPatients} from "../../firebase";
 import {Button, Form, Row, Col, Container, ButtonGroup, Table, Grid, Modal} from 'react-bootstrap'
 import firebase from "firebase/compat/app";
 import AddThroughCsvFile from "./AddThroughCsvFile";
 import { Plus} from 'react-bootstrap-icons';
+import ToCsvFile from "./ToCsvFile";
 
 
 export default function TableData({
@@ -422,6 +423,7 @@ export default function TableData({
                 }}>{"הוסף או הסר מקבץ"}</Button>}
             </tr>
             {addOrRemoveBatch && <AddThroughCsvFile addBatch={addOrRemoveBatch} setAddBatch={setAddOrRemoveBatch} add={addNews} remove={remove}/>}
+            <ToCsvFile col={columnsInfoView} list={contacts}/>
 
 
         </div>

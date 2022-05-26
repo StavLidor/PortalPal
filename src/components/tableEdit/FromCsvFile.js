@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Papa from 'papaparse'
 
-export default function CsvFile({addNews,remove}){
+export default function FromCsvFile({addNews,remove}){
     const [file, editFile] = useState(null)
     const [type, editType] = useState("add")
     const submit = (event) => {

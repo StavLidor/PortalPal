@@ -311,10 +311,7 @@ export default function TableData({
                 </form>
             </div>
             }
-            {<Button className="m-2 p-2" style={{fontWeight: "bold"}} variant="outline-primary" onClick={() => {
-                console.log("show dialog")
-                setAddSomeone(true)
-            }}><Plus style={{fontSize: 20}}/> {"הוסף " + type + " חדש"}</Button>}
+
             {addSomeone && <Modal show={addSomeone} onHide={()=>setAddSomeone(false)}>
                 <Modal.Header>
                     <Modal.Title style={{fontWeight:"bold", fontSize:35}}>{"הוספת " + type + " חדש"}</Modal.Title>
@@ -415,15 +412,27 @@ export default function TableData({
                     </Button>
                 </Modal.Footer>
             </Modal>}
-            <tr>
+            <Row>
+            <Col md={1} className="gap-1" >
+                <Row>
+                <Button className="m-2 p-2" style={{fontWeight: "bold",width:'100%'}} variant="outline-primary" onClick={() => {
+                    console.log("show dialog")
+                    setAddSomeone(true)
+                }}><Plus style={{fontSize: 20}}/> {"הוסף " + type + " חדש"}</Button>
+                </Row>
 
-                {<Button className="m-2 p-2" style={{fontWeight: "bold"}} variant="outline-primary" onClick={() => {
+                 <Row><Button className="m-2 p-2" style={{fontWeight: "bold",width:'100%'}} variant="outline-primary" onClick={() => {
                     console.log("show dialog")
                     setAddOrRemoveBatch(true)
-                }}>{"הוסף או הסר מקבץ"}</Button>}
-            </tr>
+                }}>{"הוסף או הסר מקבץ"}</Button></Row>
+
+
+                <Row ><ToCsvFile col={columnsInfoView} list={contacts} style={{width:'100%'}} /></Row>
+            </Col></Row>
             {addOrRemoveBatch && <AddThroughCsvFile addBatch={addOrRemoveBatch} setAddBatch={setAddOrRemoveBatch} add={addNews} remove={remove}/>}
-            <ToCsvFile col={columnsInfoView} list={contacts}/>
+
+
+
 
 
         </div>

@@ -132,16 +132,16 @@ function TherapistsList({
             list.map((item, index) => {
                 let data = item
                 if (type === 'parent') {
-                    path = isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
+                    path ='therapist'+ '/'+ isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
                 } else {
-                    path = index.toString() + '/' + currentPage.toString();
+                    path = 'therapist'+ '/'+index.toString() + '/' + currentPage.toString();
                     showInstitute = ', ' + institute
                 }
                 return (
                     <div>
                         <Button id='therapistList-button' as={Link} to={path} active={
                             /*isClick(path)*/
-                            current.id === data.id &&!isClick('parent')
+                            current.id === data.id &&isClick('therapist')
                         }
                                 style={{backgroundColor:'transparent',border:'transparent'}}
                                  className="list-group-item list-group-item-action mb-1" onClick={(e) => {

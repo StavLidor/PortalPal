@@ -135,7 +135,7 @@ function HomePage({userDetails, type, institute}) {
             return (
                 <div>
                     <Routes>
-                        <Route path={data.id.toString() + '/' + isActive.toString() + '/' + index.toString() + '/*'}
+                        <Route path={data.id.toString() + '/' + 'therapist'+ '/' + isActive.toString() + '/' + index.toString() + '/*'}
                                element={<TherapistTabsBanner therapistInstitute={therapist.institute}
                                                              therapistId={therapist.id}
                                                              type={type}
@@ -145,20 +145,20 @@ function HomePage({userDetails, type, institute}) {
                     </Routes>
                     <Routes>
                         <Route
-                            path={data.id.toString() + '/' + isActive.toString() + '/' + index.toString() + '/communication'}
+                            path={data.id.toString() + '/' + 'therapist'+ '/'+index.toString()+ '/' +isActive.toString() + '/' + index.toString() + '/communication'}
                             element={<Chat
                                 otherUser={therapist} patient={data.id} isActive={isActive}/>}/>
                     </Routes>
                     <Routes>
                         <Route
-                            path={data.id.toString() + '/' + isActive.toString() + '/' + index.toString() + '/sessions'}
+                            path={data.id.toString() + '/' + 'therapist'+ '/' + isActive.toString() + '/' + index.toString() + '/sessions'}
                             // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
                             element={<SessionsList patientId={currentPerson}
                                                    therapistId={currentTherapist.id}
                                                    type={type}/>}/>
 
                         <Route
-                            path={data.id.toString() + '/' + isActive.toString() + '/'  + index.toString() + '/exercises'}
+                            path={data.id.toString() + '/' + 'therapist'+ '/' + isActive.toString() + '/'  + index.toString() + '/exercises'}
                             // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
                             element={<PatientExercises patient={currentPerson}
                                                        therapist={currentTherapist.id}
@@ -206,7 +206,8 @@ function HomePage({userDetails, type, institute}) {
                                 {/*<Container>*/}
 
                                 <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}
-                                            currentPage={currentPage} handlePrint={handlePrint}/>
+                                            currentPage={currentPage} handlePrint={handlePrint}
+                                setCurrentPerson={setCurrentPerson}/>
                             </Col>
                             {/*</Container>*/}
                         </Row>
@@ -509,7 +510,7 @@ function HomePage({userDetails, type, institute}) {
                                             return (
                                                 <div>
                                                     <Routes>
-                                                        <Route path={data.id.toString() + '/' + index.toString() + '/*'}
+                                                        <Route path={data.id.toString() +'/'+'therapist' + '/' + index.toString() + '/*'}
                                                                element={<Chat otherUser={therapist} patient={data.id}
                                                                               isActive={"active"}/>}
                                                         />

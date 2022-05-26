@@ -1,10 +1,14 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CSVLink, CSVDownload} from 'react-csv'
 import {convertToNormalDate} from "../../useFunction";
 
 
 
 export default function ToCsvFile({list ,col}){
+    const [data,setData]= useState([])
+    useEffect(() => {
+        toCsv()
+    },[list])
     function toCsv(){
         const dataToCsv=[]
         const firstLIne=[]
@@ -18,7 +22,7 @@ export default function ToCsvFile({list ,col}){
         list.map(i=>{
             const line =[]
             col.map(c=>{
-                console.log(c)
+                //console.log(c)
                 if(c.view === true){
                     if(c.type === 'date'){
                         line.push(convertToNormalDate(i[c.name]))
@@ -34,10 +38,10 @@ export default function ToCsvFile({list ,col}){
             )
             dataToCsv.push(line)
         })
-        return dataToCsv
+        setData(dataToCsv)
     }
     return(
-        <CSVLink data={toCsv()} >הורד</CSVLink>
+        <CSVLink data={data} >הורד טבלה כקובץ csv</CSVLink>
     )
 
 }

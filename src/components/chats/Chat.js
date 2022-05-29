@@ -4,6 +4,7 @@ import firebase from "firebase/compat/app"
 import {auth, db, getDocCurrentUser,} from "../../firebase";
 import {collection, query, where, addDoc, Timestamp, orderBy, limit, onSnapshot, getDocs} from "firebase/firestore";
 import Message from "./message";
+import Button from "react-bootstrap/Button";
 export default function Chat({userUid1=null,userUid2=null,patient}){
     const [messages,setMessages]=useState([])
     const [newMessage,setNewMessage]=useState('')
@@ -64,9 +65,9 @@ export default function Chat({userUid1=null,userUid2=null,patient}){
             <input type='text' value={newMessage} onChange={handleOnChange}
                    placeholder='הודעה'
             />
-            <button type="submit" disabled={!newMessage}>
+            <Button type="submit" disabled={!newMessage} variant='success'>
                 שלח
-            </button>
+            </Button>
 
         </form>
             </>

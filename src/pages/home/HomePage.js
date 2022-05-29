@@ -36,6 +36,7 @@ import ReactToPrint, {useReactToPrint} from 'react-to-print'
 import {styled, TableCell} from "@mui/material";
 import TestsList from "../../TestsList";
 import ProgressTrendTabsBanner from "../../ProgressTrendTabsBanner";
+import {isClick} from "../../useFunction";
 
 
 function HomePage({userDetails, type, institute}) {
@@ -135,30 +136,32 @@ function HomePage({userDetails, type, institute}) {
             return (
                 <div>
                     <Routes>
-                        <Route path={data.id.toString() + '/' + 'therapist'+ '/' + isActive.toString() + '/' + index.toString() + '/*'}
-                               element={<TherapistTabsBanner therapistInstitute={therapist.institute}
-                                                             therapistId={therapist.id}
-                                                             type={type}
-                                                             currentPerson={currentPerson}
-                                                             setCurrentPage={setCurrentPage}/>}
+                        <Route
+                            path={data.id.toString() + '/' + 'therapist' + '/' + isActive.toString() + '/' + index.toString() + '/*'}
+                            element={<TherapistTabsBanner therapistInstitute={therapist.institute}
+                                                          therapistId={therapist.id}
+                                                          type={type}
+                                                          currentPerson={currentPerson}
+                                                          setCurrentPage={setCurrentPage}
+                                                          currentPage={currentPage}/>}
                         />
                     </Routes>
                     <Routes>
                         <Route
-                            path={data.id.toString() + '/' + 'therapist'+ '/'+index.toString()+ '/' +isActive.toString() + '/' + index.toString() + '/communication'}
+                            path={data.id.toString() + '/' + 'therapist' + '/' + index.toString() + '/' + isActive.toString() + '/' + index.toString() + '/communication'}
                             element={<Chat
                                 otherUser={therapist} patient={data.id} isActive={isActive}/>}/>
                     </Routes>
                     <Routes>
                         <Route
-                            path={data.id.toString() + '/' + 'therapist'+ '/' + isActive.toString() + '/' + index.toString() + '/sessions'}
+                            path={data.id.toString() + '/' + 'therapist' + '/' + isActive.toString() + '/' + index.toString() + '/sessions'}
                             // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
                             element={<SessionsList patientId={currentPerson}
                                                    therapistId={currentTherapist.id}
                                                    type={type}/>}/>
 
                         <Route
-                            path={data.id.toString() + '/' + 'therapist'+ '/' + isActive.toString() + '/'  + index.toString() + '/exercises'}
+                            path={data.id.toString() + '/' + 'therapist' + '/' + isActive.toString() + '/' + index.toString() + '/exercises'}
                             // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
                             element={<PatientExercises patient={currentPerson}
                                                        therapist={currentTherapist.id}
@@ -201,14 +204,14 @@ function HomePage({userDetails, type, institute}) {
                                             onClick={onLogout}>התנתק</Button>
                                 </ButtonGroup>
                             </Col>
-                            <Col style={{width:'100%'}}/>
+                            <Col style={{width: '100%'}}/>
                             {/*<Col md='3' className="border align-self-center w-auto" id='floating-tabs-bar'>*/}
                             <Col md='3' className=" align-self-center w-auto">
                                 {/*<Container>*/}
 
                                 <TabsBanner type={type} currentPerson={currentPerson} setCurrentPage={setCurrentPage}
                                             currentPage={currentPage} handlePrint={handlePrint}
-                                setCurrentPerson={setCurrentPerson}/>
+                                            setCurrentPerson={setCurrentPerson}/>
                             </Col>
                             {/*</Container>*/}
                         </Row>
@@ -259,8 +262,8 @@ function HomePage({userDetails, type, institute}) {
 
                             </Row>
 
-                            <Row className="mb-4 " style={(()=>{
-                                if(type === 'parent'){
+                            <Row className="mb-4 " style={(() => {
+                                if (type === 'parent') {
                                     return {minHeight: 300}
                                 }
                                 return {minHeight: 100}
@@ -286,87 +289,88 @@ function HomePage({userDetails, type, institute}) {
                                 )}
 
                                 {(type === 'therapist') &&
-                                    patientListData.map((item) => {
-                                            let data = item.data()
-                                            return (
-                                                <Routes>
-                                                    {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
-                                                    <Route path={data.id.toString() + '/*'}
-                                                           element={
-                                                               <Col>
-                                                                   <Row>
-                                                                       <Button as={Link} to='sessions' active={currentPage === 'sessions'} onClick={() => {
-                                                                           setCurrentPage('sessions')
-                                                                       }} className="list-group-item list-group-item-action"
-                                                                               id='selected-patient-menu-top-button'>סיכומי
-                                                                           טיפולים</Button>
-                                                                   </Row>
+                                patientListData.map((item) => {
+                                        let data = item.data()
+                                        return (
+                                            <Routes>
+                                                {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
+                                                <Route path={data.id.toString() + '/*'}
+                                                       element={
+                                                           <Col>
+                                                               <Row>
+                                                                   <Button as={Link} to='sessions'
+                                                                           active={currentPage === 'sessions'}
+                                                                           onClick={() => {
+                                                                               setCurrentPage('sessions')
+                                                                           }}
+                                                                           className="list-group-item list-group-item-action"
+                                                                           id='selected-patient-menu-top-button'>סיכומי
+                                                                       טיפולים</Button>
+                                                               </Row>
 
-                                                                   <Row>
-                                                                       <Button as={Link} to='exercises' active={currentPage === 'exercises'} onClick={() => {
-                                                                           setCurrentPage('exercises')
-                                                                       }}
-                                                                               className="list-group-item list-group-item-action"
-                                                                               id='selected-patient-menu-middle-button'>תרגילים</Button>
-                                                                   </Row>
+                                                               <Row>
+                                                                   <Button as={Link} to='exercises'
+                                                                           active={currentPage === 'exercises'}
+                                                                           onClick={() => {
+                                                                               setCurrentPage('exercises')
+                                                                           }}
+                                                                           className="list-group-item list-group-item-action"
+                                                                           id='selected-patient-menu-middle-button'>תרגילים</Button>
+                                                               </Row>
 
-                                                                   <Row>
-                                                                       <Button as={Link} to='ProgressTrend/*' active={currentPage === 'ProgressTrend'} onClick={() => {
-                                                                           setCurrentPage('ProgressTrend')
-                                                                       }}
-                                                                               className="list-group-item list-group-item-action"
-                                                                               id='selected-patient-menu-middle-button'>מגמת
-                                                                           התקדמות</Button>
-                                                                   </Row>
+                                                               <Row>
+                                                                   <Button as={Link} to='ProgressTrend/*'
+                                                                           active={currentPage === 'ProgressTrend'}
+                                                                           onClick={() => {
+                                                                               setCurrentPage('ProgressTrend')
+                                                                           }}
+                                                                           className="list-group-item list-group-item-action"
+                                                                           id='selected-patient-menu-middle-button'>מגמת
+                                                                       התקדמות</Button>
+                                                               </Row>
 
-                                                                   <Row >
-                                                                       {/*<Button as={NavDropdown}*/}
-                                                                       {/*        drop='start' title="אפליקציות צד שלישי"*/}
-                                                                       {/*         style={{background:"transparent"}}>*/}
-                                                                       {/*<div style={{width:'3000px'}}>*/}
-                                                                           <NavDropdown drop='start' title={"אפליקציות צד שלישי"}
-                                                                                        id='selected-patient-menu-bottom-button'>
-                                                                               <NavDropdown.Item as={Link} to={'AUTIDO'}
-                                                                                                 onClick={() => {
-                                                                                                     setCurrentPage('AUTIDO')
-                                                                                                 }}>AutiDo</NavDropdown.Item>
-                                                                               <NavDropdown.Item as={Link} to={'KAZABUBU'}
-                                                                                                 onClick={() => {
-                                                                                                     setCurrentPage('KAZABUBU')
-                                                                                                 }}>
-                                                                                   KAZABUBU
-                                                                               </NavDropdown.Item>
-                                                                           </NavDropdown>
-                                                                       {/*</div>*/}
-                                                                       {/*</Button>*/}
-                                                                       {/*<Link to='exercises' onClick={() => {*/}
-                                                                       {/*    setCurrentPage('exercises')*/}
-                                                                       {/*}}*/}
-                                                                       {/*      className="list-group-item list-group-item-action"*/}
-                                                                       {/*      id='lower-side-menu-bottom-button'>אפליקציות צד שלישי</Link>*/}
-                                                                   </Row>
-                                                               </Col>
-                                                           }/>
-                                                </Routes>
-                                            )
-                                        }
-                                    )}
+                                                               <Row>
+                                                                   <NavDropdown drop='start' title={"אפליקציות צד שלישי"}
+                                                                                id='selected-patient-menu-bottom-button'
+                                                                                active={isClick('AUTIDO') || isClick('KAZABUBU')}>
+                                                                       <NavDropdown.Item as={Link} to={'AUTIDO'}
+                                                                                         onClick={() => {
+                                                                                             setCurrentPage('AUTIDO')
+                                                                                         }}>AutiDo</NavDropdown.Item>
+                                                                       <NavDropdown.Item as={Link} to={'KAZABUBU'}
+                                                                                         onClick={() => {
+                                                                                             setCurrentPage('KAZABUBU')
+                                                                                         }}>
+                                                                           KAZABUBU
+                                                                       </NavDropdown.Item>
+                                                                   </NavDropdown>
+                                                               </Row>
+                                                           </Col>
+                                                       }/>
+                                            </Routes>
+                                        )
+                                    }
+                                )}
 
 
                             </Row>
 
-                            <Row style={(()=>{
-                                if(type === 'parent'){
-                                    return  {minHeight: 100}
+                            <Row
+                            //     style={(() => {
+                            //     if (type === 'parent') {
+                            //         return {minHeight: 100}
+                            //     }
+                            //     return {minHeight: 300}
+                            //
+                            // })()}
+                                id='middle-floating-box'>
+                                {type === 'parent' && currentPerson !== '' &&
+                                <Button as={Link} to={currentPerson + '/code'} onClick={() => setShowDialogCode(true)}
+                                        className="text-center"
+                                    // style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
+                                    variant="outline-secondary"
+                                        id='personal-code-button'>קבל קוד אישי</Button>
                                 }
-                                return {minHeight: 300}
-
-                            })()} id='middle-floating-box'>
-                                {type === 'parent' && currentPerson !== '' && <Link to={currentPerson + '/code'}>
-                                    <Button onClick={() => setShowDialogCode(true)} className="text-center"
-                                            style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
-                                            variant="outline-primary">קבל קוד אישי</Button>
-                                </Link>}
 
 
                                 {(type === 'therapist') &&
@@ -400,207 +404,210 @@ function HomePage({userDetails, type, institute}) {
                             </Row>
                         </Animated>
                     </Col>
-                    <Col   md='8' className="border border-secondary rounded" id='display-window'>
+                    <Col md='8' className="border border-secondary rounded" id='display-window'>
                         {/*<Chats/>*/}
                         <div ref={componentRef}>
-                        <Routes>
-                            <Route path={'ContactUs'}
-                                   element={
-                                       <ContactUs/>
-                                   }/>
-                        </Routes>
-                        <Routes>
-                            <Route path={'AboutUs'}
-                                   element={
-                                       <AboutUs/>
-                                   }/>
-                        </Routes>
-                        <Routes>
-                            <Route path={currentPerson.toString() + '/documentation'}
-                                   element={
-                                       (() => {
+                            <Routes>
+                                <Route path={'ContactUs'}
+                                       element={
+                                           <ContactUs/>
+                                       }/>
+                            </Routes>
+                            <Routes>
+                                <Route path={'AboutUs'}
+                                       element={
+                                           <AboutUs/>
+                                       }/>
+                            </Routes>
+                            <Routes>
+                                <Route path={currentPerson.toString() + '/documentation'}
+                                       element={
+                                           (() => {
+                                               if (currentPerson !== '') {
+                                                   return <FileSystem user={userDetails.id} patient={currentPerson}/>
+                                               }
+                                               return <h2>אנא בחר מטופל כדי למלא עבורו את הטופס</h2>
+
+                                           })()
+                                       }/>
+                            </Routes>
+                            <Routes>
+                                <Route path={currentPerson.toString() + '/AQform'}
+                                       element={(() => {
+                                           return <AQ/>
+                                       })()
+                                       }/>
+                                <Route path={'/AQform'}
+                                       element={(() => {
+                                           return <AQ/>
+                                       })()
+
+                                       }/>
+                            </Routes>
+                            <Routes>
+                                <Route path={currentPerson.toString() + '/AUTIDO'}
+                                       element={(() => {
                                            if (currentPerson !== '') {
-                                               return <FileSystem user={userDetails.id} patient={currentPerson}/>
+                                               // return <ReportsPage appKey={'AutiDo'}/>
+                                               const index = patientListData.findIndex((s) => s.id === currentPerson)
+                                               if (index === -1) {
+                                                   return <div></div>
+                                               }
+                                               return <CheckHasAPICode appKey={'AutiDo'}
+                                                                       patientDetails={patientListData[index].data()}/>
                                            }
-                                           return <h2>אנא בחר מטופל כדי למלא עבורו את הטופס</h2>
+                                           return <h2>אנא בחר מטופל כדי לראות דוחות קיימים</h2>
 
                                        })()
-                                   }/>
-                        </Routes>
-                        <Routes>
-                            <Route path={currentPerson.toString() + '/AQform'}
-                                   element={(() => {
-                                       return <AQ/>
-                                   })()
-                                   }/>
-                            <Route path={'/AQform'}
-                                   element={(() => {
-                                       return <AQ/>
-                                   })()
 
-                                   }/>
-                        </Routes>
-                        <Routes>
-                            <Route path={currentPerson.toString() + '/AUTIDO'}
-                                   element={(() => {
-                                       if (currentPerson !== '') {
-                                           // return <ReportsPage appKey={'AutiDo'}/>
-                                           const index = patientListData.findIndex((s) => s.id === currentPerson)
-                                           if (index === -1) {
-                                               return <div></div>
-                                           }
-                                           return <CheckHasAPICode appKey={'AutiDo'}
-                                                                   patientDetails={patientListData[index].data()}/>
-                                       }
-                                       return <h2>אנא בחר מטופל כדי לראות דוחות קיימים</h2>
-
-                                   })()
-
-                                   }/>
-                        </Routes>
-                        <Routes>
-                            <Route path={'/myProfile'}
-                                   element={(() => {
-                                       return <MyProfile userDetails={userDetails}/>
-                                   })()
-                                   }/>
-                        </Routes>
-                        <Routes>
-                            <Route path={currentPerson.toString() + '/code'}
-                                   element={<GetPersonalCode type={type} id={currentPerson}/>}/>
-                        </Routes>
+                                       }/>
+                            </Routes>
+                            <Routes>
+                                <Route path={'/myProfile'}
+                                       element={(() => {
+                                           return <MyProfile userDetails={userDetails}/>
+                                       })()
+                                       }/>
+                            </Routes>
+                            <Routes>
+                                <Route path={currentPerson.toString() + '/code'}
+                                       element={<GetPersonalCode type={type} id={currentPerson}/>}/>
+                            </Routes>
 
 
-                        {type === 'parent' && patientListData.map((item) => {
-                                let data = item.data()
-                                return (
-                                    <div>
-                                        {activeTherapistListData.length > 0 && componentsTherapists(activeTherapistListData, 'active', data)}
-                                        {notActiveTherapistListData.length > 0 && componentsTherapists(notActiveTherapistListData, 'notActive', data)}
+                            {type === 'parent' && patientListData.map((item) => {
+                                    let data = item.data()
+                                    return (
+                                        <div>
+                                            {activeTherapistListData.length > 0 && componentsTherapists(activeTherapistListData, 'active', data)}
+                                            {notActiveTherapistListData.length > 0 && componentsTherapists(notActiveTherapistListData, 'notActive', data)}
 
-                                    </div>
-                                )
-                            }
-                        )}
-
-                        {type === 'therapist' && patientListData.map((item) => {
-                                let data = item.data()
-                                return (
-                                    parentsListData.map((parent, index) => {
-                                            console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
-                                            return (
-                                                <div>
-
-
-                                                    <Routes>
-                                                        <Route
-                                                            path={data.id.toString() + '/parent/' + index.toString() + '/*'}
-                                                            element={<Chat otherUser={parent} patient={data.id}
-                                                                           isActive={"active"}/>}
-                                                        />
-                                                    </Routes>
-                                                </div>
-                                            )
-                                        }
+                                        </div>
                                     )
-                                )
-                            }
-                        )}
+                                }
+                            )}
 
-                        {type === 'therapist' && patientListData.map((item) => {
-                                let data = item.data()
-                                return (
-                                    activeTherapistListData.map((therapist, index) => {
-                                            console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
-                                            return (
-                                                <div>
-                                                    <Routes>
-                                                        <Route path={data.id.toString() +'/'+'therapist' + '/' + index.toString() + '/*'}
-                                                               element={<Chat otherUser={therapist} patient={data.id}
-                                                                              isActive={"active"}/>}
-                                                        />
-                                                    </Routes>
-                                                </div>
-                                            )
-                                        }
+                            {type === 'therapist' && patientListData.map((item) => {
+                                    let data = item.data()
+                                    return (
+                                        parentsListData.map((parent, index) => {
+                                                console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
+                                                return (
+                                                    <div>
+
+
+                                                        <Routes>
+                                                            <Route
+                                                                path={data.id.toString() + '/parent/' + index.toString() + '/*'}
+                                                                element={<Chat otherUser={parent} patient={data.id}
+                                                                               isActive={"active"}/>}
+                                                            />
+                                                        </Routes>
+                                                    </div>
+                                                )
+                                            }
+                                        )
                                     )
-                                )
-                            }
-                        )}
+                                }
+                            )}
+
+                            {type === 'therapist' && patientListData.map((item) => {
+                                    let data = item.data()
+                                    return (
+                                        activeTherapistListData.map((therapist, index) => {
+                                                console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
+                                                return (
+                                                    <div>
+                                                        <Routes>
+                                                            <Route
+                                                                path={data.id.toString() + '/' + 'therapist' + '/' + index.toString() + '/*'}
+                                                                element={<Chat otherUser={therapist} patient={data.id}
+                                                                               isActive={"active"}/>}
+                                                            />
+                                                        </Routes>
+                                                    </div>
+                                                )
+                                            }
+                                        )
+                                    )
+                                }
+                            )}
 
 
-                        {type === 'therapist' && patientListData.map((item) => {
-                                let data = item.data()
-                                return (
-                                    <>
-                                    <Routes>
-                                        <Route path={data.id.toString() + '/sessions'}
-                                               element={<SessionsList patientId={currentPerson}
+                            {type === 'therapist' && patientListData.map((item) => {
+                                    let data = item.data()
+                                    return (
+                                        <>
+                                            <Routes>
+                                                <Route path={data.id.toString() + '/sessions'}
+                                                       element={<SessionsList patientId={currentPerson}
+                                                                              therapistId={userDetails.id}
+                                                                              type={type}/>}/>
+
+                                                <Route path={data.id.toString() + '/exercises'}
+                                                       element={<PatientExercises patient={currentPerson}
+                                                                                  therapist={userDetails.id}
+                                                                                  type={type}/>}/>
+                                                <Route path={data.id.toString() + '/ProgressTrend/*'}
+                                                       element={
+                                                           <ProgressTrendTabsBanner type={type}
+                                                                                    currentPerson={currentPerson}
+                                                                                    setCurrentPage={setCurrentPage}
+                                                                                    currentPage={currentPage}/>
+                                                           /*<TestsList patientId={currentPerson}
+                                                                                     therapistId={userDetails.id}
+                                                                                     type={type} category={'קשר בין אישי'}/>*/
+                                                       }/>
+
+
+                                            </Routes>
+                                            <Routes>
+                                                <Route path={data.id.toString() + '/ProgressTrend/groupDiscourse'}
+                                                       element={
+                                                           <TestsList patientId={currentPerson}
                                                                       therapistId={userDetails.id}
-                                                                      type={type}/>}/>
-
-                                        <Route path={data.id.toString() + '/exercises'}
-                                               element={<PatientExercises patient={currentPerson}
-                                                                          therapist={userDetails.id}
-                                                                          type={type}/>}/>
-                                        <Route path={data.id.toString() + '/ProgressTrend/*'}
-                                               element={
-                                            <ProgressTrendTabsBanner type={type} currentPerson={currentPerson}
-                                            setCurrentPage={setCurrentPage}/>
-                                            /*<TestsList patientId={currentPerson}
+                                                                      type={type} category={'שיח קבוצתי'}/>
+                                                       }/>
+                                            </Routes>
+                                            <Routes>
+                                                <Route path={data.id.toString() + '/ProgressTrend/interpersonalConnection'}
+                                                       element={
+                                                           <TestsList patientId={currentPerson}
                                                                       therapistId={userDetails.id}
-                                                                      type={type} category={'קשר בין אישי'}/>*/
-                                        }/>
+                                                                      type={type} category={'קשר בין אישי'}/>
+                                                       }/>
+                                            </Routes>
+                                            <Routes>
 
-
-                                    </Routes>
-                                    <Routes>
-                                        <Route path={data.id.toString() + '/ProgressTrend/groupDiscourse'}
-                                               element={
-                                                   <TestsList patientId={currentPerson}
-                                                              therapistId={userDetails.id}
-                                                              type={type} category={'שיח קבוצתי'}/>
-                                               }/>
-                                        </Routes>
-                                        <Routes>
-                                        <Route path={data.id.toString() + '/ProgressTrend/interpersonalConnection'}
-                                               element={
-                                                   <TestsList patientId={currentPerson}
-                                                              therapistId={userDetails.id}
-                                                              type={type} category={'קשר בין אישי'}/>
-                                               }/>
-                                        </Routes>
-                                        <Routes>
-
-                                        <Route path={data.id.toString() + '/ProgressTrend/academic'}
-                                               element={
-                                                   <TestsList patientId={currentPerson}
-                                                              therapistId={userDetails.id}
-                                                              type={type} category={'אקדמי'}/>
-                                               }/>
-                                        </Routes>
-                                        <Routes>
-                                        <Route path={data.id.toString() + '/ProgressTrend/KeepingEyeContact'}
-                                               element={
-                                                   <TestsList patientId={currentPerson}
-                                                              therapistId={userDetails.id}
-                                                              type={type} category={'קשר עין'}/>
-                                               }/>
-                                        </Routes>
-                                        <Routes>
-                                        <Route path={data.id.toString() + '/ProgressTrend/plots'}
-                                               element={
-                                                   <TestsList patientId={currentPerson}
-                                                              therapistId={userDetails.id}
-                                                              type={type} category={null}/>
-                                               }/>/>
-                                    </Routes>
-                                    </>
-                                )
+                                                <Route path={data.id.toString() + '/ProgressTrend/academic'}
+                                                       element={
+                                                           <TestsList patientId={currentPerson}
+                                                                      therapistId={userDetails.id}
+                                                                      type={type} category={'אקדמי'}/>
+                                                       }/>
+                                            </Routes>
+                                            <Routes>
+                                                <Route path={data.id.toString() + '/ProgressTrend/KeepingEyeContact'}
+                                                       element={
+                                                           <TestsList patientId={currentPerson}
+                                                                      therapistId={userDetails.id}
+                                                                      type={type} category={'קשר עין'}/>
+                                                       }/>
+                                            </Routes>
+                                            <Routes>
+                                                <Route path={data.id.toString() + '/ProgressTrend/plots'}
+                                                       element={
+                                                           <TestsList patientId={currentPerson}
+                                                                      therapistId={userDetails.id}
+                                                                      type={type} category={null}/>
+                                                       }/>/>
+                                            </Routes>
+                                        </>
+                                    )
+                                }
+                            )
                             }
-                        )
-                        }
-                    </div>
+                        </div>
                     </Col>
                 </Row>
 

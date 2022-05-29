@@ -208,17 +208,18 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
         return true
     }
     return (
+
         (category)?(
-        <div>
-            <Row className='p-2'>
-                <Col>
-                    <Form.Label style={{fontWeight: 'bold'}}> {"מבחנים של"+" "+category}</Form.Label>
-                </Col>
-                <Col md='4'>
+            <Container className='align-items-center' style={{width:'70%'}}>
+            <Row className='p-2 align-content-start'>
+                <div style={{width:'auto'}}>
+                    <Form.Label className='fs-2' style={{fontWeight: 'bold'}}>{"מבחנים של"+" "+category}</Form.Label></div>
+                <div style={{width:'auto',alignSelf:"center"}}>
                     {type === 'therapist' && <AddTestDialog  category={category} handleOnSubmit={handleOnSubmit}/>}
-                </Col>
+                </div>
             </Row>
-            {/*// sessionsData.map((s)=>(*/}
+                <br/>
+                <br/>
             <Accordion alwaysOpen={true}>
                 {
                     testsList.map((t, i) => (
@@ -283,11 +284,13 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
                                     </Col>
                                 </Accordion.Body>
                             </Accordion.Item>
-
                         )
                     )
                 }
             </Accordion>
+                <br/>
+                <br/>
+
             <Bar type="bar" data={ {
                 labels: dates,
                 datasets: [
@@ -298,8 +301,9 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
                     },
                 ],
             }}  />
-        </div>):(
+            </Container>):(
             // ['קשר בין אישי']:[],['שיח קבוצתי']:[],['שמירת קשר עין']:[],['אקדמי']:[]
+            <Container className='align-items-center' style={{width:'70%'}}>
             <Bar type="bar" data={ {
                 labels:[...Array(Math.max(scores['אקדמי'].length,scores['שמירת קשר עין'].length,
                     scores['שיח קבוצתי'].length,scores['קשר בין אישי'].length)).keys()],
@@ -326,7 +330,9 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
                     },
                 ],
             }}  />
+            </Container>
         )
+
     )
 
 }
@@ -370,7 +376,7 @@ function AddTestDialog({category,handleOnSubmit}) {
     return (
         <div>
             <Button  variant="outline-dark" onClick={handleShow}><Plus className= "m-1"/>
-                הוסף תרגיל
+                הוסף מבחן
             </Button>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>

@@ -15,7 +15,7 @@ function ContactUs() {
         <div className='AddTypeExternalTherapist'>
             <Form
                 /*onSubmit={onSignUp}*/ className="needs-validation" noValidate>
-                <Container className="w-auto" fluid="sm">
+                <Container style={{width:'60%'}}>
                     <Form.Group className="mb-3" controlId="formEmail">
                         <Form.Label for="validationDefault01" className="text-center" style={{width: "100%"}}>צור קשר</Form.Label>
                         <Row>
@@ -25,7 +25,7 @@ function ContactUs() {
                             <Col md="auto">
                                 <Form.Control id='validationDefault01' required
                                               onChange={e => setDetails({...details, name: e.target.value})}/>
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{width:'400px',fontSize: 10,color: "red"}} id="invalid-feedback">
                                     {messages.name}
                                 </div>
                             </Col>
@@ -37,7 +37,7 @@ function ContactUs() {
                             <Col md="auto">
                                 <Form.Control id='validationDefault01' required type='email' placeholder='toko@gmail.com'
                                               onChange={e => setDetails({...details, email: e.target.value})}/>
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{width:'400px',fontSize: 10,color: "red"}} id="invalid-feedback">
                                     {messages.email}
                                 </div>
                             </Col>
@@ -49,7 +49,7 @@ function ContactUs() {
                             <Col md="auto">
                                 <Form.Control id='validationDefault01' required
                                               onChange={e => setDetails({...details, subject: e.target.value})}/>
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{width:'400px',fontSize: 10,color: "red"}} id="invalid-feedback">
                                     {messages.subject}
                                 </div>
                             </Col>
@@ -59,9 +59,9 @@ function ContactUs() {
                                 תוכן פניה:
                             </Col>
                             <Col md="auto">
-                                <textarea id='validationDefault01' required
+                                <textarea id='validationDefault01' required style={{width:'400px',fontSize: 16}}
                                               onChange={e => setDetails({...details, content: e.target.value})}/>
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{width:'400px',fontSize: 10,color: "red"}} id="invalid-feedback">
                                     {messages.content}
                                 </div>
                             </Col>
@@ -70,7 +70,7 @@ function ContactUs() {
                     </Form.Group>
                     <Row className="p-1" md="10">
                         <ButtonGroup className="gap-4">
-                            <Button className="rounded-3" variant="outline-primary" size="md"
+                            <Button className="rounded-3" variant="outline-secondary" size="md" id='default-button'
                                     /*onClick={}*/>שלח</Button>
                         </ButtonGroup>
                     </Row>

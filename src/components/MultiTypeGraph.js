@@ -47,13 +47,13 @@ function MultiTypeGraph({appKey, data}) {
         <div>
             {/*<div id="graphs"></div>*/}
             <div className='header'>
-                <h1 className='title'>דוח התקדמות ב {appKey}</h1>
+                <h1 className='title text-center'>דוח התקדמות ב {appKey}</h1>
             </div>
             <div id="graphs">
                 <Row><Form.Label className="p-2 m-1" style={{fontWeight: 'bold'}}>פרטים אישיים באפליקציה</Form.Label>
                 </Row>
                 <Row>
-                    <Col md={1}></Col>
+                    <Col md={1}/>
                     <Col className="p-2">
                         <Row>שם פרטי: {data['first_name']}</Row>
                         <Row>שם משפחה: {data['last_name']}</Row>
@@ -62,11 +62,7 @@ function MultiTypeGraph({appKey, data}) {
                 </Row>
             </div>
             <br/>
-            {/*<Scatter data={data['data'][0]} options={data['options'][0]} type={data['type'][0]}/>*/}
-            {/*<br/>*/}
-            {/*<br/>*/}
-            {/*<Bar data={data['data'][1]} options={data['options'][1]} type={data['type'][1]}/>*/}
-            {/*<script>{function n(){document.getElementById('graphs').innerHTML = a}}</script>*/}
+
             {listOfTags.map((tag)=>{
                 return tag
             })}

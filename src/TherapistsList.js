@@ -141,7 +141,7 @@ function TherapistsList({
                     <div>
                         <Button id='therapistList-button' as={Link} to={path} active={
                             /*isClick(path)*/
-                            current.id === data.id &&isClick('therapist')
+                            current.id === data.id && isClick('therapist')
                         }
                                 style={{backgroundColor:'transparent',border:'transparent'}}
                                  className="list-group-item list-group-item-action mb-1" onClick={(e) => {
@@ -167,7 +167,6 @@ function TherapistsList({
     }
     return (
         <div>
-            {type === 'parent' &&<Form.Label style={{fontWeight: 'bold'}}>רשימת מטפלים</Form.Label>}
             {type === 'therapist' &&<Form.Label style={{fontWeight: 'bold'}}>צאט עם מטפלים אחרים</Form.Label>}
             <div>
             {type === 'parent' && <Form.Label  style={{fontWeight: 'bold'}}>מטפלים פעילים:</Form.Label>}

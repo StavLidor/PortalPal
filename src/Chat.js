@@ -74,41 +74,13 @@ function Chat({otherUser, patient, isActive}) {
                 // TODO: Handle errors!
                 console.log('error!!', error)
             })
-        // console.log('blb')
-        // const querySnapshot = await getDocs(unsubscribe)
-        // let data = []
-        // querySnapshot.forEach((doc) => (
-        //     // console.log(doc)
-        //
-        //     data.push({...doc.data(), id: doc.id})
-        //
-        // ))
-        //
-        // console.log('data', data)
-        // setMessages(data)
-        // return unsubscribe
-
-
     }, [])
 
     return (
         <div className="maincontainer">
-            {/*<div class="container py-5 px-4">*/}
-
-                {/*<div class="row rounded-lg overflow-hidden shadow">*/}
-
-                    {/*<div class="col-12 px-0">*/}
                         <div class="px-4 py-2 chat-box bg-white m-3 p-1">
                             {/*<Container>*/}
                             <Col>
-                            {/*<Row className="mb-3">*/}
-{/*<ScrollToBottom>*/}
-    {/*{(() => {*/}
-    {/*    const scrollToBottom = useScrollToBottom()*/}
-    {/*    const [sticky] = useSticky()*/}
-
-    {/*    return (*/}
-    {/*        <React.Fragment>*/}
                 {messages.map(message => (
                     <Row className="media w-50 mb-1 ">
                         {/*<Container style={{width: "75%"}}>*/}
@@ -159,52 +131,20 @@ function Chat({otherUser, patient, isActive}) {
                     </Row>
 
                 ))}
-                {/*</Row>*/}
-                {/*{!sticky && <button onClick={scrollToBottom}>Click me to scroll to bottom</button>}*/}
-
-            {/*</React.Fragment>*/}
-    {/*)*/}
-    {/*})()}*/}
-{/*</ScrollToBottom>*/}
-
-
                             </Col>
 
                         </div>
             {isActive==='active' && <div className="px-2 py-1 bg-white m-3 p-1">
-            {/*<Row className="w-auto">*/}
-                {/*<Form action="#" class="bg-light">*/}
-                    {/*<div class="input-group">*/}
-
-                     <ButtonGroup className="w-100">
-                        {/*<Col>*/}
+                     <ButtonGroup className="w-100 align-items-center">
                         <Form.Control onChange={handleOnChange} type="text" value={newMessage}
                                       placeholder="הקלד הודעה..."
                                       aria-describedby="button-addon2"
                                       class="form-control rounded-0 border-0 py-4 bg-light"
-                        style={{width:"100%"}}/>
-                        {/*</Col>*/}
+                        style={{width:"100%",height:'50px'}}/>
 
-                        {/*<div class="input-group-append">*/}
-                        {/*<Col>*/}
                         <Button onClick={sendMessage} className="rounded-3 m-2" size="md"
-                                variant="outline-primary">שלח</Button>
-                        {/*</Col>*/}
-
-                        {/*</div>*/}
+                                variant="success" style={{width:"80px",height:'50px'}}>שלח</Button>
                     </ButtonGroup>
-                    {/*    /!*<i*!/*/}
-                    {/*    /!*class="fa fa-paper-plane"></i>*!/*/}
-                    {/*</Button>*/}
-
-                    {/*</div>*/}
-                {/*</Form>*/}
-
-                {/*</Container>*/}
-            {/*</Row>*/}
-                    {/*</div>*/}
-                {/*</div>*/}
-            {/*</div>*/}
             </div>}
         </div>
     )

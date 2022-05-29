@@ -2,6 +2,7 @@ import {Button, ButtonGroup, Form, Row} from "react-bootstrap";
 import React, {useState} from "react";
 import ReportsPage from "./ReportsPage";
 import {addThirdPartyCodes} from "./firebase";
+import {Container} from "@mui/material";
 
 function CheckHasAPICode({appKey, patientDetails}) {
     console.log("in new: ", patientDetails)
@@ -10,7 +11,7 @@ function CheckHasAPICode({appKey, patientDetails}) {
     const [wasCodeRemoved, setWasCodeRemoved] = useState(false);
 
     return (
-        <div>
+        <div className='p-4' style={{width:'80%'}}>
             {hasCode === false && <div className="text-center p-2">
                 {wasCodeRemoved && <Form.Label>הקוד הוסר בהצלחה!</Form.Label>}
                 <Row><Form.Label style={{fontSize: 20, fontWeight: "bold"}}> שמחים שאתה רוצה לקשר אלינו את

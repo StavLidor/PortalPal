@@ -10,7 +10,7 @@ import PatientDetails from "../sidebar/PatientDetails";
 import {Plus} from "react-bootstrap-icons";
 import {isClick} from "../../useFunction";
 
-function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPerson, setCurrentPage}) {
+function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPerson, setCurrentPage,currentPage}) {
 
     const [tabsComponent, setTabsComponent] = useState(<h3>משהו השתבש...</h3>)
 
@@ -49,24 +49,24 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
             //     break
             case "parent":
                 setTabsComponent(
-                    <Container className="border border-secondary rounded">
+                    <Container style={{width: '90%'}} className='p-4'>
 
-                        <Nav fill justify variant="tabs" defaultActiveKey={'sessions'}>
+                        <Nav fill variant="pills"  className='gap-4' defaultActiveKey={'sessions'}>
 
-                            <Nav.Item>
+                            <Nav.Item id='inner-top-menu-button'>
                                 <Nav.Link as={Link} to='sessions' onClick={() => {
                                     setCurrentPage('sessions')
-                                }} active={isClick('sessions')} className="list-group-item list-group-item-action">סיכומי טיפולים</Nav.Link>
+                                }} active={isClick('sessions')} id='inner-top-menu-button' className="list-group-item list-group-item-action border">סיכומי טיפולים</Nav.Link>
                             </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link as={Link} to='exercises' onClick={() => {
+                            <Nav.Item id='inner-top-menu-button'>
+                                <Nav.Link as={Link} to='exercises' id='inner-top-menu-button' onClick={() => {
                                     setCurrentPage('exercises')
-                                }} active={isClick('exercises')} className="list-group-item list-group-item-action">תרגילים</Nav.Link>
+                                }} active={isClick('exercises')} className="list-group-item list-group-item-action border">תרגילים</Nav.Link>
                             </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link as={Link} to='communication' onClick={() => {
+                            <Nav.Item id='inner-top-menu-button'>
+                                <Nav.Link as={Link} to='communication' id='inner-top-menu-button' onClick={() => {
                                     setCurrentPage('communication')
-                                }} className="list-group-item list-group-item-action"
+                                }} className="list-group-item list-group-item-action border"
                                           active={isClick('communication')}>התקשרות</Nav.Link>
                             </Nav.Item>
                         </Nav>
@@ -81,36 +81,36 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
                     </Container>
                 )
                 break
-            case "therapist":
-                setTabsComponent(
-                    <Container className="border border-secondary rounded m-3">
-                        <Nav justify variant="tabs" defaultActiveKey={'sessions'}>
-                            <Nav.Item>
-                                <Button as={Link} active={isClick('sessions')}onClick={() => {
-                                    setCurrentPage('sessions')
-                                }} to={'sessions'} className="list-group-item list-group-item-action"
-                                          style={{borderRadius: 10}} id='sessions-side-button'>סיכומי
-                                    טיפולים</Button>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link as={Link} to='exercises' active={isClick('exercises')} onClick={() => {
-                                    setCurrentPage('exercises')
-                                }} className="list-group-item list-group-item-action">תרגילים</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link as={Link} to='communication' active={isClick('communication')} onClick={() => {
-                                    setCurrentPage('communication')
-                                }} className="list-group-item list-group-item-action">התקשרות</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
-                    </Container>
-                )
-                break
+            // case "therapist":
+            //     setTabsComponent(
+            //         <Container className="border border-secondary rounded m-3">
+            //             <Nav justify variant="tabs" defaultActiveKey={'sessions'}>
+            //                 <Nav.Item>
+            //                     <Button as={Link} active={isClick('sessions')}onClick={() => {
+            //                         setCurrentPage('sessions')
+            //                     }} to={'sessions'} className="list-group-item list-group-item-action"
+            //                               style={{borderRadius: 10}} id='sessions-side-button'>סיכומי
+            //                         טיפולים</Button>
+            //                 </Nav.Item>
+            //                 <Nav.Item>
+            //                     <Nav.Link as={Link} to='exercises' active={isClick('exercises')} onClick={() => {
+            //                         setCurrentPage('exercises')
+            //                     }} className="list-group-item list-group-item-action">תרגילים</Nav.Link>
+            //                 </Nav.Item>
+            //                 <Nav.Item>
+            //                     <Nav.Link as={Link} to='communication' active={isClick('communication')} onClick={() => {
+            //                         setCurrentPage('communication')
+            //                     }} className="list-group-item list-group-item-action">התקשרות</Nav.Link>
+            //                 </Nav.Item>
+            //             </Nav>
+            //         </Container>
+            //     )
+            //     break
             default:
                 setTabsComponent(<h3>משהו השתבש...</h3>)
                 break
         }
-    }, [currentPerson])
+    }, [currentPerson,currentPage])
 
     return (tabsComponent)
 }

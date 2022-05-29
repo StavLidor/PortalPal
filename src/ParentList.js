@@ -9,7 +9,7 @@ import firebase from "firebase/compat/app";
 import styles from "./pages/home/HomePage.CSS"
 import {isClick} from "./useFunction";
 
-function ParentList({details, setCurrentParent, currentPage, setParentsListData, currentPerson}) {
+function ParentList({details, setCurrentParent, currentPage, setParentsListData, currentPerson,setCurrentPage}) {
     // console.log("in therapist!!!!!!!!")
     const [parents, setParents] = useState([])
     const [current, setCurrent] = useState({id: "", index: ""})
@@ -76,6 +76,7 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
 
                                       setCurrentParent({id: data.id, index: index.toString()})
                                       setCurrent({id: data.id, index: index.toString()})
+                                      setCurrentPage('parent')
 
                                   }}>{data.firstName + " " + data.lastName}</Button>
                         )

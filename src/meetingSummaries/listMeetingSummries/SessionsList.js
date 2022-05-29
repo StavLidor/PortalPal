@@ -20,6 +20,7 @@ import firebase from "firebase/compat/app";
 import { Pencil,Plus,Trash} from 'react-bootstrap-icons';
 
 function SessionsList({patientId, therapistId = null, type}) {
+
     const [sessionsData, setSessionsData] = useState([])
     const [open, setOpen] = useState(false);
     const [newSession, setNewSession] = useState({
@@ -27,6 +28,12 @@ function SessionsList({patientId, therapistId = null, type}) {
         summary: '',
         date: ''
     })
+    // function expand() {
+    //     $('.collapse').collapse('show');
+    // }
+    // function collapse() {
+    //     $('.collapse').collapse('hide');
+    // }
     const checkData=(setMessages,session)=>{
         console.log(session)
         const messagesSubmit={ title: '',
@@ -151,11 +158,20 @@ function SessionsList({patientId, therapistId = null, type}) {
                 <div style={{width:'auto',alignSelf:"center"}}>
                     <AddSessionDialog type={type} setNewSession={setNewSession} newSession={newSession}
                                       handleOnSubmit={handleOnSubmit}/>
+                    {/*<Button  variant="outline-dark"*/}
+                    {/*         onclick={expand}><Plus className= "m-1"/>*/}
+                    {/*    פתח את כל פגישות*/}
+                    {/*</Button>*/}
+                    {/*<Button  variant="outline-dark"  onclick={collapse}><Plus className= "m-1"/>*/}
+                    {/*    סגור את כל פגישות*/}
+                    {/*</Button>*/}
             </div>
             </Row>
             <br/>
             {/*// sessionsData.map((s)=>(*/}
-            <Accordion className='justify-content-center' style={{width:'70%'}}>
+            <Accordion className='justify-content-center' style={{width:'70%'}} alwaysOpen={true}
+
+            >
                 {
                     sessionsData.map((s, i) => (
                             // <>
@@ -165,7 +181,7 @@ function SessionsList({patientId, therapistId = null, type}) {
                                     &nbsp;&nbsp;
                                     {/*{e.createdAt.toDate().toUTCString() + e.place}*/}
                                 </Accordion.Header>
-                                <Accordion.Body>
+                                <Accordion.Body >
                                     <Col>
                                         <Row>
                                             <Form.Label>

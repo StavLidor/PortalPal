@@ -12,7 +12,7 @@ import {isClick} from "./useFunction";
 function TherapistsList({
                             details,
                             setCurrentTherapist,
-                            currentPage,
+                            currentPage,setCurrentPage,
                             setActiveTherapistListData,
                             setNotActiveTherapistListData,
                             currentPerson,
@@ -134,7 +134,8 @@ function TherapistsList({
                 if (type === 'parent') {
                     path ='therapist'+ '/'+ isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
                 } else {
-                    path = 'therapist'+ '/'+index.toString() + '/' + currentPage.toString();
+                    path = 'therapist'+ '/'+index.toString() //+ '/' + currentPage.toString()
+
                     showInstitute = ', ' + institute
                 }
                 return (
@@ -146,6 +147,9 @@ function TherapistsList({
                                 style={{backgroundColor:'transparent',border:'transparent'}}
                                  className="list-group-item list-group-item-action mb-1" onClick={(e) => {
                             // e.preventDefault()
+                            if(type === 'therapist'){
+                                setCurrentPage('therapist')
+                            }
                             setCurrentTherapist({id: data.id, index: index.toString()})
                             setCurrent({id: data.id, index: index.toString()})
 

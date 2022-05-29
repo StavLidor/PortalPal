@@ -163,7 +163,7 @@ function PatientExercises({patient, therapist, type}) {
                     </div>
             </Row>
 
-            <Accordion className='justify-content-center' style={{width:'70%'}}>
+            <Accordion className='justify-content-center' style={{width:'70%'}} alwaysOpen={true}>
                 {
                     exercisesData.map((e, i) => (
                             // <>

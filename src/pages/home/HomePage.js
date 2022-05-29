@@ -283,6 +283,7 @@ function HomePage({userDetails, type, institute}) {
                                                                                 setNotActiveTherapistListData={setNotActiveTherapistListData}
                                                                                 currentPerson={currentPerson}
                                                                                 type={type} institute={institute}
+                                                                                setCurrentPage={setCurrentPage}
                                                        />}/>
                                             </Routes>)
                                     }
@@ -386,7 +387,9 @@ function HomePage({userDetails, type, institute}) {
                                                                                     setActiveTherapistListData={setActiveTherapistListData}
                                                                                     setNotActiveTherapistListData={setNotActiveTherapistListData}
                                                                                     currentPerson={currentPerson}
-                                                                                    type={type} institute={institute}/>
+                                                                                    type={type} institute={institute}
+                                                                                    setCurrentPage={setCurrentPage}
+                                                           />
 
                                                            }/>
                                                 </Routes>
@@ -394,6 +397,7 @@ function HomePage({userDetails, type, institute}) {
                                                     <Route path={data.id.toString() + '/*'}
                                                            element={<ParentList currentPage={currentPage} details={data}
                                                                                 currentPerson={currentPerson}
+                                                                                setCurrentPage={setCurrentPage}
                                                                                 setParentsListData={setParentsListData}
                                                                                 setCurrentParent={setCurrentParent}/>}/>
                                                 </Routes>
@@ -460,19 +464,21 @@ function HomePage({userDetails, type, institute}) {
 
                                        })()
 
-                                       }/>
-                            </Routes>
-                            <Routes>
-                                <Route path={'/myProfile'}
-                                       element={(() => {
-                                           return <MyProfile userDetails={userDetails}/>
-                                       })()
-                                       }/>
-                            </Routes>
-                            <Routes>
-                                <Route path={currentPerson.toString() + '/code'}
-                                       element={<GetPersonalCode type={type} id={currentPerson}/>}/>
-                            </Routes>
+                                   }/>
+                        </Routes>
+                        <Routes>
+                            <Route path={'/myProfile'}
+                                   element={(() => {
+                                       return <MyProfile userDetails={userDetails}/>
+                                   })()
+                                   }/>
+                        </Routes>
+                        <Routes>
+                            <Route path={currentPerson.toString() + '/code'}
+                                   element={<GetPersonalCode type={type} id={currentPerson}
+                                   detailsChild={patientListData[patientListData.findIndex((p) => p.id === currentPerson)
+                                       ].data()}/>}/>
+                        </Routes>
 
 
                             {type === 'parent' && patientListData.map((item) => {

@@ -6,22 +6,43 @@ import {Button, Container, Form, Row} from 'react-bootstrap'
 import {FormGroup} from "@mui/material";
 import {Toast} from "bootstrap";
 
-export function GetPersonalCode({id = null, type}) {
+export function GetPersonalCode({id = null, type,detailsChild}) {
     //TODO:add a connection
     const [code, setCode] = useState("")
-    const [getCodeAgain, setGetCodeAgain] = useState(false)
+    //const [getCodeAgain, setGetCodeAgain] = useState(false)
 
-    const [detailsNewPatient, setDetailsNewPatient] = useState({id: "", connection: "", code: ""})
+    //const [detailsNewPatient, setDetailsNewPatient] = useState({id: "", connection: "", code: ""})
 
     useEffect(async () => {
+        // console.log('detalisChild',detailsChild)
+        if(detailsChild.code.length>0){
+            setCode( hash.sha256().update(detailsChild.code[0]).digest("hex"))
+        }
+        else {
+            await createACode()
+        }
+        // const realCode = makePassword(10)
+        // const hashCode = hash.sha256().update(realCode).digest("hex")
+        // setCode(hashCode)
+        // // console.log(hashCode)
+        //
+        // await addToPatientArr(id, 'code', realCode)
+
+    }, [])
+    const createACode=async () => {
         const realCode = makePassword(10)
         const hashCode = hash.sha256().update(realCode).digest("hex")
         setCode(hashCode)
         // console.log(hashCode)
 
         await addToPatientArr(id, 'code', realCode)
+    }
 
-    }, [getCodeAgain])
+    // const submit=async  e =>{
+    //     e.preventDefault()
+    //     await submit()
+    //
+    // }
 
     const submitAdd = async e => {
         e.preventDefault()
@@ -57,9 +78,7 @@ export function GetPersonalCode({id = null, type}) {
 
 
                 <Form.Label className='fs-5'>ביצירת קוד חדש - הקוד הישן יבוטל ולא יהיה שמיש אם טרם הוכנס למערכת. </Form.Label>
-                <Button className='w-25' variant="outline-danger" onClick={()=>{
-                    setGetCodeAgain(!getCodeAgain)
-                }}>קבל קוד חדש</Button>
+                <Button className='w-25' variant="outline-danger" onClick={createACode}>קבל קוד חדש</Button>
                 <br/>
             </FormGroup>
             <div className='show' id="toast">הקוד הועתק...</div>

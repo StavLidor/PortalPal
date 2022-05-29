@@ -471,7 +471,9 @@ function HomePage({userDetails, type, institute}) {
                         </Routes>
                         <Routes>
                             <Route path={currentPerson.toString() + '/code'}
-                                   element={<GetPersonalCode type={type} id={currentPerson}/>}/>
+                                   element={<GetPersonalCode type={type} id={currentPerson}
+                                   detailsChild={patientListData[patientListData.findIndex((p) => p.id === currentPerson)
+                                       ].data()}/>}/>
                         </Routes>
 
 

@@ -4,22 +4,43 @@ import {addPatientToExternalTherapist, addToPatientArr} from "../../firebase";
 import hash from "hash.js";
 import {Button, Container} from 'react-bootstrap'
 
-export function GetPersonalCode({id = null, type}) {
+export function GetPersonalCode({id = null, type,detailsChild}) {
     //TODO:add a connection
     const [code, setCode] = useState("")
-    const [getCodeAgain, setGetCodeAgain] = useState(false)
+    //const [getCodeAgain, setGetCodeAgain] = useState(false)
 
-    const [detailsNewPatient, setDetailsNewPatient] = useState({id: "", connection: "", code: ""})
+    //const [detailsNewPatient, setDetailsNewPatient] = useState({id: "", connection: "", code: ""})
 
     useEffect(async () => {
+        console.log('detalisChild',detailsChild)
+        if(detailsChild.code.length>0){
+            setCode( hash.sha256().update(detailsChild.code[0]).digest("hex"))
+        }
+        else {
+            await createACode()
+        }
+        // const realCode = makePassword(10)
+        // const hashCode = hash.sha256().update(realCode).digest("hex")
+        // setCode(hashCode)
+        // // console.log(hashCode)
+        //
+        // await addToPatientArr(id, 'code', realCode)
+
+    }, [])
+    const createACode=async () => {
         const realCode = makePassword(10)
         const hashCode = hash.sha256().update(realCode).digest("hex")
         setCode(hashCode)
         // console.log(hashCode)
 
         await addToPatientArr(id, 'code', realCode)
+    }
 
-    }, [getCodeAgain])
+    // const submit=async  e =>{
+    //     e.preventDefault()
+    //     await submit()
+    //
+    // }
 
     // const submitCreate = async e => {
     //     e.preventDefault()
@@ -36,10 +57,10 @@ export function GetPersonalCode({id = null, type}) {
     //
     //
     // }
-    const submitAdd = async e => {
-        e.preventDefault()
-        await addPatientToExternalTherapist(detailsNewPatient.id, detailsNewPatient.code, detailsNewPatient.connection)
-    }
+    // const submitAdd = async e => {
+    //     e.preventDefault()
+    //     await addPatientToExternalTherapist(detailsNewPatient.id, detailsNewPatient.code, detailsNewPatient.connection)
+    // }
     return (
 
         <div>
@@ -53,9 +74,7 @@ export function GetPersonalCode({id = null, type}) {
             <h3 style={{fontSize: 11}}> *קוד זה ישמש מטפל חיצוני כדי שהילד יהפוך להיות חלק מהמטופלים שלו. על המטפל
                 לקחת קוד זה ולהזין אותו תחת המשתמש שלו.
             </h3>
-            <Button variant="outline-primary" onClick={()=>{
-                setGetCodeAgain(!getCodeAgain)
-            }}>קבל קוד חדש</Button>
+            <Button variant="outline-primary" onClick={createACode}>קבל קוד חדש</Button>
         </div>
     )
 

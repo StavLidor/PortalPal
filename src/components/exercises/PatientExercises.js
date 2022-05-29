@@ -154,18 +154,16 @@ function PatientExercises({patient, therapist, type}) {
     // console.log(exercisesData[0].until.toDate().getFullYear() + '-' + (exercisesData[0].until.toDate().getMonth() + 1) + '-' + exercisesData[0].until.toDate().getDate())
     return (
         <div>
-            {/*<h3>תירגוליישן</h3>*/}
-            <Row className='p-2'>
-                <Col>
-                    <Form.Label style={{fontWeight: 'bold'}}>רשימת תרגילים</Form.Label>
-                </Col>
-                <Col md='4'>
-                    <AddExerciseDialog type={type} setNewExercise={setNewExercise} newExercise={newExercise}
-                                       handleOnSubmit={handleOnSubmit}/>
-                </Col>
+                <Row className='p-2 align-content-start'>
+                    <div style={{width:'auto'}}>
+                        <Form.Label className='fs-2' style={{fontWeight: 'bold'}}>רשימת תרגילים</Form.Label></div>
+                    <div style={{width:'auto',alignSelf:"center"}}>
+                        <AddExerciseDialog type={type} setNewExercise={setNewExercise} newExercise={newExercise}
+                                           handleOnSubmit={handleOnSubmit}/>
+                    </div>
             </Row>
 
-            <Accordion>
+            <Accordion className='justify-content-center' style={{width:'70%'}}>
                 {
                     exercisesData.map((e, i) => (
                             // <>

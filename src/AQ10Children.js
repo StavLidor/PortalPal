@@ -6,7 +6,7 @@ function AQ10ChildrenForm({setDetails, details}) {
             <tbody>
             <tr>
                 <td className="text-center">1</td>
-                <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא נוטה להבחין בצלילים
+                <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא נוטה להבחין בצלילים
                     קטנים כאשר אחרים
                     לא מבחינים.
                 </td>
@@ -30,7 +30,7 @@ function AQ10ChildrenForm({setDetails, details}) {
             </tr>
         <tr>
             <td className="text-center">2</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא בדרך כלל מתרכז יותר
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא בדרך כלל מתרכז יותר
                 בתמונה הכללית
                 מאשר בפרטים הקטנים.
             </td>
@@ -47,7 +47,7 @@ function AQ10ChildrenForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">3</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>במפגש חברתי, הוא מצליח
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>במפגש חברתי, הוא מצליח
                 לעקוב בקלות אחר
                 מספר שיחות עם אנשים שונים.
             </td>
@@ -64,7 +64,7 @@ function AQ10ChildrenForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">4</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא מצליח לעבור בין
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא מצליח לעבור בין
                 פעילויות שונות
                 בקלות.
             </td>
@@ -81,7 +81,7 @@ function AQ10ChildrenForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">5</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא לא יודע איך להחזיק
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא לא יודע איך להחזיק
                 שיחה עם חבריו.
             </td>
             <td>
@@ -97,7 +97,7 @@ function AQ10ChildrenForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">6</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא טוב בשיחת חולין.</td>
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא טוב בשיחת חולין.</td>
             <td>
                 <Form.Check className="text-center" name="sixthQuestion" type="radio"
                             onChange={e => setDetails({...details, A6: 0})}/>
@@ -111,7 +111,7 @@ function AQ10ChildrenForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">7</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>כאשר מספרים לו סיפור, קשה
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>כאשר מספרים לו סיפור, קשה
                 לו לגלות
                 ולהבין מה הכוונות והתחושות של כל דמות בסיפור.
             </td>
@@ -128,7 +128,7 @@ function AQ10ChildrenForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">8</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>כשהיה בגן, הוא אהב לשחק
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>כשהיה בגן, הוא אהב לשחק
                 במשחקי העמדת
                 פנים עם ילדים אחרים.
             </td>
@@ -145,7 +145,7 @@ function AQ10ChildrenForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">9</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא מצליח להבין בקלות מה
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא מצליח להבין בקלות מה
                 אדם אחר חושב או
                 מרגיש רק על ידי הבטה בפניו.
             </td>
@@ -162,7 +162,7 @@ function AQ10ChildrenForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">10</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא מתקשה להכיר וליצור
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא מתקשה להכיר וליצור
                 חברים חדשים.
             </td>
             <td>

@@ -6,7 +6,7 @@ function AQ10AdultForm({setDetails, details}) {
             <tbody>
             <tr>
                 <td className="text-center">1</td>
-                <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא נוטה להבחין בצלילים
+                <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא נוטה להבחין בצלילים
                     קטנים כאשר אחרים
                     לא מבחינים.
                 </td>
@@ -26,7 +26,7 @@ function AQ10AdultForm({setDetails, details}) {
             </tr>
         <tr>
             <td className="text-center">2</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא בדרך כלל מתרכז יותר
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא בדרך כלל מתרכז יותר
                 בתמונה הכללית
                 מאשר בפרטים הקטנים.
             </td>
@@ -43,7 +43,7 @@ function AQ10AdultForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">3</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא מסוגל לבצע בקלות יותר מפעולה אחת במקביל
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא מסוגל לבצע בקלות יותר מפעולה אחת במקביל
             </td>
             <td>
                 <Form.Check className="text-center" name="thirdQuestion" type="radio"
@@ -58,7 +58,7 @@ function AQ10AdultForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">4</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>בעת הפרעה, הוא מסוגל לחזור במהרה לעיסוקיו הקודמים.
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>בעת הפרעה, הוא מסוגל לחזור במהרה לעיסוקיו הקודמים.
             </td>
             <td>
                 <Form.Check className="text-center" name="fourthQuestion" type="radio"
@@ -73,7 +73,7 @@ function AQ10AdultForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">5</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא אוהב לאסוף מידע על כל מיני דברים לפי קטגוריות (למשל סוגי מכוניות, סוגי ציפורים וכו').
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא אוהב לאסוף מידע על כל מיני דברים לפי קטגוריות (למשל סוגי מכוניות, סוגי ציפורים וכו').
             </td>
             <td>
                 <Form.Check className="text-center" name="eightQuestion" type="radio"
@@ -88,7 +88,7 @@ function AQ10AdultForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">6</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>בעת שיחה, הוא יודע להבחין האם האדם שמולו משתעמם.</td>
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>בעת שיחה, הוא יודע להבחין האם האדם שמולו משתעמם.</td>
             <td>
                 <Form.Check className="text-center" name="sixthQuestion" type="radio"
                             onChange={e => setDetails({...details, A6: 0})}/>
@@ -102,7 +102,7 @@ function AQ10AdultForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">7</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>כאשר מספרים לו סיפור, קשה
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>כאשר מספרים לו סיפור, קשה
                 לו לגלות
                 ולהבין מה הכוונות והתחושות של כל דמות בסיפור.
             </td>
@@ -120,7 +120,7 @@ function AQ10AdultForm({setDetails, details}) {
         <tr>
             <td className="text-center">8</td>
 
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>כשמישהו מדבר איתו, הוא מסוגל "לקרוא בין השורות"
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>כשמישהו מדבר איתו, הוא מסוגל "לקרוא בין השורות"
             </td>
             <td>
                 <Form.Check className="text-center" name="fifthQuestion" type="radio"
@@ -135,7 +135,7 @@ function AQ10AdultForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">9</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא מצליח להבין בקלות מה
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא מצליח להבין בקלות מה
                 אדם אחר חושב או
                 מרגיש רק על ידי הבטה בפניו.
             </td>
@@ -152,7 +152,7 @@ function AQ10AdultForm({setDetails, details}) {
         </tr>
         <tr>
             <td className="text-center">10</td>
-            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 20}}>הוא מתקשה להבין את כוונותם של אנשים אחרים.
+            <td className="text-end p-2" style={{lineHeight: 1, fontSize: 18}}>הוא מתקשה להבין את כוונותם של אנשים אחרים.
             </td>
             <td>
                 <Form.Check className="text-center" name="tenthQuestion" type="radio"

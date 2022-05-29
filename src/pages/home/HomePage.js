@@ -179,7 +179,8 @@ function HomePage({userDetails, type, institute}) {
                     <Col className="align-self-center"
                          id='top-banner'>
                         <Row>
-                            <Col md='2' className="w-auto rounded justify-content-center">
+                            <Col
+                                md='2' className="w-auto rounded justify-content-center">
                                 <ButtonGroup className="gap-4 align-items-center">
                                     <Form.Label>
                                         שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}
@@ -200,7 +201,7 @@ function HomePage({userDetails, type, institute}) {
                                             onClick={onLogout}>התנתק</Button>
                                 </ButtonGroup>
                             </Col>
-                            <Col md='7'/>
+                            <Col style={{width:'100%'}}/>
                             {/*<Col md='3' className="border align-self-center w-auto" id='floating-tabs-bar'>*/}
                             <Col md='3' className=" align-self-center w-auto">
                                 {/*<Container>*/}
@@ -294,34 +295,37 @@ function HomePage({userDetails, type, institute}) {
                                                            element={
                                                                <Col>
                                                                    <Row>
-                                                                       <Button as={Link} to='sessions' onClick={() => {
+                                                                       <Button as={Link} to='sessions' active={currentPage === 'sessions'} onClick={() => {
                                                                            setCurrentPage('sessions')
                                                                        }} className="list-group-item list-group-item-action"
-                                                                               id='lower-side-menu-top-button'>סיכומי
+                                                                               id='selected-patient-menu-top-button'>סיכומי
                                                                            טיפולים</Button>
                                                                    </Row>
 
                                                                    <Row>
-                                                                       <Button as={Link} to='exercises' onClick={() => {
+                                                                       <Button as={Link} to='exercises' active={currentPage === 'exercises'} onClick={() => {
                                                                            setCurrentPage('exercises')
                                                                        }}
                                                                                className="list-group-item list-group-item-action"
-                                                                               id='lower-side-menu-middle-button'>תרגילים</Button>
+                                                                               id='selected-patient-menu-middle-button'>תרגילים</Button>
                                                                    </Row>
 
                                                                    <Row>
-                                                                       <Button as={Link} to='ProgressTrend/*' onClick={() => {
+                                                                       <Button as={Link} to='ProgressTrend/*' active={currentPage === 'ProgressTrend'} onClick={() => {
                                                                            setCurrentPage('ProgressTrend')
                                                                        }}
                                                                                className="list-group-item list-group-item-action"
-                                                                               id='lower-side-menu-middle-button'>מגמת
+                                                                               id='selected-patient-menu-middle-button'>מגמת
                                                                            התקדמות</Button>
                                                                    </Row>
 
-                                                                   <Row>
-                                                                       <div id='lower-side-menu-bottom-button'>
-                                                                           <NavDropdown drop='start' title="אפליקציות צד שלישי"
-                                                                                        id='lower-side-menu-bottom-button'>
+                                                                   <Row >
+                                                                       {/*<Button as={NavDropdown}*/}
+                                                                       {/*        drop='start' title="אפליקציות צד שלישי"*/}
+                                                                       {/*         style={{background:"transparent"}}>*/}
+                                                                       {/*<div style={{width:'3000px'}}>*/}
+                                                                           <NavDropdown drop='start' title={"אפליקציות צד שלישי"}
+                                                                                        id='selected-patient-menu-bottom-button'>
                                                                                <NavDropdown.Item as={Link} to={'AUTIDO'}
                                                                                                  onClick={() => {
                                                                                                      setCurrentPage('AUTIDO')
@@ -333,7 +337,8 @@ function HomePage({userDetails, type, institute}) {
                                                                                    KAZABUBU
                                                                                </NavDropdown.Item>
                                                                            </NavDropdown>
-                                                                       </div>
+                                                                       {/*</div>*/}
+                                                                       {/*</Button>*/}
                                                                        {/*<Link to='exercises' onClick={() => {*/}
                                                                        {/*    setCurrentPage('exercises')*/}
                                                                        {/*}}*/}

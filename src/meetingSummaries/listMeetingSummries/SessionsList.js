@@ -145,21 +145,20 @@ function SessionsList({patientId, therapistId = null, type}) {
 
     return (
         <div>
-            <Row className='p-2'>
-                <Col>
-                    <Form.Label style={{fontWeight: 'bold'}}>סיכומי טיפולים</Form.Label>
-                </Col>
-                <Col md='4'>
+            <Row className='p-2 align-content-start'>
+                <div style={{width:'auto'}}>
+                    <Form.Label className='fs-2' style={{fontWeight: 'bold'}}>סיכומי טיפולים</Form.Label></div>
+                <div style={{width:'auto',alignSelf:"center"}}>
                     <AddSessionDialog type={type} setNewSession={setNewSession} newSession={newSession}
-                                       handleOnSubmit={handleOnSubmit}/>
-                </Col>
+                                      handleOnSubmit={handleOnSubmit}/>
+            </div>
             </Row>
+            <br/>
             {/*// sessionsData.map((s)=>(*/}
-            <Accordion>
+            <Accordion className='justify-content-center' style={{width:'70%'}}>
                 {
                     sessionsData.map((s, i) => (
                             // <>
-
                             <Accordion.Item eventKey={s.id}>
                                 <Accordion.Header>
                                     {s.title+ ', ' +new Date(s.date.seconds * 1000).toLocaleDateString()}
@@ -169,29 +168,29 @@ function SessionsList({patientId, therapistId = null, type}) {
                                 <Accordion.Body>
                                     <Col>
                                         <Row>
-                                            <Form.Text>
+                                            <Form.Label>
                                                 נושא המפגש:
                                                 &nbsp;
                                                 {s.title}
-                                            </Form.Text>
+                                            </Form.Label>
                                         </Row>
 
                                         <Row>
-                                            <Form.Text>
+                                            <Form.Label>
                                                 תאריך:
                                                 &nbsp;
                                                 {/*{s.date}*/}
                                                 {new Date(s.date.seconds * 1000).toLocaleDateString()}
-                                            </Form.Text>
+                                            </Form.Label>
                                         </Row>
 
                                         <Row>
-                                            <Form.Text>
+                                            <Form.Label>
                                                 תוכן:
                                                 &nbsp;
                                                 {s.summary}
                                                 {/*{new Date(e.createdAt.seconds * 1000).toLocaleDateString()}*/}
-                                            </Form.Text>
+                                            </Form.Label>
                                         </Row>
 
                                         {(type === 'therapist') &&
@@ -210,26 +209,6 @@ function SessionsList({patientId, therapistId = null, type}) {
                     )
                 }
             </Accordion>
-            {/*// <>*/}
-            {/*// <Button*/}
-            {/*//     onClick={() => setOpen(!open)}*/}
-            {/*//     aria-controls="example-collapse-text"*/}
-            {/*//     aria-expanded={open}*/}
-            {/*// >*/}
-            {/*//     {s.date.toDate().toUTCString() + s.title}*/}
-            {/*// </Button>*/}
-            {/*//*/}
-            {/*//*/}
-            {/*//     <Collapse in={open}>*/}
-            {/*//         <div id="example-collapse-text">*/}
-            {/*//             {s.date.toDate().toUTCString()}*/}
-            {/*//             {s.title}*/}
-            {/*//             {s.summary}*/}
-            {/*//         </div>*/}
-            {/*//     </Collapse>*/}
-            {/*// </>*/}
-
-            {/*// }*/}
         </div>
     )
 }

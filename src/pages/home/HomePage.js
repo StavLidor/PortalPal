@@ -473,12 +473,12 @@ function HomePage({userDetails, type, institute}) {
                                    })()
                                    }/>
                         </Routes>
-                        <Routes>
-                            <Route path={currentPerson.toString() + '/code'}
-                                   element={<GetPersonalCode type={type} id={currentPerson}
-                                   detailsChild={patientListData[patientListData.findIndex((p) => p.id === currentPerson)
-                                       ].data()}/>}/>
-                        </Routes>
+                            {type === 'parent' && currentPerson !== '' && patientListData.length>0 && <Routes>
+                                <Route path={currentPerson.toString() + '/code'}
+                                       element={<GetPersonalCode type={type} id={currentPerson}
+                                                                 detailsChild={patientListData[patientListData.findIndex((p) => p.id === currentPerson)
+                                                                     ].data()}/>}/>
+                            </Routes>}
 
 
                             {type === 'parent' && patientListData.map((item) => {

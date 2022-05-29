@@ -44,17 +44,18 @@ export function GetPersonalCode({id = null, type,detailsChild}) {
     //
     // }
 
-    const submitAdd = async e => {
-        e.preventDefault()
-        await addPatientToExternalTherapist(detailsNewPatient.id, detailsNewPatient.code, detailsNewPatient.connection)
-    }
+    // const submitAdd = async e => {
+    //     e.preventDefault()
+    //     await addPatientToExternalTherapist(detailsNewPatient.id, detailsNewPatient.code, detailsNewPatient.connection)
+    // }
 
     const copyToClipBoard =()=> {
         const copyText = document.getElementById("personal-code-text-box");
         navigator.clipboard.writeText(copyText.innerText)
         const x = document.getElementById("toast");
+        console.log('toko')
         x.className = "show";
-        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 2000);
     }
     return (
 
@@ -68,7 +69,7 @@ export function GetPersonalCode({id = null, type,detailsChild}) {
                 <br/>
                 <Row className='align-items-center gap-3' >
                     <Form.Label className='fs-5' style={{width:'70px',fontWeight:'bold'}}>קוד:</Form.Label>
-                    <Form.Label  readonly className='border border-secondary rounded p-2'  id='personal-code-text-box' >{code}</Form.Label>
+                    <Form.Label  readOnly className='border border-secondary rounded p-2'  id='personal-code-text-box' >{code}</Form.Label>
                     <Button className='btn align-self-start' title='העתק קוד' variant='outline-secondary' style={{width:'110px',height: '40px'}} onClick={copyToClipBoard}>העתק קוד</Button>
                 </Row>
                 <br/>
@@ -81,7 +82,7 @@ export function GetPersonalCode({id = null, type,detailsChild}) {
                 <Button className='w-25' variant="outline-danger" onClick={createACode}>קבל קוד חדש</Button>
                 <br/>
             </FormGroup>
-            <div className='show' id="toast">הקוד הועתק...</div>
+            <div  id="toast">הקוד הועתק...</div>
 
         </div>
     )

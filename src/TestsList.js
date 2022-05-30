@@ -315,9 +315,12 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
                 }}  />}
             </Container></>):(
             // ['קשר בין אישי']:[],['שיח קבוצתי']:[],['שמירת קשר עין']:[],['אקדמי']:[]
-            <Container className='align-items-center' style={{width:'70%'}}>
-                {Math.max(scores['אקדמי'].length,scores['שמירת קשר עין'].length,
-                    scores['שיח קבוצתי'].length,scores['קשר בין אישי'].length)>0&& <Bar type="bar" data={ {
+            <>
+
+                {(Math.max(scores['אקדמי'].length,scores['שמירת קשר עין'].length,
+                    scores['שיח קבוצתי'].length,scores['קשר בין אישי'].length)>0)?(
+                    <Container className='align-items-center' style={{width:'70%'}}>
+                        <Bar type="bar" data={ {
                 labels:[...Array(Math.max(scores['אקדמי'].length,scores['שמירת קשר עין'].length,
                     scores['שיח קבוצתי'].length,scores['קשר בין אישי'].length)).keys()],
                 datasets: [
@@ -342,9 +345,12 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
                         backgroundColor: 'rgb(54,229,235)',
                     },
                 ],
-            }}  />}
-            </Container>
-        )
+            }}  />
+                    </Container>):(empty)?(<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >לא קיימים מבחנים.</Form.Label> </Row>):
+                    <Row className='p-2 align-content-start'> <Form.Label className='fs-4' >טוען...</Form.Label> </Row>
+                }
+
+            </> )
 
     )
 

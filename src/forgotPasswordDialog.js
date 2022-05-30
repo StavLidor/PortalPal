@@ -43,13 +43,13 @@ export function ForgotPasswordDialog({showDialog, setShowDialog,}) {
                                     את כתובת האימייל של החשבון שאת סיסמתו תרצה לאפס.</Form.Label>
                                 <Row>
                                     <Col>
-                                        אימייל:
+                                        <Form.Label className='fs-4'>אימייל:</Form.Label>
                                     </Col>
                                     <Col md="auto">
                                         <Form.Control className="" type='email' placeholder='email@gmail.com'
                                                       id='validationDefault01'
                                                       required onChange={e => setEmail(e.target.value)}/>
-                                        <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                        <div style={{fontSize: 10,color: "red",width:'300px'}} id="invalid-feedback">
                                             {message}
                                         </div>
                                     </Col>

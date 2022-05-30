@@ -18,11 +18,11 @@ body {
 }
 
 footer {
-    /*position: fixed;*/
+    position: absolute;
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: red;
+    background-color: #99C4C8;
     color: white;
     text-align: center;
 }
@@ -287,7 +287,6 @@ footer {
     width: auto;
     height: auto;
 }
-
 #default-button:hover {
     background: #99C4C8;
     border-width: 2px;
@@ -295,6 +294,30 @@ footer {
     width: auto;
     height: auto;
 }
+
+
+#default-button-darker {
+    background: transparent;
+    border-width: 2px;
+    color: black;
+    width: auto;
+    height: auto;
+}
+#default-button-darker-static {
+    background: #69969a;
+    border-width: 2px;
+    color: white;
+    width: auto;
+    height: auto;
+}
+#default-button-darker:hover {
+    background: #69969a;
+    border-width: 2px;
+    color: white;
+    width: auto;
+    height: auto;
+}
+
 
 
 #info-button {
@@ -329,6 +352,13 @@ footer {
 
 #aboutUs {
     font-size: 25px;
+}
+
+
+
+#login-box{
+    /*width:355px;*/
+    background-color:lightgrey;
 }
 
 ::-webkit-scrollbar {

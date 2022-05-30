@@ -23,9 +23,9 @@ export default function Authenticate({login}) {
             </Animated>
 
             <Animated animationIn="fadeIn" animationInDuration={1000} animationOutDuration={1000} isVisible={true}>
-            <Container className="justify-content-center" style={{maxWidth:'600px'}}>
-            <div className={"border border-secondary rounded-3 m-5 p-4"} style={{
-                backgroundColor:'lightgrey'
+            <Container className="justify-content-center" style={{maxWidth:'500px'}} >
+            <div className={"border border-secondary rounded-3 m-5 p-4"} id='login-box' style={{
+                backgroundColor:'#c0dadc'
             }}>
                     {displayLoginForm === true && <Animated animationIn="fadeIn" animationInDuration={1000}  isVisible={true}>
                         <Login login={login} setDisplayLoginForm={setDisplayLoginForm}/>

@@ -76,7 +76,7 @@ function SignUp({setDisplayLoginForm})  {
                 <Form.Group className="mb-3" controlId="formEmail">
                     <Form.Label  for="validationDefault01" className="text-center" style={{width: "100%"}}>צור חשבון מטפל חדש</Form.Label>
                     <Row>
-                        <Col>
+                        <Col className='fs-5'>
                             שם פרטי:
                         </Col>
                         <Col md="auto">
@@ -89,7 +89,7 @@ function SignUp({setDisplayLoginForm})  {
                     </Row>
 
                     <Row>
-                        <Col>
+                        <Col className='fs-5'>
                             שם משפחה:
                         </Col>
                         <Col md="auto">
@@ -103,7 +103,7 @@ function SignUp({setDisplayLoginForm})  {
 
 
                     <Row>
-                        <Col>
+                        <Col className='fs-5'>
                             אימייל:
                         </Col>
                         <Col md="auto">
@@ -116,7 +116,7 @@ function SignUp({setDisplayLoginForm})  {
                     </Row>
 
                     <Row>
-                        <Col>
+                        <Col className='fs-5'>
                             סיסמה:
                         </Col>
                         <Col md="auto">
@@ -134,7 +134,7 @@ function SignUp({setDisplayLoginForm})  {
                     </Row>
 
                     <Row>
-                        <Col>
+                        <Col className='fs-5'>
                             מספר רישיון:
                         </Col>
                         <Col md="auto">
@@ -149,8 +149,8 @@ function SignUp({setDisplayLoginForm})  {
                 </Form.Group>
                 <Row className="p-1" md="10">
                     <ButtonGroup className="gap-4">
-                        <Button className="rounded-3" size="md" onClick={onSignUp}>צור חשבון</Button>
-                        <Button className="rounded-3" variant="outline-primary" size="md"
+                        <Button className="rounded-3" size="md" onClick={onSignUp} variant="secondary" id='default-button-darker-static'>צור חשבון</Button>
+                        <Button className="rounded-3" variant="outline-secondary" size="md" id='default-button-darker'
                                 onClick={() => setDisplayLoginForm(true)}>התחבר עם חשבון קיים</Button>
                     </ButtonGroup>
                 </Row>

@@ -179,8 +179,9 @@ function HomePage({userDetails, type, institute}) {
             <Container className="p-4" fluid>
                 <Row className='gap-4'>
                     <Col md='2' style={{maxWidth: '250px'}}><img src={Logo} alt='toko' style={{width: '240px'}}/></Col>
-                    <Col className="align-self-center"
-                         id='top-banner'>
+
+                    <Col className="align-self-center" id='top-banner'>
+                        <Animated animationIn="slideInLeft" animationInDuration={1000} isVisible={true}>
                         <Row>
                             <Col
                                 md='2' className="w-auto rounded justify-content-center">
@@ -215,6 +216,7 @@ function HomePage({userDetails, type, institute}) {
                             </Col>
                             {/*</Container>*/}
                         </Row>
+                        </Animated>
                     </Col>
                 </Row>
             </Container>

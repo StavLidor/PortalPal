@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link} from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import {Telephone} from 'react-bootstrap-icons';
+import {Printer, Telephone,People} from 'react-bootstrap-icons';
 
 
 function TabsBanner({type, currentPerson, setCurrentPage, currentPage,handlePrint,setCurrentPerson}) {
@@ -47,22 +47,21 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage,handlePrin
                         }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
                             מילוי טופס AQ
                         </Button>
-
-                        <Button id='top-menu-button' as={Link} variant='primary' to={'AboutUs'} onClick={() => {
+                        <Button id='top-menu-button' /*as={Link} */variant='primary' /*to={'print'}*/ onClick={handlePrint} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
+                            <Printer/>
+                        </Button>
+                        <Button id='top-menu-button' as={Link} title='אודות' variant='primary' to={'AboutUs'} onClick={() => {
                             setCurrentPage('AboutUs')
                             setCurrentPerson('')
                         }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
-                            אודות
-                        </Button>
-                        <Button id='top-menu-button' /*as={Link} */variant='primary' /*to={'print'}*/ onClick={handlePrint} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
-                            הדפסה
+                            <People/>
                         </Button>
 
-                        <Button id='top-menu-button' as={Link} to={'ContactUs'} onClick={() => {
+
+                        <Button id='top-menu-button' as={Link} to={'ContactUs'} title='צרו קשר' onClick={() => {
                             setCurrentPage('ContactUs')
                             setCurrentPerson('')
                         }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
-                             צרו קשר   &nbsp;
                             <Telephone/>
                         </Button>
                         {/*<Nav.Item>*/}

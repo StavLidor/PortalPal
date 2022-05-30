@@ -52,23 +52,23 @@ function Login({login, setDisplayLoginForm}) {
                     <Form.Group className="mb-3" controlId="formEmail">
                         <Form.Label for="validationDefault01" className="text-center" style={{width: "100%"}}>התחברות</Form.Label>
                         <Row>
-                            <Col>
+                            <Col className='fs-5'>
                                 אימייל:
                             </Col>
                             <Col md="auto">
-                                <Form.Control  className="" type='email' placeholder='email@gmail.com' id='validationDefault01'
+                                <Form.Control  type='email' placeholder='email@gmail.com' id='validationDefault01'
                                            required  onChange={e => setUserDetails({...userDetails, email: e.target.value})}/>
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{fontSize: 14,color: "red",width:'200px'}} id="invalid-feedback">
                                     {messages.email}
                                 </div>
                             </Col>
                         </Row>
                         <Row>
-                            <Col>
+                            <Col className='fs-5'>
                                 סיסמה:
                             </Col>
                             <Col md="auto">
-                                <Form.Control  className="" type='password' placeholder='סיסמה' id='validationDefault01'
+                                <Form.Control  className="" type='password' placeholder='סיסמה' style={{width:'200px'}} id='validationDefault01'
                                                required  onChange={e => setUserDetails({
                                     ...userDetails,
                                     password: e.target.value
@@ -77,11 +77,11 @@ function Login({login, setDisplayLoginForm}) {
                         </Row>
 
                         <Row>
-                            <Col>
+                            <Col className='fs-5'>
                                 תפקיד:
                             </Col>
-                            <Col md="auto">
-                                <Form.Select id='type'
+                            <Col>
+                                <Form.Select id='type' style={{width:'200px'}}
                                              onChange={e => setUserDetails({...userDetails, type: e.target.value})}>
                                     <option style={{fontSize: 18}} id='title1' value="therapist">מטפל</option>
                                     <option style={{fontSize: 18}} id='title2' value="parent">הורה</option>
@@ -91,18 +91,18 @@ function Login({login, setDisplayLoginForm}) {
                         </Row>
 
                         <Row>
-                            <Col>
+                            <Col className='fs-5'>
                                 מוסד:
                             </Col>
                             <Col md="auto">
-                                <Form.Select id='institute' /*disabled={userDetails.type === 'parent'}*/
+                                <Form.Select id='institute' disabled={userDetails.type === 'admin'} style={{width:'200px'}}
                                              onChange={e => setUserDetails({
                                                  ...userDetails,
                                                  institute: e.target.value
                                              })}>
                                     <option style={{fontSize: 18}} id='ins1' value={1}>1</option>
-                                    <option style={{fontSize: 18}} id='ins2'>2</option>
-                                    <option style={{fontSize: 18}} id='ins3'>3</option>
+                                    <option style={{fontSize: 18}} id='ins2' value={2}>2</option>
+                                    <option style={{fontSize: 18}} id='ins3' value={3}>3</option>
                                     <option style={{fontSize: 18}} id='ins4' value="external">חיצוני</option>
                                 </Form.Select>
                             </Col>
@@ -110,9 +110,9 @@ function Login({login, setDisplayLoginForm}) {
                     </Form.Group>
                     <Row className="p-1" md="10">
                         <ButtonGroup className="gap-4">
-                            <Button className="rounded-3" size="md" onClick={onLogin}>התחבר</Button>
-                            <Button className="rounded-3" variant="outline-primary" size="md"
-                                    onClick={changeForm}>הירשם</Button>
+                            <Button className="rounded-3" size="md" onClick={onLogin}  variant="secondary" id='default-button-darker-static'>התחבר</Button>
+                            <Button className="rounded-3" variant="outline-secondary" size="md" id='default-button-darker'
+                                    onClick={changeForm}>הירשם כמטפל</Button>
                         </ButtonGroup>
                     </Row>
                     <Row>

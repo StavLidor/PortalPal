@@ -5,7 +5,7 @@ import {Link, Route, Routes} from "react-router-dom";
 import Patient from "../../pages/patient/Patient";
 import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import {addPatientToExternalTherapist, db} from "../../firebase";
-import {Pencil, Plus, Trash} from 'react-bootstrap-icons';
+import {Pencil, Plus, FilePerson, PersonCircle} from 'react-bootstrap-icons';
 import TableData from "../tableEdit/TableData";
 import {isClick} from "../../useFunction";
 
@@ -86,7 +86,7 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                             }
 
 
-                        }}>{data.firstName + " " + data.lastName}</Button>
+                        }}><PersonCircle/>&nbsp;&nbsp;&nbsp;&nbsp;{data.firstName + " " + data.lastName} </Button>
                         )
                     }
                 )}

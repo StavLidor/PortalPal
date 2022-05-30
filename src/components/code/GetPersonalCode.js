@@ -74,11 +74,11 @@ export function GetPersonalCode({id = null, type,detailsChild}) {
                 </Row>
                 <br/>
 
-                <Form.Label className='fs-5'>שימו לב: הקוד הוא חד-פעמי! ברגע שמטפל מכניס אותו למערכת יווצר קוד חדש.</Form.Label>
-                <br/><br/><br/><br/>
+                <Form.Label className='fs-5'>שימו לב: הקוד הוא חד-פעמי! ברגע שמטפל מכניס אותו למערכת הוא כבר לא שמיש.</Form.Label>
 
 
-                <Form.Label className='fs-5'>ביצירת קוד חדש - הקוד הישן יבוטל ולא יהיה שמיש אם טרם הוכנס למערכת. </Form.Label>
+
+                <Form.Label className='fs-5'>על מנת להוסיף יותר ממטפל אחד יש ליצור קוד נוסף. </Form.Label>
                 <Button className='w-25' variant="outline-danger" onClick={createACode}>קבל קוד חדש</Button>
                 <br/>
             </FormGroup>

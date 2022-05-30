@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 
 import App from './App';
+import {Form} from "react-bootstrap";
 
 
 ReactDOM.render(
@@ -15,10 +16,10 @@ ReactDOM.render(
             {/*            {'https://cdn.jsdelivr.net/pyodide/dev/full/pyodide.js'} />*/}
         </head>
         <App/>
-        {/*<footer>*/}
-        {/*    <p>Author: Hege Refsnes</p>*/}
-        {/*    <p><a href="mailto:hege@example.com">hege@example.com</a></p>*/}
-        {/*</footer>*/}
+        <footer>
+            <>Author: Hege Refsnes</>
+            {/*<p><a href="mailto:hege@example.com">hege@example.com</a></p>*/}
+        </footer>
 
     {/*    <head>*/}
     {/*        <meta charSet="utf-8"/>*/}

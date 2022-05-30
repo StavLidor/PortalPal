@@ -65,7 +65,7 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                         return (
                             // <div>{data.firstName + " " + data.lastName+', '+data.connection}</div>
 
-                            <Button as={Link} to={'parent' + '/' + index.toString() + '/' + currentPage.toString()}
+                            <Button as={Link} to={'parent' + '/' + index.toString() + '/' /*+ currentPage.toString()*/}
                                     active={isClick('parent') && current.id === data.id}
                                     className="list-group-item list-group-item-action mb-1"
                                     style={{backgroundColor:'transparent',border:'transparent'}}

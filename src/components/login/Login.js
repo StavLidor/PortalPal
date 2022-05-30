@@ -15,7 +15,7 @@ function Login({login, setDisplayLoginForm}) {
         email: "toko1010@gmail.com",
         password: "1234567",
         type: "therapist",
-        institute: 1
+        institute: '1'
     })
     const [messages, setMessages] = useState({
         email: "",
@@ -82,7 +82,11 @@ function Login({login, setDisplayLoginForm}) {
                             </Col>
                             <Col>
                                 <Form.Select id='type' style={{width:'200px'}}
-                                             onChange={e => setUserDetails({...userDetails, type: e.target.value})}>
+                                             onChange={e =>
+
+                                                     setUserDetails({...userDetails, type: e.target.value})
+
+                                                 }>
                                     <option style={{fontSize: 18}} id='title1' value="therapist">מטפל</option>
                                     <option style={{fontSize: 18}} id='title2' value="parent">הורה</option>
                                     <option style={{fontSize: 18}} id='title3' value="admin">ניהול</option>
@@ -90,7 +94,7 @@ function Login({login, setDisplayLoginForm}) {
                             </Col>
                         </Row>
 
-                        <Row>
+                        {userDetails.type !== 'admin' &&<Row>
                             <Col className='fs-5'>
                                 מוסד:
                             </Col>
@@ -100,13 +104,13 @@ function Login({login, setDisplayLoginForm}) {
                                                  ...userDetails,
                                                  institute: e.target.value
                                              })}>
-                                    <option style={{fontSize: 18}} id='ins1' value={1}>1</option>
-                                    <option style={{fontSize: 18}} id='ins2' value={2}>2</option>
-                                    <option style={{fontSize: 18}} id='ins3' value={3}>3</option>
+                                    <option style={{fontSize: 18}} id='ins1' value={'1'}>1</option>
+                                    <option style={{fontSize: 18}} id='ins2' value={'2'}>2</option>
+                                    <option style={{fontSize: 18}} id='ins3' value={'3'}>3</option>
                                     <option style={{fontSize: 18}} id='ins4' value="external">חיצוני</option>
                                 </Form.Select>
                             </Col>
-                        </Row>
+                        </Row>}
                     </Form.Group>
                     <Row className="p-1" md="10">
                         <ButtonGroup className="gap-4">

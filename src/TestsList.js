@@ -28,6 +28,7 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
             return []
         return {['קשר בין אישי']:[],['שיח קבוצתי']:[],['שמירת קשר עין']:[],['אקדמי']:[]}
     })())
+    const [empty,editEmpty]=useState(false)
     // const data2 = {
     //     labels: dates,
     //     datasets: [
@@ -94,6 +95,12 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
                     let datesArr=[]
                     let scoresArr=[]
                     let scoresDic={['קשר בין אישי']:[],['שיח קבוצתי']:[],['שמירת קשר עין']:[],['אקדמי']:[]}
+                    if(querySnapshot.docs.length === 0){
+                        editEmpty(true)
+                    }
+                    else {
+                        editEmpty(false)
+                    }
                     querySnapshot.forEach((doc) => {
                             tests.push({...doc.data(), id: doc.id})
                             if(category){
@@ -210,16 +217,21 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
     return (
 
         (category)?(
+            <>
+                <Row className='p-2 align-content-start'>
+                    <div style={{width:'auto'}}>
+                        <Form.Label className='fs-2' style={{fontWeight: 'bold'}}>{"מבחנים של"+" "+category}</Form.Label></div>
+                    <div style={{width:'auto',alignSelf:"center"}}>
+                        {type === 'therapist' && <AddTestDialog  category={category} handleOnSubmit={handleOnSubmit}/>}
+                    </div>
+                </Row>
+                {empty&&testsList.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >לא קיימים מבחנים</Form.Label> </Row>}
+                {!empty&&testsList.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >טוען...</Form.Label> </Row>}
             <Container className='align-items-center' style={{width:'70%'}}>
-            <Row className='p-2 align-content-start'>
-                <div style={{width:'auto'}}>
-                    <Form.Label className='fs-2' style={{fontWeight: 'bold'}}>{"מבחנים של"+" "+category}</Form.Label></div>
-                <div style={{width:'auto',alignSelf:"center"}}>
-                    {type === 'therapist' && <AddTestDialog  category={category} handleOnSubmit={handleOnSubmit}/>}
-                </div>
-            </Row>
+
                 <br/>
                 <br/>
+
             <Accordion alwaysOpen={true}>
                 {
                     testsList.map((t, i) => (
@@ -291,20 +303,21 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
                 <br/>
                 <br/>
 
-            <Bar type="bar" data={ {
-                labels: dates,
-                datasets: [
-                    {
-                        label: 'ציון',
-                        data: scores,
-                        backgroundColor: 'rgb(54, 162, 235)',
-                    },
-                ],
-            }}  />
-            </Container>):(
+                {testsList.length>0 && <Bar type="bar" data={ {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'ציון',
+                            data: scores,
+                            backgroundColor: 'rgb(54, 162, 235)',
+                        },
+                    ],
+                }}  />}
+            </Container></>):(
             // ['קשר בין אישי']:[],['שיח קבוצתי']:[],['שמירת קשר עין']:[],['אקדמי']:[]
             <Container className='align-items-center' style={{width:'70%'}}>
-            <Bar type="bar" data={ {
+                {Math.max(scores['אקדמי'].length,scores['שמירת קשר עין'].length,
+                    scores['שיח קבוצתי'].length,scores['קשר בין אישי'].length)>0&& <Bar type="bar" data={ {
                 labels:[...Array(Math.max(scores['אקדמי'].length,scores['שמירת קשר עין'].length,
                     scores['שיח קבוצתי'].length,scores['קשר בין אישי'].length)).keys()],
                 datasets: [
@@ -329,7 +342,7 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
                         backgroundColor: 'rgb(54,229,235)',
                     },
                 ],
-            }}  />
+            }}  />}
             </Container>
         )
 

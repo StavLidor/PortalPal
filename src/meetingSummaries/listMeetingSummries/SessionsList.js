@@ -22,7 +22,9 @@ import { Pencil,Plus,Trash} from 'react-bootstrap-icons';
 function SessionsList({patientId, therapistId = null, type}) {
 
     const [sessionsData, setSessionsData] = useState([])
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
+    const [empty,editEmpty]=useState(false)
+
     const [newSession, setNewSession] = useState({
         title: '',
         summary: '',
@@ -58,6 +60,8 @@ function SessionsList({patientId, therapistId = null, type}) {
         return false
     }
     useEffect(async () => {
+        console.log('Empty',empty)
+        // editEmpty(false)
         console.log('useEffect')
         let q
         let therapistIDForSession = (() => {
@@ -72,6 +76,12 @@ function SessionsList({patientId, therapistId = null, type}) {
 
             const sessions = []
             getDocs(q).then((querySnapshot) => {
+                if(querySnapshot.docs.length === 0){
+                    editEmpty(true)
+                }
+                else {
+                    editEmpty(false)
+                }
                 querySnapshot.forEach((doc) => {
                     sessions.push({...doc.data(), id: doc.id})
                     console.log('id', doc.id)
@@ -81,13 +91,21 @@ function SessionsList({patientId, therapistId = null, type}) {
 
 
                 });
+
                 setSessionsData(sessions)
+
             })
 
         } else {
             return onSnapshot(
                 q,
                 (querySnapshot) => {
+                    if(querySnapshot.docs.length === 0){
+                        editEmpty(true)
+                    }
+                    else {
+                        editEmpty(false)
+                    }
                     let sessions = []
                     querySnapshot.forEach((doc) => (
                         // console.log(doc)
@@ -97,6 +115,9 @@ function SessionsList({patientId, therapistId = null, type}) {
                     ))
                     console.log("sessions: ", sessions)
                     setSessionsData(sessions)
+                    // if(sessionsData.length === 0){
+                    //     editEmpty(true)
+                    // }
                     console.log("sessionsData: ", sessionsData)
                 },
                 (error) => {
@@ -154,7 +175,9 @@ function SessionsList({patientId, therapistId = null, type}) {
         <div>
             <Row className='p-2 align-content-start'>
                 <div style={{width:'auto'}}>
-                    <Form.Label className='fs-2' style={{fontWeight: 'bold'}}>סיכומי טיפולים</Form.Label></div>
+                    <Form.Label className='fs-2' style={{fontWeight: 'bold'}}>סיכומי טיפולים</Form.Label>
+                </div>
+
                 <div style={{width:'auto',alignSelf:"center"}}>
                     <AddSessionDialog type={type} setNewSession={setNewSession} newSession={newSession}
                                       handleOnSubmit={handleOnSubmit}/>
@@ -167,11 +190,16 @@ function SessionsList({patientId, therapistId = null, type}) {
                     {/*</Button>*/}
             </div>
             </Row>
+            {empty &&sessionsData.length===0 && <Row className='p-2 align-content-start'> <Form.Label className='fs-4' >
+                לא קיימים עוד סיכומי מפגש</Form.Label> </Row>}
+            {!empty && sessionsData.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >טוען...</Form.Label> </Row>}
             <br/>
+
             {/*// sessionsData.map((s)=>(*/}
             <Accordion className='justify-content-center' style={{width:'70%'}} alwaysOpen={true}
 
             >
+
                 {
                     sessionsData.map((s, i) => (
                             // <>

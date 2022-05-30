@@ -28,6 +28,7 @@ import {Plus, Pencil, Trash} from 'react-bootstrap-icons';
 function PatientExercises({patient, therapist, type}) {
     const [exercisesData, setExercisesData] = useState([])
     const [open, setOpen] = useState(false)
+    const [empty,editEmpty]=useState(false)
 
     const [newExercise, setNewExercise] = useState({
         until: '',
@@ -51,6 +52,12 @@ function PatientExercises({patient, therapist, type}) {
 
             const arr = []
             getDocs(q).then((querySnapshot) => {
+                if(querySnapshot.docs.length === 0){
+                    editEmpty(true)
+                }
+                else {
+                    editEmpty(false)
+                }
                 querySnapshot.forEach((doc) => {
                     arr.push({...doc.data(), id: doc.id})
                     console.log('id', doc.id)
@@ -61,6 +68,9 @@ function PatientExercises({patient, therapist, type}) {
 
 
                 });
+                if(arr.length === 0){
+                    editEmpty(true)
+                }
                 setExercisesData(arr)
             })
         } else {
@@ -68,6 +78,12 @@ function PatientExercises({patient, therapist, type}) {
                 q,
                 (querySnapshot) => {
                     let data = []
+                    if(querySnapshot.docs.length === 0){
+                        editEmpty(true)
+                    }
+                    else {
+                        editEmpty(false)
+                    }
                     querySnapshot.forEach((doc) => (
                         // console.log(doc)
 
@@ -75,6 +91,9 @@ function PatientExercises({patient, therapist, type}) {
 
                     ))
                     console.log("DATA: ", data)
+                    if(data.length === 0){
+                        editEmpty(true)
+                    }
                     setExercisesData(data)
 
                 },
@@ -162,7 +181,8 @@ function PatientExercises({patient, therapist, type}) {
                                            handleOnSubmit={handleOnSubmit}/>
                     </div>
             </Row>
-
+            {empty&&exercisesData.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >לא ניתנו תרגילים</Form.Label> </Row>}
+            {!empty && exercisesData.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >טוען...</Form.Label> </Row>}
             <Accordion className='justify-content-center' style={{width:'70%'}} alwaysOpen={true}>
                 {
                     exercisesData.map((e, i) => (

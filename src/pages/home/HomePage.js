@@ -148,7 +148,7 @@ function HomePage({userDetails, type, institute}) {
                     </Routes>
                     <Routes>
                         <Route
-                            path={data.id.toString() + '/' + 'therapist' + '/' + index.toString() + '/' + isActive.toString() + '/' + index.toString() + '/communication'}
+                            path={data.id.toString() + '/' + 'therapist' + '/'  + isActive.toString() + '/' + index.toString() +'/communication'}
                             element={<Chat
                                 otherUser={therapist} patient={data.id} isActive={isActive}/>}/>
                     </Routes>

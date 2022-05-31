@@ -1,13 +1,21 @@
 import {Button, ButtonGroup, Form, Row} from "react-bootstrap";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ReportsPage from "./ReportsPage";
 import {addThirdPartyCodes} from "./firebase";
 import {Container} from "@mui/material";
 
 function CheckHasAPICode({appKey, patientDetails}) {
     console.log("in new: ", patientDetails)
-    const [hasCode, setHasCode] = useState(appKey in patientDetails.thirdPartyCodes);
-    const [code, setCode] = useState(patientDetails.thirdPartyCodes[appKey]);
+    const [hasCode, setHasCode] = useState(false);
+    const [code, setCode] = useState(null)
+    useEffect(()=>{
+        const flag = appKey in patientDetails.thirdPartyCodes
+        setHasCode(flag)
+        if(flag){
+            setCode(patientDetails.thirdPartyCodes[appKey])
+        }
+
+    },[patientDetails])
     const [wasCodeRemoved, setWasCodeRemoved] = useState(false);
 
     return (

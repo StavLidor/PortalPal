@@ -23,6 +23,7 @@ function TherapistsList({
     const [activeTherapistsList, setActiveTherapistsList] = useState([])
     const [notActiveTherapistsList, setNotActiveTherapistList] = useState([])
     const [current, setCurrent] = useState({id: "", index: ""})
+    const [reload, setReload] = useState(true)
 
     console.log('therapistLIstt')
     //console.log(talkersIds)
@@ -112,11 +113,13 @@ function TherapistsList({
                     }
                     // console.log()
                 })
+                setReload(false)
                 setActiveTherapistsList(activeTherapists)
                 console.log("activeTherapists", activeTherapists)
                 setActiveTherapistListData(activeTherapists)
                 setNotActiveTherapistList(notActiveTherapists)
                 setNotActiveTherapistListData(notActiveTherapists)
+
             })
         }
 
@@ -140,6 +143,7 @@ function TherapistsList({
                 }
                 return (
                     <div>
+
                         <Button id='therapistList-button' as={Link} to={path} active={
                             /*isClick(path)*/
                             current.id === data.id && isClick('therapist')
@@ -171,10 +175,12 @@ function TherapistsList({
     }
     return (
         <div>
+            {reload &&  <Row><Form.Label style={{fontWeight: 'bold'}} >טוען...</Form.Label></Row>}
             {type === 'therapist' &&<Form.Label style={{fontWeight: 'bold'}}>צאט עם מטפלים אחרים</Form.Label>}
             <div>
             {type === 'parent' && <Form.Label  style={{fontWeight: 'bold'}}>מטפלים פעילים:</Form.Label>}
             </div>
+
             <div>
             {activeTherapistsList.length > 0 && showList(activeTherapistsList, 'active')}
             </div>

@@ -17,6 +17,7 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
     const [addPatient, setAddPatient] = useState(false)
     const [detailsNewPatient, setDetailsNewPatient] = useState({id: "", connection: "", code: ""})
     const [listener, setListener] = useState(null)
+    const [reload, setReload] = useState(true)
 
     useEffect(getListData, [list])
 
@@ -38,6 +39,7 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                 console.log("list data: ", snapshot.docs)
                 setListData(snapshot.docs)
                 setPatientListData(snapshot.docs)
+                setReload(false)
             },
             (error) => {
                 // TODO: Handle errors!
@@ -54,7 +56,8 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
 
     return (
         <div>
-            <Form.Label style={{fontWeight: 'bold'}}>{listTitle}</Form.Label>
+            <Row><Form.Label style={{fontWeight: 'bold'}}>{listTitle}</Form.Label></Row>
+            {reload &&  <Row><Form.Label style={{fontWeight: 'bold'}} >טוען...</Form.Label></Row>}
             {institute === 'external' && <Button onClick={() => setAddPatient(true)} className="m-2 p-1 text-center"
                                                  style={{fontSize: 10, height: 30}} variant="outline-primary"><Plus/>הוסף
                 מטופל</Button>

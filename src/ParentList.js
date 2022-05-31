@@ -13,6 +13,8 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
     // console.log("in therapist!!!!!!!!")
     const [parents, setParents] = useState([])
     const [current, setCurrent] = useState({id: "", index: ""})
+    const [reload, setReload] = useState(true)
+
 
     // console.log('therapistLIstt')
     //console.log(talkersIds)
@@ -48,6 +50,7 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                         }
                         // console.log()
                     })
+                    setReload(false)
                     setParents(data)
                     setParentsListData(data)
                     // console.log("my data: ", data)
@@ -58,7 +61,8 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
 
     return (
         <div>
-            <Form.Label style={{fontWeight: 'bold'}}>צאט עם הורי מטופל</Form.Label>
+            {reload &&  <Row><Form.Label style={{fontWeight: 'bold'}} >טוען...</Form.Label></Row>}
+            <Row><Form.Label style={{fontWeight: 'bold'}}>צאט עם הורי מטופל</Form.Label></Row>
                 {parents.map((item, index) => {
                         let data = item
 

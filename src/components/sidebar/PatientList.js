@@ -72,11 +72,11 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                         return (
                             <Button id='patient-button' as={Link} active={currentPerson ===data.id.toString()}
                                     style={{backgroundColor:'transparent',border:'transparent'}}
-                                    to={id + (() => {
+                                    to={id +'/'+currentPage /*(() => {
                             if (currentPage !== 'parent' && currentPage !=='therapist')
                                 return '/'+currentPage
                             return ''
-                        })()
+                        })()*/
                         } className="list-group-item list-group-item-action mb-1" onClick={(e) => {
                             // e.preventDefault()
                             if(currentPerson===data.id.toString()){

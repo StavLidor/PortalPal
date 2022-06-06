@@ -28,7 +28,7 @@ export function GetPersonalCode({id = null, type,detailsChild}) {
         //
         // await addToPatientArr(id, 'code', realCode)
 
-    }, [])
+    }, [id])
     const createACode=async () => {
         const realCode = makePassword(10)
         const hashCode = hash.sha256().update(realCode).digest("hex")

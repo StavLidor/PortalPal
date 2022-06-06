@@ -72,8 +72,16 @@ function HomePage({userDetails, type, institute}) {
         // return localStorage.getItem("currentPerson")
         return ""
     })())
-    const [currentPage, setCurrentPage] = useState('')
-    const [currentTherapist, setCurrentTherapist] = useState({id: '', index: ''})
+    const [currentPage, setCurrentPage] = useState((()=>{
+        const saveCurrentPage= localStorage.getItem("currentPage")
+        const pathSpilt = window.location.pathname.split("/")
+        const len = pathSpilt.length
+        if( saveCurrentPage!==null && pathSpilt[len-1]===saveCurrentPage){
+            return saveCurrentPage
+        }
+        return ''
+    })())
+    const [currentTherapist, setCurrentTherapist] = useState({id: '', index: '',active:true})
     const [currentParent, setCurrentParent] = useState({id: '', index: ''})
     const [children, setChildren] = useState([])
     console.log('Currents', currentPerson)
@@ -88,6 +96,10 @@ function HomePage({userDetails, type, institute}) {
         console.log("current person: ", currentPerson)
         localStorage.setItem("currentPerson", currentPerson)
     }, [currentPerson])
+    useEffect(() => {
+       localStorage.setItem("currentPage", currentPage)
+        console.log('currentpage now',currentPage)
+    }, [currentPage])
 
     useEffect(() => {
         if (type === "therapist") {
@@ -152,6 +164,7 @@ function HomePage({userDetails, type, institute}) {
                             element={<Chat
                                 otherUser={therapist} patient={data.id} isActive={isActive}/>}/>
                     </Routes>
+
                     <Routes>
                         <Route
                             path={data.id.toString() + '/' + 'therapist' + '/' + isActive.toString() + '/' + index.toString() + '/sessions'}
@@ -368,7 +381,8 @@ function HomePage({userDetails, type, institute}) {
                             // })()}
                                 id='middle-floating-box'>
                                 {type === 'parent' && currentPerson !== '' &&
-                                <Button as={Link} to={currentPerson + '/code'} onClick={() => setShowDialogCode(true)}
+                                <Button as={Link} to={currentPerson + '/code'} onClick={() => {setShowDialogCode(true)
+                                setCurrentPage('code')}} active={currentPage ==='code'}
                                         className="text-center"
                                     // style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
                                     variant="outline-secondary"
@@ -551,6 +565,29 @@ function HomePage({userDetails, type, institute}) {
                                                        element={<SessionsList patientId={currentPerson}
                                                                               therapistId={userDetails.id}
                                                                               type={type}/>}/>
+                                                { currentTherapist.id !==''
+                                                   &&<Route path={data.id.toString() + '/therapist'}
+                                                       element={<Chat  patient={currentPerson} otherUser={
+                                                           (()=>{
+                                                               //console.log('LOOK',currentTherapist)
+                                                               if(currentTherapist.active){
+                                                                   console.log(
+                                                                       'LOOK',
+                                                                       parseInt(currentTherapist.index),activeTherapistListData[parseInt(currentTherapist.index)])
+                                                                   return activeTherapistListData[parseInt(currentTherapist.index)]
+                                                               }
+                                                               return notActiveTherapistListData[parseInt(currentTherapist.index)]
+                                                           })()
+                                                       } type={type}
+                                                                      isActive={(()=>{
+                                                                          //console.log('LOOK',currentTherapist)
+                                                                          if(currentTherapist.active){
+                                                                              return 'active'
+                                                                          }
+                                                                          return 'noActive'
+                                                                      })()}
+
+                                                       />}/>}
 
                                                 <Route path={data.id.toString() + '/exercises'}
                                                        element={<PatientExercises patient={currentPerson}

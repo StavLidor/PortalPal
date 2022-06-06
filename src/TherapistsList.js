@@ -22,7 +22,7 @@ function TherapistsList({
     console.log("in therapist!!!!!!!!")
     const [activeTherapistsList, setActiveTherapistsList] = useState([])
     const [notActiveTherapistsList, setNotActiveTherapistList] = useState([])
-    const [current, setCurrent] = useState({id: "", index: ""})
+    const [current, setCurrent] = useState({id: "", index: "",active:true})
     const [reload, setReload] = useState(true)
 
     console.log('therapistLIstt')
@@ -30,7 +30,32 @@ function TherapistsList({
     useEffect(async () => {
 
         console.log('TYPEE', type)
+        const pathSpilt = window.location.pathname.split("/")
+        let index = ''
+        let active=true
+        if(pathSpilt.length > 2 && pathSpilt[2] === 'therapist'){
+            console.log('PathSpilt therapist',pathSpilt)
+            index='0'
+            if(type === 'therapist' && pathSpilt.length>3){
+                index=pathSpilt[3]
+                if (isNaN(parseInt(index))){
+                    index='0'
+                }
+            }
+            else if(type === 'parent' &&pathSpilt.length>4){
+                index= pathSpilt[4]
+                if (isNaN(parseInt(index))){
+                    index='0'
+                }
+                if(pathSpilt[3]==='notActive'){
+                    active=false
+                }
+            }
+             setCurrent({id:'',index:index,active: active})
+           console.log('Therapist page',{id:'',index:index,active: active})
+        }
         if (type === 'parent') {
+            console.log('Therapist page',current)
             const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"),
                 where('institute', '==', institute))
             if (institute === 'external') {
@@ -43,7 +68,7 @@ function TherapistsList({
                     })
             } else {
                 getDocs(collectionRef).then((d) => {
-                    getData(d)
+                    getData(d,{id:'',index:index,active: active})
                 })
             }
         } else {
@@ -52,12 +77,12 @@ function TherapistsList({
             // const querySnapshot = await getDocs(docRef)
 
             getDocs(collectionRef).then((d) => {
-                getData(d)
+                getData(d,{id:'',index:index,active: active})
             })
         }
 
     }, [])
-    const getData = (d) => {
+    const getData = (d,mapCurrent) => {
         const therapistIds = []
         let dict = {}
 
@@ -115,10 +140,23 @@ function TherapistsList({
                 })
                 setReload(false)
                 setActiveTherapistsList(activeTherapists)
-                console.log("activeTherapists", activeTherapists)
+                console.log("activeTherapists", activeTherapists,mapCurrent)
                 setActiveTherapistListData(activeTherapists)
                 setNotActiveTherapistList(notActiveTherapists)
                 setNotActiveTherapistListData(notActiveTherapists)
+                if(mapCurrent.index!=='' && activeTherapists.length>parseInt(mapCurrent.index) && mapCurrent.active){
+                    console.log('Therapist page WWW')
+                    const index = parseInt(mapCurrent.index)
+                    setCurrent({index:mapCurrent.index,id:activeTherapists[index].id,
+                    active: true})
+                    setCurrentTherapist({index:mapCurrent.index,id:activeTherapists[index].id,active:true})
+                }
+                else if(mapCurrent.index!=='' && notActiveTherapists.length>parseInt(mapCurrent.index) &&!mapCurrent.active ){
+                    const index = parseInt(mapCurrent.index)
+                    setCurrent({index:mapCurrent.index,id:notActiveTherapists[index].id,
+                        active: false})
+                    setCurrentTherapist({index:mapCurrent.index,id:notActiveTherapists[index].id,active:false})
+                }
 
             })
         }
@@ -151,11 +189,12 @@ function TherapistsList({
                                 style={{backgroundColor:'transparent',border:'transparent'}}
                                  className="list-group-item list-group-item-action mb-1" onClick={(e) => {
                             // e.preventDefault()
-                            if(type === 'therapist'){
-                                setCurrentPage('therapist')
-                            }
-                            setCurrentTherapist({id: data.id, index: index.toString()})
-                            setCurrent({id: data.id, index: index.toString()})
+                            // if(type === 'therapist'){
+                            //     setCurrentPage('therapist')
+                            // }
+                            setCurrentPage('therapist')
+                            setCurrentTherapist({id: data.id, index: index.toString(),active: isActive === 'active'})
+                            setCurrent( {id: data.id, index: index.toString(),active: isActive === 'active'})
 
 
                         }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}</Button>

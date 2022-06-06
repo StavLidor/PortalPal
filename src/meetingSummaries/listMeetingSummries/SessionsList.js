@@ -69,6 +69,9 @@ function SessionsList({patientId, therapistId = null, type}) {
                 return therapistId
             return auth.currentUser.uid
         })()
+        if(therapistIDForSession ===''){
+            return
+        }
         q = query(collection(db, "patients/" + patientId + "/therapists/" + therapistIDForSession + "/sessions"), orderBy("date", "desc"))
         console.log("q: ", q)
         if (type === 'parent') {
@@ -126,7 +129,7 @@ function SessionsList({patientId, therapistId = null, type}) {
                 })
         }
 
-    }, [])
+    }, [therapistId])
 
     const handleOnSubmit = async (setMessages) => {
         if(!checkData(setMessages,newSession))

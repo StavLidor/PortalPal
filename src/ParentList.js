@@ -19,7 +19,19 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
     // console.log('therapistLIstt')
     //console.log(talkersIds)
     useEffect(async () => {
-
+        const pathSpilt = window.location.pathname.split("/")
+        let index=''
+        if(pathSpilt.length > 2 && pathSpilt[2] === 'parent'){
+            if(pathSpilt.length>3){
+                index=pathSpilt[3]
+                if (isNaN(parseInt(index))){
+                    index='0'
+                }
+            }
+            else{
+                index='0'
+            }
+        }
             // let dict = {}
             // const collectionRef = query(collection(db, "patients/" + details.id + ))
             // const querySnapshot = await getDocs(docRef)
@@ -53,9 +65,15 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                     setReload(false)
                     setParents(data)
                     setParentsListData(data)
+                    if(index!=='' && data.length>parseInt(index)){
+                        const dict={id: data[parseInt(index)].id, index: index}
+                        setCurrentParent(dict)
+                        setCurrent(dict)
+                    }
                     // console.log("my data: ", data)
                 })
             }
+
         }
         , [])
 

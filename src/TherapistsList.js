@@ -34,6 +34,7 @@ function TherapistsList({
 
         console.log('TYPEE', type)
         const pathSpilt = window.location.pathname.split("/")
+        console.log('HERE',currentPage,pathSpilt,pathSpilt.length)
         let index = ''
         let active=true
         let isNotChose=false
@@ -60,6 +61,11 @@ function TherapistsList({
             }
              setCurrent({id:'',index:index,active: active})
            console.log('Therapist page',{id:'',index:index,active: active})
+        }
+        else if(pathSpilt.length === 3 &&!pathSpilt[2].trim() && currentPage === 'therapist'){
+
+            index='0'
+            isNotChose=true
         }
 
         if (type === 'parent') {
@@ -206,10 +212,10 @@ function TherapistsList({
             list.map((item, index) => {
                 let data = item
                 if (type === 'parent') {
-                    if(currentPage!=='therapist' &&(
+                    if(
                         currentPage==='sessions' ||
                         currentPage==='exercises' ||currentPage==='communication'
-                    )){
+                    ){
                         path ='therapist'+ '/'+ isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
                     }
                     else {

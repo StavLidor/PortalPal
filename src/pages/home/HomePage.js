@@ -79,6 +79,9 @@ function HomePage({userDetails, type, institute}) {
         if( saveCurrentPage!==null && pathSpilt[len-1]===saveCurrentPage){
             return saveCurrentPage
         }
+        if(saveCurrentPage ==='therapist'|| saveCurrentPage ==='parent'){
+            return saveCurrentPage
+        }
         return ''
     })())
     const [currentTherapist, setCurrentTherapist] = useState({id: '', index: '',active:true})
@@ -87,8 +90,10 @@ function HomePage({userDetails, type, institute}) {
     console.log('Currents', currentPerson)
 
     async function onLogout() {
-        await signOutCurrentUser()
         setCurrentPerson("")
+        setCurrentPage('')
+        await signOutCurrentUser()
+
     }
 
     useEffect(() => {
@@ -589,7 +594,8 @@ function HomePage({userDetails, type, institute}) {
                                                        element={<SessionsList patientId={currentPerson}
                                                                               therapistId={userDetails.id}
                                                                               type={type}/>}/>
-                                                { currentTherapist.id !==''
+                                                { currentTherapist.id !==''&&((currentTherapist.active &&activeTherapistListData.length>parseInt(currentTherapist.index))||
+                                                        (!currentTherapist.active &&notActiveTherapistListData.length>parseInt(currentTherapist.index)))
                                                    &&<Route path={data.id.toString() + '/therapist'}
                                                        element={<Chat  patient={currentPerson} otherUser={
                                                            (()=>{
@@ -612,6 +618,12 @@ function HomePage({userDetails, type, institute}) {
                                                                       })()}
 
                                                        />}/>}
+                                                {currentParent.id!=''&&parentsListData.length>parseInt(currentParent.index)&&
+                                                    <Route path={data.id.toString() + '/parent'}
+                                                                               element={ <Chat patient={currentPerson}
+                                                                              otherUser={parentsListData[parseInt(currentParent.index)]
+                                                } type={type} isActive={'active'}
+                                                />}/>}
 
                                                 <Route path={data.id.toString() + '/exercises'}
                                                        element={<PatientExercises patient={currentPerson}

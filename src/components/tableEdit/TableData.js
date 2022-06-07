@@ -27,7 +27,7 @@ export default function TableData({
                                       emptyEditDetailsTable
                                       , HebrewNamesTable,
                                       columnsInfoViewTable
-                                      , table, getTable,optionIds,tableOptionIds
+                                      , table, getTable,optionIds,tableOptionIds,isEmptyTable
                                   }) {
 
 
@@ -252,7 +252,6 @@ export default function TableData({
 
     return (
         <div>
-            {contacts.length > 0 &&
 
             <div className="secretary">
                 <form onSubmit={handleEditFormSubmit}>
@@ -298,6 +297,7 @@ export default function TableData({
                                                 table={table}
                                                 getTable={getTable}
                                                 tableOptionIds={tableOptionIds}
+                                                isEmptyTable={isEmptyTable}
                                             />
 
                                         ) :
@@ -310,7 +310,7 @@ export default function TableData({
                     </Table>
                 </form>
             </div>
-            }
+
 
             {addSomeone && <Modal show={addSomeone} onHide={()=>setAddSomeone(false)}>
                 <Modal.Header>

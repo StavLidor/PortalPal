@@ -52,6 +52,12 @@ function App() {
                             }
 
                         }
+                        // if(localStorage.getItem('type')  ==='admin' && value.data().institute===''){
+                        //     signOutCurrentUser()
+                        //     setDisplayLoginError(true)
+                        //     localStorage.setItem("type", "")
+                        //     localStorage.setItem("institute", "")
+                        // }
 
                     })
                 } catch (err) {

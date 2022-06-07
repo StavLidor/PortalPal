@@ -19,7 +19,7 @@ const ReadOnlyRow = ({
                          requiredId,
                          table,
                          columnsInfo,getTable,
-                         tableOptionIds
+                         tableOptionIds,isEmptyTable
                      }) => {
         // console.log('ReadOnlyRow', contact.id)
         // console.log('ReadOnlyRow', columnNames)
@@ -124,7 +124,7 @@ const ReadOnlyRow = ({
                         data={table/*contactTable[tableName]*/}
                         HebrewNames={HebrewNames} columnsInfoView={columnsInfoViewTable} requiredId={true}
                         getTable={getTable} update={updateTable}
-                        optionIds={tableOptionIds}
+                        optionIds={tableOptionIds} isEmptyTable={isEmptyTable}
                     />}
                     {/*{toEdit &&*/}
                     {

@@ -33,6 +33,12 @@ function SecretaryPage({data}) {
     const [listenerStudents, setListenerStudents] = useState(null)
     const [listenersTableStudents, setListenersTableStudents] = useState([])
     const [studentTable, setStudentTable] = useState(null)
+    const [reloadStudents,setReloadStudents]=useState(true)
+    const [reloadEmployees,setReloadEmployees]=useState(true)
+    const [isEmptyEmployees,setIsEmptyEmployees]=useState(false)
+    const [isEmptyStudents,setIsEmptyStudents]=useState(false)
+    const [isEmptyTable,setIsEmptyTable]=useState(false)
+    const [reloadTable,setReloadTable]=useState(true)
     useEffect(() => {
         if(studentTable!==null){
             const index = studentsTable.findIndex((s) => s.id === studentTable.id)
@@ -40,6 +46,9 @@ function SecretaryPage({data}) {
             if(index === -1){
                 if(studentTable.active){
                     setStudentsTable( [...studentsTable,studentTable])
+                    if(isEmptyTable===true){
+                        setIsEmptyTable(false)
+                    }
                 }
             }
             else{
@@ -51,7 +60,11 @@ function SecretaryPage({data}) {
                     arr[index]=studentTable
                 }
                 console.log("deletei from table",arr)
+
                 setStudentsTable(arr)
+                if(arr.length===0&& isEmptyTable===false){
+                    setIsEmptyTable(true)
+                }
             }
 
         }
@@ -75,6 +88,8 @@ function SecretaryPage({data}) {
                             data.push({...doc.data(), id: doc.id})
                         ))
                         setEmployees(data)
+                        setReloadEmployees(false)
+
 
                         console.log("DATA HERE:", data)
                         console.log("EMPLOYEES HERE:", employees)
@@ -96,7 +111,7 @@ function SecretaryPage({data}) {
 
     useEffect(() => {
         if (listenerStudents !== null) {
-            console.log("קקי תלמיד")
+          //  console.log("קקי תלמיד")
             listenerStudents()
         }
 
@@ -120,6 +135,7 @@ function SecretaryPage({data}) {
                         //     data.push(doc.data())
                     })
                     setStudents(data)
+                    setReloadStudents(false)
                     //  const index = studentsTable.findIndex((s) => s.id === doc.id)
                     // studentsTable[index]=doc.data()
                     console.log('Students1112', data)
@@ -149,11 +165,24 @@ function SecretaryPage({data}) {
             // console.log('students',d.data().students)
             // console.log('employees',d.data().employees)
             if (d.data().employees !== idEmployees) {
-                setIdEmployees(d.data().employees)
-                setIdStudents(d.data().students)
-                console.log("listener: ", listenerEmployees)
 
-                console.log("d.data().employees: ", d.data().employees)
+                setIdEmployees(d.data().employees)
+                if(d.data().employees.length ===0){
+                    setIsEmptyEmployees(true)
+                }
+                else {
+                    setIsEmptyEmployees(false)
+                }
+                setIdStudents(d.data().students)
+                if(d.data().students.length ===0){
+                    setIsEmptyStudents(true)
+                }
+                else {
+                    setIsEmptyStudents(false)
+                }
+              //  console.log("listener: ", listenerEmployees)
+
+               // console.log("d.data().employees: ", d.data().employees)
 
 
             }
@@ -162,7 +191,7 @@ function SecretaryPage({data}) {
     }, [])
 
     const addPatient = async (details, setMessages)=>{
-        console.log('Messagesssss!!!!!!!!!!!! ',details.dateOfBirth)
+        //console.log('Messagesssss!!!!!!!!!!!! ',details.dateOfBirth)
 
         const messages={id:"",firstName:"",lastName:"",dateOfBirth:"",city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:""}
         if(!details.id.trim()||!is_israeli_id_number(details.id)){
@@ -428,7 +457,15 @@ function SecretaryPage({data}) {
 
         setUserGetTable(details)
         let arrSnapshot=[]
-        console.log('CCCCCCCCCC', details.institutes[data.institute])
+        console.log('is Empty',details.institutes[data.institute].length,details.institutes[data.institute])
+        if(details.institutes[data.institute].length === 0){
+            console.log('is Empty')
+            setIsEmptyTable(true)
+        }
+        else {
+            setIsEmptyTable(false)
+        }
+
         details.institutes[data.institute].map((id)=>{
 
             const index = students.findIndex((s) => s.id === id)
@@ -576,7 +613,11 @@ function SecretaryPage({data}) {
             <Row className="border border-secondary rounded" style={{minHeight: 400}}>
                 <Routes>
                     <Route path="employees"
-                           element={<TableData type="עובד" add={addTherapist} update={updateTherapist}
+                           element={
+                        <>
+                            {  isEmptyEmployees&&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >
+                                אין עובדים במוסד</Form.Label> </Row>}
+                        <TableData type="עובד" add={addTherapist} update={updateTherapist}
                                                deleteObj={deleteObjTherapist
                                                }
                                                emptyDetails={{
@@ -607,13 +648,19 @@ function SecretaryPage({data}) {
                                                deleteObjTable={deleteConnectionToTherapist}
                                                updateTable={updateConnectionToTherapist}
                                                tableOptionIds={students}
+                                   isEmptyTable={isEmptyTable}
 
-                           />}/>
+                           /></>}/>
                 </Routes>
 
                 <Routes>
                     <Route path="students"
-                           element={<TableData type="תלמיד" add={addPatient} update={updatesPatients}
+                           element={<>
+                               {  reloadStudents&&!isEmptyStudents&&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >
+                                   טוען...</Form.Label> </Row>}
+                               {  isEmptyStudents&&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >
+                                   אין תלמידים במוסד</Form.Label> </Row>}
+                        <TableData type="תלמיד" add={addPatient} update={updatesPatients}
                                                deleteObj={deleteObjPatient}
                                                emptyDetails={{
                                                    id: "",
@@ -637,7 +684,8 @@ function SecretaryPage({data}) {
                            }} data={students} HebrewNames={[
                                "תעודת זהות", "שם פרטי", "שם משפחה", "תאריך לידה", "מגדר","קוד אבחון" ,"עיר", "רחוב", "מספר רחוב"]
                            } columnsInfoView={columnsViewPatient} requiredId={true}
-                                             />}/>
+
+                                             /></>}/>
                 </Routes>
 
             </Row>

@@ -1,7 +1,7 @@
 import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useEffect, useState, useCallback, useContext} from "react";
-import {Link, Route, Routes} from "react-router-dom";
+import React, {useEffect, useState,useRef, useCallback, useContext} from "react";
+import {Link, Route, Routes, useLinkClickHandler} from "react-router-dom";
 import {getDate} from "date-fns";
 import {collection, getDocs, onSnapshot, query, where} from "firebase/firestore";
 import {auth, db} from "./firebase";
@@ -24,6 +24,9 @@ function TherapistsList({
     const [notActiveTherapistsList, setNotActiveTherapistList] = useState([])
     const [current, setCurrent] = useState({id: "", index: "",active:true})
     const [reload, setReload] = useState(true)
+    const [clickId,setClickId]=useState('')
+    const componentRefActive = useRef()
+    const componentRefNotActive = useRef()
 
     console.log('therapistLIstt')
     //console.log(talkersIds)
@@ -33,6 +36,7 @@ function TherapistsList({
         const pathSpilt = window.location.pathname.split("/")
         let index = ''
         let active=true
+        let isNotChose=false
         if(pathSpilt.length > 2 && pathSpilt[2] === 'therapist'){
             console.log('PathSpilt therapist',pathSpilt)
             index='0'
@@ -51,10 +55,19 @@ function TherapistsList({
                     active=false
                 }
             }
+            else if(type === 'parent' && pathSpilt.length===3){
+                isNotChose=true
+            }
              setCurrent({id:'',index:index,active: active})
            console.log('Therapist page',{id:'',index:index,active: active})
         }
+
         if (type === 'parent') {
+            if(pathSpilt.length===3&&currentPage!==''&&currentPage!=='therapist'){
+                console.log('YESS')
+                index='0'
+                isNotChose=true
+            }
             console.log('Therapist page',current)
             const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"),
                 where('institute', '==', institute))
@@ -68,7 +81,7 @@ function TherapistsList({
                     })
             } else {
                 getDocs(collectionRef).then((d) => {
-                    getData(d,{id:'',index:index,active: active})
+                    getData(d,{id:'',index:index,active: active,isNotChose:isNotChose})
                 })
             }
         } else {
@@ -77,7 +90,7 @@ function TherapistsList({
             // const querySnapshot = await getDocs(docRef)
 
             getDocs(collectionRef).then((d) => {
-                getData(d,{id:'',index:index,active: active})
+                getData(d,{id:'',index:index,active: active,isNotChose:isNotChose})
             })
         }
 
@@ -101,6 +114,7 @@ function TherapistsList({
         });
         console.log("therapistIds: ", therapistIds)
         console.log("therapistIds.length: ", therapistIds.length)
+
         if (therapistIds.length > 0) {
             const unsubscribe = query(collection(db, "users"),
                 where(firebase.firestore.FieldPath.documentId(), 'in', therapistIds)
@@ -118,6 +132,7 @@ function TherapistsList({
                             id: doc.id,
                             firstName: doc.data().firstName, lastName: doc.data().lastName,
                             institute: dict[doc.id].institute, connection: dict[doc.id].connection,
+
                             // active: (() => {
                             //     if (dict[doc.id].active)
                             //         return 'פעיל'
@@ -144,19 +159,36 @@ function TherapistsList({
                 setActiveTherapistListData(activeTherapists)
                 setNotActiveTherapistList(notActiveTherapists)
                 setNotActiveTherapistListData(notActiveTherapists)
+                //let flagID=''
                 if(mapCurrent.index!=='' && activeTherapists.length>parseInt(mapCurrent.index) && mapCurrent.active){
                     console.log('Therapist page WWW')
                     const index = parseInt(mapCurrent.index)
                     setCurrent({index:mapCurrent.index,id:activeTherapists[index].id,
                     active: true})
                     setCurrentTherapist({index:mapCurrent.index,id:activeTherapists[index].id,active:true})
+                    if( mapCurrent.isNotChose){
+                        componentRefActive.current.click()
+                    }
+                    //flagID=activeTherapists[index].id
+
                 }
-                else if(mapCurrent.index!=='' && notActiveTherapists.length>parseInt(mapCurrent.index) &&!mapCurrent.active ){
+                else if(mapCurrent.index!=='' && notActiveTherapists.length>parseInt(mapCurrent.index) &&(!mapCurrent.active||
+                    parseInt(mapCurrent.index)===0)){
                     const index = parseInt(mapCurrent.index)
                     setCurrent({index:mapCurrent.index,id:notActiveTherapists[index].id,
                         active: false})
                     setCurrentTherapist({index:mapCurrent.index,id:notActiveTherapists[index].id,active:false})
+                    //flagID=notActiveTherapists[index].id
+                    if( mapCurrent.isNotChose){
+                        componentRefNotActive.current.click()
+                    }
                 }
+                // if(type === 'parent'&& flagID!=='' && mapCurrent.isNotChose){
+                //
+                //     console.log('CCCCCCCCCCClick',flagID)
+                //
+                //     setClickId(flagID)
+                // }
 
             })
         }
@@ -173,7 +205,16 @@ function TherapistsList({
             list.map((item, index) => {
                 let data = item
                 if (type === 'parent') {
-                    path ='therapist'+ '/'+ isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
+                    if(currentPage!=='therapist' &&(
+                        currentPage==='sessions' ||
+                        currentPage==='exercises' ||currentPage==='communication'
+                    )){
+                        path ='therapist'+ '/'+ isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
+                    }
+                    else {
+                        path ='therapist'+ '/'+ isActive.toString() + '/' + index.toString()
+                    }
+
                 } else {
                     path = 'therapist'+ '/'+index.toString() //+ '/' + currentPage.toString()
 
@@ -182,17 +223,32 @@ function TherapistsList({
                 return (
                     <div>
 
-                        <Button id='therapistList-button' as={Link} to={path} active={
+                        <Button id='therapistList-button' as={Link} to={path}  ref={(()=>{
+                            if(index ===0 &&isActive === 'active' ){
+                                return componentRefActive
+                            }
+                            else if(index ===0 &&isActive !== 'active'){
+                                return componentRefNotActive
+                            }
+                            return null
+                        })()}
+                                active={
                             /*isClick(path)*/
                             current.id === data.id && isClick('therapist')
                         }
                                 style={{backgroundColor:'transparent',border:'transparent'}}
                                  className="list-group-item list-group-item-action mb-1" onClick={(e) => {
                             // e.preventDefault()
-                            // if(type === 'therapist'){
-                            //     setCurrentPage('therapist')
-                            // }
-                            setCurrentPage('therapist')
+                            if(type === 'therapist'){
+                                setCurrentPage('therapist')
+                            }
+                            else{
+                                if(currentPage!=='sessions' &&
+                                    currentPage!=='exercises' &&currentPage!=='communication'){
+                                    setCurrentPage('therapist')
+                                }
+                            }
+
                             setCurrentTherapist({id: data.id, index: index.toString(),active: isActive === 'active'})
                             setCurrent( {id: data.id, index: index.toString(),active: isActive === 'active'})
 

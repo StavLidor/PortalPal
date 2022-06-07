@@ -105,7 +105,8 @@ function HomePage({userDetails, type, institute}) {
         if (type === "therapist") {
             return
         }
-        console.log("children: ", children)
+        console.log()
+        //console.log("children: ", children)
         const childrenList = []
         for (const [key, value] of Object.entries(userDetails.childrenIds)) {
             if (value.findIndex((i) => i === institute) !== -1) {
@@ -147,6 +148,7 @@ function HomePage({userDetails, type, institute}) {
             console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
             return (
                 <div>
+                    {/*{[]}*/}
                     <Routes>
                         <Route
                             path={data.id.toString() + '/' + 'therapist' + '/' + isActive.toString() + '/' + index.toString() + '/*'}
@@ -501,6 +503,28 @@ function HomePage({userDetails, type, institute}) {
                                     let data = item.data()
                                     return (
                                         <div>
+                                            {/*{activeTherapistListData.length > 0 && <Routes>*/}
+                                            {/*    <Route*/}
+                                            {/*        path={data.id.toString() + '/' + 'firstTherapist' + '/*'}*/}
+                                            {/*        element={<TherapistTabsBanner therapistInstitute={activeTherapistListData[0].institute}*/}
+                                            {/*                                      therapistId={activeTherapistListData[0].id}*/}
+                                            {/*                                      type={type}*/}
+                                            {/*                                      currentPerson={currentPerson}*/}
+                                            {/*                                      setCurrentPage={setCurrentPage}*/}
+                                            {/*                                      currentPage={currentPage}/>}*/}
+                                            {/*    />*/}
+                                            {/*</Routes>}*/}
+                                            {/*{activeTherapistListData.length === 0 && notActiveTherapistListData.length>0 && <Routes>*/}
+                                            {/*    <Route*/}
+                                            {/*        path={data.id.toString() + '/' + 'firstTherapist' + '/*'}*/}
+                                            {/*        element={<TherapistTabsBanner therapistInstitute={notActiveTherapistListData[0].institute}*/}
+                                            {/*                                      therapistId={notActiveTherapistListData[0].id}*/}
+                                            {/*                                      type={type}*/}
+                                            {/*                                      currentPerson={currentPerson}*/}
+                                            {/*                                      setCurrentPage={setCurrentPage}*/}
+                                            {/*                                      currentPage={currentPage}/>}*/}
+                                            {/*    />*/}
+                                            {/*</Routes>}*/}
                                             {activeTherapistListData.length > 0 && componentsTherapists(activeTherapistListData, 'active', data)}
                                             {notActiveTherapistListData.length > 0 && componentsTherapists(notActiveTherapistListData, 'notActive', data)}
 

@@ -63,7 +63,8 @@ function TherapistsList({
         }
 
         if (type === 'parent') {
-            if(pathSpilt.length===3&&currentPage!==''&&currentPage!=='therapist'){
+            if(pathSpilt.length===3&&(currentPage==='sessions' ||
+                currentPage==='exercises' ||currentPage==='communication')){
                 console.log('YESS')
                 index='0'
                 isNotChose=true

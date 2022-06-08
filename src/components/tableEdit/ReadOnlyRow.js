@@ -19,7 +19,7 @@ const ReadOnlyRow = ({
                          requiredId,
                          table,
                          columnsInfo,getTable,
-                         tableOptionIds,isEmptyTable
+                         tableOptionIds,isEmptyTable,isReloadTable
                      }) => {
         // console.log('ReadOnlyRow', contact.id)
         // console.log('ReadOnlyRow', columnNames)
@@ -117,14 +117,15 @@ const ReadOnlyRow = ({
                         </Button>
                     }
                     {showMyPatients &&  <MyPatientsDialog
-                        userName={contact.firstName+" "+contact.lastName}
+                        userName={contact.firstName+" "+contact.lastName} contact={contact}
                         showMyPatients={showMyPatients} setShowMyPatients={setShowMyPatients}
                         add={addTable} deleteObj={deleteObjTable}
                         emptyDetails={emptyDetailsTable} emptyEditDetails={emptyEditDetailsTable}
                         data={table/*contactTable[tableName]*/}
                         HebrewNames={HebrewNames} columnsInfoView={columnsInfoViewTable} requiredId={true}
                         getTable={getTable} update={updateTable}
-                        optionIds={tableOptionIds} isEmptyTable={isEmptyTable}
+                        optionIds={tableOptionIds} isEmptyTable={isEmptyTable} isReloadTable={isReloadTable}
+
                     />}
                     {/*{toEdit &&*/}
                     {

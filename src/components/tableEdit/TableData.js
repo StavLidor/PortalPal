@@ -27,7 +27,8 @@ export default function TableData({
                                       emptyEditDetailsTable
                                       , HebrewNamesTable,
                                       columnsInfoViewTable
-                                      , table, getTable,optionIds,tableOptionIds,isEmptyTable
+                                      , table, getTable,optionIds,tableOptionIds,isEmptyTable,
+                                      isReloadTable
                                   }) {
 
 
@@ -298,6 +299,7 @@ export default function TableData({
                                                 getTable={getTable}
                                                 tableOptionIds={tableOptionIds}
                                                 isEmptyTable={isEmptyTable}
+                                                isReloadTable={isReloadTable}
                                             />
 
                                         ) :

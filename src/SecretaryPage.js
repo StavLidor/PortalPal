@@ -38,7 +38,7 @@ function SecretaryPage({data}) {
     const [isEmptyEmployees,setIsEmptyEmployees]=useState(false)
     const [isEmptyStudents,setIsEmptyStudents]=useState(false)
     const [isEmptyTable,setIsEmptyTable]=useState(false)
-    const [reloadTable,setReloadTable]=useState(true)
+    // const [reloadTable,setReloadTable]=useState(true)
     useEffect(() => {
         if(studentTable!==null){
             const index = studentsTable.findIndex((s) => s.id === studentTable.id)
@@ -457,7 +457,7 @@ function SecretaryPage({data}) {
 
         setUserGetTable(details)
         let arrSnapshot=[]
-        console.log('is Empty',details.institutes[data.institute].length,details.institutes[data.institute])
+        // console.log('is Empty',details.institutes[data.institute].length,details.institutes[data.institute])
         if(details.institutes[data.institute].length === 0){
             console.log('is Empty')
             setIsEmptyTable(true)
@@ -604,9 +604,13 @@ function SecretaryPage({data}) {
             return false
         }
 
-
     }
-
+    const isReloadTable=(details)=>{
+        if(details.institutes[data.institute].length ===studentsTable.length){
+            return true
+        }
+        return false
+    }
 
     return (
         <div>
@@ -648,7 +652,7 @@ function SecretaryPage({data}) {
                                                deleteObjTable={deleteConnectionToTherapist}
                                                updateTable={updateConnectionToTherapist}
                                                tableOptionIds={students}
-                                   isEmptyTable={isEmptyTable}
+                                   isEmptyTable={isEmptyTable} isReloadTable={isReloadTable}
 
                            /></>}/>
                 </Routes>

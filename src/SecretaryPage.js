@@ -614,7 +614,7 @@ function SecretaryPage({data}) {
 
     return (
         <div>
-            <Row className="border border-secondary rounded" style={{minHeight: 400}}>
+            <Row className="p-5" style={{minHeight: 400}}>
                 <Routes>
                     <Route path="employees"
                            element={

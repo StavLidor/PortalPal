@@ -415,7 +415,7 @@ export default function TableData({
                 </Modal.Footer>
             </Modal>}
             <Row>
-            <Col md={1} className="gap-1" >
+            <Col md={"auto"} className="gap-1" >
                 <Row>
                 <Button className="m-2 p-2" style={{fontWeight: "bold",width:'100%'}} variant="outline-primary" onClick={() => {
                     console.log("show dialog")
@@ -430,7 +430,9 @@ export default function TableData({
 
 
                 <Row ><ToCsvFile col={columnsInfoView} list={contacts} style={{width:'100%'}} /></Row>
-            </Col></Row>
+            </Col>
+
+            </Row>
             {addOrRemoveBatch && <AddThroughCsvFile addBatch={addOrRemoveBatch} setAddBatch={setAddOrRemoveBatch} add={addNews} remove={remove}/>}
 
 

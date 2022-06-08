@@ -11,7 +11,8 @@ import {isClick} from "../../useFunction";
 
 export let patientList = []
 
-function PatientList({institute, list, setPatientListData, listTitle, setCurrentPerson,currentPerson, currentPage,setPatientIsClicked}) {
+function PatientList({institute, list, setPatientListData, listTitle, setCurrentPerson,currentPerson, currentPage,setPatientIsClicked,
+                         setCurrentPage}) {
 
     const [listData, setListData] = useState([])
     const [addPatient, setAddPatient] = useState(false)
@@ -72,11 +73,14 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                         return (
                             <Button id='patient-button' as={Link} active={currentPerson ===data.id.toString()}
                                     style={{backgroundColor:'transparent',border:'transparent'}}
-                                    to={id +'/'+currentPage /*(() => {
-                            if (currentPage !== 'parent' && currentPage !=='therapist')
-                                return '/'+currentPage
-                            return ''
-                        })()*/
+                                    to={id +(() => {
+                            if (currentPage==='AboutUs'
+                                ||currentPage==='ContactUs'||currentPage==='myProfile'){
+                                return ''
+                            }
+
+                            return '/'+currentPage
+                        })()
                         } className="list-group-item list-group-item-action mb-1" onClick={(e) => {
                             // e.preventDefault()
                             if(currentPerson===data.id.toString()){
@@ -86,6 +90,10 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                             else {
                                 setPatientIsClicked(true)
                                 setCurrentPerson(data.id.toString())
+                                if(currentPage==='AboutUs'
+                                    ||currentPage==='ContactUs'||currentPage==='myProfile'){
+                                    setCurrentPage('')
+                                }
                             }
 
 

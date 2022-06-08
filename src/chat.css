@@ -26,7 +26,12 @@ footer {
     color: white;
     text-align: center;
 }
-
+.btn-float-left{
+    float: left;
+}
+.btn-float-right{
+    float: right;
+}
 #middle-floating-box {
     box-shadow: 6px 4px 8px 0px rgba(0, 0, 0, 0.34);
     /*background-color: #c7c7c7;*/
@@ -245,6 +250,15 @@ footer {
     color: black;
     width: auto;
     height: auto;
+}
+#print-button {
+    background: transparent;
+    border-width: 2px;
+    color: black;
+    width: auto;
+    height: auto;
+    float: left;
+
 }
 
 #aq-button {

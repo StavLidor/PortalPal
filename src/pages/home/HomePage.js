@@ -37,6 +37,7 @@ import {styled, TableCell} from "@mui/material";
 import TestsList from "../../TestsList";
 import ProgressTrendTabsBanner from "../../ProgressTrendTabsBanner";
 import {isClick} from "../../useFunction";
+import {Printer} from "react-bootstrap-icons";
 
 
 function HomePage({userDetails, type, institute}) {
@@ -216,6 +217,7 @@ function HomePage({userDetails, type, institute}) {
                                             id='account-button'
                                             onClick={() => {
                                                 setCurrentPerson('')
+                                                setCurrentPage('myProfile')
                                             }}>החשבון
                                         שלי</Button>
                                     }
@@ -251,7 +253,8 @@ function HomePage({userDetails, type, institute}) {
                                                            currentPerson={currentPerson}
                                                            currentPage={currentPage}
                                                            institute={institute}
-                                                           setPatientIsClicked={setPatientIsClicked}/>}
+                                                           setPatientIsClicked={setPatientIsClicked}
+                        setCurrentPage={setCurrentPage}/>}
 
                         {type === 'therapist' && <PatientList list={userDetails.institutes[institute]}
                                                               setPatientListData={setPatientListData}
@@ -260,7 +263,8 @@ function HomePage({userDetails, type, institute}) {
                                                               currentPerson={currentPerson}
                                                               currentPage={currentPage}
                                                               institute={institute}
-                                                              setPatientIsClicked={setPatientIsClicked}/>}
+                                                              setPatientIsClicked={setPatientIsClicked}
+                                                              setCurrentPage={setCurrentPage}/>}
 
                         {/*{sideListComponent}*/}
                     </Col>
@@ -433,7 +437,58 @@ function HomePage({userDetails, type, institute}) {
                     </Col>
                     <Col md='8' className="border border-secondary rounded" id='display-window'>
                         {/*<Chats/>*/}
-                        <div ref={componentRef}>
+
+                        <div>
+                            {/*{currentPage}*/}
+                            {currentPage!==''&&currentPage!=='AboutUs' &&
+
+                                currentPage!=='ContactUs'&&currentPage!=='myProfile'&&
+                                (!(type==='parent'&& currentPage==='therapist')) &&
+                                currentPage!=='ProgressTrend'
+                                &&<Row><Col className="col-lg-12 ">
+                                <Button id='print-button' variant='primary'
+                                        onClick={handlePrint} className="btn btn-secondary btn-float-left ">
+                                    <Printer/>
+                                </Button>
+                            </Col>
+                            </Row>}
+
+                            {currentPerson.toString()!==''&&<Routes>
+                                <Route path={currentPerson.toString()}
+                                       element={
+                                          <div>
+                                              <Row  className='align-content-start p-5' style={{fontSize: 20, width: '70%'}}>
+                                                   ניתן ללחוץ על אחת אפשריות מתפריט מימינך על מנת לראות את המבוקש
+                                              </Row>
+                                          </div>
+                                       }/>
+                            </Routes>}
+                            <Routes>
+                                <Route path={'/'}
+                                       element={
+                                            <div>
+                                           <Row className='align-content-start'> <Form.Label className="text-center fs-1" style={{fontWeight: "bold",width: "100%"}}>
+                                               ברוך/ה הבא/ה לפורטפל!
+                                           </Form.Label> </Row>
+                                                <Col md={"auto"} className="gap-1" >
+                                           <Row  className='align-content-start p-5' style={{fontSize: 20, width: '70%'}}>
+                                            הפורטופל  הוא החוט המקשר בין מטפלים והורים של המטופל.
+                                           </Row>
+                                                    <br/>
+                                           {/*<Row  className='align-content-start p-5' style={{fontSize: 20, width: '70%'}}>*/}
+                                           {/*ניתן ליצור תקשורת בין מטפלים למטפלים ובין הורים למטפלים.*/}
+                                           {/*</Row>*/}
+                                                    { type==='parent'&&<Row  className='align-content-start p-5' style={{fontSize: 20, width: '70%'}}>
+                                                כדי לצפות בילדים שלך ניתן ללחץ על אחד מהם ברשימה בצד
+                                            </Row>}
+                                                    { type==='therapist'&&<Row  className='align-content-start p-5' style={{fontSize: 20, width: '70%'}}>
+                                                        כדי לצפות במטופלים שלך ניתן ללחץ על אחד מהם ברשימה בצד
+                                                    </Row>}
+                                                </Col></div>
+
+
+                                       }/>
+                            </Routes>
                             <Routes>
                                 <Route path={'ContactUs'}
                                        element={
@@ -458,6 +513,15 @@ function HomePage({userDetails, type, institute}) {
                                            })()
                                        }/>
                             </Routes>
+                            <Routes>
+                                <Route path={'/myProfile'}
+                                       element={(() => {
+                                           return <MyProfile userDetails={userDetails}/>
+                                       })()
+                                       }/>
+                            </Routes>
+                            <div ref={componentRef}>
+
                             <Routes>
                                 <Route path={currentPerson.toString() + '/AQform'}
                                        element={(() => {
@@ -489,13 +553,7 @@ function HomePage({userDetails, type, institute}) {
 
                                    }/>
                         </Routes>
-                        <Routes>
-                            <Route path={'/myProfile'}
-                                   element={(() => {
-                                       return <MyProfile userDetails={userDetails}/>
-                                   })()
-                                   }/>
-                        </Routes>
+
                             {type === 'parent' && currentPerson !== '' && patientListData.length>0 && <Routes>
                                 <Route path={currentPerson.toString() + '/code'}
                                        element={<GetPersonalCode type={type} id={currentPerson}
@@ -688,7 +746,7 @@ function HomePage({userDetails, type, institute}) {
                                 }
                             )
                             }
-                        </div>
+                        </div></div>
                     </Col>
                 </Row>
 

@@ -47,9 +47,9 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage,handlePrin
                         }} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
                             מילוי טופס AQ
                         </Button>
-                        <Button id='top-menu-button' /*as={Link} */variant='primary' /*to={'print'}*/ onClick={handlePrint} className="btn-secondary rounded-3 list-group-item list-group-item-action v">
-                            <Printer/>
-                        </Button>
+                        {/*<Button id='top-menu-button' variant='primary'  onClick={handlePrint} className="btn-secondary rounded-3 list-group-item list-group-item-action v">*/}
+                        {/*    <Printer/>*/}
+                        {/*</Button>*/}
                         <Button id='top-menu-button' as={Link} title='אודות' variant='primary' to={'AboutUs'} onClick={() => {
                             setCurrentPage('AboutUs')
                             setCurrentPerson('')

@@ -75,7 +75,7 @@ function TherapistsList({
                 index='0'
                 isNotChose=true
             }
-            console.log('Therapist page',current)
+            //console.log('Therapist page',current)
             const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"),
                 where('institute', '==', institute))
             if (institute === 'external') {
@@ -83,7 +83,7 @@ function TherapistsList({
                     collectionRef,
                     (snapshot) => {
                         console.log('INNNNN', snapshot.docs[0])
-                        getData(snapshot)
+                        getData(snapshot,{id:'',index:index,active: active,isNotChose:isNotChose})
 
                     })
             } else {
@@ -166,6 +166,7 @@ function TherapistsList({
                 setActiveTherapistListData(activeTherapists)
                 setNotActiveTherapistList(notActiveTherapists)
                 setNotActiveTherapistListData(notActiveTherapists)
+                console.log('HEREEEEEEE',mapCurrent)
                 //let flagID=''
                 if(mapCurrent.index!=='' && activeTherapists.length>parseInt(mapCurrent.index) && mapCurrent.active){
                     console.log('Therapist page WWW')
@@ -181,6 +182,7 @@ function TherapistsList({
                 }
                 else if(mapCurrent.index!=='' && notActiveTherapists.length>parseInt(mapCurrent.index) &&(!mapCurrent.active||
                     parseInt(mapCurrent.index)===0)){
+
                     const index = parseInt(mapCurrent.index)
                     setCurrent({index:mapCurrent.index,id:notActiveTherapists[index].id,
                         active: false})
@@ -198,6 +200,9 @@ function TherapistsList({
                 // }
 
             })
+        }
+        else {
+            setReload(false)
         }
 
     }

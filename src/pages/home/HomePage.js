@@ -40,7 +40,7 @@ import {isClick} from "../../useFunction";
 import {Printer} from "react-bootstrap-icons";
 
 
-function HomePage({userDetails, type, institute}) {
+function HomePage({userDetails, type, institute,setConnectNow}) {
 //     const PrintCell = styled(TableCell)`
 //     width: 100px;
 //     justify-content: flex-end;
@@ -93,6 +93,7 @@ function HomePage({userDetails, type, institute}) {
     async function onLogout() {
         setCurrentPerson("")
         setCurrentPage('')
+        setConnectNow(false)
         await signOutCurrentUser()
 
     }
@@ -120,6 +121,7 @@ function HomePage({userDetails, type, institute}) {
 
             }
         }
+        //if(childrenList.length ===0)
         setChildren(childrenList)
     }, [userDetails.childrenIds])
 

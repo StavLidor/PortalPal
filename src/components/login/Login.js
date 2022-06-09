@@ -9,7 +9,8 @@ import ForgotPasswordDialog from "../../forgotPasswordDialog";
 
 
 
-function Login({login, setDisplayLoginForm}) {
+function Login({login, setDisplayLoginForm,setConnectNow,load}) {
+    const [flagLogin,setFlagLogin]=useState(false)
     //TODO: delete default values.
     const [userDetails, setUserDetails] = useState({
         email: "toko1010@gmail.com",
@@ -25,6 +26,8 @@ function Login({login, setDisplayLoginForm}) {
     const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false)
 
     const onLogin = async e => {
+        setConnectNow(true)
+        setFlagLogin(true)
         e.preventDefault()
         if (validateEmail(userDetails.email) !== null) {
             let result = await signIn(userDetails.email, userDetails.password)
@@ -114,7 +117,10 @@ function Login({login, setDisplayLoginForm}) {
                     </Form.Group>
                     <Row className="p-1" md="10">
                         <ButtonGroup className="gap-4">
-                            <Button className="rounded-3" size="md" onClick={onLogin}  variant="secondary" id='default-button-darker-static'>התחבר</Button>
+                            {(load)?(<Button className="rounded-3" size="md"   variant="secondary" id='default-button-darker-static'>טוען...</Button>):(
+                                <Button className="rounded-3" size="md" onClick={onLogin}  variant="secondary" id='default-button-darker-static'>התחבר</Button>
+                            )}
+
                             <Button className="rounded-3" variant="outline-secondary" size="md" id='default-button-darker'
                                     onClick={changeForm}>הירשם כמטפל</Button>
                         </ButtonGroup>
@@ -124,6 +130,11 @@ function Login({login, setDisplayLoginForm}) {
                         <Form.Text style={{fontSize:16,textDecoration:'underline',cursor:'pointer'}} onClick={()=>setShowForgotPasswordDialog(true)}>שכחתי סיסמה...</Form.Text>
                         </Col>
                     </Row>
+                    {!load&&flagLogin &&
+                        <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                            למשתמש זה אין התאמה בין הטיפוס למוסד
+                        </div>
+                    }
                     <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
                         {messages.password}
                     </div>

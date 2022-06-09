@@ -6,7 +6,7 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import Logo from "../../Portapel.png";
 
-export default function Authenticate({login}) {
+export default function Authenticate({login,setConnectNow,load}) {
 
     const [displayLoginForm, setDisplayLoginForm] = useState(true);
 
@@ -28,7 +28,8 @@ export default function Authenticate({login}) {
                 backgroundColor:'#c0dadc'
             }}>
                     {displayLoginForm === true && <Animated animationIn="fadeIn" animationInDuration={1000}  isVisible={true}>
-                        <Login login={login} setDisplayLoginForm={setDisplayLoginForm}/>
+                        <Login login={login} setDisplayLoginForm={setDisplayLoginForm}
+                               setConnectNow={setConnectNow} load={load}/>
                     </Animated>}
 
 

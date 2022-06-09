@@ -16,6 +16,9 @@ function App() {
     const [displayLoginError, setDisplayLoginError] = useState(false);
     const [isFirstLoad, setIsFirstLoad] = useState(true)
     const [addExternal, setAddExternal] = useState(false)
+    const [connectNow,setConnectNow]=useState(false)
+
+
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async user => {
@@ -23,20 +26,57 @@ function App() {
             if (user) {
                 setIsSigneIn(true)
 
+
                 try {
                     const docRef = doc(db, "users", auth.currentUser.uid);
                     onSnapshot(docRef,(value)=>{
                         console.log(value)
                         console.log(value.data())
                         console.log(value.data().titles)
+                        // if(!(localStorage.getItem("refresh")!=null||localStorage.getItem("refresh")!=='')){
+                        //
+                        // }
                         setUserDetails(value)
                         console.log("data user details: ", value.data().childrenIds)
+                        if(localStorage.getItem('type') === 'parent' && (()=>{
+                            for (const [k, v] of Object.entries(value.data().childrenIds)) {
+
+                                if (v.findIndex((i) => i === localStorage.getItem("institute")) !== -1) {
+                                    return false
+
+                                }
+                            }
+                            return true
+                        })()){
+                            signOutCurrentUser()
+                            setDisplayLoginError(true)
+                           // setConnectNow(false)
+                            // localStorage.setItem("type", "")
+                            // localStorage.setItem("institute", "")
+                            return
+                        }
+
 
                         if(value.data().titles.includes(localStorage.getItem('type'))){
-                            setHasDetails(true)
-                            console.log('print hello')
-                            setDisplayLoginError(false)
-                            setIsFirstLoad(true)
+                            //console.log(localStorage.getItem('type'),!(localStorage.getItem("institute") in   value.data().institutes))
+
+                            if(localStorage.getItem('type') === 'therapist' &&
+                                !(localStorage.getItem("institute") in   value.data().institutes)){
+                                signOutCurrentUser()
+                                setDisplayLoginError(true)
+                                //setConnectNow(false)
+                                localStorage.setItem("type", "")
+                                localStorage.setItem("institute", "")
+                                return
+                            }
+                            else {
+                                setHasDetails(true)
+                                //console.log('print hello')
+                                setDisplayLoginError(false)
+                                setIsFirstLoad(true)
+                                setConnectNow(false)
+                            }
+
                         }
                         else{
                             if(localStorage.getItem('type') === 'therapist' &&localStorage.getItem("institute")===
@@ -49,9 +89,11 @@ function App() {
                                 setDisplayLoginError(true)
                                 localStorage.setItem("type", "")
                                 localStorage.setItem("institute", "")
+                                // setConnectNow(false)
                             }
 
                         }
+
                         // if(localStorage.getItem('type')  ==='admin' && value.data().institute===''){
                         //     signOutCurrentUser()
                         //     setDisplayLoginError(true)
@@ -67,6 +109,7 @@ function App() {
                 localStorage.setItem("type", "")
                 localStorage.setItem("institute", "")
                 localStorage.setItem("currentPerson", "")
+                localStorage.setItem("currentPage", "")
                 setIsSigneIn(false)
                 if(isFirstLoad === false){
                     setDisplayLoginError(true)
@@ -79,9 +122,11 @@ function App() {
     }, [])
 
     const login = async (type, institute, isSuccessfulSignIn) => {
+        // setConnectNow(true)
         localStorage.setItem("type", type)
         localStorage.setItem("institute", institute)
         setDisplayLoginError(!isSuccessfulSignIn)
+
     }
 
 
@@ -90,15 +135,20 @@ function App() {
         <Router>
             <div className="App">
                 {addExternal && <AddTypeExternalTherapist setAddExternal={setAddExternal}/>}
-                {isSigneIn === false && checkUserConnection && <Authenticate login={login}/>}
+                {((isSigneIn === false && checkUserConnection)||
+                    (connectNow) ) ?(<Authenticate login={login}
+                                                      load={connectNow && !displayLoginError}
+                                                      setConnectNow={setConnectNow}/>):(
+                    checkUserConnection===false ||(isSigneIn && hasDetails===false)
+                )?(<div>טוען...</div>):(<></>) }
                 {/*{isSigneIn === false && checkUserConnection && <AQold/>}*/}
                 {/*{isSigneIn === false && checkUserConnection && <AQ10ChildrenForm/>}*/}
-                {(checkUserConnection===false ||(isSigneIn && hasDetails===false) ) && <div>loading</div>}
-                {displayLoginError && isSigneIn === false && checkUserConnection && <h4>אחד מפרטי ההתחברות לא נכון :(</h4>}
+                {/*{(checkUserConnection===false ||(isSigneIn && hasDetails===false) ) &&!connectNow&& <div>טוען...</div>}*/}
+                {/*{displayLoginError && isSigneIn === false && checkUserConnection && <h4>אחד מפרטי ההתחברות לא נכון :(</h4>}*/}
                 {/*// TODO: page for loading*/}
 
                 {isSigneIn && hasDetails && displayLoginError === false &&
-                <HomePage userDetails={{...userDetails.data(),id:userDetails.id}} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")} />}
+                <HomePage setConnectNow={setConnectNow} userDetails={{...userDetails.data(),id:userDetails.id}} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")} />}
 
             </div>
         </Router>

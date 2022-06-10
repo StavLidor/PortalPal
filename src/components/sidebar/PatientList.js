@@ -8,11 +8,12 @@ import {addPatientToExternalTherapist, db} from "../../firebase";
 import {Pencil, Plus, FilePerson, PersonCircle} from 'react-bootstrap-icons';
 import TableData from "../tableEdit/TableData";
 import {isClick} from "../../useFunction";
+import AddPatient from "../../AddPatient";
 
 export let patientList = []
 
 function PatientList({institute, list, setPatientListData, listTitle, setCurrentPerson,currentPerson, currentPage,setPatientIsClicked,
-                         setCurrentPage}) {
+                         setCurrentPage,type}) {
 
     const [listData, setListData] = useState([])
     const [addPatient, setAddPatient] = useState(false)
@@ -50,16 +51,14 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
         setListener(() => result)
     }
 
-    const submitAdd = async () => {
-        // e.preventDefault()
-        await addPatientToExternalTherapist(detailsNewPatient.id, detailsNewPatient.code, detailsNewPatient.connection)
-    }
+
 
     return (
         <div>
             <Row><Form.Label style={{fontWeight: 'bold'}}>{listTitle}</Form.Label></Row>
             {reload &&  <Row><Form.Label style={{fontWeight: 'bold'}} >טוען...</Form.Label></Row>}
-            {institute === 'external' && <Button onClick={() => setAddPatient(true)} className="m-2 p-1 text-center"
+            {type==='therapist'&&institute === 'external' &&
+                <Button onClick={() => setAddPatient(true)} className="m-2 p-1 text-center"
                                                  style={{fontSize: 10, height: 30}} variant="outline-primary"><Plus/>הוסף
                 מטופל</Button>
             }
@@ -102,52 +101,8 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                     }
                 )}
 
-            {addPatient && <Modal show={addPatient} onHide={() => {
-                setAddPatient(false)
-            }}>
-                <Modal.Header>
-                    <Modal.Title>הוסף מטופל</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Col>
-                            <Row className="form-group">
-                                <Form.Label htmlFor="id">תז</Form.Label>
-                                <Form.Control type="text" name="id" id="id" onChange={e => setDetailsNewPatient({
-                                    ...detailsNewPatient,
-                                    id: e.target.value
-                                })} value={detailsNewPatient.id}/>
-                            </Row>
-                            <Row className="form-group">
-                                <Form.Label htmlFor="connection">קשר</Form.Label>
-                                <Form.Control type="text" name="connection" id="connection"
-                                              onChange={e => setDetailsNewPatient({
-                                                  ...detailsNewPatient,
-                                                  connection: e.target.value
-                                              })} value={detailsNewPatient.connection}/>
-                            </Row>
-                            <Row className="form-group">
-                                <Form.Label htmlFor="code">קוד:</Form.Label>
-                                <Form.Control type="text" name="code" id="code" onChange={e => setDetailsNewPatient({
-                                    ...detailsNewPatient,
-                                    code: e.target.value
-                                })} value={detailsNewPatient.code}/>
-                            </Row>
-                        </Col>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setAddPatient(false)}>
-                        סגור
-                    </Button>
-                    <Button variant="success" onClick={() => {
-                        setAddPatient(false)
-                        submitAdd()
-                    }} type="submit">
-                        הוסף
-                    </Button>
-                </Modal.Footer>
-            </Modal>}
+            {addPatient && <AddPatient addPatient={addPatient}
+            setAddPatient={setAddPatient} listPatient={list}/>}
         </div>
     )
 }

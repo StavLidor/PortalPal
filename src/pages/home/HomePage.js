@@ -256,6 +256,7 @@ function HomePage({userDetails, type, institute,setConnectNow}) {
                                                            currentPage={currentPage}
                                                            institute={institute}
                                                            setPatientIsClicked={setPatientIsClicked}
+                                                           type={type}
                         setCurrentPage={setCurrentPage}/>}
 
                         {type === 'therapist' && <PatientList list={userDetails.institutes[institute]}
@@ -266,7 +267,8 @@ function HomePage({userDetails, type, institute,setConnectNow}) {
                                                               currentPage={currentPage}
                                                               institute={institute}
                                                               setPatientIsClicked={setPatientIsClicked}
-                                                              setCurrentPage={setCurrentPage}/>}
+                                                              setCurrentPage={setCurrentPage}
+                        type={type}/>}
 
                         {/*{sideListComponent}*/}
                     </Col>

@@ -469,7 +469,8 @@ export const addPatient = async details => {
                 buildingNumber: details.buildingNumber,
                 parents: [uid_user],
                 gender: details.gender,
-                thirdPartyCodes:{}
+                thirdPartyCodes:{},
+                code:[]
                 /*idSecretary:[details.idSecretary]*/
             })
         }

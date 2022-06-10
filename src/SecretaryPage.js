@@ -197,6 +197,9 @@ function SecretaryPage({data}) {
         if(!details.id.trim()||!is_israeli_id_number(details.id)){
             messages.id='הכנס תז ישראלית'
         }
+        if(idStudents.includes(details.id)){
+            messages.id='קיים תלמיד במוסד עם תז זאת'
+        }
         if(!validateEmail(details.email)){
             messages.email='הכנס אימייל תקין להורה'
         }
@@ -269,6 +272,9 @@ function SecretaryPage({data}) {
         console.log('TTTTTTTTT',details.jobs)
         if(!validateEmail(details.email)){
             messages.email='הכנס אימייל תקין'
+        }
+        if(employees.findIndex((e) => e.email === details.email)!==-1){
+            messages.email='קיים עובד עם אימייל זה במערכת '
         }
         if(!details.firstName.trim()){
             messages.firstName='הכנס שם פרטי למטפל'

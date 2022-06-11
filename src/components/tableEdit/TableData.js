@@ -41,6 +41,7 @@ export default function TableData({
     const [addOrRemoveBatch, setAddOrRemoveBatch] = useState(false)
     const [contactTable, setContactTable] = useState(null)
     const [show, setShow] = useState(false)
+    const [load,setLoad]=useState(false)
     const closeDialog = () => setAddSomeone(false)
     const handleShow = () => setShow(true)
 
@@ -224,6 +225,7 @@ export default function TableData({
         // setContacts(newContacts)
     }
     const submitAddDialog = () => {
+        setLoad(true)
         console.log('ADDDDDDDDDDDDDDDDD')
         const p = Promise.resolve(add(detailsNew, setMessages))
         console.log('messagesss',messages)
@@ -231,15 +233,17 @@ export default function TableData({
             if (id) {
                 const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
                 if (index < 0) {
-                    if (typeof (id) == "string") {
-                        addToContacts({...detailsNew, id: id})
-                        console.log(detailsNew)
-                    } else {
-                        addToContacts(Object.assign({}, detailsNew, id))
-                    }
+                    // if (typeof (id) == "string") {
+                    //     addToContacts({...detailsNew, id: id})
+                    //     console.log(detailsNew)
+                    // } else {
+                    //     addToContacts(Object.assign({}, detailsNew, id))
+                    // }
                     // setEditContactId(null);
+                    setLoad(false)
                     setDetailsNew(emptyDetails)
                     setAddSomeone(false)
+
                 } else {
                     // mybe can not change the informtion need to think about
                     //newContacts[index] = detailsNew
@@ -314,7 +318,11 @@ export default function TableData({
             </div>
 
 
-            {addSomeone && <Modal show={addSomeone} onHide={()=>setAddSomeone(false)}>
+            {addSomeone && <Modal show={addSomeone} onHide={()=>{
+                setDetailsNew(emptyDetails)
+                setMessages(emptyDetails)
+                setAddSomeone(false)
+            }}>
                 <Modal.Header>
                     <Modal.Title style={{fontWeight:"bold", fontSize:35}}>{"הוספת " + type + " חדש"}</Modal.Title>
                 </Modal.Header>
@@ -406,12 +414,22 @@ export default function TableData({
                         setMessages(emptyDetails)}}>
                         בטל
                     </Button>
-                    <Button variant="success" onClick={() => {
-                        // setAddSomeone(false)
-                        submitAddDialog()
-                    }}>
-                        שמור
-                    </Button>
+                    {
+                        (!load)?(
+                            <Button variant="success" onClick={() => {
+                                // setAddSomeone(false)
+                                submitAddDialog()
+                            }}>
+                                שמור
+                            </Button>
+                        ):(
+                            <Button variant="success" >
+                                טוען...
+                            </Button>
+                        )
+
+                    }
+
                 </Modal.Footer>
             </Modal>}
             <Row>

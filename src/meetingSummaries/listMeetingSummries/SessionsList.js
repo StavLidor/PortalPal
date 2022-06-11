@@ -268,11 +268,19 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
         summary: '',
         date: ''
     })
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false)
+    const [load,setLoad]=useState(false)
     const handleClose = () => {setShow(false)
         setMessages({title: '',
             summary: '',
-            date: ''})}
+            date: ''})
+        setNewSession({
+            title: '',
+            summary: '',
+            date: ''
+        })
+    }
+
     const handleShow = () => setShow(true);
 
     return (
@@ -305,6 +313,19 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                             </div>
                         </Row>
                         <Row>
+                            <Form.Group controlId="title">
+                                <Form.Label>כותרת</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    onChange={e => setNewSession({...newSession, title: e.target.value})}
+
+                                />
+                            </Form.Group>
+                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                {messages.title}
+                            </div>
+                        </Row>
+                        <Row>
                             <Form.Group controlId="summary">
                                 <Col><Form.Label>סיכום מפגש</Form.Label></Col>
                                 <Col>
@@ -320,19 +341,7 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                                 {messages.summary}
                             </div>
                         </Row>
-                        <Row>
-                            <Form.Group controlId="title">
-                                <Form.Label>כותרת</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    onChange={e => setNewSession({...newSession, title: e.target.value})}
 
-                                />
-                            </Form.Group>
-                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
-                                {messages.title}
-                            </div>
-                        </Row>
 
 
 
@@ -344,14 +353,22 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                     <Button variant="secondary" onClick={handleClose}>
                         בטל
                     </Button>
-                    <Button variant="success" onClick={async () => {
+                    {(load)?(
+                        <Button variant="success" >
+                            טוען...
+                        </Button>
+                    ):(
+                        <Button variant="success" onClick={async () => {
+                            setLoad(true)
+                            if (await handleOnSubmit(setMessages)) {
+                                handleClose()
+                            }
+                            setLoad(false)
+                        }}>
+                            שמור שינויים
+                        </Button>
+                    )}
 
-                        if (await handleOnSubmit(setMessages)) {
-                            handleClose()
-                        }
-                    }}>
-                         שמור שינויים
-                    </Button>
                 </Modal.Footer>
             </Modal>
         </>

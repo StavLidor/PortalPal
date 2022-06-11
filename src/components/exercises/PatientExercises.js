@@ -261,6 +261,7 @@ export default PatientExercises
 
 function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) {
     const [show, setShow] = useState(false);
+    const [load,setLoad]=useState(false)
     const [messages, setMessages] = useState({
         until: '',
         description: '',
@@ -273,7 +274,14 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
             description: '',
             // patient: patient,
             place: '',
-        })};
+        })
+        setNewExercise({
+            until: '',
+            description: '',
+            // patient: patient,
+            place: '',
+        })
+    };
     const handleShow = () => setShow(true);
 
     return (
@@ -354,18 +362,27 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                     <Button variant="secondary" onClick={handleClose}>
                         בטל
                     </Button>
-                    <Button variant="success" onClick={async () => {
-                        const flag = handleOnSubmit(setMessages)
-                        console.log('flag', flag)
-                        if (await flag) {
-                            handleClose()
-                        } else {
-                            console.log('FALSEE')
-                        }
+                    {(load)?(
+                        <Button variant="success" >
+                            טוען...
+                        </Button>
+                    ):(
+                        <Button variant="success" onClick={async () => {
+                            setLoad(true)
+                            const flag = handleOnSubmit(setMessages)
+                            console.log('flag', flag)
+                            if (await flag) {
+                                handleClose()
+                            } else {
+                                console.log('FALSEE')
+                            }
+                            setLoad(false)
 
-                    }}>
-                        שמור שינויים
-                    </Button>
+                        }}>
+                            שמור שינויים
+                        </Button>
+                    )}
+
                 </Modal.Footer>
             </Modal>
         </>

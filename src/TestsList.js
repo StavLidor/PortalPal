@@ -360,6 +360,7 @@ function AddTestDialog({category,handleOnSubmit}) {
     const [email, setEmail] = useState('')
     const [feedback, setFeedback] = useState('')
     const [show, setShow] = useState(false)
+    const [load, setLoad] = useState(false)
     const [messages,setMessages]=useState({
         description: '',
         executionDate: '',
@@ -516,14 +517,25 @@ function AddTestDialog({category,handleOnSubmit}) {
                     <Button variant="secondary" onClick={handleClose}>
                         בטל
                     </Button>
-                    <Button variant="success" onClick={async () => {
+                    {
+                        (load)?(
+                            <Button variant="success" >
+                                טוען...
+                            </Button>
+                        ):(
+                            <Button variant="success" onClick={async () => {
+                                setLoad(true)
 
-                        if (await handleOnSubmit(newTest,setMessages)) {
-                            handleClose()
-                        }
-                    }}>
-                        שמור שינויים
-                    </Button>
+                                if (await handleOnSubmit(newTest,setMessages)) {
+                                    handleClose()
+                                }
+                                setLoad(false)
+                            }}>
+                                שמור שינויים
+                            </Button>
+                        )
+                    }
+
                 </Modal.Footer>
             </Modal>
         </div>

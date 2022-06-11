@@ -77,7 +77,9 @@ function HomePage({userDetails, type, institute,setConnectNow}) {
         const saveCurrentPage= localStorage.getItem("currentPage")
         const pathSpilt = window.location.pathname.split("/")
         const len = pathSpilt.length
-        if( saveCurrentPage!==null && pathSpilt[len-1]===saveCurrentPage){
+        if( saveCurrentPage!==null && (pathSpilt[len-1]===saveCurrentPage||
+        len>2&&((pathSpilt[len-2]+'/'+pathSpilt[len-1]===saveCurrentPage)||(pathSpilt[len-2]===saveCurrentPage
+            && pathSpilt[len-1]==='*')))){
             return saveCurrentPage
         }
         if(saveCurrentPage ==='therapist'|| saveCurrentPage ==='parent'){
@@ -351,7 +353,12 @@ function HomePage({userDetails, type, institute,setConnectNow}) {
 
                                                                <Row>
                                                                    <Button as={Link} to='ProgressTrend/*'
-                                                                           active={currentPage === 'ProgressTrend'}
+                                                                           active={currentPage === 'ProgressTrend'||currentPage==='ProgressTrend/interpersonalConnection'
+                                                                               ||currentPage==='ProgressTrend/groupDiscourse'||
+                                                                               currentPage==='ProgressTrend/academic'||currentPage==='ProgressTrend/KeepingEyeContact'||
+                                                                               currentPage==='ProgressTrend/plots'
+                                                                   }
+
                                                                            onClick={() => {
                                                                                setCurrentPage('ProgressTrend')
                                                                            }}

@@ -62,7 +62,7 @@ function AddPatient({addPatient,setAddPatient,listPatient}){
                 <Form>
                     <Col>
                         <Row className="form-group">
-                            <Form.Label htmlFor="id">תז</Form.Label>
+                            <Form.Label style={{fontSize:20 }} htmlFor="id">תז</Form.Label>
                             <Form.Control type="text" name="id" id="id" onChange={e => setDetailsNewPatient({
                                 ...detailsNewPatient,
                                 id: e.target.value
@@ -72,7 +72,7 @@ function AddPatient({addPatient,setAddPatient,listPatient}){
                             </div>
                         </Row>
                         <Row className="form-group">
-                            <Form.Label htmlFor="connection">קשר</Form.Label>
+                            <Form.Label style={{fontSize:20 }} htmlFor="connection">קשר</Form.Label>
                             <Form.Control type="text" name="connection" id="connection"
                                           onChange={e => setDetailsNewPatient({
                                               ...detailsNewPatient,
@@ -83,7 +83,7 @@ function AddPatient({addPatient,setAddPatient,listPatient}){
                             </div>
                         </Row>
                         <Row className="form-group">
-                            <Form.Label htmlFor="code">קוד:</Form.Label>
+                            <Form.Label style={{fontSize:20 }} htmlFor="code">קוד</Form.Label>
                             <Form.Control type="text" name="code" id="code" onChange={e => setDetailsNewPatient({
                                 ...detailsNewPatient,
                                 code: e.target.value

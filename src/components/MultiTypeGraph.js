@@ -45,6 +45,7 @@ function MultiTypeGraph({appKey, data}) {
     }
     return (
         <div>
+            <Col className="justify-content-center">
             {/*<div id="graphs"></div>*/}
             <div className='header'>
                 <h1 className='title text-center'>דוח התקדמות ב {appKey}</h1>
@@ -66,6 +67,7 @@ function MultiTypeGraph({appKey, data}) {
             {listOfTags.map((tag)=>{
                 return tag
             })}
+            </Col>
         </div>
     )
 }

@@ -624,14 +624,14 @@ function SecretaryPage({data}) {
                 <Routes>
                     <Route path="/"
                            element={<Row className='align-content-start'> <Form.Label className='fs-4' >
-                               {"ניתן לראות  עובדים או תלמידים במוסד "+data.institute+ " בלשוניות עובדים,תלמדים. "}</Form.Label> </Row>}/>
+                               {"ניתן לראות עובדים או תלמידים במוסד "+data.institute+ " בלשוניות שלמעלה: עובדים, תלמידים. "}</Form.Label> </Row>}/>
                 </Routes>
                 <Routes>
                     <Route path="employees"
                            element={
                         <>
                             <Row className=' align-content-start'> <Form.Label className='fs-4' >
-                                {"עובדים במוסד "+data.institute}</Form.Label> </Row>
+                                {"עובדים במוסד "+data.institute+":"}</Form.Label> </Row>
                             {  isEmptyEmployees&&<Row className='align-content-start'> <Form.Label className='fs-4' >
                                 אין עובדים במוסד</Form.Label> </Row>}
                         <TableData type="עובד" add={addTherapist} update={updateTherapist}
@@ -674,7 +674,7 @@ function SecretaryPage({data}) {
                     <Route path="students"
                            element={<>
                                <Row className='align-content-start'> <Form.Label className='fs-4' >
-                                   {"תלמידים במוסד "+data.institute}</Form.Label> </Row>
+                                   {"תלמידים במוסד "+data.institute+":"}</Form.Label> </Row>
                                {/*{  reloadStudents&&!isEmptyStudents&&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >*/}
                                {/*    טוען...</Form.Label> </Row>}*/}
                                {  isEmptyStudents&&<Row className='align-content-start'> <Form.Label className='fs-4' >

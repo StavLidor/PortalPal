@@ -21,7 +21,7 @@ export function AddTypeExternalTherapist({setAddExternal})  {
             /*onSubmit={onSignUp}*/  className="needs-validation" noValidate>
             <Container className="w-auto" fluid="sm">
                 <Form.Group className="mb-3" controlId="formEmail">
-                    <Form.Label  for="validationDefault01" className="text-center" style={{width: "100%"}}>הוסף פרטים הבאים על מנת שתוכל להיכנס למטפל חיצוני</Form.Label>
+                    <Form.Label for="validationDefault01" className="text-center" style={{width: "100%"}}>הוסף פרטים הבאים על מנת שתוכל להיכנס למטפל חיצוני</Form.Label>
 
                     <Row>
                         <Col>

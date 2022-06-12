@@ -181,7 +181,7 @@ function PatientExercises({patient, therapist, type}) {
                                            handleOnSubmit={handleOnSubmit}/>
                     </div>
             </Row>
-            {empty&&exercisesData.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >לא ניתנו תרגילים</Form.Label> </Row>}
+            {empty&&exercisesData.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >כרגע, לא קיימים תרגילים.</Form.Label> </Row>}
             {!empty && exercisesData.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >טוען...</Form.Label> </Row>}
             <Accordion className='justify-content-center' style={{width:'70%'}} alwaysOpen={true}>
                 {

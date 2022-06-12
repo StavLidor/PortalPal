@@ -51,7 +51,6 @@ export default function Sidebar({type, ids}) {
     return (
         <Router>
         <div className='sidebar'>
-
             {
                 type === "therapist" ? (
                     <h1>רשימת מטופלים</h1>
@@ -59,7 +58,6 @@ export default function Sidebar({type, ids}) {
                         <h1>רשימת ילדים</h1>
                     ) :
                     <h1>רשימת תלמידים</h1>
-
             }
             {
 

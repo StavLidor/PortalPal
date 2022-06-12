@@ -109,7 +109,7 @@ function Chat({otherUser, patient, isActive}) {
                         <div className="media-body ml-3">
                             <div className=/*"bg-light rounded py-2 px-3 mb-2"*/{(() => {
                                 if (message.senderAndReceiver.sender === auth.currentUser.uid) {
-                                    return "bg-primary rounded py-2 px-3 mb-2"
+                                    return "bg-secondary rounded py-2 px-3 mb-2"
                                 }
                                 return "bg-light rounded py-2 px-3 mb-2"
 

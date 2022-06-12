@@ -194,7 +194,7 @@ function SessionsList({patientId, therapistId = null, type}) {
             </div>
             </Row>
             {empty &&sessionsData.length===0 && <Row className='p-2 align-content-start'> <Form.Label className='fs-4' >
-                לא קיימים עוד סיכומי מפגש</Form.Label> </Row>}
+               כרגע, לא קיימים סיכומי מפגשים.</Form.Label> </Row>}
             {!empty && sessionsData.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >טוען...</Form.Label> </Row>}
             <br/>
 
@@ -286,7 +286,7 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
     return (
         <>
             {(type === 'therapist') && <Button  variant="outline-dark" onClick={handleShow}><Plus className= "m-1"/>
-                הוסף מפגש
+                הוסף טיפול
             </Button>}
 
             <Modal show={show} onHide={handleClose}>

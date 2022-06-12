@@ -225,7 +225,7 @@ function TestsList({patientId, therapistId = null, type,category = null}) {
                         {type === 'therapist' && <AddTestDialog  category={category} handleOnSubmit={handleOnSubmit}/>}
                     </div>
                 </Row>
-                {empty&&testsList.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >לא קיימים מבחנים</Form.Label> </Row>}
+                {empty&&testsList.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >כרגע, לא קיימים מבחנים.</Form.Label> </Row>}
                 {!empty&&testsList.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >טוען...</Form.Label> </Row>}
             <Container className='align-items-center' style={{width:'70%'}}>
 

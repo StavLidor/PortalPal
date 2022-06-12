@@ -20,7 +20,7 @@ function CheckHasAPICode({appKey, patientDetails}) {
 
     return (
         <div className='p-4' style={{width:'80%'}}>
-            {hasCode === false && <div className="text-center p-2">
+            {hasCode === false && <div className="justify-content-center p-2">
                 {wasCodeRemoved && <Form.Label>הקוד הוסר בהצלחה!</Form.Label>}
                 <Row><Form.Label style={{fontSize: 20, fontWeight: "bold"}}> שמחים שאתה רוצה לקשר אלינו את
                     אפליקציית {appKey} !
@@ -28,7 +28,7 @@ function CheckHasAPICode({appKey, patientDetails}) {
                 <Row><Form.Label style={{fontWeight: "bold"}}>כדי לעשות זאת עליך להכניס פה
                     הקוד שמופיע לך
                     באפליקציה:</Form.Label></Row>
-                <ButtonGroup className="m-1 gap-1">
+                <ButtonGroup className="m-1 gap-1 w-75">
                     <Form.Control onChange={e => setCode(e.target.value)}
                                   value={code}/>
                     <Button

@@ -55,14 +55,15 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
 
     return (
         <div>
-            <Row><Form.Label style={{fontWeight: 'bold'}}>{listTitle}</Form.Label></Row>
+            <Row><Col><Form.Label style={{fontWeight: 'bold'}}>{listTitle}</Form.Label></Col>
             {reload &&  <Row><Form.Label style={{fontWeight: 'bold'}} >טוען...</Form.Label></Row>}
             {type==='therapist'&&institute === 'external' &&
-                <Button onClick={() => setAddPatient(true)} className="m-2 p-1 text-center"
+                <Col md={"auto"}><Button onClick={() => setAddPatient(true)} id="addPatientButton" className="m-2 p-1 text-center"
                                                  style={{fontSize: 10, height: 30}} variant="outline-primary"><Plus/>הוסף
                 מטופל</Button>
+                </Col>
             }
-
+            </Row>
                 {listData.map((item) => {
                         let data = item.data()
                         let id = data.id.toString()

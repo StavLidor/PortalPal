@@ -15,12 +15,11 @@ function PatientDetails({details, type, institute}) {
                 <Form.Label style={{fontWeight: 'bold'}}>פרטי מטופל</Form.Label>
 
                 {type === "therapist" && institute === "external" &&
-                <Button className="m-2 p-1 text-center" onClick={() => {
+                <Button className="m-2 p-1 text-center rounded-3" id="deletePatientButton" onClick={() => {
                     setShowRemovePatientDialog(true)
                     // await removeConnectionPatientToTherapist(auth.currentUser.uid, details.id, institute)
                 }
-                } style={{fontSize: 10, width: 80, height: 32}} variant="outline-primary"><Dash/>הסר
-                    מטופל</Button>}
+                } style={{fontSize: 10, width: 80, height: 32}} variant="outline-primary"><Dash/> הסר מטופל</Button>}
             </ButtonGroup>
             {showRemovePatientDialog && <Modal show={showRemovePatientDialog} onHide={() => {
                 setShowRemovePatientDialog(false)
@@ -29,13 +28,13 @@ function PatientDetails({details, type, institute}) {
                     <Modal.Title>האם אתה בטוח שברצונך להסיר מטופל זה?</Modal.Title>
                 </Modal.Header>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={async () => {
+                    <Button variant="danger" onClick={async () => {
                         setShowRemovePatientDialog(false)
                         await removeConnectionPatientToTherapist(auth.currentUser.uid, details.id, institute)
                     }}>
                         כן
                     </Button>
-                    <Button variant="primary" onClick={() => {
+                    <Button variant="secondary" onClick={() => {
                         setShowRemovePatientDialog(false)
                     }}>
                         לא, אל תמחק

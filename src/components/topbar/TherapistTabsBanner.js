@@ -10,7 +10,7 @@ import PatientDetails from "../sidebar/PatientDetails";
 import {Plus} from "react-bootstrap-icons";
 import {isClick} from "../../useFunction";
 
-function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPerson, setCurrentPage,currentPage}) {
+function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPerson, setCurrentPage, currentPage}) {
 
     const [tabsComponent, setTabsComponent] = useState(<h3>משהו השתבש...</h3>)
 
@@ -50,34 +50,39 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
             case "parent":
                 setTabsComponent(
                     <Container style={{width: '90%'}} className='p-4'>
-
-                        <Nav fill variant="pills"  className='gap-4' defaultActiveKey={'sessions'}>
-
-                            <Nav.Item id='inner-top-menu-button'>
-                                <Nav.Link as={Link} to='sessions' onClick={() => {
-                                    setCurrentPage('sessions')
-                                }} active={isClick('sessions')} id='inner-top-menu-button' className="list-group-item list-group-item-action border">סיכומי טיפולים</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item id='inner-top-menu-button'>
-                                <Nav.Link as={Link} to='exercises' id='inner-top-menu-button' onClick={() => {
-                                    setCurrentPage('exercises')
-                                }} active={isClick('exercises')} className="list-group-item list-group-item-action border">תרגילים</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item id='inner-top-menu-button'>
-                                <Nav.Link as={Link} to='communication' id='inner-top-menu-button' onClick={() => {
-                                    setCurrentPage('communication')
-                                }} className="list-group-item list-group-item-action border"
-                                          active={isClick('communication')}>התקשרות</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
-                        {therapistInstitute === 'external' &&
-                        <Button className="m-2 p-1 text-center" onClick={async () => {
-                            console.log(currentPerson)
-                            await removeConnectionPatientToTherapist(therapistId, currentPerson, therapistInstitute)
-                        }
-                        } style={{fontSize: 10, height: 30}} variant="outline-primary"><Plus/>הסר
-                            מטפל חיצוני</Button>}
-
+                        <Row className="w-100">
+                            <Col md={10}>
+                            <Nav fill variant="pills" className='gap-4' defaultActiveKey={'sessions'}>
+                                <Nav.Item id='inner-top-menu-button'>
+                                    <Nav.Link as={Link} to='sessions' onClick={() => {
+                                        setCurrentPage('sessions')
+                                    }} active={isClick('sessions')} id='inner-top-menu-button'
+                                              className="list-group-item list-group-item-action border">סיכומי
+                                        טיפולים</Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item id='inner-top-menu-button'>
+                                    <Nav.Link as={Link} to='exercises' id='inner-top-menu-button' onClick={() => {
+                                        setCurrentPage('exercises')
+                                    }} active={isClick('exercises')}
+                                              className="list-group-item list-group-item-action border">תרגילים</Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item id='inner-top-menu-button'>
+                                    <Nav.Link as={Link} to='communication' id='inner-top-menu-button' onClick={() => {
+                                        setCurrentPage('communication')
+                                    }} className="list-group-item list-group-item-action border"
+                                              active={isClick('communication')}>התקשרות</Nav.Link>
+                                </Nav.Item>
+                            </Nav>
+                            </Col>
+                            {therapistInstitute === 'external' &&
+                            <Col md={2}><Button id="deleteExternalTherapist" className="text-center" onClick={async () => {
+                                console.log(currentPerson)
+                                await removeConnectionPatientToTherapist(therapistId, currentPerson, therapistInstitute)
+                            }
+                            }  variant="outline-primary"><Plus/>הסר
+                                מטפל חיצוני</Button>
+                            </Col>}
+                        </Row>
                     </Container>
                 )
                 break
@@ -110,7 +115,7 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
                 setTabsComponent(<h3>משהו השתבש...</h3>)
                 break
         }
-    }, [currentPerson,currentPage])
+    }, [currentPerson, currentPage])
 
     return (tabsComponent)
 }

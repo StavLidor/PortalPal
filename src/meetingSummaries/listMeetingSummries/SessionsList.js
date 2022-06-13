@@ -17,13 +17,13 @@ import {Link, Route, Routes} from "react-router-dom";
 import {auth, db} from "../../firebase";
 import {addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, updateDoc} from "firebase/firestore";
 import firebase from "firebase/compat/app";
-import { Pencil,Plus,Trash} from 'react-bootstrap-icons';
+import {Pencil, Plus, Trash} from 'react-bootstrap-icons';
 
 function SessionsList({patientId, therapistId = null, type}) {
 
     const [sessionsData, setSessionsData] = useState([])
     const [open, setOpen] = useState(false)
-    const [empty,editEmpty]=useState(false)
+    const [empty, editEmpty] = useState(false)
 
     const [newSession, setNewSession] = useState({
         title: '',
@@ -36,31 +36,33 @@ function SessionsList({patientId, therapistId = null, type}) {
     // function collapse() {
     //     $('.collapse').collapse('hide');
     // }
-    const checkData=(setMessages,session)=>{
+    const checkData = (setMessages, session) => {
         console.log(session)
-        const messagesSubmit={ title: '',
+        const messagesSubmit = {
+            title: '',
             summary: '',
-            date: ''}
+            date: ''
+        }
         // e.preventDefault()
-        console.log(session.date ==="")
-        if(session.date ===""){
-            messagesSubmit.date='הכנס תאריך מפגש'
+        console.log(session.date === "")
+        if (session.date === "") {
+            messagesSubmit.date = 'הכנס תאריך מפגש'
         }
-        if(!session.title.trim()){
-            messagesSubmit.title='הכנס כותרת פגישה'
+        if (!session.title.trim()) {
+            messagesSubmit.title = 'הכנס כותרת פגישה'
         }
-        if(!session.summary.trim()){
-            messagesSubmit.summary='הכנס סיכום פגישה'
+        if (!session.summary.trim()) {
+            messagesSubmit.summary = 'הכנס סיכום פגישה'
         }
         setMessages(messagesSubmit)
         console.log(messagesSubmit)
-        if(!messagesSubmit.date.trim() && !messagesSubmit.title.trim()&& !messagesSubmit.summary.trim()){
+        if (!messagesSubmit.date.trim() && !messagesSubmit.title.trim() && !messagesSubmit.summary.trim()) {
             return true
         }
         return false
     }
     useEffect(async () => {
-        console.log('Empty',empty)
+        console.log('Empty', empty)
         // editEmpty(false)
         console.log('useEffect')
         let q
@@ -69,7 +71,7 @@ function SessionsList({patientId, therapistId = null, type}) {
                 return therapistId
             return auth.currentUser.uid
         })()
-        if(therapistIDForSession ===''){
+        if (therapistIDForSession === '') {
             return
         }
         q = query(collection(db, "patients/" + patientId + "/therapists/" + therapistIDForSession + "/sessions"), orderBy("date", "desc"))
@@ -79,10 +81,9 @@ function SessionsList({patientId, therapistId = null, type}) {
 
             const sessions = []
             getDocs(q).then((querySnapshot) => {
-                if(querySnapshot.docs.length === 0){
+                if (querySnapshot.docs.length === 0) {
                     editEmpty(true)
-                }
-                else {
+                } else {
                     editEmpty(false)
                 }
                 querySnapshot.forEach((doc) => {
@@ -103,10 +104,9 @@ function SessionsList({patientId, therapistId = null, type}) {
             return onSnapshot(
                 q,
                 (querySnapshot) => {
-                    if(querySnapshot.docs.length === 0){
+                    if (querySnapshot.docs.length === 0) {
                         editEmpty(true)
-                    }
-                    else {
+                    } else {
                         editEmpty(false)
                     }
                     let sessions = []
@@ -132,19 +132,19 @@ function SessionsList({patientId, therapistId = null, type}) {
     }, [therapistId])
 
     const handleOnSubmit = async (setMessages) => {
-        if(!checkData(setMessages,newSession))
+        if (!checkData(setMessages, newSession))
             return false
-        console.log("new session: " ,newSession)
-        console.log("path:" ,"patients/" + patientId + "/therapists/" + auth.currentUser.uid + '/sessions')
+        console.log("new session: ", newSession)
+        console.log("path:", "patients/" + patientId + "/therapists/" + auth.currentUser.uid + '/sessions')
         // e.preventDefault()
         // newSession.until = firebase.firestore.Timestamp.fromDate(new Date(newSession.until))
         await addDoc(collection(db, "patients/" + patientId + "/therapists/" + auth.currentUser.uid + '/sessions'), newSession
-        //     {
-        //     ...newSession,
-        //     // createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        //     // createdAt: firebase.firestore.Timestamp.fromDate(new Date(newSession.createdAt)),
-        //     // until: firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
-        // }
+            //     {
+            //     ...newSession,
+            //     // createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            //     // createdAt: firebase.firestore.Timestamp.fromDate(new Date(newSession.createdAt)),
+            //     // until: firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
+            // }
         )
         // const docRef = await addDoc(collection(db, "exercises"),
         //     { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
@@ -156,14 +156,14 @@ function SessionsList({patientId, therapistId = null, type}) {
             docId))
         // await deleteDoc(doc(db, "exercises", docId))
     }
-    const handleUpdate = async (docId, data,setMessages) => {
-        if(!checkData(setMessages,data))
+    const handleUpdate = async (docId, data, setMessages) => {
+        if (!checkData(setMessages, data))
             return false
-        console.log("dataaaaaaaaaaaa:" , data)
+        console.log("dataaaaaaaaaaaa:", data)
 
         // await updateIDDoc(docId, "exercises", data)
         await updateDoc(doc(collection(db, "patients"), patientId, "therapists", auth.currentUser.uid, 'sessions',
-            docId),data
+            docId), data
             //     {
             //     ...data,
             //     // createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -177,11 +177,11 @@ function SessionsList({patientId, therapistId = null, type}) {
     return (
         <div>
             <Row className='p-2 align-content-start'>
-                <div style={{width:'auto'}}>
+                <div style={{width: 'auto'}}>
                     <Form.Label className='fs-2' style={{fontWeight: 'bold'}}>סיכומי טיפולים</Form.Label>
                 </div>
 
-                <div style={{width:'auto',alignSelf:"center"}}>
+                <div style={{width: 'auto', alignSelf: "center"}}>
                     <AddSessionDialog type={type} setNewSession={setNewSession} newSession={newSession}
                                       handleOnSubmit={handleOnSubmit}/>
                     {/*<Button  variant="outline-dark"*/}
@@ -191,15 +191,17 @@ function SessionsList({patientId, therapistId = null, type}) {
                     {/*<Button  variant="outline-dark"  onclick={collapse}><Plus className= "m-1"/>*/}
                     {/*    סגור את כל פגישות*/}
                     {/*</Button>*/}
-            </div>
+                </div>
             </Row>
-            {empty &&sessionsData.length===0 && <Row className='p-2 align-content-start'> <Form.Label className='fs-4' >
-               כרגע, לא קיימים סיכומי מפגשים.</Form.Label> </Row>}
-            {!empty && sessionsData.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >טוען...</Form.Label> </Row>}
+            {empty && sessionsData.length === 0 &&
+            <Row className='p-2 align-content-start'> <Form.Label className='fs-4'>
+                כרגע, לא קיימים סיכומי מפגשים.</Form.Label> </Row>}
+            {!empty && sessionsData.length === 0 &&
+            <Row className='p-2 align-content-start'> <Form.Label className='fs-4'>טוען...</Form.Label> </Row>}
             <br/>
 
             {/*// sessionsData.map((s)=>(*/}
-            <Accordion className='justify-content-center' style={{width:'70%'}} alwaysOpen={true}
+            <Accordion className='justify-content-center' style={{width: '70%'}} alwaysOpen={true}
 
             >
 
@@ -208,11 +210,11 @@ function SessionsList({patientId, therapistId = null, type}) {
                             // <>
                             <Accordion.Item eventKey={s.id}>
                                 <Accordion.Header>
-                                    {s.title+ ', ' +new Date(s.date.seconds * 1000).toLocaleDateString()}
+                                    {s.title + ', ' + new Date(s.date.seconds * 1000).toLocaleDateString()}
                                     &nbsp;&nbsp;
                                     {/*{e.createdAt.toDate().toUTCString() + e.place}*/}
                                 </Accordion.Header>
-                                <Accordion.Body >
+                                <Accordion.Body>
                                     <Col>
                                         <Row>
                                             <Form.Label>
@@ -242,10 +244,10 @@ function SessionsList({patientId, therapistId = null, type}) {
 
                                         {(type === 'therapist') &&
                                         <Row className='justify-content-end w-10'>
-                                            <Col className="m-1" md={1}>
+                                            <Col md={1}>
                                                 <EditSessionDialog sessionData={s} handleUpdate={handleUpdate}/>
                                             </Col>
-                                            <Col className="m-1" md={1}>
+                                            <Col md={1}>
                                                 <DeleteSessionDialog handleDelete={handleDelete} sessionID={s.id}/>
                                             </Col>
                                         </Row>}
@@ -269,11 +271,14 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
         date: ''
     })
     const [show, setShow] = useState(false)
-    const [load,setLoad]=useState(false)
-    const handleClose = () => {setShow(false)
-        setMessages({title: '',
+    const [load, setLoad] = useState(false)
+    const handleClose = () => {
+        setShow(false)
+        setMessages({
+            title: '',
             summary: '',
-            date: ''})
+            date: ''
+        })
         setNewSession({
             title: '',
             summary: '',
@@ -285,7 +290,7 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
 
     return (
         <>
-            {(type === 'therapist') && <Button  variant="outline-dark" onClick={handleShow}><Plus className= "m-1"/>
+            {(type === 'therapist') && <Button variant="outline-dark" onClick={handleShow}><Plus className="m-1"/>
                 הוסף טיפול
             </Button>}
 
@@ -303,12 +308,15 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                                     type="date"
                                     autoFocus
                                     onChange={e => setNewSession(
-                                        {...newSession, date: firebase.firestore.Timestamp.fromDate(new Date(e.target.value))}
+                                        {
+                                            ...newSession,
+                                            date: firebase.firestore.Timestamp.fromDate(new Date(e.target.value))
+                                        }
                                     )}
                                 />
 
                             </Form.Group>
-                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                            <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                 {messages.date}
                             </div>
                         </Row>
@@ -321,7 +329,7 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
 
                                 />
                             </Form.Group>
-                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                            <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                 {messages.title}
                             </div>
                         </Row>
@@ -329,21 +337,18 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                             <Form.Group controlId="summary">
                                 <Col><Form.Label>סיכום מפגש</Form.Label></Col>
                                 <Col>
-                                <textarea style={{width:"460px"}}
-                                    type="text"
-                                    onChange={e => setNewSession({...newSession, summary: e.target.value})}
+                                <textarea style={{width: "460px"}}
+                                          type="text"
+                                          onChange={e => setNewSession({...newSession, summary: e.target.value})}
 
                                 />
                                 </Col>
 
                             </Form.Group>
-                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                            <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                 {messages.summary}
                             </div>
                         </Row>
-
-
-
 
 
                     </Col>
@@ -353,11 +358,11 @@ function AddSessionDialog({setNewSession, newSession, handleOnSubmit, type}) {
                     <Button variant="secondary" onClick={handleClose}>
                         בטל
                     </Button>
-                    {(load)?(
-                        <Button variant="success" >
+                    {(load) ? (
+                        <Button variant="success">
                             טוען...
                         </Button>
-                    ):(
+                    ) : (
                         <Button variant="success" onClick={async () => {
                             setLoad(true)
                             if (await handleOnSubmit(setMessages)) {
@@ -391,15 +396,18 @@ function DeleteSessionDialog({handleDelete, sessionID}) {
                 <Modal.Header>
                     <Modal.Title>מחיקת תרגיל</Modal.Title>
                 </Modal.Header>
-                האם אתה בטוח שברצונך למחוק את תרגיל זה?
+                <Modal.Body>
+                    האם אתה בטוח שברצונך למחוק את תרגיל זה?
+                </Modal.Body>
+
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => {
+                    <Button variant="danger" onClick={() => {
                         handleClose()
                         handleDelete(sessionID)
                     }}>
                         כן
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={handleClose}>
                         לא, אל תמחק
                     </Button>
 
@@ -417,18 +425,25 @@ function EditSessionDialog({handleUpdate, sessionData}) {
         date: ''
     })
     const [newSessionData, setNewSessionData] = useState(sessionData);
-    const handleClose = () => {setShow(false)
-        setMessages({title: '',
+    const handleClose = () => {
+        setShow(false)
+        setMessages({
+            title: '',
             summary: '',
-            date: ''})}
+            date: ''
+        })
+    }
     const handleShow = () => setShow(true);
+    useEffect(() => {
+        setNewSessionData(sessionData)
+    }, [sessionData])
 
     return (
         <>
             <Button variant="outline-dark" onClick={handleShow}><Pencil/>
             </Button>
 
-            <Modal show={show} onHide={()=> {
+            <Modal show={show} onHide={() => {
                 setNewSessionData(sessionData)
                 handleClose()
             }}>
@@ -450,7 +465,7 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                                               })}
                                 />
                             </Form.Group>
-                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                            <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                 {messages.title}
                             </div>
                         </Row>
@@ -464,29 +479,32 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                                     // value={(exerciseData.until.toDate().getFullYear() + '-' + (exerciseData.until.toDate().getMonth() + 1) + '-' + exerciseData.until.toDate().getDate()).toString()}
                                     // value={new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()}
                                     defaultValue={
-                                        (()=>{
+                                        (() => {
                                             let year = new Date(newSessionData.date.seconds * 1000).getFullYear()
                                             let month = new Date(newSessionData.date.seconds * 1000).getMonth() + 1
                                             let day = new Date(newSessionData.date.seconds * 1000).getDate()
 
                                             let dateString = year.toString() + '-'
-                                            if(month < 10){
-                                                dateString+='0'
+                                            if (month < 10) {
+                                                dateString += '0'
                                             }
-                                            dateString+=month.toString() + '-'
-                                            if(day < 10){
-                                                dateString+='0'
+                                            dateString += month.toString() + '-'
+                                            if (day < 10) {
+                                                dateString += '0'
                                             }
-                                            dateString+=day.toString()
+                                            dateString += day.toString()
                                             return dateString
                                         })()}
                                     // value={(new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()).toString()}
 
-                                    onChange={e => setNewSessionData({...newSessionData, date: firebase.firestore.Timestamp.fromDate(new Date(e.target.value))})}
+                                    onChange={e => setNewSessionData({
+                                        ...newSessionData,
+                                        date: firebase.firestore.Timestamp.fromDate(new Date(e.target.value))
+                                    })}
 
                                 />
                             </Form.Group>
-                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                            <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                 {messages.date}
                             </div>
                         </Row>
@@ -506,7 +524,7 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                                               })}
                                 />
                             </Form.Group>
-                            <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                            <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                 {messages.summary}
                             </div>
                         </Row>
@@ -515,7 +533,7 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={()=>{
+                    <Button variant="secondary" onClick={() => {
                         setNewSessionData(sessionData)
                         handleClose()
                     }}>
@@ -525,9 +543,7 @@ function EditSessionDialog({handleUpdate, sessionData}) {
 
                         console.log("new: ", newSessionData)
                         console.log("newExerciseData.until: ", newSessionData.date)
-                        if (await handleUpdate(newSessionData.id, newSessionData, setMessages))
-
-                        {
+                        if (await handleUpdate(newSessionData.id, newSessionData, setMessages)) {
                             setNewSessionData(newSessionData)
                             handleClose()
                         }

@@ -751,7 +751,7 @@ function HomePage({userDetails, type, institute, setConnectNow}) {
                                                            element={
                                                                <TestsList patientId={currentPerson}
                                                                           therapistId={userDetails.id}
-                                                                          type={type} category={'קשר עין'}/>
+                                                                          type={type} category={'שמירת קשר עין'}/>
                                                            }/>
                                                 </Routes>
                                                 <Routes>

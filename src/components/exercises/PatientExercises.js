@@ -28,7 +28,7 @@ import {Plus, Pencil, Trash} from 'react-bootstrap-icons';
 function PatientExercises({patient, therapist, type}) {
     const [exercisesData, setExercisesData] = useState([])
     const [open, setOpen] = useState(false)
-    const [empty,editEmpty]=useState(false)
+    const [empty, editEmpty] = useState(false)
 
     const [newExercise, setNewExercise] = useState({
         until: '',
@@ -44,6 +44,7 @@ function PatientExercises({patient, therapist, type}) {
     //     place: '',
     // })
     // const [addExercise, setAddExercise] = useState(false)
+
     useEffect(async () => {
         //console.log('useEffect')
         const q = query(collection(db, "patients/" + patient + "/therapists/" + therapist + "/exercises"), orderBy("createdAt", "desc"))
@@ -52,10 +53,9 @@ function PatientExercises({patient, therapist, type}) {
 
             const arr = []
             getDocs(q).then((querySnapshot) => {
-                if(querySnapshot.docs.length === 0){
+                if (querySnapshot.docs.length === 0) {
                     editEmpty(true)
-                }
-                else {
+                } else {
                     editEmpty(false)
                 }
                 querySnapshot.forEach((doc) => {
@@ -68,7 +68,7 @@ function PatientExercises({patient, therapist, type}) {
 
 
                 });
-                if(arr.length === 0){
+                if (arr.length === 0) {
                     editEmpty(true)
                 }
                 setExercisesData(arr)
@@ -78,10 +78,9 @@ function PatientExercises({patient, therapist, type}) {
                 q,
                 (querySnapshot) => {
                     let data = []
-                    if(querySnapshot.docs.length === 0){
+                    if (querySnapshot.docs.length === 0) {
                         editEmpty(true)
-                    }
-                    else {
+                    } else {
                         editEmpty(false)
                     }
                     querySnapshot.forEach((doc) => (
@@ -91,7 +90,7 @@ function PatientExercises({patient, therapist, type}) {
 
                     ))
                     console.log("DATA: ", data)
-                    if(data.length === 0){
+                    if (data.length === 0) {
                         editEmpty(true)
                     }
                     setExercisesData(data)
@@ -104,35 +103,37 @@ function PatientExercises({patient, therapist, type}) {
         }
     }, [])
 
-    const checkData=(setMessages,exercise)=>{
-        const messagesSubmit={until: '',
+    const checkData = (setMessages, exercise) => {
+        const messagesSubmit = {
+            until: '',
             description: '',
             // patient: patient,
-            place: '',}
+            place: '',
+        }
         // e.preventDefault()
-        console.log(exercise.until ==="")
-        if(exercise.until ===""){
-            messagesSubmit.until='הכנס תאריך סיום'
+        console.log(exercise.until === "")
+        if (exercise.until === "") {
+            messagesSubmit.until = 'הכנס תאריך סיום'
         }
-        if(!exercise.description.trim()){
-            messagesSubmit.description='הכנס תיאור תרגיל'
+        if (!exercise.description.trim()) {
+            messagesSubmit.description = 'הכנס תיאור תרגיל'
         }
-        if(!exercise.place.trim()){
-            messagesSubmit.place='הכנס מקום תרגיל'
+        if (!exercise.place.trim()) {
+            messagesSubmit.place = 'הכנס מקום תרגיל'
         }
         setMessages(messagesSubmit)
         console.log(messagesSubmit)
-        if(!messagesSubmit.until.trim() && !messagesSubmit.description.trim()&& !messagesSubmit.place.trim()){
+        if (!messagesSubmit.until.trim() && !messagesSubmit.description.trim() && !messagesSubmit.place.trim()) {
             return true
         }
         return false
     }
     const handleOnSubmit = async (setMessages) => {
-        if(checkData(setMessages,newExercise)) {
+        if (checkData(setMessages, newExercise)) {
             newExercise.until = firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
             await addDoc(collection(db, "patients/" + patient + "/therapists/" + therapist + '/exercises'), {
                 ...newExercise,
-                 createdAt: firebase.firestore.Timestamp.fromDate(new Date())
+                createdAt: firebase.firestore.Timestamp.fromDate(new Date())
                 //createdAt: firebase.firestore.Timestamp.fromDate(new Date(newExercise.createdAt)),
                 // until: firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
             })
@@ -149,21 +150,21 @@ function PatientExercises({patient, therapist, type}) {
             docId))
         // await deleteDoc(doc(db, "exercises", docId))
     }
-    const handleUpdate = async (docId, data,setMessages) => {
-        console.log("dataaaaaaaaaaaa:" , data)
-        console.log("dataaaaaaaaaaaa until:" , data.until)
-        if(!checkData(setMessages,data)) {
+    const handleUpdate = async (docId, data, setMessages) => {
+        console.log("dataaaaaaaaaaaa:", data)
+        console.log("dataaaaaaaaaaaa until:", data.until)
+        if (!checkData(setMessages, data)) {
             return false
         }
         // await updateIDDoc(docId, "exercises", data)
         await updateDoc(doc(collection(db, "patients"), patient, "therapists", therapist, 'exercises',
-            docId),data
-        //     {
-        //     ...data,
-        //     // createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        //     // until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
-        //     until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
-        // }
+            docId), data
+            //     {
+            //     ...data,
+            //     // createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            //     // until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
+            //     until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
+            // }
         )
         return true
     }
@@ -173,36 +174,39 @@ function PatientExercises({patient, therapist, type}) {
     // console.log(exercisesData[0].until.toDate().getFullYear() + '-' + (exercisesData[0].until.toDate().getMonth() + 1) + '-' + exercisesData[0].until.toDate().getDate())
     return (
         <div>
-                <Row className='p-2 align-content-start'>
-                    <div style={{width:'auto'}}>
-                        <Form.Label className='fs-2' style={{fontWeight: 'bold'}}>רשימת תרגילים</Form.Label></div>
-                    <div style={{width:'auto',alignSelf:"center"}}>
-                        <AddExerciseDialog type={type} setNewExercise={setNewExercise} newExercise={newExercise}
-                                           handleOnSubmit={handleOnSubmit}/>
-                    </div>
+            <Row className='p-2 align-content-start'>
+                <div style={{width: 'auto'}}>
+                    <Form.Label className='fs-2' style={{fontWeight: 'bold'}}>רשימת תרגילים</Form.Label></div>
+                <div style={{width: 'auto', alignSelf: "center"}}>
+                    <AddExerciseDialog type={type} setNewExercise={setNewExercise} newExercise={newExercise}
+                                       handleOnSubmit={handleOnSubmit}/>
+                </div>
             </Row>
-            {empty&&exercisesData.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >כרגע, לא קיימים תרגילים.</Form.Label> </Row>}
-            {!empty && exercisesData.length ===0 &&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >טוען...</Form.Label> </Row>}
-            <Accordion className='justify-content-center' style={{width:'70%'}} alwaysOpen={true}>
+            {empty && exercisesData.length === 0 &&
+            <Row className='p-2 align-content-start'> <Form.Label className='fs-4'>כרגע, לא קיימים תרגילים.</Form.Label>
+            </Row>}
+            {!empty && exercisesData.length === 0 &&
+            <Row className='p-2 align-content-start'> <Form.Label className='fs-4'>טוען...</Form.Label> </Row>}
+            <Accordion className='justify-content-center' style={{width: '70%'}} alwaysOpen={true}>
                 {
                     exercisesData.map((e, i) => (
                             // <>
 
                             <Accordion.Item eventKey={e.id}>
                                 <Accordion.Header>
-                                    {e.createdAt!==null &&new Date(e.createdAt.seconds * 1000).toLocaleDateString() + ' ' + e.place}
+                                    {e.createdAt !== null && new Date(e.createdAt.seconds * 1000).toLocaleDateString() + ' ' + e.description}
                                     &nbsp;&nbsp;
                                     {/*{e.createdAt.toDate().toUTCString() + e.place}*/}
                                 </Accordion.Header>
                                 <Accordion.Body>
                                     <Col>
-                                        <Row>
-                                            <Form.Text>
-                                                שם:
-                                                &nbsp;
-                                                שם חובהההה
-                                            </Form.Text>
-                                        </Row>
+                                        {/*<Row>*/}
+                                        {/*    <Form.Text>*/}
+                                        {/*        שם:*/}
+                                        {/*        &nbsp;*/}
+                                        {/*        שם חובהההה*/}
+                                        {/*    </Form.Text>*/}
+                                        {/*</Row>*/}
 
                                         <Row>
                                             <Form.Text>
@@ -236,11 +240,11 @@ function PatientExercises({patient, therapist, type}) {
                                             </Form.Text>
                                         </Row>
                                         {(type === 'therapist') &&
-                                        <Row className='justify-content-end'>
-                                            <Col md={2}>
+                                        <Row className='justify-content-end w-10'>
+                                            <Col md={1}>
                                                 <EditExerciseDialog exerciseData={e} handleUpdate={handleUpdate}/>
                                             </Col>
-                                            <Col md={2}>
+                                            <Col md={1}>
                                                 <DeleteExerciseDialog handleDelete={handleDelete} exerciseID={e.id}/>
                                             </Col>
                                         </Row>}
@@ -261,14 +265,15 @@ export default PatientExercises
 
 function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) {
     const [show, setShow] = useState(false);
-    const [load,setLoad]=useState(false)
+    const [load, setLoad] = useState(false)
     const [messages, setMessages] = useState({
         until: '',
         description: '',
         // patient: patient,
         place: '',
     })
-    const handleClose = () => {setShow(false)
+    const handleClose = () => {
+        setShow(false)
         setMessages({
             until: '',
             description: '',
@@ -311,12 +316,12 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                         <Row>
                             <Form.Group controlId="end_date">
                                 <Form.Label>תאריך סיום</Form.Label>
-                                <Form.Control  id='validationDefault01'
-                                    type="date"
-                                    onChange={e => setNewExercise({...newExercise, until: e.target.value})}
+                                <Form.Control id='validationDefault01'
+                                              type="date"
+                                              onChange={e => setNewExercise({...newExercise, until: e.target.value})}
 
                                 />
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                     {messages.until}
                                 </div>
                             </Form.Group>
@@ -334,7 +339,7 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                                                   description: e.target.value
                                               })}
                                 />
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                     {messages.description}
                                 </div>
                             </Form.Group>
@@ -349,7 +354,7 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                                 <Form.Control type='text'
                                               onChange={e => setNewExercise({...newExercise, place: e.target.value})}
                                 />
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                     {messages.place}
                                 </div>
                             </Form.Group>
@@ -362,11 +367,11 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                     <Button variant="secondary" onClick={handleClose}>
                         בטל
                     </Button>
-                    {(load)?(
-                        <Button variant="success" >
+                    {(load) ? (
+                        <Button variant="success">
                             טוען...
                         </Button>
-                    ):(
+                    ) : (
                         <Button variant="success" onClick={async () => {
                             setLoad(true)
                             const flag = handleOnSubmit(setMessages)
@@ -405,15 +410,17 @@ function DeleteExerciseDialog({handleDelete, exerciseID}) {
                 <Modal.Header>
                     <Modal.Title>מחיקת תרגיל</Modal.Title>
                 </Modal.Header>
-                האם אתה בטוח שברצונך למחוק את תרגיל זה?
+                <Modal.Body>
+                    האם אתה בטוח שברצונך למחוק את תרגיל זה?</Modal.Body>
+
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => {
+                    <Button variant="danger" onClick={() => {
                         handleClose()
                         handleDelete(exerciseID)
                     }}>
                         כן
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={handleClose}>
                         לא, אל תמחק
                     </Button>
 
@@ -432,14 +439,19 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
         // patient: patient,
         place: '',
     })
-    const handleClose = () => {setShow(false)
+    const handleClose = () => {
+        setShow(false)
         setMessages({
             until: '',
             description: '',
             // patient: patient,
             place: '',
-        })};
+        })
+    };
     const handleShow = () => setShow(true);
+    useEffect(() => {
+        setNewExerciseData(exerciseData)
+    }, [exerciseData])
 
     return (
         <>
@@ -447,7 +459,7 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                 <Pencil></Pencil>
             </Button>
 
-            <Modal show={show} onHide={()=> {
+            <Modal show={show} onHide={() => {
                 setNewExerciseData(exerciseData)
                 handleClose()
             }}>
@@ -464,20 +476,20 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                     autoFocus
                                     disabled
                                     defaultValue={
-                                        (()=>{
+                                        (() => {
                                             let year = new Date(newExerciseData.createdAt.seconds * 1000).getFullYear()
                                             let month = new Date(newExerciseData.createdAt.seconds * 1000).getMonth() + 1
                                             let day = new Date(newExerciseData.createdAt.seconds * 1000).getDate()
 
                                             let dateString = year.toString() + '-'
-                                            if(month < 10){
-                                                dateString+='0'
+                                            if (month < 10) {
+                                                dateString += '0'
                                             }
-                                            dateString+=month.toString() + '-'
-                                            if(day < 10){
-                                                dateString+='0'
+                                            dateString += month.toString() + '-'
+                                            if (day < 10) {
+                                                dateString += '0'
                                             }
-                                            dateString+=day.toString()
+                                            dateString += day.toString()
                                             return dateString
                                         })()}
                                     onChange={e => setNewExerciseData({...newExerciseData, createdAt: e.target.value})}
@@ -496,28 +508,31 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                     // value={(exerciseData.until.toDate().getFullYear() + '-' + (exerciseData.until.toDate().getMonth() + 1) + '-' + exerciseData.until.toDate().getDate()).toString()}
                                     // value={new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()}
                                     defaultValue={
-                                        (()=>{
+                                        (() => {
                                             let year = new Date(newExerciseData.until.seconds * 1000).getFullYear()
                                             let month = new Date(newExerciseData.until.seconds * 1000).getMonth() + 1
                                             let day = new Date(newExerciseData.until.seconds * 1000).getDate()
 
                                             let dateString = year.toString() + '-'
-                                            if(month < 10){
-                                                dateString+='0'
+                                            if (month < 10) {
+                                                dateString += '0'
                                             }
-                                            dateString+=month.toString() + '-'
-                                            if(day < 10){
-                                                dateString+='0'
+                                            dateString += month.toString() + '-'
+                                            if (day < 10) {
+                                                dateString += '0'
                                             }
-                                            dateString+=day.toString()
+                                            dateString += day.toString()
                                             return dateString
                                         })()}
                                     // value={(new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()).toString()}
 
-                                    onChange={e => setNewExerciseData({...newExerciseData, until: firebase.firestore.Timestamp.fromDate(new Date(e.target.value))})}
+                                    onChange={e => setNewExerciseData({
+                                        ...newExerciseData,
+                                        until: firebase.firestore.Timestamp.fromDate(new Date(e.target.value))
+                                    })}
 
                                 />
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                     {messages.until}
                                 </div>
                             </Form.Group>
@@ -536,7 +551,7 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                                   description: e.target.value
                                               })}
                                 />
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                     {messages.description}
                                 </div>
                             </Form.Group>
@@ -550,9 +565,12 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                 <Form.Label>מיקום</Form.Label>
                                 <Form.Control type='text'
                                               value={newExerciseData.place}
-                                              onChange={e => setNewExerciseData({...newExerciseData, place: e.target.value})}
+                                              onChange={e => setNewExerciseData({
+                                                  ...newExerciseData,
+                                                  place: e.target.value
+                                              })}
                                 />
-                                <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
+                                <div style={{fontSize: 10, color: "red"}} id="invalid-feedback">
                                     {messages.place}
                                 </div>
                             </Form.Group>
@@ -562,13 +580,13 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={()=>{
+                    <Button variant="secondary" onClick={() => {
                         setNewExerciseData(exerciseData)
                         handleClose()
                     }}>
                         בטל
                     </Button>
-                    <Button variant="primary" onClick={async () => {
+                    <Button variant="success" onClick={async () => {
 
                         console.log("new: ", newExerciseData)
                         console.log("newExerciseData.until: ", newExerciseData.until)

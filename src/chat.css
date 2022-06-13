@@ -319,6 +319,19 @@ footer {
     border-width: 2px;
 }
 
+#addTest {
+    color: black;
+}
+
+#addTest:hover {
+    color: white;
+    background: #68A7AD;
+
+}
+#criteria_for_adding_test{
+    font-size: 20px;
+}
+
 #account-button {
     background: transparent;
     border-width: 2px;

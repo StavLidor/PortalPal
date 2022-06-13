@@ -164,6 +164,7 @@ function HomePage({userDetails, type, institute, setConnectNow}) {
                             path={data.id.toString() + '/' + 'therapist' + '/' + isActive.toString() + '/' + index.toString() + '/*'}
                             element={<TherapistTabsBanner therapistInstitute={therapist.institute}
                                                           therapistId={therapist.id}
+                                                          therapistIsActive={isActive === 'active'}
                                                           type={type}
                                                           currentPerson={currentPerson}
                                                           setCurrentPage={setCurrentPage}

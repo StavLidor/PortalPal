@@ -230,7 +230,7 @@ function TherapistsList({
                 } else {
                     path = 'therapist'+ '/'+index.toString() //+ '/' + currentPage.toString()
 
-                    showInstitute = ', ' + institute
+                    showInstitute = ', ' + data.institute
                 }
                 return (
                     <div>

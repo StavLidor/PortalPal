@@ -10,7 +10,8 @@ import PatientDetails from "../sidebar/PatientDetails";
 import {Plus} from "react-bootstrap-icons";
 import {isClick} from "../../useFunction";
 
-function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPerson, setCurrentPage, currentPage}) {
+function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPerson, setCurrentPage, currentPage,
+                                 therapistIsActive}) {
 
     const [tabsComponent, setTabsComponent] = useState(<h3>משהו השתבש...</h3>)
 
@@ -74,7 +75,7 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
                                 </Nav.Item>
                             </Nav>
                             </Col>
-                            {therapistInstitute === 'external' &&
+                            {therapistInstitute === 'external' &&therapistIsActive&&
                             <Col md={2}><Button id="deleteExternalTherapist" className="text-center" onClick={async () => {
                                 console.log(currentPerson)
                                 await removeConnectionPatientToTherapist(therapistId, currentPerson, therapistInstitute)

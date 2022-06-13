@@ -14,7 +14,7 @@ function Login({login, setDisplayLoginForm,setConnectNow,load}) {
     //TODO: delete default values.
     const [userDetails, setUserDetails] = useState({
         email: "toko1010@gmail.com",
-        password: "1234567",
+        password: "אבגדהו",
         type: "therapist",
         institute: '1'
     })
@@ -26,19 +26,25 @@ function Login({login, setDisplayLoginForm,setConnectNow,load}) {
     const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false)
 
     const onLogin = async e => {
-        setConnectNow(true)
-        setFlagLogin(true)
+
         e.preventDefault()
         if (validateEmail(userDetails.email) !== null) {
+            setConnectNow(true)
+            setFlagLogin(true)
             let result = await signIn(userDetails.email, userDetails.password)
             if(result === false){
+                setConnectNow(false)
+                setFlagLogin(false)
                 setMessages({email:"",password:"לא נמצאה התאמה בין הסיסמא לאימייל, אנא נסה שנית"})
+
             }
             else{
                 login(userDetails.type, userDetails.institute, result)
             }
-        } else {
+        }
+        else {
             setMessages({password:"",email:"אנא הזן אימייל תקין"})
+
         }
     }
 

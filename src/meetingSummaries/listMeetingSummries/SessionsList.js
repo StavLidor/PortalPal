@@ -195,7 +195,7 @@ function SessionsList({patientId, therapistId = null, type}) {
             </Row>
             {empty && sessionsData.length === 0 &&
             <Row className='p-2 align-content-start'> <Form.Label className='fs-4'>
-                כרגע, לא קיימים סיכומי מפגשים.</Form.Label> </Row>}
+                כרגע, לא קיימים סיכומי טיפולים.</Form.Label> </Row>}
             {!empty && sessionsData.length === 0 &&
             <Row className='p-2 align-content-start'> <Form.Label className='fs-4'>טוען...</Form.Label> </Row>}
             <br/>

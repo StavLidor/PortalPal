@@ -10,14 +10,11 @@ import styles from "../../pages/home/HomePage.CSS"
 import {isClick} from "../../useFunction";
 
 function ParentList({details, setCurrentParent, currentPage, setParentsListData, currentPerson,setCurrentPage}) {
-    // console.log("in therapist!!!!!!!!")
     const [parents, setParents] = useState([])
     const [current, setCurrent] = useState({id: "", index: ""})
     const [reload, setReload] = useState(true)
 
 
-    // console.log('therapistLIstt')
-    //console.log(talkersIds)
     useEffect(async () => {
         const pathSpilt = window.location.pathname.split("/")
         let index=''
@@ -39,7 +36,6 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
             //     const therapistIds = []
             //
             //     d.forEach((doc) => {
-            //         // console.log('therapistLIstt',doc.data())
             //         therapistIds.push(doc.id)
             //         dict[doc.id] = {institute: doc.data().institute, connection: doc.data().connection}
             //     });
@@ -52,7 +48,6 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
 
                     let data = []
                     querySnapshot.forEach((doc) => {
-                        // console.log(doc)
                         if (doc.id !== auth.currentUser.uid) {
                             data.push({
                                 id: doc.id, ...doc.data()
@@ -60,7 +55,6 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                                 /*institute: dict[doc.id].institute,*/
                             })
                         }
-                        // console.log()
                     })
                     setReload(false)
                     setParents(data)
@@ -70,7 +64,6 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                         setCurrentParent(dict)
                         setCurrent(dict)
                     }
-                    // console.log("my data: ", data)
                 })
             }
 

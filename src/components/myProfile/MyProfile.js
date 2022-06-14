@@ -1,10 +1,7 @@
 import {Col, Form, Row, Button, ButtonGroup, Modal} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
-import {useAuthState} from "../../todelete/chats/hooks";
-import TableData from "../tableEdit/TableData";
 import {auth, authAdd, updatesCurrentUser} from "../../firebase";
 import {signInWithEmailAndPassword} from "firebase/auth";
-// import { IconName } from "react-icons/bs";
 import {ArrowRight, Pencil,Person} from 'react-bootstrap-icons';
 import {validateEmail} from "../../useFunction";
 
@@ -85,7 +82,6 @@ export function MyProfile({userDetails}) {
         //         if(key in details && value!==details[key])
         //             details[key]=value
         //     }
-        //     console.log(details.firstName)
         //     //setData(details)
         //     setIsEdit(false)
         // }
@@ -123,7 +119,6 @@ export function MyProfile({userDetails}) {
     }
 
     const changeDetailsHandler = async () => {
-        //console.log('HEYYYYYYYYY')
 
         let data = {}
         for (const [key, value] of Object.entries(editDetails)) {
@@ -136,9 +131,8 @@ export function MyProfile({userDetails}) {
             }
 
         }
-        console.log('keyss',Object.keys(data).length)
         if( Object.keys(data).length === 0){
-            console.log('Noting')
+
             return true
         }
         const messages={firstName:'',lastName:'',email: '',password:''}
@@ -149,9 +143,7 @@ export function MyProfile({userDetails}) {
             messages.lastName ='אנא,הכנס שם משפחה'
         }
         setMessagesEdit(messages)
-        console.log(messages)
         if(messages.firstName.trim()||messages.lastName.trim()){
-            //console.log('HEYYYYYYYYY')
             return false
         }
         if(await updatesCurrentUser(data)){

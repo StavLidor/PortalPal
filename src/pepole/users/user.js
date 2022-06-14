@@ -26,10 +26,8 @@ export const newUser=async details=>{
         /*ids: arr_ids*/
         details
     })){
-        // console.log("HI user",details.name.toString(),details.password.toString());
     }
     else{
-        // console.log('user with this mail exsist')
     }
 
 }
@@ -40,34 +38,25 @@ export const signUser = async details=>{
         return true
     }
     catch (err){
-        console.log(err)
         return false
     }
 
     // later check before if this in Cache
-    // console.log('d',details);
     // const  more_details =  await signIfUserExists(details);
-    // console.log('more',more_details)
     // // more_details.then(function (object){
-    // //     console.log('not a promise')
     // // })
     // if( more_details){
-    //     console.log('yesss');
-    //     console.log('more_d',more_details);
     //     return more_details /*{name:more_details.name,
     //         email: details.email}*/
     // }
-    // console.log('not found');
     // return  null/*{name:"",
     //     email: ""}*/
 }
 export const newPatients= async details=>{
     if (await addPatient(details)){
-//         console.log("HI",details.id,details.name.toString());
         return details.id
     }
     else {
-        // console.log('patient with this id exsist')
         return null
     }
 }

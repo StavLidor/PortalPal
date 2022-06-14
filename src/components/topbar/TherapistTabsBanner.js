@@ -2,11 +2,7 @@ import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup} fr
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link, matchPath, Route, useNavigate, useLocation, Routes} from "react-router-dom";
-import Patient from "../../todelete/patient/Patient";
-import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import {auth, removeConnectionPatientToTherapist, signOutCurrentUser} from "../../firebase";
-import PatientList from "../patientsSidebar/PatientList";
-import PatientDetails from "../patientsSidebar/PatientDetails";
 import {Plus} from "react-bootstrap-icons";
 import {isClick} from "../../useFunction";
 
@@ -17,9 +13,7 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
 
 
     // useEffect(()=> {
-    //     console.log()
     //     setCurrentPath(currentPerson)
-    //     console.log(currentPath);
     // },[currentPerson])
 
 
@@ -77,7 +71,6 @@ function TherapistTabsBanner({therapistId, therapistInstitute, type, currentPers
                             </Col>
                             {therapistInstitute === 'external' &&therapistIsActive&&
                             <Col md={2}><Button id="deleteExternalTherapist" className="text-center" onClick={async () => {
-                                console.log(currentPerson)
                                 await removeConnectionPatientToTherapist(therapistId, currentPerson, therapistInstitute)
                             }
                             }  variant="outline-primary"><Plus/>הסר

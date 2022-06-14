@@ -55,19 +55,15 @@ export default function TableData({
         // }()
     )
     useEffect(() => {
-        if(type === 'eee')
-            console.log("DATAAAAA:", data)
         const p1 = Promise.resolve(data)
         p1.then(arr => {
             setContacts(arr)
-            // console.log(arr)
         })
 
 
     }, [data])
     // useEffect(()=>{
     //     setModifyContacts(contacts)
-    //     console.log('Modify',modifyContacts)
     //
     // },contacts)
 
@@ -80,11 +76,9 @@ export default function TableData({
         if (event.target.type === 'date') {
             newFormData[fieldName] = firebase.firestore.Timestamp.fromDate(new Date(fieldValue))
         }
-        console.log(fieldName, fieldValue)
         // const newFormData = {...editFormData}
         // newFormData[fieldName] = fieldValue
         setEditFormData(newFormData)
-        console.log(editFormData, 'e1')
     };
     const handleCancelClick = () => {
         setEditContactId(null);
@@ -96,9 +90,7 @@ export default function TableData({
     };
     const handleDeleteClick = async (contactId) => {
         const newContacts = [...contacts];
-        console.log(contacts)
         const index = contacts.findIndex((contact) => contact.id === contactId)
-        console.log("IDDDDDDDDDDDDDD: ", contacts[index])
         if (await deleteObj(contacts[index]/*contactId*/)) {
             // newContacts.splice(index, 1)
             if (contactTable && contactId === contactTable.id) {
@@ -111,7 +103,6 @@ export default function TableData({
     const handleEditFormSubmit = async (event) => {
         event.preventDefault()
         const editedContact = editFormData
-        console.log('editedContact', editFormData)
 
         if (await update(editContactId, editedContact)) {
             // const newContacts = [...contacts];
@@ -123,12 +114,10 @@ export default function TableData({
         setEditContactId(null)
     };
     const addNews = allDetails => {
-        //console.log('new patinet for csv')
 
         let i = 0
         let count = 0
         const newContacts = [...contacts]
-        console.log('length allDetails', allDetails.length)
         allDetails.map(async (details) => {
 
                 // const newContacts = [...contacts]
@@ -139,8 +128,6 @@ export default function TableData({
                 let modifyContacts = ((flag) => {
                     count++
                     if (flag) {
-                        console.log('add', i, promiseId)
-                        console.log('count', count)
                         if (typeof (promiseId) == "string") {
                             newContacts[contacts.length + i] = {...details, id: promiseId}
                         } else {
@@ -153,25 +140,19 @@ export default function TableData({
                     }
                 })
 
-                console.log(i, 'NUMBER')
                 p.then(async id => {
 
-                    console.log('SEEEEEEEEC', id, i)
                     if (id) {
                         modifyContacts(true)
-                        console.log('BEFORE ADD C')
 
                         // addToContacts({...details,id:id})
-                        console.log('AFTER ADD C', contacts)
 
                     } else {
                         modifyContacts(false)
-                        console.log(false)
                     }
 
                 })
                 i++
-                console.log()
 
 
             }
@@ -179,14 +160,12 @@ export default function TableData({
         //setContacts(newContacts)
     }
     const remove = allDetails => {
-        //console.log('new patinet for csv')
         const newContacts = [...contacts]
 
         let count = 0
         allDetails.map(async (details) => {
                 let modifyContacts = ((flag) => {
                     count++
-                    //console.log('modifyContacts',flag)
                     if (flag) {
                         const index = contacts.findIndex((contact) => contact.id === id)
                         if (id === contactTable.id) {
@@ -224,16 +203,13 @@ export default function TableData({
     }
     const submitAddDialog = () => {
         setLoad(true)
-        console.log('ADDDDDDDDDDDDDDDDD')
         const p = Promise.resolve(add(detailsNew, setMessages))
-        console.log('messagesss',messages)
         p.then(async id => {
             if (id) {
                 const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
                 if (index < 0) {
                     // if (typeof (id) == "string") {
                     //     addToContacts({...detailsNew, id: id})
-                    //     console.log(detailsNew)
                     // } else {
                     //     addToContacts(Object.assign({}, detailsNew, id))
                     // }
@@ -251,7 +227,6 @@ export default function TableData({
         })
 
     };
-    console.log("type", type)
 
     return (
         <div>
@@ -434,13 +409,11 @@ export default function TableData({
             <Col md={"auto"} className="gap-1" >
                 <Row>
                 <Button className="m-2 p-2" style={{fontWeight: "bold",width:'100%'}} variant="outline-primary" onClick={() => {
-                    console.log("show dialog")
                     setAddSomeone(true)
                 }}><Plus style={{fontSize: 20}}/> {"הוסף " + type + " חדש"}</Button>
                 </Row>
 
                  <Row><Button className="m-2 p-2" style={{fontWeight: "bold",width:'100%'}} variant="outline-primary" onClick={() => {
-                    console.log("show dialog")
                     setAddOrRemoveBatch(true)
                 }}>{"הוסף או הסר מקבץ"}</Button></Row>
 

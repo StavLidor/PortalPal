@@ -46,7 +46,6 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
     //     ],
     // }
     useEffect(async () => {
-        console.log('useEffect')
         let q
         let therapistIDForSession = (() => {
             if (type === 'parent')
@@ -63,9 +62,7 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
                 orderBy("category", "desc")*/, orderBy("executionDate", "asc"))
         }
 
-        console.log("q: ", q)
         if (type === 'parent') {
-            // console.log('allDetailsMeetings222')
 
             const tests = []
             let datesArr = []
@@ -75,7 +72,6 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
                     tests.push({...doc.data(), id: doc.id})
                     datesArr.push(new Date(doc.data().executionDate.seconds * 1000).toLocaleDateString())
                     scoresArr.push(doc.data().score)
-                    console.log('id', doc.id)
                     // if (doc.sessionsData().client === id){
                     //
                     // }
@@ -114,12 +110,10 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
 
                         }
 
-                        // console.log(doc)
 
 
                     )
                     setDates(datesArr.reverse())
-                    console.log("tests: ", tests)
                     if (category) {
                         setTestsList(tests)
                         setScores(scoresArr.reverse())
@@ -127,17 +121,14 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
                         setScores(scoresDic)
                     }
 
-                    //console.log("sessionsData: ", sessionsData)
                 },
                 (error) => {
                     // TODO: Handle errors!
-                    console.log('error!!', error)
                 })
         }
 
     }, [])
     const checkData = (setMessages, test) => {
-        //console.log(session)
         const messagesSubmit = {
             description: '',
             executionDate: '',
@@ -145,7 +136,6 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
             score: '', summary: ''
         }
         // e.preventDefault()
-        //console.log(session.date ==="")
         if (test.executionDate === "") {
             messagesSubmit.executionDate = 'הכנס תאריך ביצוע'
         }
@@ -166,7 +156,6 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
             }
         }
         setMessages(messagesSubmit)
-        console.log(messagesSubmit)
         if (!messagesSubmit.executionDate.trim() && !messagesSubmit.description.trim() && !messagesSubmit.summary.trim()
             && !messagesSubmit.summary.trim() && !messagesSubmit.score.trim()) {
             return true
@@ -174,13 +163,10 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
         return false
     }
     const handleOnSubmit = async (newTest, setMessages) => {
-        console.log('ADDDDDDDDDDD')
         if (!checkData(setMessages, newTest)) {
             return false
         }
 
-        // console.log("new session: " ,newSession)
-        console.log("path:", "patients/" + patientId + "/therapists/" + auth.currentUser.uid + '/tests')
         // e.preventDefault()
         // newSession.until = firebase.firestore.Timestamp.fromDate(new Date(newSession.until))
         await addDoc(collection(db, "patients/" + patientId + "/therapists/" + auth.currentUser.uid + "/tests"), {
@@ -769,8 +755,6 @@ function EditTestDialog({handleUpdate, testData, category}) {
                     </Button>
                     <Button variant="success" onClick={async () => {
 
-                        console.log("new: ", newTestData)
-                        console.log("newExerciseData.until: ", newTestData.date)
                         if (await handleUpdate(newTestData.id, newTestData, setMessages)) {
                             setNewTestData(newTestData)
                             handleClose()

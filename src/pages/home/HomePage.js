@@ -13,13 +13,13 @@ import SessionsList from "../../components/listMeetingSummries/SessionsList";
 import TherapistTabsBanner from "../../components/topbar/TherapistTabsBanner";
 import PatientExercises from "../../components/exercises/PatientExercises";
 
-import Chat from "../../components/Chat/Chat";
+import Chat from "../../components/chat/Chat";
 import AQ from "../../components/aq/AQ";
 import ParentList from "../../components/parentList/ParentList";
 
 import SecretaryPage from "../secretary/SecretaryPage";
 import MyProfile from "../../components/myProfile/MyProfile";
-import GetPersonalCode from "../../todelete/code/GetPersonalCode";
+import GetPersonalCode from "../../components/code/GetPersonalCode";
 import Logo from "../../images/Portapel.png";
 import CheckHasAPICode from "../../components/api/checkHasAPICode";
 import ContactUs from "../../components/contactUs/ContactUs"
@@ -49,13 +49,10 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
     const [showDialogCode, setShowDialogCode] = useState(false)
     const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
     const [currentPerson, setCurrentPerson] = useState((() => {
-        //console.log('Localtion',window.location.href, window.location.host,window.location.pathname)
         const pathSpilt = window.location.pathname.split("/")
 
         if (pathSpilt.length === 1)
             return ""
-        // console.log('BEGINN localStoeage',,localStorage.getItem("currentPerson"))
-        // console.log('BEGINN localStoeage',,localStorage.getItem("currentPerson"))
         if (localStorage.getItem("currentPerson") !== null && pathSpilt[1] === localStorage.getItem("currentPerson")) {
             return pathSpilt[1]
         }
@@ -82,7 +79,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
     const [currentTherapist, setCurrentTherapist] = useState({id: '', index: '', active: true})
     const [currentParent, setCurrentParent] = useState({id: '', index: ''})
     const [children, setChildren] = useState([])
-    console.log('Currents', currentPerson)
 
     async function onLogout() {
         setCurrentPerson("")
@@ -93,21 +89,16 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
     }
 
     useEffect(() => {
-        console.log("patients: ", patientListData)
-        console.log("current person: ", currentPerson)
         localStorage.setItem("currentPerson", currentPerson)
     }, [currentPerson])
     useEffect(() => {
         localStorage.setItem("currentPage", currentPage)
-        console.log('currentpage now', currentPage)
     }, [currentPage])
 
     useEffect(() => {
         if (type === "therapist") {
             return
         }
-        console.log()
-        //console.log("children: ", children)
         const childrenList = []
         for (const [key, value] of Object.entries(userDetails.childrenIds)) {
             if (value.findIndex((i) => i === institute) !== -1) {
@@ -123,7 +114,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
         if (type === "parent") {
             return
         }
-        console.log("in use effect: ", userDetails.institutes[institute])
         if (userDetails.institutes[institute].findIndex((s) => s === currentPerson) === -1) {
             setCurrentPerson("")
         }
@@ -147,7 +137,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
 
         return (list.map((therapist, index) => {
             // let data = item.data()
-            console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
             return (
                 <div>
                     {/*{[]}*/}
@@ -613,7 +602,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                         let data = item.data()
                                         return (
                                             parentsListData.map((parent, index) => {
-                                                    console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
                                                     return (
                                                         <div>
 
@@ -637,7 +625,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                         let data = item.data()
                                         return (
                                             activeTherapistListData.map((therapist, index) => {
-                                                    console.log('PATH:', '/' + data.id.toString() + '/' + index.toString())
                                                     return (
                                                         <div>
                                                             <Routes>
@@ -670,18 +657,13 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                     && <Route path={data.id.toString() + '/therapist'}
                                                               element={<Chat patient={currentPerson} otherUser={
                                                                   (() => {
-                                                                      //console.log('LOOK',currentTherapist)
                                                                       if (currentTherapist.active) {
-                                                                          console.log(
-                                                                              'LOOK',
-                                                                              parseInt(currentTherapist.index), activeTherapistListData[parseInt(currentTherapist.index)])
                                                                           return activeTherapistListData[parseInt(currentTherapist.index)]
                                                                       }
                                                                       return notActiveTherapistListData[parseInt(currentTherapist.index)]
                                                                   })()
                                                               } type={type}
                                                                              isActive={(() => {
-                                                                                 //console.log('LOOK',currentTherapist)
                                                                                  if (currentTherapist.active) {
                                                                                      return 'active'
                                                                                  }

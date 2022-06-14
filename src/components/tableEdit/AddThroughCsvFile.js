@@ -10,7 +10,6 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
     const [submitted, setSubmitted] = useState(false)
     const submit = () => {
         // event.preventDefault();
-        //console.log(file)
         if (file) {
             if (type === 'add') {
                 parser(file, add)
@@ -22,19 +21,16 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
     }
 
     function parser(file, f) {
-        // console.log(file)
         let reader = new FileReader();
 
         reader.addEventListener('load', function (e) {
             const allObj = []
             //let csvdata = e.target.result;
             let arr = Papa.parse(e.target.result).data
-            // console.log(arr)
 
             // let arr= data.split("\n");
 
             let keys = arr[0]
-            // console.log(keys)
             let rows = arr.length;
 
             let cols = keys.length;
@@ -52,7 +48,6 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                     let value = line[j]
                     obj[header] = value
                 }
-                // console.log(obj)
                 // if(i==1){
                 //     f(obj)
                 // }
@@ -95,7 +90,6 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
 
                             {/*    <input type="file" name="learnCSV" accept="text/csv" onChange={e => {*/}
                             {/*        setFile(e.target.files[0])*/}
-                            {/*        console.log('change')*/}
                             {/*    }}/>*/}
 
                             {/*    {submitted && file === null &&*/}
@@ -105,7 +99,6 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                             <Row className="input-group mb-3">
                                 <input name="learnCSV" accept="text/csv" onChange={e => {
                                     setFile(e.target.files[0])
-                                    console.log('change')
                                 }} type="file" className="form-control m-3" id="inputGroupFile02"/>
                                 {submitted && (file === null || file === undefined) &&
                                 <Form.Text className="text-center" style={{fontSize: 10, color: "red"}}>אנא בחר
@@ -120,25 +113,21 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                     </Button>
                     <Button variant="success" onClick={() => {
                         if (file === undefined) {
-                            console.log("hereeeeeeee: ", file)
                         }
 
                         if (type === "" || file === null || file === undefined) {
-                            console.log("jslnfskdnfsknfsnf: " , file)
                             if (type === "") {
                                 setShowMsg(true)
                             } else {
                                 setShowMsg(false)
                             }
                             if (file === null || file===undefined) {
-                                console.log("changing")
                                 setSubmitted(true)
                             } else {
                                 setSubmitted(false)
                             }
 
                         } else {
-                            console.log("file: ", file)
                             submit()
                             setAddBatch(false)
                         }

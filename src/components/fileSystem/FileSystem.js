@@ -26,9 +26,8 @@ function FileSystem({patient, user}){
         const storageRef = ref(storage, '/' + user.toString() + '/'+patient.toString() +'/'+ image.name.toString());
         // const storageRef = ref(storage, '/' + 'Stav' + '/'+'Liron' +'/' + image.name.toString());
 
-        console.log('try')
         uploadBytes(storageRef, image).then((snapshot) => {
-            console.log('Uploaded a blob or file!');
+
         });
     }
 
@@ -46,7 +45,6 @@ function FileSystem({patient, user}){
             await storageRef.child(uploadedFile.name).put(uploadedFile);
             alert("Successfully uploaded picture!");
         } catch (error) {
-            console.log("error", error);
         }
     };
 

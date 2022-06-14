@@ -16,7 +16,6 @@ function SignUp({setDisplayLoginForm})  {
     // institute: string (admin only)
     // institutes: {1: ...patients.  external:...patients.} (therapist only)
     // childrenIds: [] (parent only)
-    console.log('sign up')
     const [userDetails, setUserDetails] = useState({
         firstName: "",
         lastName: "",jobs:[], license: "",titles:['therapist'] ,email: "", password: "",institute:"", institutes: {external: []},
@@ -31,7 +30,6 @@ function SignUp({setDisplayLoginForm})  {
     })
     const onSignUp = async e => {
         e.preventDefault()
-        //console.log(userDetails)
         const messagesUpdate={
             firstName: "",
             lastName: "",
@@ -48,7 +46,6 @@ function SignUp({setDisplayLoginForm})  {
              messagesUpdate.lastName ='אנא,הכנס שם משפחה'
         }
          if(userDetails.password.length<6){
-             //console.log('PASSWOred',userDetails.password)
              messagesUpdate.password ='אנא,הכנס סיסמא באורך 6 לפחות'
         }
         if(!validateEmail(userDetails.email)){
@@ -56,7 +53,6 @@ function SignUp({setDisplayLoginForm})  {
         }
 
         setMessages(messagesUpdate)
-        console.log(messagesUpdate)
         if(messagesUpdate.firstName==='' && messagesUpdate.lastName==='' &&
             messagesUpdate.password===''&& messagesUpdate.email==='' &&
             messagesUpdate.license===''){

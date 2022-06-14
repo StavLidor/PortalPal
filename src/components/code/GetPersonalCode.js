@@ -14,7 +14,7 @@ export function GetPersonalCode({id = null, type,detailsChild}) {
     //const [detailsNewPatient, setDetailsNewPatient] = useState({id: "", connection: "", code: ""})
 
     useEffect(async () => {
-        // console.log('detalisChild',detailsChild)
+
         if(detailsChild.code.length>0){
             setCode( hash.sha256().update(detailsChild.code[0]).digest("hex"))
         }
@@ -24,7 +24,6 @@ export function GetPersonalCode({id = null, type,detailsChild}) {
         // const realCode = makePassword(10)
         // const hashCode = hash.sha256().update(realCode).digest("hex")
         // setCode(hashCode)
-        // // console.log(hashCode)
         //
         // await addToPatientArr(id, 'code', realCode)
 
@@ -33,7 +32,6 @@ export function GetPersonalCode({id = null, type,detailsChild}) {
         const realCode = makePassword(10)
         const hashCode = hash.sha256().update(realCode).digest("hex")
         setCode(hashCode)
-        // console.log(hashCode)
 
         await addToPatientArr(id, 'code', realCode)
     }
@@ -53,7 +51,7 @@ export function GetPersonalCode({id = null, type,detailsChild}) {
         const copyText = document.getElementById("personal-code-text-box");
         navigator.clipboard.writeText(copyText.innerText)
         const x = document.getElementById("toast");
-        console.log('toko')
+
         x.className = "show";
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 2000);
     }
@@ -61,11 +59,11 @@ export function GetPersonalCode({id = null, type,detailsChild}) {
 
         <div className='p-4'>
             <FormGroup>
-            <Form.Label className='fs-1'>קוד אישי</Form.Label>
-            <Form.Label className='fs-5'>קוד זה ישמש אותך על מנת לקשר בין המטופל לבין מטפל חדש.</Form.Label>
-            <Form.Label className='fs-5'>יש לשתף את הקוד עם המטפל איתו תרצו לבצע את הקישור.</Form.Label>
-            <Form.Label className='fs-5'>ברגע שהמטפל יכניס את הקוד למערכת מהחשבון שלו, הפרופיל של המטופל יופיע אצלו.</Form.Label>
-            <Form.Label className='fs-5'>באותו האופן, המטפל וכל הפרטים יופיעו בחשבון זה.</Form.Label>
+                <Form.Label className='fs-1'>קוד אישי</Form.Label>
+                <Form.Label className='fs-5'>קוד זה ישמש אותך על מנת לקשר בין המטופל לבין מטפל חדש.</Form.Label>
+                <Form.Label className='fs-5'>יש לשתף את הקוד עם המטפל איתו תרצו לבצע את הקישור.</Form.Label>
+                <Form.Label className='fs-5'>ברגע שהמטפל יכניס את הקוד למערכת מהחשבון שלו, הפרופיל של המטופל יופיע אצלו.</Form.Label>
+                <Form.Label className='fs-5'>באותו האופן, המטפל וכל הפרטים יופיעו בחשבון זה.</Form.Label>
                 <br/>
                 <Row className='align-items-center gap-3' >
                     <Form.Label className='fs-5' style={{width:'70px',fontWeight:'bold'}}>קוד:</Form.Label>

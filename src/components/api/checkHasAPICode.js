@@ -5,7 +5,6 @@ import {addThirdPartyCodes} from "../../firebase";
 import {Container} from "@mui/material";
 
 function CheckHasAPICode({appKey, patientDetails}) {
-    console.log("in new: ", patientDetails)
     const [hasCode, setHasCode] = useState(false);
     const [code, setCode] = useState(null)
     useEffect(()=>{

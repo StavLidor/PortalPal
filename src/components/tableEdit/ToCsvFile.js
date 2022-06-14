@@ -23,7 +23,7 @@ export default function ToCsvFile({list ,col}){
         list.map(i=>{
             const line =[]
             col.map(c=>{
-                //console.log(c)
+
                 if(c.view === true){
                     if(c.type === 'date'){
                         line.push(convertToNormalDate(i[c.name]))

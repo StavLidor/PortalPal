@@ -41,7 +41,6 @@ function AQ({ref}) {
 
     const formValidation = () => {
         for (let key in details) {
-            console.log(key, details[key])
             if (details[key] === null) {
                 setIsFormValid(false)
                 setModelResultMessage('יש למלא את הטופס במלואו')
@@ -61,15 +60,12 @@ function AQ({ref}) {
             details.A5 + details.A6 + details.A7 + details.A8 + details.A9 + details.A10
 
         setFormResult(details.result.toString())
-        console.log(details)
-        console.log('type', modelType)
 
         const finalToModel = details.A1 + ',' + details.A2 + ',' + details.A3 + ',' + details.A4 + ',' + details.A5 +
             ',' + details.A6 + ',' + details.A7 + ',' + details.A8 + ',' + details.A9 + ',' + details.A10 +
             ',' + details.Age + ',' + details.Gender + ',' + details.Ethnicity + ',' + details.Jaundice +
             ',' + details.Family_mem_with_ASD + ',' + 'unknown' + ',' + 'NO' + ',' + details.result + ',' + '18 and more' + ',' + details.Who_completed_the_test
 
-        console.log(finalToModel)
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

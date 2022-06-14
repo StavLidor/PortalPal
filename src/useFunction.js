@@ -27,8 +27,6 @@ ddpClient.sha256 = (password) => {
 }
 
 export const convertToNormalDate = (newSessionData) => {
-    console.log(newSessionData,'NEWW'
-    )
     let year = new Date(newSessionData.seconds * 1000).getFullYear()
     let month = new Date(newSessionData.seconds * 1000).getMonth() + 1
     let day = new Date(newSessionData.seconds * 1000).getDate()

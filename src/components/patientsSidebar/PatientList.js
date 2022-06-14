@@ -2,12 +2,9 @@ import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Mo
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link, Route, Routes} from "react-router-dom";
-import Patient from "../../todelete/patient/Patient";
 import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import {addPatientToExternalTherapist, db} from "../../firebase";
 import {Pencil, Plus, FilePerson, PersonCircle} from 'react-bootstrap-icons';
-import TableData from "../tableEdit/TableData";
-import {isClick} from "../../useFunction";
 import AddPatient from "../forms/AddPatient";
 
 export let patientList = []
@@ -38,14 +35,12 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
         const result = onSnapshot(
             queryRequest,
             (snapshot) => {
-                console.log("list data: ", snapshot.docs)
                 setListData(snapshot.docs)
                 setPatientListData(snapshot.docs)
                 setReload(false)
             },
             (error) => {
                 // TODO: Handle errors!
-                console.log('error!!', error)
 
             })
         setListener(() => result)

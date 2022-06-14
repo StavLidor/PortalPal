@@ -42,7 +42,6 @@ function SecretaryPage({data,dictInstitutes}) {
     useEffect(() => {
         if(studentTable!==null){
             const index = studentsTable.findIndex((s) => s.id === studentTable.id)
-            console.log('indexSS',index,studentsTable,studentTable)
             if(index === -1){
                 if(studentTable.active){
                     setStudentsTable( [...studentsTable,studentTable])
@@ -59,7 +58,6 @@ function SecretaryPage({data,dictInstitutes}) {
                 else{
                     arr[index]=studentTable
                 }
-                console.log("deletei from table",arr)
 
                 setStudentsTable(arr)
                 if(arr.length===0&& isEmptyTable===false){
@@ -71,7 +69,6 @@ function SecretaryPage({data,dictInstitutes}) {
     },[studentTable])
     useEffect(() => {
         if (listenerEmployees !== null) {
-            console.log("קקי")
             listenerEmployees()
         }
         if (idEmployees.length > 0) {
@@ -91,17 +88,12 @@ function SecretaryPage({data,dictInstitutes}) {
                         setReloadEmployees(false)
 
 
-                        console.log("DATA HERE:", data)
-                        console.log("EMPLOYEES HERE:", employees)
                     },
                     (error) => {
                         // TODO: Handle errors!
-                        console.log('error!!', error)
                     }
                 )
-            console.log("result: ", resultEmployee)
             setListenerEmployees(() => resultEmployee)
-            console.log("listenerEmployees: ", listenerEmployees)
         }
         else {
             setEmployees([])
@@ -111,7 +103,6 @@ function SecretaryPage({data,dictInstitutes}) {
 
     useEffect(() => {
         if (listenerStudents !== null) {
-          //  console.log("קקי תלמיד")
             listenerStudents()
         }
 
@@ -138,15 +129,11 @@ function SecretaryPage({data,dictInstitutes}) {
                     setReloadStudents(false)
                     //  const index = studentsTable.findIndex((s) => s.id === doc.id)
                     // studentsTable[index]=doc.data()
-                    console.log('Students1112', data)
                 },
                 (error) => {
                     // TODO: Handle errors!
-                    console.log('error!!', error)
                 })
-            console.log("result: ", resultStudent)
             setListenerStudents(() => resultStudent)
-            console.log("listenerStudents: ", listenerStudents)
         }
         else {
             setStudents([])
@@ -156,14 +143,10 @@ function SecretaryPage({data,dictInstitutes}) {
     }, [idStudents])
 
     useEffect(async () => {
-        console.log('SEC')
         let docRef = doc(db, "institutes", data.institute.toString())
 
         onSnapshot(docRef, (d) => {
 
-            // console.log('institute',d.data())
-            // console.log('students',d.data().students)
-            // console.log('employees',d.data().employees)
             if (d.data().employees !== idEmployees) {
 
                 setIdEmployees(d.data().employees)
@@ -180,9 +163,7 @@ function SecretaryPage({data,dictInstitutes}) {
                 else {
                     setIsEmptyStudents(false)
                 }
-              //  console.log("listener: ", listenerEmployees)
 
-               // console.log("d.data().employees: ", d.data().employees)
 
 
             }
@@ -191,7 +172,6 @@ function SecretaryPage({data,dictInstitutes}) {
     }, [])
 
     const addPatient = async (details, setMessages)=>{
-        //console.log('Messagesssss!!!!!!!!!!!! ',details.dateOfBirth)
 
         const messages={id:"",firstName:"",lastName:"",dateOfBirth:"",city:"",street:"",buildingNumber:"",firstNameParent:"",lastNameParent:"",email:"",gender:""}
         if(!details.id.trim()||!is_israeli_id_number(details.id)){
@@ -231,13 +211,11 @@ function SecretaryPage({data,dictInstitutes}) {
             messages.buildingNumber='הכנס מספר רחוב'
         }
         setMessages(messages)
-        console.log('Messagesssss ')
         if(!messages.firstName.trim() && !messages.lastName.trim() &&
             !messages.id.trim() && !messages.email.trim() &&
             !messages.lastNameParent.trim() && !messages.firstNameParent.trim()
             && !messages.city.trim()&& !messages.street.trim()&& !messages.buildingNumber.trim()
         &&  !messages.dateOfBirth.trim()){
-            console.log('its GOODDD')
             return await newPatients({...details,institute: data.institute,dateOfBirth:firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
             })
         }
@@ -249,7 +227,6 @@ function SecretaryPage({data,dictInstitutes}) {
     }
     // const addTherapist = async (details) => {
     //     if (details.jobs !== undefined) {
-    //         console.log('JOBBBBBBBBS', details.jobs)
     //         details.jobs = details.jobs.split(",")
     //     }
     //     if (details.email !== undefined) {
@@ -259,17 +236,14 @@ function SecretaryPage({data,dictInstitutes}) {
     //
     //         p.then(async id => {
     //
-    //             console.log('SEEEEEEEEC', id)
     //             return id
     //         })
-    //         console.log('IDDDD INN', id)
     //     }
     //     return null
     //
     // }
     const addTherapist = async(details, setMessages) => {
         const messages={email:"",firstName:"",lastName:"",jobs:""}
-        console.log('TTTTTTTTT',details.jobs)
         if(!validateEmail(details.email)){
             messages.email='הכנס אימייל תקין'
         }
@@ -314,7 +288,6 @@ function SecretaryPage({data,dictInstitutes}) {
         //
     }
     const updateTherapist = async (id, details) => {
-        console.log('edit details', details)
         if (typeof (details.jobs) === "string") {
             details.jobs = details.jobs.split(",")
         }
@@ -322,7 +295,6 @@ function SecretaryPage({data,dictInstitutes}) {
         return await updatesUser(id, {firstName: details.firstName, lastName: details.lastName, jobs: details.jobs})
     }
     const deleteObjTherapist = async (contact/*id*/) => {
-        console.log('delete Therapist')
 
         if (!await deleteTherapistFromInstitute(data.institute, contact)) {
             return false
@@ -463,9 +435,7 @@ function SecretaryPage({data,dictInstitutes}) {
 
         setUserGetTable(details)
         let arrSnapshot=[]
-        // console.log('is Empty',details.institutes[data.institute].length,details.institutes[data.institute])
         if(details.institutes[data.institute].length === 0){
-            console.log('is Empty')
             setIsEmptyTable(true)
         }
         else {
@@ -479,7 +449,6 @@ function SecretaryPage({data,dictInstitutes}) {
 
                 let docRef = doc(db, "patients/" + id + "/therapists",details.id)
                 let resultSnap=onSnapshot(docRef, (d) => {
-                    console.log(d.data().connection)
                     setStudentTable({...students[index],connection:d.data().connection,active:
                         d.data().active})
                     // setStudentsTable([...studentsTable,{...students[index],connection:d.data().connection}])
@@ -491,7 +460,6 @@ function SecretaryPage({data,dictInstitutes}) {
 
         })
         setListenersTableStudents(arrSnapshot)
-        // console.log('arrStudents',arrStudents)
         // setStudentsTable(arrStudents)
         // const unsubscribe = query(collection(db, "patients"),
         //     where(firebase.firestore.FieldPath.documentId(), 'in', details.institutes[data.institute]))
@@ -505,14 +473,11 @@ function SecretaryPage({data,dictInstitutes}) {
         //             data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
         //         ))
         //         setStudentsTable(data)
-        //         console.log(data)
         //     },
         //     (error) => {
         //         // TODO: Handle errors!
-        //         console.log('error!!', error)
         //     })
         // const dataStudents = await detailsPatient(details.institutes[data.institute])
-        // console.log('AAAAA', dataStudents)
         // return dataStudents
         //data.works.institutes
 
@@ -544,7 +509,6 @@ function SecretaryPage({data,dictInstitutes}) {
         },
     ]
     const addConnectionToTherapist = async (details,setMessages) => {
-        console.log(details)
         const messages ={id:"",connection:""}
         if(!details.connection.trim()){
             messages.connection='הכנס קשר'
@@ -552,16 +516,13 @@ function SecretaryPage({data,dictInstitutes}) {
         if(!details.id.trim()){
             messages.id='אין תלמדים שאפשר לקשר'
         }
-        //console.log("EEEEEEEEEEEEEE", userGetTable.institutes[data.institute],details)
         const i = userGetTable.institutes[data.institute].findIndex((id) => id === details.id)
         if(i!==-1){
-            console.log("EEEEEEEEEEEEEE", userGetTable.institutes[data.institute],details)
             messages.id="יש קשר בין תלמיד לעובד"
 
             //return false
         }
         setMessages(messages)
-        console.log(messages)
         if(messages.connection.trim()||messages.id.trim()){
             return false
         }
@@ -575,7 +536,6 @@ function SecretaryPage({data,dictInstitutes}) {
         if(await addConnectionPatientToTherapist(userGetTable.id, details.id, data.institute, details.connection)) {
             let docRef = doc(db, "patients/" + details.id + "/therapists",userGetTable.id)
             const resultSnap=onSnapshot(docRef, (d) => {
-                console.log(d.data().connection)
                 setStudentTable({...students[index],connection:d.data().connection,active:
                     d.data().active})
                 // setStudentsTable([...studentsTable,{...students[index],connection:d.data().connection}])
@@ -587,7 +547,6 @@ function SecretaryPage({data,dictInstitutes}) {
 
     }
     const deleteConnectionToTherapist = async (contact/*id*/) => {
-        // console.log("EEEEEEEEEEEEEE",idGetTable)
         if(await removeConnectionPatientToTherapist(userGetTable.id, contact.id, data.institute)) {
             //TODO: if need to remove the snapshot?
             return true
@@ -596,7 +555,6 @@ function SecretaryPage({data,dictInstitutes}) {
 
     }
     const updateConnectionToTherapist = async (id, data) => {
-        // console.log("EEEEEEEEEEEEEE",idGetTable)
         const collection_query_patients = collection(db, "patients")
         try {
             await updateDoc(doc(collection_query_patients, id, "therapists",userGetTable.id
@@ -606,7 +564,6 @@ function SecretaryPage({data,dictInstitutes}) {
             return true
         }
         catch (e){
-            console.log(e)
             return false
         }
 
@@ -661,7 +618,7 @@ function SecretaryPage({data,dictInstitutes}) {
                                                }} getTable={getTable}
                                                table={studentsTable}
                                                columnsInfoViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
-                               /*(d)=>{console.log('DD',d)}*/} /*deleteObj={deleteConnectionToTherapist}*/
+                               /*(d)=>{}*/} /*deleteObj={deleteConnectionToTherapist}*/
                                                deleteObjTable={deleteConnectionToTherapist}
                                                updateTable={updateConnectionToTherapist}
                                                tableOptionIds={students}

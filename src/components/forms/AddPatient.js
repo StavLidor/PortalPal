@@ -23,7 +23,6 @@ function AddPatient({addPatient,setAddPatient,listPatient}){
         if(!detailsNewPatient.code.trim()){
             messagesSubmit.code ='אנא אכנס את הקוד שנתן לך ההורה'
         }
-        console.log(messagesSubmit)
         setMessages(messagesSubmit)
         if(!messagesSubmit.id.trim() && !messagesSubmit.connection.trim()&& !messagesSubmit.code.trim()){
 

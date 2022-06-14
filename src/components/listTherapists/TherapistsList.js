@@ -19,7 +19,6 @@ function TherapistsList({
                             type,
                             institute,dictInstitutes
                         }) {
-    console.log("in therapist!!!!!!!!")
     const [activeTherapistsList, setActiveTherapistsList] = useState([])
     const [notActiveTherapistsList, setNotActiveTherapistList] = useState([])
     const [current, setCurrent] = useState({id: "", index: "",active:true})
@@ -28,18 +27,13 @@ function TherapistsList({
     const componentRefActive = useRef()
     const componentRefNotActive = useRef()
 
-    console.log('therapistLIstt')
-    //console.log(talkersIds)
     useEffect(async () => {
 
-        console.log('TYPEE', type)
         const pathSpilt = window.location.pathname.split("/")
-        console.log('HERE',currentPage,pathSpilt,pathSpilt.length)
         let index = ''
         let active=true
         let isNotChose=false
         if(pathSpilt.length > 2 && pathSpilt[2] === 'therapist'){
-            console.log('PathSpilt therapist',pathSpilt)
             index='0'
             if(type === 'therapist' && pathSpilt.length>3){
                 index=pathSpilt[3]
@@ -60,7 +54,6 @@ function TherapistsList({
                 isNotChose=true
             }
              setCurrent({id:'',index:index,active: active})
-           console.log('Therapist page',{id:'',index:index,active: active})
         }
         else if(pathSpilt.length === 3 &&!pathSpilt[2].trim() && currentPage === 'therapist'){
 
@@ -71,18 +64,15 @@ function TherapistsList({
         if (type === 'parent') {
             if(pathSpilt.length===3&&(currentPage==='sessions' ||
                 currentPage==='exercises' ||currentPage==='communication')){
-                console.log('YESS')
                 index='0'
                 isNotChose=true
             }
-            //console.log('Therapist page',current)
             const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"),
                 where('institute', '==', institute))
             if (institute === 'external') {
                 onSnapshot(
                     collectionRef,
                     (snapshot) => {
-                        console.log('INNNNN', snapshot.docs[0])
                         getData(snapshot,{id:'',index:index,active: active,isNotChose:isNotChose})
 
                     })
@@ -108,7 +98,6 @@ function TherapistsList({
 
         d.forEach((doc) => {
             if (doc.id !== auth.currentUser.uid) {
-                // console.log('therapistLIstt',doc.data())
                 if ((type === "therapist" && doc.data().active) || type === "parent") {
                     therapistIds.push(doc.id)
                     dict[doc.id] = {
@@ -119,8 +108,6 @@ function TherapistsList({
 
             }
         });
-        console.log("therapistIds: ", therapistIds)
-        console.log("therapistIds.length: ", therapistIds.length)
 
         if (therapistIds.length > 0) {
             const unsubscribe = query(collection(db, "users"),
@@ -133,7 +120,6 @@ function TherapistsList({
                 let notActiveTherapists = []
                 querySnapshot.forEach((doc) => {
                     if (dict[doc.id].active)
-                        // console.log(doc)
                     {
                         activeTherapists.push({
                             id: doc.id,
@@ -158,18 +144,14 @@ function TherapistsList({
                             // })()
                         })
                     }
-                    // console.log()
                 })
                 setReload(false)
                 setActiveTherapistsList(activeTherapists)
-                console.log("activeTherapists", activeTherapists,mapCurrent)
                 setActiveTherapistListData(activeTherapists)
                 setNotActiveTherapistList(notActiveTherapists)
                 setNotActiveTherapistListData(notActiveTherapists)
-                console.log('HEREEEEEEE',mapCurrent)
                 //let flagID=''
                 if(mapCurrent.index!=='' && activeTherapists.length>parseInt(mapCurrent.index) && mapCurrent.active){
-                    console.log('Therapist page WWW')
                     const index = parseInt(mapCurrent.index)
                     setCurrent({index:mapCurrent.index,id:activeTherapists[index].id,
                     active: true})
@@ -194,7 +176,6 @@ function TherapistsList({
                 }
                 // if(type === 'parent'&& flagID!=='' && mapCurrent.isNotChose){
                 //
-                //     console.log('CCCCCCCCCCClick',flagID)
                 //
                 //     setClickId(flagID)
                 // }

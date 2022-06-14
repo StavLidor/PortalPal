@@ -1,26 +1,13 @@
 import React, {useEffect, useState, useCallback, useContext} from "react"
-import ScrollToBottom, {useSticky, useScrollToBottom} from 'react-scroll-to-bottom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
-// import DiscussionBoard from 'react-discussion-board'
-
-//import 'react-discussion-board/dist/index.css'
-
-// import './app.css'
-import HomePage from "../../pages/home/HomePage";
-import {Link} from "react-router-dom";
 import {Col, ListGroup, Row, Form, Container, Button, ButtonGroup} from "react-bootstrap";
 import {auth, db, getUserConnections} from "../../firebase";
 import {addDoc, collection, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import firebase from "firebase/compat/app";
-import Message from "../../todelete/chats/message";
 
-// import Button from "react-bootstrap/Button";
 
 function Chat({otherUser, patient, isActive}) {
-    // console.log("otherUser", otherUser.id)
-    // console.log("patient", patient)
-    // console.log("user", auth.currentUser.uid)
     const [messages, setMessages] = useState([])
     const [talkers, setTalkers] = useState([])
     const [therapists, setTherapists] = useState([])
@@ -53,7 +40,6 @@ function Chat({otherUser, patient, isActive}) {
                 [{receiver: auth.currentUser.uid, sender: otherUser.id},
                     {sender: auth.currentUser.uid, receiver: otherUser.id}]), orderBy("createdAt", "asc"), limit(100),
         )
-        // console.log("unsubscribe", unsubscribe)
 
         return onSnapshot(
             unsubscribe,
@@ -61,18 +47,15 @@ function Chat({otherUser, patient, isActive}) {
 
                 let data = []
                 querySnapshot.forEach((doc) => (
-                    // console.log(doc)
 
                     data.push({...doc.data(), id: doc.id})
 
                 ))
-                // console.log("DATA: ", data)
                 setMessages(data)
 
             },
             (error) => {
                 // TODO: Handle errors!
-                console.log('error!!', error)
             })
     }, [])
 

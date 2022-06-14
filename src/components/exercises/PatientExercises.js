@@ -39,10 +39,8 @@ function PatientExercises({patient, therapist, type}) {
     // const [addExercise, setAddExercise] = useState(false)
 
     useEffect(async () => {
-        //console.log('useEffect')
         const q = query(collection(db, "patients/" + patient + "/therapists/" + therapist + "/exercises"), orderBy("createdAt", "desc"))
         if (type === 'parent') {
-            console.log('allDetailsExercises222')
 
             const arr = []
             getDocs(q).then((querySnapshot) => {
@@ -53,11 +51,9 @@ function PatientExercises({patient, therapist, type}) {
                 }
                 querySnapshot.forEach((doc) => {
                     arr.push({...doc.data(), id: doc.id})
-                    console.log('id', doc.id)
                     // if (doc.data().client === id){
                     //
                     // }
-                    console.log("ARR: ", arr)
 
 
                 });
@@ -77,12 +73,10 @@ function PatientExercises({patient, therapist, type}) {
                         editEmpty(false)
                     }
                     querySnapshot.forEach((doc) => (
-                        // console.log(doc)
 
                         data.push({...doc.data(), id: doc.id})
 
                     ))
-                    console.log("DATA: ", data)
                     if (data.length === 0) {
                         editEmpty(true)
                     }
@@ -91,7 +85,6 @@ function PatientExercises({patient, therapist, type}) {
                 },
                 (error) => {
                     // TODO: Handle errors!
-                    console.log('error!!', error)
                 })
         }
     }, [])
@@ -104,7 +97,6 @@ function PatientExercises({patient, therapist, type}) {
             place: '',
         }
         // e.preventDefault()
-        console.log(exercise.until === "")
         if (exercise.until === "") {
             messagesSubmit.until = 'הכנס תאריך סיום'
         }
@@ -115,7 +107,6 @@ function PatientExercises({patient, therapist, type}) {
             messagesSubmit.place = 'הכנס מקום תרגיל'
         }
         setMessages(messagesSubmit)
-        console.log(messagesSubmit)
         if (!messagesSubmit.until.trim() && !messagesSubmit.description.trim() && !messagesSubmit.place.trim()) {
             return true
         }
@@ -132,7 +123,6 @@ function PatientExercises({patient, therapist, type}) {
             })
             return true
         }
-        console.log('false')
         return false
         // const docRef = await addDoc(collection(db, "exercises"),
         //     { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
@@ -144,8 +134,6 @@ function PatientExercises({patient, therapist, type}) {
         // await deleteDoc(doc(db, "exercises", docId))
     }
     const handleUpdate = async (docId, data, setMessages) => {
-        console.log("dataaaaaaaaaaaa:", data)
-        console.log("dataaaaaaaaaaaa until:", data.until)
         if (!checkData(setMessages, data)) {
             return false
         }
@@ -162,9 +150,6 @@ function PatientExercises({patient, therapist, type}) {
         return true
     }
 
-    // console.log(new Date(exercisesData[0].createdAt.seconds * 1000).getYear() + '-'+new Date(exercisesData[0].createdAt.seconds * 1000).getMonth()+ '-'+new Date(exercisesData[0].createdAt.seconds * 1000).getDay())
-    // console.log(exercisesData[0].createdAt.toDate().getMonth())
-    // console.log(exercisesData[0].until.toDate().getFullYear() + '-' + (exercisesData[0].until.toDate().getMonth() + 1) + '-' + exercisesData[0].until.toDate().getDate())
     return (
         <div>
             <Row className='p-2 align-content-start'>
@@ -368,11 +353,9 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                         <Button variant="success" onClick={async () => {
                             setLoad(true)
                             const flag = handleOnSubmit(setMessages)
-                            console.log('flag', flag)
                             if (await flag) {
                                 handleClose()
                             } else {
-                                console.log('FALSEE')
                             }
                             setLoad(false)
 
@@ -496,7 +479,6 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                 <Form.Label>תאריך סיום</Form.Label>
                                 <Form.Control
                                     type="date"
-                                    // console.log(exercisesData[0].createdAt.toDate().getMonth())
 
                                     // value={(exerciseData.until.toDate().getFullYear() + '-' + (exerciseData.until.toDate().getMonth() + 1) + '-' + exerciseData.until.toDate().getDate()).toString()}
                                     // value={new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()}
@@ -581,8 +563,6 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                     </Button>
                     <Button variant="success" onClick={async () => {
 
-                        console.log("new: ", newExerciseData)
-                        console.log("newExerciseData.until: ", newExerciseData.until)
                         if (await handleUpdate(newExerciseData.id, newExerciseData, setMessages)) {
                             handleClose()
                         }

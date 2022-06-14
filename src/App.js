@@ -19,7 +19,7 @@ function App() {
     const [connectNow,setConnectNow]=useState(false)
     const [listInstitutes,setListInstitutes]=useState([])
     const [dictInstitutes,setDictInstitutes]=useState({})
-    // console.log('CHeck',dictInstitutes=={})
+
 
 
 
@@ -45,14 +45,10 @@ function App() {
                 try {
                     const docRef = doc(db, "users", auth.currentUser.uid);
                     onSnapshot(docRef,(value)=>{
-                        console.log(value)
-                        console.log(value.data())
-                        console.log(value.data().titles)
                         // if(!(localStorage.getItem("refresh")!=null||localStorage.getItem("refresh")!=='')){
                         //
                         // }
                         setUserDetails(value)
-                        console.log("data user details: ", value.data().childrenIds)
                         if(localStorage.getItem('type') === 'parent' && (()=>{
                             for (const [k, v] of Object.entries(value.data().childrenIds)) {
 
@@ -73,7 +69,7 @@ function App() {
 
 
                         if(value.data().titles.includes(localStorage.getItem('type'))){
-                            //console.log(localStorage.getItem('type'),!(localStorage.getItem("institute") in   value.data().institutes))
+
 
                             if(localStorage.getItem('type') === 'therapist' &&
                                 !(localStorage.getItem("institute") in   value.data().institutes)){
@@ -86,7 +82,6 @@ function App() {
                             }
                             else {
                                 setHasDetails(true)
-                                //console.log('print hello')
                                 setDisplayLoginError(false)
                                 setIsFirstLoad(true)
                                 setConnectNow(false)

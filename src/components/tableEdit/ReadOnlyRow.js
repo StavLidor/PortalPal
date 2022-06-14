@@ -21,18 +21,14 @@ const ReadOnlyRow = ({
                          columnsInfo,getTable,
                          tableOptionIds,isEmptyTable,isReloadTable
                      }) => {
-        // console.log('ReadOnlyRow', contact.id)
-        // console.log('ReadOnlyRow', columnNames)
         // columnNames.map((name) => (
         //
-        //     console.log(contact[name])
         // ))
 
         const [showMyPatients, setShowMyPatients] = useState(false)
         const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
         // const handleShowMyPatients = () => {
-        //     console.log("in dialoggggggggggggggg")
         //     return (
         //         <div>
         //             <MyPatientsDialog

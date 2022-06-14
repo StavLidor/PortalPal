@@ -9,7 +9,6 @@ import TableData from "../tableEdit/TableData";
 
 function PatientDetails({details, type, institute}) {
     const [showRemovePatientDialog, setShowRemovePatientDialog] = useState(false)
-    // console.log("in patient!!!!!!!!")
     return (<div>
             <ButtonGroup>
                 <Form.Label style={{fontWeight: 'bold'}}>פרטי מטופל</Form.Label>

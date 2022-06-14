@@ -37,14 +37,12 @@ function SessionsList({patientId, therapistId = null, type}) {
     //     $('.collapse').collapse('hide');
     // }
     const checkData = (setMessages, session) => {
-        console.log(session)
         const messagesSubmit = {
             title: '',
             summary: '',
             date: ''
         }
         // e.preventDefault()
-        console.log(session.date === "")
         if (session.date === "") {
             messagesSubmit.date = 'הכנס תאריך מפגש'
         }
@@ -55,16 +53,13 @@ function SessionsList({patientId, therapistId = null, type}) {
             messagesSubmit.summary = 'הכנס סיכום פגישה'
         }
         setMessages(messagesSubmit)
-        console.log(messagesSubmit)
         if (!messagesSubmit.date.trim() && !messagesSubmit.title.trim() && !messagesSubmit.summary.trim()) {
             return true
         }
         return false
     }
     useEffect(async () => {
-        console.log('Empty', empty)
         // editEmpty(false)
-        console.log('useEffect')
         let q
         let therapistIDForSession = (() => {
             if (type === 'parent')
@@ -75,9 +70,7 @@ function SessionsList({patientId, therapistId = null, type}) {
             return
         }
         q = query(collection(db, "patients/" + patientId + "/therapists/" + therapistIDForSession + "/sessions"), orderBy("date", "desc"))
-        console.log("q: ", q)
         if (type === 'parent') {
-            console.log('allDetailsMeetings222')
 
             const sessions = []
             getDocs(q).then((querySnapshot) => {
@@ -88,7 +81,6 @@ function SessionsList({patientId, therapistId = null, type}) {
                 }
                 querySnapshot.forEach((doc) => {
                     sessions.push({...doc.data(), id: doc.id})
-                    console.log('id', doc.id)
                     // if (doc.sessionsData().client === id){
                     //
                     // }
@@ -111,21 +103,17 @@ function SessionsList({patientId, therapistId = null, type}) {
                     }
                     let sessions = []
                     querySnapshot.forEach((doc) => (
-                        // console.log(doc)
 
                         sessions.push({...doc.data(), id: doc.id})
 
                     ))
-                    console.log("sessions: ", sessions)
                     setSessionsData(sessions)
                     // if(sessionsData.length === 0){
                     //     editEmpty(true)
                     // }
-                    console.log("sessionsData: ", sessionsData)
                 },
                 (error) => {
                     // TODO: Handle errors!
-                    console.log('error!!', error)
                 })
         }
 
@@ -134,8 +122,6 @@ function SessionsList({patientId, therapistId = null, type}) {
     const handleOnSubmit = async (setMessages) => {
         if (!checkData(setMessages, newSession))
             return false
-        console.log("new session: ", newSession)
-        console.log("path:", "patients/" + patientId + "/therapists/" + auth.currentUser.uid + '/sessions')
         // e.preventDefault()
         // newSession.until = firebase.firestore.Timestamp.fromDate(new Date(newSession.until))
         await addDoc(collection(db, "patients/" + patientId + "/therapists/" + auth.currentUser.uid + '/sessions'), newSession
@@ -159,7 +145,6 @@ function SessionsList({patientId, therapistId = null, type}) {
     const handleUpdate = async (docId, data, setMessages) => {
         if (!checkData(setMessages, data))
             return false
-        console.log("dataaaaaaaaaaaa:", data)
 
         // await updateIDDoc(docId, "exercises", data)
         await updateDoc(doc(collection(db, "patients"), patientId, "therapists", auth.currentUser.uid, 'sessions',
@@ -474,7 +459,6 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                                 <Form.Label>תאריך</Form.Label>
                                 <Form.Control
                                     type="date"
-                                    // console.log(exercisesData[0].createdAt.toDate().getMonth())
 
                                     // value={(exerciseData.until.toDate().getFullYear() + '-' + (exerciseData.until.toDate().getMonth() + 1) + '-' + exerciseData.until.toDate().getDate()).toString()}
                                     // value={new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()}
@@ -541,8 +525,6 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                     </Button>
                     <Button variant="success" onClick={async () => {
 
-                        console.log("new: ", newSessionData)
-                        console.log("newExerciseData.until: ", newSessionData.date)
                         if (await handleUpdate(newSessionData.id, newSessionData, setMessages)) {
                             setNewSessionData(newSessionData)
                             handleClose()

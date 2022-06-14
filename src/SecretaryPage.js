@@ -631,7 +631,7 @@ function SecretaryPage({data,dictInstitutes}) {
                            element={
                         <>
                             <Row className=' align-content-start'> <Form.Label className='fs-4' >
-                                {"עובדים במוסד "+data.institute+":"}</Form.Label> </Row>
+                                {"עובדים במוסד "+dictInstitutes[data.institute]+":"}</Form.Label> </Row>
                             {  isEmptyEmployees&&<Row className='align-content-start'> <Form.Label className='fs-4' >
                                 אין עובדים במוסד</Form.Label> </Row>}
                         <TableData type="עובד" add={addTherapist} update={updateTherapist}
@@ -674,7 +674,7 @@ function SecretaryPage({data,dictInstitutes}) {
                     <Route path="students"
                            element={<>
                                <Row className='align-content-start'> <Form.Label className='fs-4' >
-                                   {"תלמידים במוסד "+data.institute+":"}</Form.Label> </Row>
+                                   {"תלמידים במוסד "+dictInstitutes[data.institute]+":"}</Form.Label> </Row>
                                {/*{  reloadStudents&&!isEmptyStudents&&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >*/}
                                {/*    טוען...</Form.Label> </Row>}*/}
                                {  isEmptyStudents&&<Row className='align-content-start'> <Form.Label className='fs-4' >

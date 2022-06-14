@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Animated} from 'react-animated-css'
 import Login from "./Login";
 import SignUp from "./SignUp";
-import Logo from "../../Portapel.png";
+import Logo from "../../images/Portapel.png";
 
 export default function Authenticate({login,setConnectNow,load,listInstitutes}) {
 

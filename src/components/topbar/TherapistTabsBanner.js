@@ -2,11 +2,11 @@ import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup} fr
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext} from "react";
 import {Link, matchPath, Route, useNavigate, useLocation, Routes} from "react-router-dom";
-import Patient from "../../pages/patient/Patient";
+import Patient from "../../todelete/patient/Patient";
 import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import {auth, removeConnectionPatientToTherapist, signOutCurrentUser} from "../../firebase";
-import PatientList from "../sidebar/PatientList";
-import PatientDetails from "../sidebar/PatientDetails";
+import PatientList from "../patientsSidebar/PatientList";
+import PatientDetails from "../patientsSidebar/PatientDetails";
 import {Plus} from "react-bootstrap-icons";
 import {isClick} from "../../useFunction";
 

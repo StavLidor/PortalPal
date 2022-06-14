@@ -3,7 +3,7 @@ import {Accordion, ButtonGroup, Col, Form, Modal, Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {convertToNormalDate} from "../../useFunction";
 import TableData from "./TableData";
-import MyPatientsDialog from "../../MyPatientsDialog";
+import MyPatientsDialog from "./MyPatientsDialog";
 import { Pencil,Plus,Trash} from 'react-bootstrap-icons';
 
 const ReadOnlyRow = ({

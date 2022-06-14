@@ -4,7 +4,7 @@ import {Button, Form, Row, Col, Container, ButtonGroup} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {resetPassword, signIn} from '../../firebase'
 import {validateEmail} from "../../useFunction"
-import ForgotPasswordDialog from "../../forgotPasswordDialog";
+import ForgotPasswordDialog from "./forgotPasswordDialog";
 
 
 

@@ -12,16 +12,9 @@ import {
     where
 } from "firebase/firestore";
 import {auth, db, updateIDDoc} from "../../firebase";
-import Message from "../chats/message";
-import Exercise from "./Exercise";
-import Datetime from "react-datetime";
+
 import firebase from "firebase/compat/app"
-import {Route, Routes, Link} from "react-router-dom";
-import ViewMeetingSummaries from "../../meetingSummaries/viewMeetingSummaries/ViewMeetingSummaries";
-import ViewExercise from "./ViewExercise";
 import {Button, Collapse, Modal, Form, Row, Col, Accordion} from "react-bootstrap";
-import {render} from "@testing-library/react";
-import ReactDOM from 'react-dom'
 import {Plus, Pencil, Trash} from 'react-bootstrap-icons';
 
 

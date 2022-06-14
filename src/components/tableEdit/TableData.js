@@ -2,9 +2,7 @@ import React, {useState, Fragment, useEffect} from "react"
 import "react-datepicker/dist/react-datepicker.css"
 import ReadOnlyRow from "./ReadOnlyRow"
 import EditableRow from "./EditableRow"
-import "./tableEdit.css"
-import FromCsvFile from "./FromCsvFile"
-import {updatesPatients} from "../../firebase";
+import "./tableData.css"
 import {Button, Form, Row, Col, Container, ButtonGroup, Table, Grid, Modal} from 'react-bootstrap'
 import firebase from "firebase/compat/app";
 import AddThroughCsvFile from "./AddThroughCsvFile";

@@ -8,7 +8,7 @@ import {Form} from "react-bootstrap";
 
 ReactDOM.render(
     <React.StrictMode>
-        {/*<link rel="stylesheet" href="chat.css"/>*/}
+        {/*<link rel="stylesheet" href="app.css"/>*/}
 
         <head>
             <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"/>

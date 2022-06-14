@@ -4,40 +4,31 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState, useCallback, useContext, useRef} from "react";
 import firebaseApp, {signOutCurrentUser} from '../../firebase'
 import {Link, Route, Routes} from "react-router-dom";
-import Patient from "../patient/Patient";
-import PatientList from "../../components/sidebar/PatientList";
-import PatientDetails from "../../components/sidebar/PatientDetails";
+import PatientList from "../../components/patientsSidebar/PatientList";
+import PatientDetails from "../../components/patientsSidebar/PatientDetails";
 import TabsBanner from "../../components/topbar/TabsBanner";
 import FileSystem from "../../components/fileSystem/FileSystem";
-import TherapistsDetails from "../../therapistsDetails";
-import TherapistsList from "../../TherapistsList";
-import SessionsList from "../../meetingSummaries/listMeetingSummries/SessionsList";
+import TherapistsList from "../../components/listTherapists/TherapistsList";
+import SessionsList from "../../components/listMeetingSummries/SessionsList";
 import TherapistTabsBanner from "../../components/topbar/TherapistTabsBanner";
-import Exercises from "../../components/exercises/Exercises";
 import PatientExercises from "../../components/exercises/PatientExercises";
-// import AQold from "../../AQold";
-// import "./HomePage.CSS"
-import styles from "./HomePage.CSS"
-import Chat from "../../Chat";
-import AQ from "../../AQ";
-import ParentList from "../../ParentList";
-import Secretary from "../secretary/Secretary";
-import SecretaryPage from "../../SecretaryPage";
-import MyProfile from "../../MyProfile";
-import GetPersonalCode from "../../components/code/GetPersonalCode";
-import Logo from "../../Portapel.png";
-import MultiType from "../../components/MultiTypeGraph";
-import MultiTypeGraph from "../../components/MultiTypeGraph";
-import ReportsPage from "../../ReportsPage";
-import CheckHasAPICode from "../../checkHasAPICode";
-import ContactUs from "../../ContactUs"
-import AboutUs from "../../AboutUs"
+
+import Chat from "../../components/Chat/Chat";
+import AQ from "../../components/aq/AQ";
+import ParentList from "../../components/parentList/ParentList";
+
+import SecretaryPage from "../secretary/SecretaryPage";
+import MyProfile from "../../components/myProfile/MyProfile";
+import GetPersonalCode from "../../todelete/code/GetPersonalCode";
+import Logo from "../../images/Portapel.png";
+import CheckHasAPICode from "../../components/api/checkHasAPICode";
+import ContactUs from "../../components/contactUs/ContactUs"
+import AboutUs from "../../components/aboutUs/AboutUs"
 import ReactToPrint, {useReactToPrint} from 'react-to-print'
-import {styled, TableCell} from "@mui/material";
-import TestsList from "../../TestsList";
-import ProgressTrendTabsBanner from "../../ProgressTrendTabsBanner";
+import TestsList from "../../components/tests/TestsList";
+import ProgressTrendTabsBanner from "../../components/tests/ProgressTrendTabsBanner";
 import {isClick} from "../../useFunction";
-import {Printer} from "react-bootstrap-icons";
+
 
 
 function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) {

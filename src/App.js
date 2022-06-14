@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 // import "./app.css"
-import './chat.css'
+import './app.css'
 import {BrowserRouter as Router, Route,} from "react-router-dom";
 import {db, signOutCurrentUser} from "./firebase";
 import {auth, GetCurrentUser, getDocCurrentUser} from './firebase'
 import Authenticate from "./components/login/Authenticate";
 import HomePage from "./pages/home/HomePage";
 import {collection, doc, getDoc, getDocs, onSnapshot, query} from "firebase/firestore";
-import {AddTypeExternalTherapist} from "./AddTypeExternalTherapist"
+import {AddTypeExternalTherapist} from "./components/forms/AddTypeExternalTherapist"
 function App() {
     const [isSigneIn, setIsSigneIn] = useState(false);
     const [userDetails, setUserDetails] = useState(null);

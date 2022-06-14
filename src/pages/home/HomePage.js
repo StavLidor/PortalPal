@@ -40,7 +40,7 @@ import {isClick} from "../../useFunction";
 import {Printer} from "react-bootstrap-icons";
 
 
-function HomePage({userDetails, type, institute, setConnectNow}) {
+function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) {
 //     const PrintCell = styled(TableCell)`
 //     width: 100px;
 //     justify-content: flex-end;
@@ -51,6 +51,7 @@ function HomePage({userDetails, type, institute, setConnectNow}) {
     })
 
     const [patientListData, setPatientListData] = useState([])
+    const dictTypes={therapist:'מטפל',parent:'הורה',admin:'מנהל'}
     const [activeTherapistListData, setActiveTherapistListData] = useState([])
     const [notActiveTherapistListData, setNotActiveTherapistListData] = useState([])
     const [parentsListData, setParentsListData] = useState([])
@@ -213,7 +214,7 @@ function HomePage({userDetails, type, institute, setConnectNow}) {
                                     md='2' className="w-auto rounded justify-content-center">
                                     <ButtonGroup className="gap-4 align-items-center">
                                         <Form.Label>
-                                            שלום, {userDetails.firstName} {userDetails.lastName}<br/>{type}
+                                            שלום, {userDetails.firstName} {userDetails.lastName}<br/>{dictTypes[type]}
                                         </Form.Label>
                                         {/*<Link to="/myProfile">*/}
                                         {type !== 'admin' &&
@@ -249,7 +250,7 @@ function HomePage({userDetails, type, institute, setConnectNow}) {
                 </Row>
             </Container>
             {(type === 'admin') ? (
-                    <SecretaryPage data={userDetails}/>) :
+                    <SecretaryPage data={userDetails} dictInstitutes={dictInstitutes}/>) :
                 <Row className='gap-4 justify-content-center'>
                     <Col md='2' style={{width: "13%", maxWidth: '350px'}} id='right-floating-box'
                          className="p-3" /*onMouseEnter={()=>setA(true)} onMouseLeave={()=>setA(false)}*/>
@@ -317,7 +318,7 @@ function HomePage({userDetails, type, institute, setConnectNow}) {
                                                                                 setNotActiveTherapistListData={setNotActiveTherapistListData}
                                                                                 currentPerson={currentPerson}
                                                                                 type={type} institute={institute}
-                                                                                setCurrentPage={setCurrentPage}
+                                                                                setCurrentPage={setCurrentPage} dictInstitutes={dictInstitutes}
                                                        />}/>
                                             </Routes>)
                                     }
@@ -431,6 +432,7 @@ function HomePage({userDetails, type, institute, setConnectNow}) {
                                                                                     currentPerson={currentPerson}
                                                                                     type={type} institute={institute}
                                                                                     setCurrentPage={setCurrentPage}
+                                                                                    dictInstitutes={dictInstitutes}
                                                            />
 
                                                            }/>

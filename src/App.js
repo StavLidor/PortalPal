@@ -6,7 +6,7 @@ import {db, signOutCurrentUser} from "./firebase";
 import {auth, GetCurrentUser, getDocCurrentUser} from './firebase'
 import Authenticate from "./components/login/Authenticate";
 import HomePage from "./pages/home/HomePage";
-import {doc, getDoc, onSnapshot} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, onSnapshot, query} from "firebase/firestore";
 import {AddTypeExternalTherapist} from "./AddTypeExternalTherapist"
 function App() {
     const [isSigneIn, setIsSigneIn] = useState(false);
@@ -17,10 +17,25 @@ function App() {
     const [isFirstLoad, setIsFirstLoad] = useState(true)
     const [addExternal, setAddExternal] = useState(false)
     const [connectNow,setConnectNow]=useState(false)
+    const [listInstitutes,setListInstitutes]=useState([])
+    const [dictInstitutes,setDictInstitutes]=useState({})
+    // console.log('CHeck',dictInstitutes=={})
 
 
 
     useEffect(() => {
+        let arrInstitutes=[]
+        let institutesDict={}
+        getDocs(collection(db, "institutes")).then((d) => {
+            d.forEach((doc) => {
+                arrInstitutes.push({key:doc.id,value:doc.data().name})
+                institutesDict[doc.id.toString()]=doc.data().name
+            })
+            arrInstitutes.push({key:'external',value:'חיצוני'})
+            setListInstitutes(arrInstitutes)
+            setDictInstitutes({...institutesDict,external:'חיצוני'})
+
+        })
         const unsubscribe = auth.onAuthStateChanged(async user => {
             setCheckUserConnection(true)
             if (user) {
@@ -135,10 +150,10 @@ function App() {
         <Router>
             <div className="App">
                 {addExternal && <AddTypeExternalTherapist setAddExternal={setAddExternal}/>}
-                {((isSigneIn === false && checkUserConnection)||
-                    (connectNow) ) ?(<Authenticate login={login}
+                {(((isSigneIn === false && checkUserConnection)||
+                    (connectNow))&& listInstitutes.length>0 ) ?(<Authenticate login={login}
                                                       load={connectNow && !displayLoginError}
-                                                      setConnectNow={setConnectNow}/>):(
+                                                      setConnectNow={setConnectNow} listInstitutes={listInstitutes}/>):(
                     checkUserConnection===false ||(isSigneIn && hasDetails===false)
                 )?(<div>טוען...</div>):(<></>) }
                 {/*{isSigneIn === false && checkUserConnection && <AQold/>}*/}
@@ -147,8 +162,8 @@ function App() {
                 {/*{displayLoginError && isSigneIn === false && checkUserConnection && <h4>אחד מפרטי ההתחברות לא נכון :(</h4>}*/}
                 {/*// TODO: page for loading*/}
 
-                {isSigneIn && hasDetails && displayLoginError === false &&
-                <HomePage setConnectNow={setConnectNow} userDetails={{...userDetails.data(),id:userDetails.id}} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")} />}
+                {isSigneIn && hasDetails && displayLoginError === false &&localStorage.getItem("institute") in dictInstitutes&&
+                <HomePage setConnectNow={setConnectNow} dictInstitutes={dictInstitutes} userDetails={{...userDetails.data(),id:userDetails.id}} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")} />}
 
             </div>
         </Router>

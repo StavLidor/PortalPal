@@ -9,14 +9,14 @@ import ForgotPasswordDialog from "../../forgotPasswordDialog";
 
 
 
-function Login({login, setDisplayLoginForm,setConnectNow,load}) {
+function Login({login, setDisplayLoginForm,setConnectNow,load,listInstitutes}) {
     const [flagLogin,setFlagLogin]=useState(false)
     //TODO: delete default values.
     const [userDetails, setUserDetails] = useState({
         email: "toko1010@gmail.com",
         password: "אבגדהו",
         type: "therapist",
-        institute: '1'
+        institute: listInstitutes[0].key
     })
     const [messages, setMessages] = useState({
         email: "",
@@ -113,10 +113,9 @@ function Login({login, setDisplayLoginForm,setConnectNow,load}) {
                                                  ...userDetails,
                                                  institute: e.target.value
                                              })}>
-                                    <option style={{fontSize: 18}} id='ins1' value={'1'}>אולפנת צביה בני ברק</option>
-                                    {/*<option style={{fontSize: 18}} id='ins2' value={'2'}>2</option>*/}
-                                    {/*<option style={{fontSize: 18}} id='ins3' value={'3'}>3</option>*/}
-                                    <option style={{fontSize: 18}} id='ins4' value="external">חיצוני</option>
+                                    {listInstitutes.map(i=>(
+                                        <option style={{fontSize: 18}} id='ins1' value={i.key}>{i.value}</option>
+                                    ))}
                                 </Form.Select>
                             </Col>
                         </Row>}

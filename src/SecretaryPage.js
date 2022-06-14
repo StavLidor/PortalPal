@@ -22,7 +22,7 @@ import {is_israeli_id_number, validateEmail} from "./useFunction";
 // import {details_users} from "../../firebase"
 
 
-function SecretaryPage({data}) {
+function SecretaryPage({data,dictInstitutes}) {
     const [students, setStudents] = useState([])
     const [employees, setEmployees] = useState([])
     const [studentsTable, setStudentsTable] = useState([])
@@ -624,7 +624,7 @@ function SecretaryPage({data}) {
                 <Routes>
                     <Route path="/"
                            element={<Row className='align-content-start'> <Form.Label className='fs-4' >
-                               {"ניתן לראות עובדים או תלמידים במוסד "+data.institute+ " בלשוניות שלמעלה: עובדים, תלמידים. "}</Form.Label> </Row>}/>
+                               {"ניתן לראות עובדים או תלמידים במוסד "+dictInstitutes[data.institute]+' '+ " בלשוניות שלמעלה: עובדים, תלמידים. "}</Form.Label> </Row>}/>
                 </Routes>
                 <Routes>
                     <Route path="employees"

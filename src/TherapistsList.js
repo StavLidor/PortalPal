@@ -17,7 +17,7 @@ function TherapistsList({
                             setNotActiveTherapistListData,
                             currentPerson,
                             type,
-                            institute
+                            institute,dictInstitutes
                         }) {
     console.log("in therapist!!!!!!!!")
     const [activeTherapistsList, setActiveTherapistsList] = useState([])
@@ -230,7 +230,7 @@ function TherapistsList({
                 } else {
                     path = 'therapist'+ '/'+index.toString() //+ '/' + currentPage.toString()
 
-                    showInstitute = ', ' + data.institute
+                    showInstitute = ', ' + dictInstitutes[data.institute]
                 }
                 return (
                     <div>

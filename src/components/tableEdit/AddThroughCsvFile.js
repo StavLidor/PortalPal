@@ -1,29 +1,42 @@
 import {Button, ButtonGroup, Col, Form, Modal, Row} from "react-bootstrap";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Papa from "papaparse";
 
-export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
+export function AddThroughCsvFile({addBatch, setAddBatch, add, remove,filedAdd,filedRemove}) {
     // const [addBatch, setAddBatch] = useState(true)
     const [file, setFile] = useState(null)
     const [type, setType] = useState("")
     const [showMsg, setShowMsg] = useState(false)
     const [submitted, setSubmitted] = useState(false)
-    const submit = () => {
+    const [errors,setErrors]=useState([])
+    const [loading,setLoading]=useState(false)
+    // const[filed,setFiled]=useState([])
+    useEffect(()=>{
+        if(loading){
+            setLoading(false)
+            if(errors.length===0){
+                setAddBatch(false)
+            }
+        }
+
+    },[errors])
+    const submit = async () => {
+        setLoading(true)
         // event.preventDefault();
         if (file) {
             if (type === 'add') {
-                parser(file, add)
+                await parser(file, add,filedAdd)
             } else {
-                parser(file, remove)
+                await parser(file, remove,filedRemove)
             }
 
         }
     }
 
-    function parser(file, f) {
+    function parser(file, f,filed) {
         let reader = new FileReader();
 
-        reader.addEventListener('load', function (e) {
+        reader.addEventListener('load', async function (e) {
             const allObj = []
             //let csvdata = e.target.result;
             let arr = Papa.parse(e.target.result).data
@@ -31,21 +44,35 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
             // let arr= data.split("\n");
 
             let keys = arr[0]
+            console.log('length')
+            if(!(keys.length === filed.length )||
+                !(keys.every(function (element) {
+                    return filed.includes(element);
+                }))){
+                setErrors(['כותרות עמודות צרכות להיות: ',filed.join(',\n')])
+                return
+
+            }
             let rows = arr.length;
 
             let cols = keys.length;
 
             let i, j = 0;
+            let error=false
             for (i = 1; i < rows; i++) {
                 let line = arr[i];
-                if (line.length !== cols)
-                    continue
+                if (line.length !== cols){
+                    error=true
+                    break
+                }
+
                 let obj = {};
 
                 for (j = 0; j < cols; j++) {
 
                     let header = keys[j]
                     let value = line[j]
+
                     obj[header] = value
                 }
                 // if(i==1){
@@ -55,7 +82,13 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
 
 
             }
-            f(allObj)
+            if(!error){
+                await f(allObj, setErrors)
+            }
+            else{
+                setErrors(['חסר עמודות בקובץ'])
+            }
+
             //setFile(null)
             // parseCsv.getParsecsvdata(csvdata); // calling function for parse csv data
         });
@@ -98,11 +131,19 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                             {/*</Row>*/}
                             <Row className="input-group mb-3">
                                 <input name="learnCSV" accept="text/csv" onChange={e => {
-                                    setFile(e.target.files[0])
+                                    if(e.target.files[0].type ==="text/csv"){
+                                        setFile(e.target.files[0])
+                                    }
+
                                 }} type="file" className="form-control m-3" id="inputGroupFile02"/>
                                 {submitted && (file === null || file === undefined) &&
                                 <Form.Text className="text-center" style={{fontSize: 10, color: "red"}}>אנא בחר
-                                    קובץ</Form.Text>}
+                                    קובץ csv</Form.Text>}
+                                {errors.map(e=>(
+                                    <Form.Text className="text-center" style={{fontSize: 10, color: "red"}}>{
+                                        e
+                                    }</Form.Text>
+                                ))}
                             </Row>
                         </Col>
                     </Form>
@@ -111,30 +152,41 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove}) {
                     <Button variant="secondary" onClick={() => setAddBatch(false)}>
                         בטל
                     </Button>
-                    <Button variant="success" onClick={() => {
-                        if (file === undefined) {
-                        }
-
-                        if (type === "" || file === null || file === undefined) {
-                            if (type === "") {
-                                setShowMsg(true)
-                            } else {
-                                setShowMsg(false)
-                            }
-                            if (file === null || file===undefined) {
-                                setSubmitted(true)
-                            } else {
-                                setSubmitted(false)
+                    {(loading)?(
+                        <Button variant="secondary" onClick={() => setAddBatch(false)}>
+                            טוען...
+                        </Button>
+                    ):(
+                        <Button variant="success" onClick={async () => {
+                            if (file === undefined) {
                             }
 
-                        } else {
-                            submit()
-                            setAddBatch(false)
+                            if (type === "" || file === null || file === undefined) {
+                                if (type === "") {
+                                    setShowMsg(true)
+                                } else {
+                                    setShowMsg(false)
+                                }
+                                if (file === null || file === undefined) {
+                                    setSubmitted(true)
+                                } else {
+                                    setSubmitted(false)
+                                }
+
+                            } else {
+                                await submit()
+                                // if (errors.length !== 0) {
+                                //     setAddBatch(false)
+                                // }
+
+                            }
                         }
-                    }
-                    }>
-                        עדכן
-                    </Button>
+                        }>
+                            עדכן
+                        </Button>
+
+                    )}
+
                 </Modal.Footer>
             </Modal>
         </div>

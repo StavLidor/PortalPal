@@ -40,6 +40,27 @@ export default function TableData({
     const [contactTable, setContactTable] = useState(null)
     const [show, setShow] = useState(false)
     const [load,setLoad]=useState(false)
+    const [filedAdd,setFiledAdd]=useState([])
+    const[filedRemove,setFiledRemove]=useState([])
+    useEffect(()=>{
+        let arrAdd=[]
+        columnsInfoView.map(c=>{
+            if(c.add === true){
+                arrAdd.push(c.name)
+            }
+
+        })
+        if(requiredId){
+            arrAdd.push('id')
+            setFiledRemove(['id'])
+        }
+        else{
+            setFiledRemove(['email'])
+        }
+        setFiledAdd(arrAdd)
+
+    },[])
+
     const closeDialog = () => setAddSomeone(false)
     const handleShow = () => setShow(true)
 
@@ -59,6 +80,7 @@ export default function TableData({
         p1.then(arr => {
             setContacts(arr)
         })
+
 
 
     }, [data])
@@ -113,29 +135,43 @@ export default function TableData({
         }
         setEditContactId(null)
     };
-    const addNews = allDetails => {
+    const addNews = (allDetails,setErrors) => {
 
         let i = 0
         let count = 0
-        const newContacts = [...contacts]
-        allDetails.map(async (details) => {
+        // const newContacts = [...contacts]
+        let errors=[]
+        allDetails.map(async (details,index) => {
 
                 // const newContacts = [...contacts]
                 const promiseId = await add(details,((messages)=>{
+                    let error=''
+                    for (const [key, value] of Object.entries(messages)) {
+                        if(value.trim()){
+                            error+=key +'-'+value +'. '
+                        }
+
+                    }
+                    if(error.trim()){
+                        errors.push('בשורה '+(index+1).toString()+' '+ error)
+                    }
+
+                    // errors[index+1]=error
 
                 }))
                 const p = Promise.resolve(promiseId)
                 let modifyContacts = ((flag) => {
                     count++
-                    if (flag) {
-                        if (typeof (promiseId) == "string") {
-                            newContacts[contacts.length + i] = {...details, id: promiseId}
-                        } else {
-                            newContacts[contacts.length + i] = Object.assign({}, detailsNew, promiseId)
-                        }
-                    }
+                    // if (flag) {
+                    //     // if (typeof (promiseId) == "string") {
+                    //     //     newContacts[contacts.length + i] = {...details, id: promiseId}
+                    //     // } else {
+                    //     //     newContacts[contacts.length + i] = Object.assign({}, detailsNew, promiseId)
+                    //     // }
+                    // }
 
                     if (count === allDetails.length) {
+                        setErrors(errors)
                         // setContacts(newContacts)
                     }
                 })
@@ -159,22 +195,28 @@ export default function TableData({
         )
         //setContacts(newContacts)
     }
-    const remove = allDetails => {
+    const remove = (allDetails,setErrors) => {
         const newContacts = [...contacts]
 
         let count = 0
-        allDetails.map(async (details) => {
+        let errors=[]
+        allDetails.map(async (details,indexMap) => {
                 let modifyContacts = ((flag) => {
                     count++
                     if (flag) {
-                        const index = contacts.findIndex((contact) => contact.id === id)
-                        if (id === contactTable.id) {
+                        //const index = contacts.findIndex((contact) => contact.id === id)
+                        if (contactTable!==null && id === contactTable.id) {
                             setContactTable(null)
                         }
-                        newContacts.splice(index, 1)
+
+                        // newContacts.splice(index, 1)
+                    }
+                    else{
+                        errors.push('בשורה '+(indexMap+1).toString()+' '+ 'לא נמצא לפי מזהה זה ולכן לא ניתן להסיר')
                     }
                     if (count === allDetails.length) {
                         // setContacts(newContacts)
+                        setErrors(errors)
                     }
                 })
                 let id = ""
@@ -186,12 +228,21 @@ export default function TableData({
                 const p = Promise.resolve(id)
                 p.then(async id => {
                     const index = contacts.findIndex((contact) => contact.id === id)
-                    deleteObj(contacts[index]).then((flag) => {
-                        modifyContacts(flag)
-                        if (flag) {
+                    if(index === -1){
+                        modifyContacts(false)
+                            //console.log('HHHHHHHHHH')
+                    }
+                    else {
+                        deleteObj(contacts[index]).then((flag) => {
+                            console.log(flag)
+                            modifyContacts(flag)
 
-                        }
-                    })
+                            if (flag) {
+
+                            }
+                        })
+                    }
+
                 })
             }
         )
@@ -422,7 +473,8 @@ export default function TableData({
             </Col>
 
             </Row>
-            {addOrRemoveBatch && <AddThroughCsvFile addBatch={addOrRemoveBatch} setAddBatch={setAddOrRemoveBatch} add={addNews} remove={remove}/>}
+            {addOrRemoveBatch && <AddThroughCsvFile addBatch={addOrRemoveBatch} setAddBatch={setAddOrRemoveBatch} add={addNews} remove={remove}
+                                                    filedAdd={filedAdd} filedRemove={filedRemove}/>}
 
 
 

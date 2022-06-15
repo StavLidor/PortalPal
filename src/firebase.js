@@ -425,22 +425,28 @@ export const addPatient = async details => {
             }
         }
         else{
+
             // if doc not exists create the doc
-            await setDoc(doc(collection_query_patients, details.id), {
-                id: details.id,
-                dateOfBirth: details.dateOfBirth,
-                firstName: details.firstName,
-                lastName: details.lastName,
-                diagnosticCode:details.diagnosticCode,
-                city: details.city,
-                street: details.street,
-                buildingNumber: details.buildingNumber,
-                parents: [uid_user],
-                gender: details.gender,
-                thirdPartyCodes:{},
-                code:[]
-                /*idSecretary:[details.idSecretary]*/
-            })
+            try{
+                await setDoc(doc(collection_query_patients, details.id), {
+                    id: details.id,
+                    dateOfBirth: details.dateOfBirth,
+                    firstName: details.firstName,
+                    lastName: details.lastName,
+                    diagnosticCode:details.diagnosticCode,
+                    city: details.city,
+                    street: details.street,
+                    buildingNumber: details.buildingNumber,
+                    parents: [uid_user],
+                    gender: details.gender,
+                    thirdPartyCodes:{},
+                    code:[]
+                    /*idSecretary:[details.idSecretary]*/
+                })
+            } catch (e) {
+                return null
+            }
+
         }
         if (await updateIDDoc(details.institute, 'institutes', {students: firebase.firestore.FieldValue.arrayUnion(details.id)}))
             return details.id
@@ -831,22 +837,27 @@ export const deletePatientFromInstitute = async (institute, removeOb) => {
         // if (!await deleteFrom(removeOb, 'students_arr', id, "array-contains"))
         //     return false
         // remove from institute
-        await updateIDDoc(institute, 'institutes',
-            {students: firebase.firestore.FieldValue.arrayRemove(removeOb)})
+        if(!await updateIDDoc(institute, 'institutes',
+            {students: firebase.firestore.FieldValue.arrayRemove(removeOb)})){
+            return false
+        }
         const unsubscribe = query(collection(db, 'patients/' + removeOb + '/therapists'),
             where('institute', '==', institute)
         )
 
         const querySnapshot = await getDocs(unsubscribe)
-        querySnapshot.forEach((doc) => (
+        let flag=true
+        querySnapshot.forEach((d) => {
+            if (flag && !updateIDDoc(d.id, 'users', {['institutes.'+institute]: firebase.firestore.FieldValue.arrayRemove(removeOb)})){
+                flag=false
+            }
+            const data ={active: false}
+            updateDoc(doc(collection_query_patients, removeOb, "therapists", d.id),data)
+    })
 
-            //doc.id
-            updateDoc(doc(db, "patients/" + removeOb + "/therapists/" + doc.id), {active: false})
-
-        ))
-
-        return true
+        return flag
     } catch (err) {
+        console.log(err)
         return false
     }
 

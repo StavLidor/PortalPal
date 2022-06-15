@@ -183,8 +183,8 @@ function SecretaryPage({data,dictInstitutes}) {
         if(!validateEmail(details.email)){
             messages.email='הכנס אימייל תקין להורה'
         }
-        if(!details.dateOfBirth.trim()){
-            messages.dateOfBirth='הכנס תאריך לידה'
+        if(!details.dateOfBirth.trim()|| isNaN(Date.parse(details.dateOfBirth))){
+            messages.dateOfBirth='הכנס תאריך לידה חוקי YYYY-MM-DD'
         }
         if(!details.diagnosticCode.trim()){
             messages.diagnosticCode='הכנס קוד אבחון'
@@ -300,7 +300,6 @@ function SecretaryPage({data,dictInstitutes}) {
             return false
         }
         return true
-        return false
         //
     }
     const deleteObjPatient = async (contact/*id*/) => {
@@ -314,13 +313,13 @@ function SecretaryPage({data,dictInstitutes}) {
 
         {
             type: "text", required: "required",
-            placeholder: "Enter a first name..."
+            placeholder: "הכנס שם פרטי..."
             , name: "firstName", label: "שם פרטי:",
             edit: true, add: true, view: true
             /*,value:editFormData.firstName,*/
         }, {
             type: "text", required: "required",
-            placeholder: "Enter a last name..."
+            placeholder: "הכנס שם משפחה..."
             , name: "lastName", label: "שם משפחה:"
             , edit: true, add: true, view: true
             /*,value:editFormData.lastName,*/
@@ -328,7 +327,7 @@ function SecretaryPage({data,dictInstitutes}) {
 
         {
             type: "text", required: "required",
-            placeholder: "Enter a last city..."
+            placeholder: "הכנס עיר..."
             , name: "jobs", label: "עבודות:"
             ,
             edit: true, add: true, view: true
@@ -346,19 +345,19 @@ function SecretaryPage({data,dictInstitutes}) {
     ]
     const columnsViewPatient = [{
         type: "text", required: "required",
-        placeholder: "Enter a first name..."
+        placeholder: "הכנס שם פרטי..."
         , name: "firstName", label: "שם פרטי:",
         edit: true, add: true, view: true
         /*,value:editFormData.firstName,*/
     }, {
         type: "text", required: "required",
-        placeholder: "Enter a last name..."
+        placeholder: "הכנס שם משפחה..."
         , name: "lastName", label: "שם משפחה:", edit: true, add: true, view: true
         /*,value:editFormData.lastName,*/
     },
         {
             type: "date", required: "required",
-            placeholder: "Enter a birth day..."
+            placeholder: "הכנס תאריך לידה..."
             , name: "dateOfBirth", label: "תאריך לידה:",
             edit: true, add: true, view: true
             /*,value:editFormData.dateOfBirth,*/
@@ -366,31 +365,31 @@ function SecretaryPage({data,dictInstitutes}) {
         {
             type: "text", required: "required", options: ['זכר', 'נקבה',
                 'אחר']
-            , name: "gender", label: "מגדר",
+            , name: "gender", label: "הכנס מגדר...",
             edit: true, add: true, view: true
         },
         {
             type: "text", required: "required",
-            placeholder: "הכנס קוד אבחון"
+            placeholder: "הכנס קוד אבחון..."
             , name: "diagnosticCode", label: "קוד אבחון:", edit: true, add: true, view: true
             /*,value:editFormData.lastName,*/
         },
 
         {
             type: "text", required: "required",
-            placeholder: "Enter a last city..."
+            placeholder: "הכניס עיר..."
             , name: "city", label: "עיר:", edit: true, add: true, view: true
             /*,value:editFormData.city*/,
         },
         {
             type: "text", required: "required",
-            placeholder: "Enter a last street..."
+            placeholder: "הכנס עיר..."
             , name: "street", label: "רחוב:", edit: true, add: true, view: true
             /*,value:editFormData.street*/,
         },
         {
             type: "text", required: "required",
-            placeholder: "Enter a last buildingNumber..."
+            placeholder: "הכנס מספר רחוב..."
             , name: "buildingNumber", label: "מספר רחוב:", edit: true, add: true, view: true
             /*,value:editFormData.buildingNumber*/,
         },
@@ -487,21 +486,21 @@ function SecretaryPage({data,dictInstitutes}) {
 
         {
             type: "text", required: "required",
-            placeholder: "Enter a first name..."
+            placeholder: "הכנס שם פרטי..."
             , name: "firstName", label: "שם פרטי:",
             edit: false,view: true,
             add: false
             /*,value:editFormData.firstName,*/
         }, {
             type: "text", required: "required",
-            placeholder: "Enter a last name..."
+            placeholder: "הכנס שם משפחה..."
             , name: "lastName", label: "שם משפחה:", edit: false,
             add: false,view: true
             /*,value:editFormData.lastName,*/
         },
         {
             type: "text", required: "required",
-            placeholder: "Enter a connection between therapist and patients..."
+            placeholder: "הכנס את קשר בין תלמיד לעובד..."
             , name: "connection", label: "קשר:",
             edit: true,
             add: true,view: true

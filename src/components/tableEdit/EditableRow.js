@@ -22,8 +22,8 @@ const EditableRow = ({
             {
                 columnsInfo.map((column) => (
                     <>
-                        {column.view && <td>
-                            {column.edit === true && column.type !== 'tableEdit' && !('options' in column) &&
+                        {column.view && <>
+                            {column.edit === true && column.type !== 'tableEdit' && !('options' in column) &&<td>
                             <Form.Control
 
                                 type={column.type}
@@ -37,12 +37,13 @@ const EditableRow = ({
                                     return editFormData[column.name]
                                 })()}
                                 onChange={handleEditFormChange}
-                            ></Form.Control>
+                            ></Form.Control></td>
 
                             }
 
 
                             {column.edit === true && column.type !== 'tableEdit' && 'options' in column &&
+                                <td>
 
                             <Form.Select type={column.type} name={column.name} id={column.name} style={{width: 100}}
                                          onChange={handleEditFormChange}
@@ -55,7 +56,8 @@ const EditableRow = ({
                                     ))
 
                                 }
-                            </Form.Select>
+
+                            </Form.Select></td>
                                 // <select type={column.type} name={column.name} id={column.name}
                                 //         onChange={handleEditFormChange}
                                 //         value={editFormData[column.name]}>
@@ -67,10 +69,10 @@ const EditableRow = ({
                                 // </select>
                             }
                             {column.edit === true && column.type === 'tableEdit' &&
-                            <TableData data={editFormData[column.name]}
-                            />}
-                            {column.edit === false && contact[column.name]}
-                        </td>}
+                            <td><TableData data={editFormData[column.name]}
+                            /></td>}
+                            {column.edit === false && <td style={{fontSize: 20}}>{contact[column.name]}</td>}</>
+                        }
                     </>
 
 

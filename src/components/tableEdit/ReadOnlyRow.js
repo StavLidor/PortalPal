@@ -52,8 +52,12 @@ const ReadOnlyRow = ({
                         <>
                             {colInfo.view && <td style={{fontSize: 20}} className="text-center">
                                 {(() => {
-                                        if (colInfo.type !== 'date')
+                                        if (colInfo.type !== 'date'){
+                                            if(Array.isArray(contact[colInfo.name]))
+                                                return contact[colInfo.name].join()
                                             return contact[colInfo.name]
+                                        }
+
                                         return convertToNormalDate(contact[colInfo.name])
                                     }
                                 )()

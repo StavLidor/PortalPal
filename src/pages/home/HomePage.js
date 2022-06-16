@@ -28,6 +28,7 @@ import ReactToPrint, {useReactToPrint} from 'react-to-print'
 import TestsList from "../../components/tests/TestsList";
 import ProgressTrendTabsBanner from "../../components/tests/ProgressTrendTabsBanner";
 import {isClick} from "../../useFunction";
+import {CSVLink} from "react-csv";
 
 
 
@@ -386,6 +387,9 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                 // })()}
                                 id='middle-floating-box'>
                                 {type === 'parent' && currentPerson !== '' &&
+                                    <>
+
+                                        <Row>
                                 <Button as={Link} to={currentPerson + '/code'} onClick={() => {
                                     setShowDialogCode(true)
                                     setCurrentPage('code')
@@ -393,7 +397,23 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                         className="text-center"
                                     // style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
                                         variant="outline-secondary"
-                                        id='personal-code-button'>קבל קוד אישי</Button>
+                                        id='personal-code-button'>קבל קוד אישי</Button></Row>
+                                        <Row>
+                                            <NavDropdown drop='start' title={"אפליקציות צד שלישי"}
+                                                         id='selected-patient-menu-bottom-button'
+                                                         active={currentPage==='AUTIDO'}>
+                                                <NavDropdown.Item as={Link} to={currentPerson + '/AUTIDO'}
+                                                                  onClick={() => {
+                                                                      setCurrentPage('AUTIDO')
+                                                                  }}>AutiDo</NavDropdown.Item>
+                                                <NavDropdown.Item /*as={Link} to={'KAZABUBU'}*/
+                                                    /*onClick={() => {
+                                                        setCurrentPage('KAZABUBU')
+                                                    }*}*/>
+                                                    KAZABUBU
+                                                </NavDropdown.Item>
+                                            </NavDropdown></Row>
+                                    </>
                                 }
 
 

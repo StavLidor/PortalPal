@@ -3,13 +3,6 @@
 </p>
 
 # Portapel Website
-
-בתור מטפל? לנהל את טיפול  ע"י תיעוד עבור כל מטופל של סיכומי פגישות, תרגילים שניתנו ומבחנים שנתנו ובנוסף אפשר ליצור קשר עם כל מטפליו והוריו.
-בתור הורה? אפשר לתקשר עם מטפלים של ילד ולצפות בתיעודים עליו של סיכומי טיפולים ותרגילים.
-בנוסף אפשר גם בתור מטפל\הורה למלות שאלון AQ-10 הנותן אבחון ראשוני לאוטיזם ומבוסס על מודל של למידת מכונה logistic reg ולצפות בהתקדמות של ילד באפליקציות צד שלישי למשל אוטידו.
-בתור אדמין ? לנהל את תלמידים ואת עובדים במוסד ואת הקשר בניהם.
-
-
 Portapel is the linking thread between parents And therapists of a patient with ASD.
 It was developed in order to create one easy to use platform for documenting and organize the treatment, and communicate with relevant people.
 <br/>
@@ -71,19 +64,19 @@ https://portal-website-db707.web.app/
 
 ## Screen Shots
 
-<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20222933.jpg" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20222933.jpg" alt="Home Screen" width="800"/>
 
-<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223021.jpg" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223021.jpg" alt="Home Screen" width="800"/>
 
-<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223044.jpg" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223044.jpg" alt="Home Screen" width="800"/>
 
-<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223121.jpg" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223121.jpg" alt="Home Screen" width="800"/>
 
-<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223138.jpg" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223138.jpg" alt="Home Screen" width="800"/>
 
-<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223205.jpg" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223205.jpg" alt="Home Screen" width="800"/>
 
-<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223232.jpg" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223232.jpg" alt="Home Screen" width="800"/>
 
 <br/>
 

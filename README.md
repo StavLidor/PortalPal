@@ -1,8 +1,6 @@
 <p align="center">
-<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Portapel.png" alt="Portapel Website" width="200"/>
-
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Portapel.png" alt="Portapel Website" width="400"/>
 </p>
-[![Portapel Website](https://github.com/LironHaim15/portal_website/blob/liron/imges/Portapel.png)](https://portal-website-db707.web.app/ "Portapel Website")
 
 # Portapel Website
 
@@ -73,17 +71,19 @@ https://portal-website-db707.web.app/
 
 ## Screen Shots
 
-<img src="https://github.com/LironHaim15/autido_app/blob/liron/images/Screenshot_1653322955.png" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20222933.jpg" alt="Home Screen" width="400"/>
 
-<img src="https://github.com/LironHaim15/autido_app/blob/liron/images/Screenshot_1653302567.png" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223021.jpg" alt="Home Screen" width="400"/>
 
-<img src="https://github.com/LironHaim15/autido_app/blob/liron/images/Screenshot_1653326174.png" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223044.jpg" alt="Home Screen" width="400"/>
 
-<img src="https://github.com/LironHaim15/autido_app/blob/liron/images/Screenshot_1653322996.png" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223121.jpg" alt="Home Screen" width="400"/>
 
-<img src="https://github.com/LironHaim15/autido_app/blob/liron/images/Screenshot_1653322978.png" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223138.jpg" alt="Home Screen" width="400"/>
 
-<img src="https://github.com/LironHaim15/autido_app/blob/liron/images/Screenshot_1653322969.png" alt="Home Screen" width="400"/>
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223205.jpg" alt="Home Screen" width="400"/>
+
+<img src="https://github.com/LironHaim15/portal_website/blob/liron/imges/Screenshot%202022-06-22%20223232.jpg" alt="Home Screen" width="400"/>
 
 <br/>
 

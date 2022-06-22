@@ -19,15 +19,15 @@ function TabsBanner({type, currentPerson, setCurrentPage, currentPage,handlePrin
                     <Nav justify variant="tabs" defaultActiveKey={currentPerson + '/sessions'}>
 
                         <Nav.Item>
-                            <Link to={'/students'} onClick={() => {
+                            <Button as={Link} id='aq-button' to={'/students'} onClick={() => {
                                 setCurrentPage('students')
-                            }} className="list-group-item list-group-item-action">תלמידים</Link>
+                            }} className="list-group-item list-group-item-action">תלמידים</Button>
                             {/*<Nav.Link eventKey="link-1">תלמידים</Nav.Link>*/}
                         </Nav.Item>
                         <Nav.Item>
-                            <Link to={'/employees'} onClick={() => {
+                            <Button as={Link} id='aq-button' to={'/employees'} onClick={() => {
                                 setCurrentPage('employees')
-                            }} className="list-group-item list-group-item-action">עובדים</Link>
+                            }} className="list-group-item list-group-item-action">עובדים</Button>
                             {/*<Nav.Link eventKey="link-2">עובדים</Nav.Link>*/}
                         </Nav.Item>
                     </Nav>

@@ -387,7 +387,7 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                 // })()}
                                 id='middle-floating-box'>
                                 {type === 'parent' && currentPerson !== '' &&
-                                    <>
+                                    <Col>
 
                                         <Row>
                                 <Button as={Link} to={currentPerson + '/code'} onClick={() => {
@@ -413,7 +413,7 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                     KAZABUBU
                                                 </NavDropdown.Item>
                                             </NavDropdown></Row>
-                                    </>
+                                    </Col>
                                 }
 
 

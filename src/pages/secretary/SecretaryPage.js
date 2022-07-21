@@ -275,21 +275,18 @@ function SecretaryPage({data,dictInstitutes}) {
     const updatesPatients = async (id, data) => {
         // if('dateOfBirth' in data)
         //     data.dateOfBirth= firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
-        let update={...data,
-            // dateOfBirth: firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
-            dateOfBirth: firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))}
-        // console.log(data)
+        let update={...data}
         if('information'in data){
             delete update.information
         }
         if ('dateOfBirth' in data)
             if (await updateIDDoc(id, 'patients', {
-                ...data,
+                ...update,
                 // dateOfBirth: firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
                 dateOfBirth: firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
             }))
                 return true
-            else if (await updateIDDoc(id, 'patients', data))
+            else if (await updateIDDoc(id, 'patients',update))
                 return true
         return false
         //

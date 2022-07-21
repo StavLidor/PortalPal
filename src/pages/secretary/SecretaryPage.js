@@ -530,7 +530,7 @@ function SecretaryPage({data,dictInstitutes}) {
             return false
         }
         const index = students.findIndex((s) => s.id === details.id)
-        if(details.id in userGetTable.institutes[data.institute]|| index == -1){
+        if(details.id in userGetTable.institutes[data.institute]|| index === -1){
             return false
         }
 
@@ -618,7 +618,9 @@ function SecretaryPage({data,dictInstitutes}) {
                                                    lastName: "",
                                                    firstName: ""/**/
                                                    ,connection: "",
-                                               }} getTable={getTable}
+                                               }}
+
+                                   getTable={getTable}
                                                table={studentsTable}
                                                columnsInfoViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
                                /*(d)=>{}*/} /*deleteObj={deleteConnectionToTherapist}*/

@@ -257,22 +257,30 @@ export default function TableData({
         const p = Promise.resolve(add(detailsNew, setMessages))
         p.then(async id => {
             if (id) {
-                const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
-                if (index < 0) {
-                    // if (typeof (id) == "string") {
-                    //     addToContacts({...detailsNew, id: id})
-                    // } else {
-                    //     addToContacts(Object.assign({}, detailsNew, id))
-                    // }
-                    // setEditContactId(null);
-                    setLoad(false)
-                    setDetailsNew(emptyDetails)
-                    setAddSomeone(false)
+                setLoad(false)
+                setDetailsNew(emptyDetails)
+                setMessages({...emptyDetails,id:''})
+                setAddSomeone(false)
+                // const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
+                // if (index < 0) {
+                //     // if (typeof (id) == "string") {
+                //     //     addToContacts({...detailsNew, id: id})
+                //     // } else {
+                //     //     addToContacts(Object.assign({}, detailsNew, id))
+                //     // }
+                //     // setEditContactId(null);
+                //     setLoad(false)
+                //     setDetailsNew(emptyDetails)
+                //     setMessages(emptyDetails)
+                //     setAddSomeone(false)
+                //
+                // } else {
+                //     // mybe can not change the informtion need to think about
+                //     //newContacts[index] = detailsNew
+                // }
 
-                } else {
-                    // mybe can not change the informtion need to think about
-                    //newContacts[index] = detailsNew
-                }
+            } else {
+                setLoad(false)
 
             }
         })
@@ -343,12 +351,13 @@ export default function TableData({
 
 
             {addSomeone && <Modal show={addSomeone} onHide={()=>{
+
                 setDetailsNew(emptyDetails)
-                setMessages(emptyDetails)
+                setMessages({...emptyDetails,id:''})
                 setAddSomeone(false)
             }}>
                 <Modal.Header>
-                    <Modal.Title style={{fontWeight:"bold", fontSize:35}}>{"הוספת " + type + " חדש"}</Modal.Title>
+                    <Modal.Title style={{fontWeight:"bold", fontSize:35}}>{"הוספת " + type +" חדש"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form className="needs-validation" noValidate>
@@ -435,7 +444,7 @@ export default function TableData({
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => {setAddSomeone(false)
                         setDetailsNew(emptyDetails)
-                        setMessages(emptyDetails)}}>
+                        setMessages({emptyDetails,id:''})}}>
                         בטל
                     </Button>
                     {

@@ -37,18 +37,3 @@ def get():
 @cross_origin()
 def test():
     return 'Pinging Model Application!!'
-
-
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     data_string = request.get_json()
-#     # result = {
-#     #     'prediction': predictions.tolist()
-#     # }
-#     # print(result['prediction'][0])
-#     return jsonify(result)
-
-
-# if __name__ == '__main__':
-#     app.run()
-# #     app.run(debug=True, host='0.0.0.0', port=9696)

@@ -1,6 +1,6 @@
 import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useEffect, useState,useRef, useCallback, useContext} from "react";
+import React, {useEffect, useState, useRef, useCallback, useContext} from "react";
 import {Link, Route, Routes, useLinkClickHandler} from "react-router-dom";
 import {getDate} from "date-fns";
 import {collection, getDocs, onSnapshot, query, where} from "firebase/firestore";
@@ -12,18 +12,18 @@ import {isClick} from "../../useFunction";
 function TherapistsList({
                             details,
                             setCurrentTherapist,
-                            currentPage,setCurrentPage,
+                            currentPage, setCurrentPage,
                             setActiveTherapistListData,
                             setNotActiveTherapistListData,
                             currentPerson,
                             type,
-                            institute,dictInstitutes
+                            institute, dictInstitutes
                         }) {
     const [activeTherapistsList, setActiveTherapistsList] = useState([])
     const [notActiveTherapistsList, setNotActiveTherapistList] = useState([])
-    const [current, setCurrent] = useState({id: "", index: "",active:true})
+    const [current, setCurrent] = useState({id: "", index: "", active: true})
     const [reload, setReload] = useState(true)
-    const [clickId,setClickId]=useState('')
+    const [clickId, setClickId] = useState('')
     const componentRefActive = useRef()
     const componentRefNotActive = useRef()
 
@@ -31,41 +31,38 @@ function TherapistsList({
 
         const pathSpilt = window.location.pathname.split("/")
         let index = ''
-        let active=true
-        let isNotChose=false
-        if(pathSpilt.length > 2 && pathSpilt[2] === 'therapist'){
-            index='0'
-            if(type === 'therapist' && pathSpilt.length>3){
-                index=pathSpilt[3]
-                if (isNaN(parseInt(index))){
-                    index='0'
+        let active = true
+        let isNotChose = false
+        if (pathSpilt.length > 2 && pathSpilt[2] === 'therapist') {
+            index = '0'
+            if (type === 'therapist' && pathSpilt.length > 3) {
+                index = pathSpilt[3]
+                if (isNaN(parseInt(index))) {
+                    index = '0'
                 }
-            }
-            else if(type === 'parent' &&pathSpilt.length>4){
-                index= pathSpilt[4]
-                if (isNaN(parseInt(index))){
-                    index='0'
+            } else if (type === 'parent' && pathSpilt.length > 4) {
+                index = pathSpilt[4]
+                if (isNaN(parseInt(index))) {
+                    index = '0'
                 }
-                if(pathSpilt[3]==='notActive'){
-                    active=false
+                if (pathSpilt[3] === 'notActive') {
+                    active = false
                 }
+            } else if (type === 'parent' && pathSpilt.length === 3) {
+                isNotChose = true
             }
-            else if(type === 'parent' && pathSpilt.length===3){
-                isNotChose=true
-            }
-             setCurrent({id:'',index:index,active: active})
-        }
-        else if(pathSpilt.length === 3 &&!pathSpilt[2].trim() && currentPage === 'therapist'){
+            setCurrent({id: '', index: index, active: active})
+        } else if (pathSpilt.length === 3 && !pathSpilt[2].trim() && currentPage === 'therapist') {
 
-            index='0'
-            isNotChose=true
+            index = '0'
+            isNotChose = true
         }
 
         if (type === 'parent') {
-            if(pathSpilt.length===3&&(currentPage==='sessions' ||
-                currentPage==='exercises' ||currentPage==='communication')){
-                index='0'
-                isNotChose=true
+            if (pathSpilt.length === 3 && (currentPage === 'sessions' ||
+                currentPage === 'exercises' || currentPage === 'communication')) {
+                index = '0'
+                isNotChose = true
             }
             const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"),
                 where('institute', '==', institute))
@@ -73,12 +70,12 @@ function TherapistsList({
                 onSnapshot(
                     collectionRef,
                     (snapshot) => {
-                        getData(snapshot,{id:'',index:index,active: active,isNotChose:isNotChose})
+                        getData(snapshot, {id: '', index: index, active: active, isNotChose: isNotChose})
 
                     })
             } else {
                 getDocs(collectionRef).then((d) => {
-                    getData(d,{id:'',index:index,active: active,isNotChose:isNotChose})
+                    getData(d, {id: '', index: index, active: active, isNotChose: isNotChose})
                 })
             }
         } else {
@@ -87,12 +84,12 @@ function TherapistsList({
             // const querySnapshot = await getDocs(docRef)
 
             getDocs(collectionRef).then((d) => {
-                getData(d,{id:'',index:index,active: active,isNotChose:isNotChose})
+                getData(d, {id: '', index: index, active: active, isNotChose: isNotChose})
             })
         }
 
     }, [])
-    const getData = (d,mapCurrent) => {
+    const getData = (d, mapCurrent) => {
         const therapistIds = []
         let dict = {}
 
@@ -119,8 +116,7 @@ function TherapistsList({
                 let activeTherapists = []
                 let notActiveTherapists = []
                 querySnapshot.forEach((doc) => {
-                    if (dict[doc.id].active)
-                    {
+                    if (dict[doc.id].active) {
                         activeTherapists.push({
                             id: doc.id,
                             firstName: doc.data().firstName, lastName: doc.data().lastName,
@@ -151,26 +147,29 @@ function TherapistsList({
                 setNotActiveTherapistList(notActiveTherapists)
                 setNotActiveTherapistListData(notActiveTherapists)
                 //let flagID=''
-                if(mapCurrent.index!=='' && activeTherapists.length>parseInt(mapCurrent.index) && mapCurrent.active){
+                if (mapCurrent.index !== '' && activeTherapists.length > parseInt(mapCurrent.index) && mapCurrent.active) {
                     const index = parseInt(mapCurrent.index)
-                    setCurrent({index:mapCurrent.index,id:activeTherapists[index].id,
-                    active: true})
-                    setCurrentTherapist({index:mapCurrent.index,id:activeTherapists[index].id,active:true})
-                    if( mapCurrent.isNotChose){
+                    setCurrent({
+                        index: mapCurrent.index, id: activeTherapists[index].id,
+                        active: true
+                    })
+                    setCurrentTherapist({index: mapCurrent.index, id: activeTherapists[index].id, active: true})
+                    if (mapCurrent.isNotChose) {
                         componentRefActive.current.click()
                     }
                     //flagID=activeTherapists[index].id
 
-                }
-                else if(mapCurrent.index!=='' && notActiveTherapists.length>parseInt(mapCurrent.index) &&(!mapCurrent.active||
-                    parseInt(mapCurrent.index)===0)){
+                } else if (mapCurrent.index !== '' && notActiveTherapists.length > parseInt(mapCurrent.index) && (!mapCurrent.active ||
+                    parseInt(mapCurrent.index) === 0)) {
 
                     const index = parseInt(mapCurrent.index)
-                    setCurrent({index:mapCurrent.index,id:notActiveTherapists[index].id,
-                        active: false})
-                    setCurrentTherapist({index:mapCurrent.index,id:notActiveTherapists[index].id,active:false})
+                    setCurrent({
+                        index: mapCurrent.index, id: notActiveTherapists[index].id,
+                        active: false
+                    })
+                    setCurrentTherapist({index: mapCurrent.index, id: notActiveTherapists[index].id, active: false})
                     //flagID=notActiveTherapists[index].id
-                    if( mapCurrent.isNotChose){
+                    if (mapCurrent.isNotChose) {
                         componentRefNotActive.current.click()
                     }
                 }
@@ -181,8 +180,7 @@ function TherapistsList({
                 // }
 
             })
-        }
-        else {
+        } else {
             setReload(false)
         }
 
@@ -192,58 +190,52 @@ function TherapistsList({
         let showInstitute = ''
 
         return (
-
-
-
             list.map((item, index) => {
                 let data = item
                 if (type === 'parent') {
-                    if(
-                        currentPage==='sessions' ||
-                        currentPage==='exercises' ||currentPage==='communication'
-                    ){
-                        path ='therapist'+ '/'+ isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
-                    }
-                    else {
-                        path ='therapist'+ '/'+ isActive.toString() + '/' + index.toString()
+                    if (
+                        currentPage === 'sessions' ||
+                        currentPage === 'exercises' || currentPage === 'communication'
+                    ) {
+                        path = 'therapist' + '/' + isActive.toString() + '/' + index.toString() + '/' + currentPage.toString();
+                    } else {
+                        path = 'therapist' + '/' + isActive.toString() + '/' + index.toString()
                     }
 
                 } else {
-                    path = 'therapist'+ '/'+index.toString() //+ '/' + currentPage.toString()
+                    path = 'therapist' + '/' + index.toString() //+ '/' + currentPage.toString()
 
                     showInstitute = ', ' + dictInstitutes[data.institute]
                 }
                 return (
                     <div>
 
-                        <Button id='therapistList-button' as={Link} to={path}  ref={(()=>{
-                            if(index ===0 &&isActive === 'active' ){
+                        <Button id='therapistList-button' as={Link} to={path} ref={(() => {
+                            if (index === 0 && isActive === 'active') {
                                 return componentRefActive
-                            }
-                            else if(index ===0 &&isActive !== 'active'){
+                            } else if (index === 0 && isActive !== 'active') {
                                 return componentRefNotActive
                             }
                             return null
                         })()}
                                 active={
-                            /*isClick(path)*/
-                            current.id === data.id && isClick('therapist')
-                        }
-                                style={{backgroundColor:'transparent',border:'transparent'}}
-                                 className="list-group-item list-group-item-action mb-1" onClick={(e) => {
+                                    /*isClick(path)*/
+                                    current.id === data.id && isClick('therapist')
+                                }
+                                style={{backgroundColor: 'transparent', border: 'transparent'}}
+                                className="list-group-item list-group-item-action mb-1" onClick={(e) => {
                             // e.preventDefault()
-                            if(type === 'therapist'){
+                            if (type === 'therapist') {
                                 setCurrentPage('therapist')
-                            }
-                            else{
-                                if(currentPage!=='sessions' &&
-                                    currentPage!=='exercises' &&currentPage!=='communication'){
+                            } else {
+                                if (currentPage !== 'sessions' &&
+                                    currentPage !== 'exercises' && currentPage !== 'communication') {
                                     setCurrentPage('therapist')
                                 }
                             }
 
-                            setCurrentTherapist({id: data.id, index: index.toString(),active: isActive === 'active'})
-                            setCurrent( {id: data.id, index: index.toString(),active: isActive === 'active'})
+                            setCurrentTherapist({id: data.id, index: index.toString(), active: isActive === 'active'})
+                            setCurrent({id: data.id, index: index.toString(), active: isActive === 'active'})
 
 
                         }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}</Button>
@@ -263,16 +255,16 @@ function TherapistsList({
     }
     return (
         <div>
-            {reload &&  <Row><Form.Label style={{fontWeight: 'bold'}} >טוען...</Form.Label></Row>}
-            {type === 'therapist' &&<Form.Label style={{fontWeight: 'bold'}}>צאט עם מטפלים אחרים</Form.Label>}
+            {reload && <Row><Form.Label style={{fontWeight: 'bold'}}>טוען...</Form.Label></Row>}
+            {type === 'therapist' && <Form.Label style={{fontWeight: 'bold'}}>צאט עם מטפלים אחרים</Form.Label>}
             <div>
-            {type === 'parent' && <Form.Label  style={{fontWeight: 'bold'}}>מטפלים פעילים:</Form.Label>}
+                {type === 'parent' && <Form.Label style={{fontWeight: 'bold'}}>מטפלים פעילים:</Form.Label>}
             </div>
 
             <div>
-            {activeTherapistsList.length > 0 && showList(activeTherapistsList, 'active')}
+                {activeTherapistsList.length > 0 && showList(activeTherapistsList, 'active')}
             </div>
-            {type === 'parent' && <Form.Label style={{fontWeight: 'bold'}} >מטפלים לא פעילים:</Form.Label>}
+            {type === 'parent' && <Form.Label style={{fontWeight: 'bold'}}>מטפלים לא פעילים:</Form.Label>}
             {notActiveTherapistsList.length > 0 && showList(notActiveTherapistsList, 'notActive')}
         </div>
 

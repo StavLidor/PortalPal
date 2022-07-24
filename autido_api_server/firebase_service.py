@@ -14,7 +14,7 @@ def get_data(db, auth_code):
     user_data = {}
 
     docs_list = []
-    # TODO : check list size
+
     for doc in docs:
         docs_list.append(doc)
         user_data = doc.to_dict()

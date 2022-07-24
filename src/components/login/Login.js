@@ -13,8 +13,8 @@ function Login({login, setDisplayLoginForm,setConnectNow,load,listInstitutes}) {
     const [flagLogin,setFlagLogin]=useState(false)
     //TODO: delete default values.
     const [userDetails, setUserDetails] = useState({
-        email: "toko1010@gmail.com",
-        password: "אבגדהו",
+        email: "",
+        password: "",
         type: "therapist",
         institute: listInstitutes[0].key
     })
@@ -65,7 +65,7 @@ function Login({login, setDisplayLoginForm,setConnectNow,load,listInstitutes}) {
                                 אימייל:
                             </Col>
                             <Col md="auto">
-                                <Form.Control  type='email' placeholder='email@gmail.com' id='validationDefault01'
+                                <Form.Control  type='email' placeholder='example@gmail.com' id='validationDefault01'
                                            required  onChange={e => setUserDetails({...userDetails, email: e.target.value})}/>
                                 <div style={{fontSize: 14,color: "red",width:'200px'}} id="invalid-feedback">
                                     {messages.email}

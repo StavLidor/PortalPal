@@ -35,7 +35,7 @@ function ContactUs() {
                                 אימייל:
                             </Col>
                             <Col md="auto">
-                                <Form.Control id='validationDefault01' required type='email' placeholder='toko@gmail.com'
+                                <Form.Control id='validationDefault01' required type='email' placeholder='example@gmail.com'
                                               onChange={e => setDetails({...details, email: e.target.value})}/>
                                 <div style={{width:'400px',fontSize: 10,color: "red"}} id="invalid-feedback">
                                     {messages.email}

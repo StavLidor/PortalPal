@@ -4,9 +4,9 @@ import {
     addConnectionPatientToTherapist,
     addUserFromAdmin,
     db, deletePatientFromInstitute,
-    deleteTherapistFromInstitute, detailsPatient,
+    deleteTherapistFromInstitute,
     findUserByEmail, removeConnectionPatientToTherapist,
-    signOutCurrentUser, updateIDDoc, updatesPatients,
+    signOutCurrentUser, updateIDDoc,
     updatesUser
 } from "../../firebase";
 import {Link, Route, Routes} from "react-router-dom";
@@ -275,14 +275,18 @@ function SecretaryPage({data,dictInstitutes}) {
     const updatesPatients = async (id, data) => {
         // if('dateOfBirth' in data)
         //     data.dateOfBirth= firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
+        let update={...data}
+        if('information'in data){
+            delete update.information
+        }
         if ('dateOfBirth' in data)
             if (await updateIDDoc(id, 'patients', {
-                ...data,
+                ...update,
                 // dateOfBirth: firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
                 dateOfBirth: firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
             }))
                 return true
-            else if (await updateIDDoc(id, 'patients', data))
+            else if (await updateIDDoc(id, 'patients',update))
                 return true
         return false
         //
@@ -526,7 +530,7 @@ function SecretaryPage({data,dictInstitutes}) {
             return false
         }
         const index = students.findIndex((s) => s.id === details.id)
-        if(details.id in userGetTable.institutes[data.institute]|| index == -1){
+        if(details.id in userGetTable.institutes[data.institute]|| index === -1){
             return false
         }
 
@@ -614,7 +618,9 @@ function SecretaryPage({data,dictInstitutes}) {
                                                    lastName: "",
                                                    firstName: ""/**/
                                                    ,connection: "",
-                                               }} getTable={getTable}
+                                               }}
+
+                                   getTable={getTable}
                                                table={studentsTable}
                                                columnsInfoViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
                                /*(d)=>{}*/} /*deleteObj={deleteConnectionToTherapist}*/

@@ -2,7 +2,7 @@ import React, {useEffect, useState, useCallback, useContext} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import {Col, ListGroup, Row, Form, Container, Button, ButtonGroup} from "react-bootstrap";
-import {auth, db, getUserConnections} from "../../firebase";
+import {auth, db} from "../../firebase";
 import {addDoc, collection, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import firebase from "firebase/compat/app";
 

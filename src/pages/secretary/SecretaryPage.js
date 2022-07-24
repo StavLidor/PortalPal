@@ -4,9 +4,9 @@ import {
     addConnectionPatientToTherapist,
     addUserFromAdmin,
     db, deletePatientFromInstitute,
-    deleteTherapistFromInstitute, detailsPatient,
+    deleteTherapistFromInstitute,
     findUserByEmail, removeConnectionPatientToTherapist,
-    signOutCurrentUser, updateIDDoc, updatesPatients,
+    signOutCurrentUser, updateIDDoc,
     updatesUser
 } from "../../firebase";
 import {Link, Route, Routes} from "react-router-dom";

@@ -1,7 +1,6 @@
 import {Button, Form, Row, Col, Container, ButtonGroup, Grid} from 'react-bootstrap'
-import React, {useEffect, useState, useCallback, useContext} from "react";
-import firebaseApp, {signIn, signUp, signOutCurrentUser, getCurrentUser} from '../../firebase'
-// import {setDisplayLoginForm} from "./Authenticate.js"
+import React, {useState} from "react";
+import {signUp} from '../../firebase'
 import {validateEmail} from "../../useFunction"
 
 function SignUp({setDisplayLoginForm})  {

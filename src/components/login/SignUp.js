@@ -102,7 +102,7 @@ function SignUp({setDisplayLoginForm})  {
                             אימייל:
                         </Col>
                         <Col md="auto">
-                            <Form.Control id='validationDefault01' required type='email' placeholder='toko@gmail.com'
+                            <Form.Control id='validationDefault01' required type='email' placeholder='example@gmail.com'
                                           onChange={e => setUserDetails({...userDetails, email: e.target.value})}/>
                             <div style={{fontSize: 10,color: "red"}} id="invalid-feedback">
                                 {messages.email}

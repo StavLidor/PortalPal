@@ -19,115 +19,76 @@ import {
     where
 } from "firebase/firestore";
 
-// import {max} from "moment";
 
 function TestsList({patientId, therapistId = null, type, category = null}) {
     const [testsList, setTestsList] = useState([])
     const [dates, setDates] = useState([])
     const [scores, setScores] = useState((() => {
+        // if ask for only one category need only his score
         if (category)
             return []
+        // if not ask for category need to show all
         return {['קשר בין אישי']: [], ['שיח קבוצתי']: [], ['שמירת קשר עין']: [], ['אקדמי']: []}
     })())
     const [empty, editEmpty] = useState(false)
-    // const data2 = {
-    //     labels: dates,
-    //     datasets: [
-    //         {
-    //             label: 'ציון',
-    //             data: scores,
-    //             backgroundColor: 'rgb(54, 162, 235)',
-    //         },
-    //         // {
-    //         //     label: 'כשלונות',
-    //         //     data: failures,
-    //         //     backgroundColor: 'rgb(255, 99, 132)',
-    //         // },
-    //     ],
-    // }
+
     useEffect(async () => {
         let q
-        let therapistIDForSession = (() => {
-            if (type === 'parent')
-                return therapistId
-            return auth.currentUser.uid
-        })()
+        let therapistIDForSession = auth.currentUser.uid
         if (category) {
+            // ask only the category that ask
             q = query(collection(db, "patients/" + patientId + "/therapists/" + therapistIDForSession + "/tests"),
-                /*where('status','==','done'),*/
                 where('category', '==', category), orderBy("executionDate", "desc"))
         } else {
+            // ask for all category
             q = query(collection(db, "patients/" + patientId + "/therapists/" + therapistIDForSession + "/tests"),
-                where('status', '==', 'done')/*,
-                orderBy("category", "desc")*/, orderBy("executionDate", "asc"))
+                where('status', '==', 'done'), orderBy("executionDate", "asc"))
         }
 
-        if (type === 'parent') {
-
-            const tests = []
-            let datesArr = []
-            let scoresArr = []
-            getDocs(q).then((querySnapshot) => {
+        return onSnapshot(
+            q,
+            (querySnapshot) => {
+                let tests = []
+                let datesArr = []
+                let scoresArr = []
+                let scoresDic = {['קשר בין אישי']: [], ['שיח קבוצתי']: [], ['שמירת קשר עין']: [], ['אקדמי']: []}
+                if (querySnapshot.docs.length === 0) {
+                    editEmpty(true)
+                } else {
+                    editEmpty(false)
+                }
                 querySnapshot.forEach((doc) => {
-                    tests.push({...doc.data(), id: doc.id})
-                    datesArr.push(new Date(doc.data().executionDate.seconds * 1000).toLocaleDateString())
-                    scoresArr.push(doc.data().score)
-                    // if (doc.sessionsData().client === id){
-                    //
-                    // }
-
-
-                });
-                setTestsList(tests)
-                setDates(datesArr.reverse())
-                setScores(scoresArr.reverse())
-            })
-
-        } else {
-            return onSnapshot(
-                q,
-                (querySnapshot) => {
-                    let tests = []
-                    let datesArr = []
-                    let scoresArr = []
-                    let scoresDic = {['קשר בין אישי']: [], ['שיח קבוצתי']: [], ['שמירת קשר עין']: [], ['אקדמי']: []}
-                    if (querySnapshot.docs.length === 0) {
-                        editEmpty(true)
-                    } else {
-                        editEmpty(false)
-                    }
-                    querySnapshot.forEach((doc) => {
-                            tests.push({...doc.data(), id: doc.id})
-                            if (category) {
-                                if (doc.data().status === 'done') {
-                                    datesArr.push(new Date(doc.data().executionDate.seconds * 1000).toLocaleDateString())
-                                    scoresArr.push(doc.data().score)
-                                }
-
-                            } else {
-                                scoresDic[doc.data().category].push(doc.data().score)
+                        tests.push({...doc.data(), id: doc.id})
+                        if (category) {
+                            // add the tests of the category
+                            if (doc.data().status === 'done') {
+                                datesArr.push(new Date(doc.data().executionDate.seconds * 1000).toLocaleDateString())
+                                scoresArr.push(doc.data().score)
                             }
 
+                        } else {
+                            // add according the category to dic
+                            scoresDic[doc.data().category].push(doc.data().score)
                         }
-
-
-
-                    )
-                    setDates(datesArr.reverse())
-                    if (category) {
-                        setTestsList(tests)
-                        setScores(scoresArr.reverse())
-                    } else {
-                        setScores(scoresDic)
                     }
+                )
+                setDates(datesArr.reverse())
+                if (category) {
+                    // set the things need for one category
+                    setTestsList(tests)
+                    setScores(scoresArr.reverse())
+                } else {
+                    // set the thing that need for show plot of all category
+                    setScores(scoresDic)
+                }
 
-                },
-                (error) => {
-                    // TODO: Handle errors!
-                })
-        }
+            },
+            (error) => {
+
+            })
 
     }, [])
+    /*check the data of the test is ok*/
     const checkData = (setMessages, test) => {
         const messagesSubmit = {
             description: '',
@@ -135,7 +96,6 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
             difficulty: '',
             score: '', summary: ''
         }
-        // e.preventDefault()
         if (test.executionDate === "") {
             messagesSubmit.executionDate = 'הכנס תאריך ביצוע'
         }
@@ -151,7 +111,7 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
                 messagesSubmit.summary = 'הכנס סיכום מבחן'
             }
             if (!test.score.trim()) {
-                // TODO: chack if it can be int
+
                 messagesSubmit.score = 'הכנס ניקוד מבחן'
             }
         }
@@ -162,37 +122,29 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
         }
         return false
     }
+    /*add the data of the test to firebase*/
     const handleOnSubmit = async (newTest, setMessages) => {
         if (!checkData(setMessages, newTest)) {
             return false
         }
-
-        // e.preventDefault()
-        // newSession.until = firebase.firestore.Timestamp.fromDate(new Date(newSession.until))
+        // if the data is ok add the test
         await addDoc(collection(db, "patients/" + patientId + "/therapists/" + auth.currentUser.uid + "/tests"), {
                 ...newTest, category: category
             }
-            //     {
-            //     ...newSession,
-            //     // createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            //     // createdAt: firebase.firestore.Timestamp.fromDate(new Date(newSession.createdAt)),
-            //     // until: firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
-            // }
         )
-        // const docRef = await addDoc(collection(db, "exercises"),
-        //     { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
         return true
 
     }
+    /*delete the test from the firebase*/
     const handleDelete = async docId => {
+
         await deleteDoc(doc(collection(db, "patients"), patientId, "therapists", auth.currentUser.uid, 'tests',
             docId))
-        // await deleteDoc(doc(db, "exercises", docId))
     }
+    /*update the test to firebase*/
     const handleUpdate = async (docId, data, setMessages) => {
         if (!checkData(setMessages, data))
             return false
-        // await updateIDDoc(docId, "exercises", data)
         await updateDoc(doc(collection(db, "patients"), patientId, "therapists", auth.currentUser.uid, 'tests',
             docId), data
         )
@@ -227,7 +179,6 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
                                         <Accordion.Header>
                                             {t.description + ', ' + new Date(t.executionDate.seconds * 1000).toLocaleDateString()}
                                             &nbsp;&nbsp;
-                                            {/*{e.createdAt.toDate().toUTCString() + e.place}*/}
                                         </Accordion.Header>
                                         <Accordion.Body>
                                             <Col>
@@ -243,7 +194,6 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
                                                     <Form.Text>
                                                         תאריך ביצוע:
                                                         &nbsp;
-                                                        {/*{s.date}*/}
                                                         {new Date(t.executionDate.seconds * 1000).toLocaleDateString()}
                                                     </Form.Text>
                                                 </Row>
@@ -273,11 +223,11 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
 
                                                 {(type === 'therapist') &&
                                                 <Row className='justify-content-end w-10'>
-                                                    <Col  md={1}>
+                                                    <Col md={1}>
                                                         <EditTestDialog testData={t} handleUpdate={handleUpdate}
                                                                         category={category}/>
                                                     </Col>
-                                                    <Col  md={1}>
+                                                    <Col md={1}>
                                                         <DeleteTestDialog handleDelete={handleDelete} testID={t.id}/>
                                                     </Col>
                                                 </Row>}
@@ -300,7 +250,29 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
                                 backgroundColor: 'rgb(54, 162, 235)',
                             },
                         ],
-                    }}/>}
+                    }}options={{
+                        scales: {
+                            y: {
+                                title: {
+                                    font: {
+                                        size: 16,
+                                    },
+                                    display: true,
+                                    text: 'ניקוד למבחן'
+                                },
+                            },
+                            x: {
+                                title: {
+                                    font: {
+                                        size: 16,
+                                    },
+                                    display: true,
+                                    text: 'תאריך מבחן'
+                                },
+                            }
+                        },
+                    }}
+                    />}
                 </Container></>) : (
             // ['קשר בין אישי']:[],['שיח קבוצתי']:[],['שמירת קשר עין']:[],['אקדמי']:[]
             <>
@@ -333,6 +305,27 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
                                     backgroundColor: 'rgb(54,229,235)',
                                 },
                             ],
+                        }} options={{
+                            scales: {
+                                y: {
+                                    title: {
+                                        font: {
+                                            size: 16,
+                                        },
+                                        display: true,
+                                        text: 'ניקוד למבחן'
+                                    },
+                                },
+                                x: {
+                                    title: {
+                                        font: {
+                                            size: 16,
+                                        },
+                                        display: true,
+                                        text: 'מספר מבחן'
+                                    },
+                                }
+                            },
                         }}/>
                     </Container>) : (empty) ? (
                         <Row className='p-2 align-content-start'> <Form.Label className='fs-4'>לא קיימים
@@ -348,9 +341,9 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
 
 export default TestsList
 
-function AddTestDialog({category, handleOnSubmit}) {
-    const [email, setEmail] = useState('')
-    const [feedback, setFeedback] = useState('')
+function AddTestDialog({category, handleOnSubmit})
+{
+
     const [show, setShow] = useState(false)
     const [load, setLoad] = useState(false)
     const [messages, setMessages] = useState({
@@ -480,7 +473,7 @@ function AddTestDialog({category, handleOnSubmit}) {
                                 <Form.Group controlId="summary">
                                     <Col><Form.Label id="criteria_for_adding_test">סיכום מפגש</Form.Label></Col>
                                     <Col>
-                                <textarea style={{fontSize: 18 ,width: "460px"}}
+                                <textarea style={{fontSize: 18, width: "460px"}}
                                           type="text"
                                           onChange={e => setNewTest({...newTest, summary: e.target.value})}
 
@@ -539,7 +532,12 @@ function AddTestDialog({category, handleOnSubmit}) {
     )
 }
 
-function DeleteTestDialog({handleDelete, testID}) {
+function DeleteTestDialog(
+{
+    handleDelete, testID
+}
+)
+{
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false)
 
@@ -573,7 +571,12 @@ function DeleteTestDialog({handleDelete, testID}) {
     );
 }
 
-function EditTestDialog({handleUpdate, testData, category}) {
+function EditTestDialog(
+{
+    handleUpdate, testData, category
+}
+)
+{
     const [show, setShow] = useState(false);
     const [messages, setMessages] = useState({
         description: '',
@@ -679,9 +682,6 @@ function EditTestDialog({handleUpdate, testData, category}) {
                         </Row>
                         <Row>
                             <Form.Label id="criteria_for_adding_test">סטטוס:</Form.Label>
-                            {/*<Col>*/}
-                            {/*    סטטוס: */}
-                            {/*</Col>*/}
                             <Col md="auto">
                                 <Form.Select id='status' /*disabled={userDetails.type === 'parent'}*/
                                              onChange={e => {
@@ -715,7 +715,7 @@ function EditTestDialog({handleUpdate, testData, category}) {
                                 <Form.Group controlId="summary">
                                     <Col><Form.Label id="criteria_for_adding_test">סיכום תרגיל</Form.Label></Col>
                                     <Col>
-                                <textarea style={{fontSize:18, width: "460px"}}
+                                <textarea style={{fontSize: 18, width: "460px"}}
                                           type="text"
                                           value={newTestData.summary}
                                           onChange={e => setNewTestData({...newTestData, summary: e.target.value})}

@@ -1,8 +1,5 @@
 import DDPClient from 'ddp-client'
-import hash, {sha256} from 'hash.js'
-import {newChat} from "react-chat-engine";
-// import {sha256} from 'crypto-hash'
-// import hashcode from 'hashcode'
+import hash from 'hash.js'
 export function makePassword(length) {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

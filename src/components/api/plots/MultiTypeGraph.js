@@ -38,10 +38,6 @@ function MultiTypeGraph({appKey, data}) {
     }
 
     window.onload = function () {
-
-        // document.getElementById('graphs').innerHTML = a
-        // all of your code goes in here
-        // it runs after the DOM is built
     }
     return (
         <div>

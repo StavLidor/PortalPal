@@ -5,44 +5,33 @@ import {
     deleteDoc,
     doc,
     getDocs,
-    limit,
     onSnapshot,
     orderBy,
     query, updateDoc,
-    where
 } from "firebase/firestore";
-import {auth, db, updateIDDoc} from "../../firebase";
+import { db} from "../../firebase";
 
 import firebase from "firebase/compat/app"
-import {Button, Collapse, Modal, Form, Row, Col, Accordion} from "react-bootstrap";
+import {Button, Modal, Form, Row, Col, Accordion} from "react-bootstrap";
 import {Plus, Pencil, Trash} from 'react-bootstrap-icons';
 
 
 function PatientExercises({patient, therapist, type}) {
     const [exercisesData, setExercisesData] = useState([])
-    const [open, setOpen] = useState(false)
     const [empty, editEmpty] = useState(false)
 
     const [newExercise, setNewExercise] = useState({
         until: '',
         description: '',
-        // patient: patient,
         place: '',
-        // therapist: therapist
     })
-    // const [messages, setMessages] = useState({
-    //     until: '',
-    //     description: '',
-    //     // patient: patient,
-    //     place: '',
-    // })
-    // const [addExercise, setAddExercise] = useState(false)
-
+    // on load component
     useEffect(async () => {
         const q = query(collection(db, "patients/" + patient + "/therapists/" + therapist + "/exercises"), orderBy("createdAt", "desc"))
         if (type === 'parent') {
 
             const arr = []
+            // only view the exercises
             getDocs(q).then((querySnapshot) => {
                 if (querySnapshot.docs.length === 0) {
                     editEmpty(true)
@@ -51,11 +40,6 @@ function PatientExercises({patient, therapist, type}) {
                 }
                 querySnapshot.forEach((doc) => {
                     arr.push({...doc.data(), id: doc.id})
-                    // if (doc.data().client === id){
-                    //
-                    // }
-
-
                 });
                 if (arr.length === 0) {
                     editEmpty(true)
@@ -63,6 +47,7 @@ function PatientExercises({patient, therapist, type}) {
                 setExercisesData(arr)
             })
         } else {
+            // can change the exercise,remove and add therefore onSnapshot
             return onSnapshot(
                 q,
                 (querySnapshot) => {
@@ -88,15 +73,13 @@ function PatientExercises({patient, therapist, type}) {
                 })
         }
     }, [])
-
+    /*check the details of the exercise is ok*/
     const checkData = (setMessages, exercise) => {
         const messagesSubmit = {
             until: '',
             description: '',
-            // patient: patient,
             place: '',
         }
-        // e.preventDefault()
         if (exercise.until === "") {
             messagesSubmit.until = 'הכנס תאריך סיום'
         }
@@ -112,40 +95,31 @@ function PatientExercises({patient, therapist, type}) {
         }
         return false
     }
+    /*submit to add the new exercises */
     const handleOnSubmit = async (setMessages) => {
         if (checkData(setMessages, newExercise)) {
             newExercise.until = firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
             await addDoc(collection(db, "patients/" + patient + "/therapists/" + therapist + '/exercises'), {
                 ...newExercise,
                 createdAt: firebase.firestore.Timestamp.fromDate(new Date())
-                //createdAt: firebase.firestore.Timestamp.fromDate(new Date(newExercise.createdAt)),
-                // until: firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
             })
             return true
         }
         return false
-        // const docRef = await addDoc(collection(db, "exercises"),
-        //     { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
 
     }
+    /*delete exercise */
     const handleDelete = async docId => {
         await deleteDoc(doc(collection(db, "patients"), patient, "therapists", therapist, 'exercises',
             docId))
-        // await deleteDoc(doc(db, "exercises", docId))
     }
+    /*update exercise */
     const handleUpdate = async (docId, data, setMessages) => {
         if (!checkData(setMessages, data)) {
             return false
         }
-        // await updateIDDoc(docId, "exercises", data)
         await updateDoc(doc(collection(db, "patients"), patient, "therapists", therapist, 'exercises',
             docId), data
-            //     {
-            //     ...data,
-            //     // createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            //     // until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
-            //     until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
-            // }
         )
         return true
     }
@@ -174,17 +148,9 @@ function PatientExercises({patient, therapist, type}) {
                                 <Accordion.Header>
                                     {e.createdAt !== null && new Date(e.createdAt.seconds * 1000).toLocaleDateString() + ' ' + e.description}
                                     &nbsp;&nbsp;
-                                    {/*{e.createdAt.toDate().toUTCString() + e.place}*/}
                                 </Accordion.Header>
                                 <Accordion.Body>
                                     <Col>
-                                        {/*<Row>*/}
-                                        {/*    <Form.Text>*/}
-                                        {/*        שם:*/}
-                                        {/*        &nbsp;*/}
-                                        {/*        שם חובהההה*/}
-                                        {/*    </Form.Text>*/}
-                                        {/*</Row>*/}
 
                                         <Row>
                                             <Form.Text>
@@ -240,14 +206,13 @@ function PatientExercises({patient, therapist, type}) {
 
 export default PatientExercises
 
-
+/* dialog of add Exercise*/
 function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) {
     const [show, setShow] = useState(false);
     const [load, setLoad] = useState(false)
     const [messages, setMessages] = useState({
         until: '',
         description: '',
-        // patient: patient,
         place: '',
     })
     const handleClose = () => {
@@ -255,13 +220,11 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
         setMessages({
             until: '',
             description: '',
-            // patient: patient,
             place: '',
         })
         setNewExercise({
             until: '',
             description: '',
-            // patient: patient,
             place: '',
         })
     };
@@ -280,16 +243,6 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
                 <Modal.Body>
 
                     <Form className="needs-validation" noValidate><Col>
-                        {/*<Row>*/}
-                        {/*    <Form.Group controlId="start_date">*/}
-                        {/*        <Form.Label for="validationDefault01">תאריך יצירה</Form.Label>*/}
-                        {/*        <Form.Control id='validationDefault01'*/}
-                        {/*                      type="date"*/}
-                        {/*            autoFocus*/}
-                        {/*            onChange={e => setNewExercise({...newExercise, createdAt: e.target.value})}*/}
-                        {/*        />*/}
-                        {/*    </Form.Group>*/}
-                        {/*</Row>*/}
 
                         <Row>
                             <Form.Group controlId="end_date">
@@ -370,7 +323,7 @@ function AddExerciseDialog({setNewExercise, newExercise, handleOnSubmit, type}) 
     );
 }
 
-
+/* dialog of delete Exercise*/
 function DeleteExerciseDialog({handleDelete, exerciseID}) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -405,14 +358,13 @@ function DeleteExerciseDialog({handleDelete, exerciseID}) {
         </>
     );
 }
-
+/* dialog of edit Exercise*/
 function EditExerciseDialog({handleUpdate, exerciseData}) {
     const [show, setShow] = useState(false);
     const [newExerciseData, setNewExerciseData] = useState(exerciseData);
     const [messages, setMessages] = useState({
         until: '',
         description: '',
-        // patient: patient,
         place: '',
     })
     const handleClose = () => {
@@ -420,7 +372,6 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
         setMessages({
             until: '',
             description: '',
-            // patient: patient,
             place: '',
         })
     };
@@ -479,9 +430,6 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                 <Form.Label>תאריך סיום</Form.Label>
                                 <Form.Control
                                     type="date"
-
-                                    // value={(exerciseData.until.toDate().getFullYear() + '-' + (exerciseData.until.toDate().getMonth() + 1) + '-' + exerciseData.until.toDate().getDate()).toString()}
-                                    // value={new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()}
                                     defaultValue={
                                         (() => {
                                             let year = new Date(newExerciseData.until.seconds * 1000).getFullYear()
@@ -499,7 +447,6 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                                             dateString += day.toString()
                                             return dateString
                                         })()}
-                                    // value={(new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()).toString()}
 
                                     onChange={e => setNewExerciseData({
                                         ...newExerciseData,
@@ -568,10 +515,6 @@ function EditExerciseDialog({handleUpdate, exerciseData}) {
                         }
                         setNewExerciseData(
                             newExerciseData
-                            // {
-                            //     ...newExerciseData,
-                            //     until: firebase.firestore.Timestamp.fromDate(new Date(newExerciseData.until))
-                            // }
                         )
                     }}>
                         שמור שינויים

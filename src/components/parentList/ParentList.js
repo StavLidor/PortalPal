@@ -1,15 +1,13 @@
-import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup} from 'react-bootstrap'
+import {Button, Form, Row} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useEffect, useState, useCallback, useContext} from "react";
-import {Link, Route, Routes} from "react-router-dom";
-import {getDate} from "date-fns";
-import {collection, getDocs, onSnapshot, query, where} from "firebase/firestore";
+import React, {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
+import {collection, getDocs, query, where} from "firebase/firestore";
 import {auth, db} from "../../firebase";
 import firebase from "firebase/compat/app";
-import styles from "../../pages/home/HomePage.CSS"
 import {isClick} from "../../useFunction";
 
-function ParentList({details, setCurrentParent, currentPage, setParentsListData, currentPerson,setCurrentPage}) {
+function ParentList({details, setCurrentParent, setParentsListData,setCurrentPage}) {
     const [parents, setParents] = useState([])
     const [current, setCurrent] = useState({id: "", index: ""})
     const [reload, setReload] = useState(true)
@@ -29,16 +27,6 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                 index='0'
             }
         }
-            // let dict = {}
-            // const collectionRef = query(collection(db, "patients/" + details.id + ))
-            // const querySnapshot = await getDocs(docRef)
-            // getDocs(collectionRef).then((d) => {
-            //     const therapistIds = []
-            //
-            //     d.forEach((doc) => {
-            //         therapistIds.push(doc.id)
-            //         dict[doc.id] = {institute: doc.data().institute, connection: doc.data().connection}
-            //     });
             if (details.parents.length > 0) {
                 const unsubscribe = query(collection(db, "users"),
                     where(firebase.firestore.FieldPath.documentId(), 'in', details.parents)
@@ -51,8 +39,6 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                         if (doc.id !== auth.currentUser.uid) {
                             data.push({
                                 id: doc.id, ...doc.data()
-                                // firstName: doc.data().firstName, lastName: doc.data().lastName,
-                                /*institute: dict[doc.id].institute,*/
                             })
                         }
                     })
@@ -78,17 +64,13 @@ function ParentList({details, setCurrentParent, currentPage, setParentsListData,
                         let data = item
 
                         return (
-                            // <div>{data.firstName + " " + data.lastName+', '+data.connection}</div>
 
-                            <Button as={Link} to={'parent' + '/' + index.toString() + '/' /*+ currentPage.toString()*/}
+                            <Button as={Link} to={'parent' + '/' + index.toString() + '/' }
                                     active={isClick('parent') && current.id === data.id}
                                     className="list-group-item list-group-item-action mb-1"
                                     style={{backgroundColor:'transparent',border:'transparent'}}
                                     id='therapistList-button'
                                   onClick={(e) => {
-                                      // e.preventDefault()
-                                      // setCurrentPerson(data.id.toString())
-
                                       setCurrentParent({id: data.id, index: index.toString()})
                                       setCurrent({id: data.id, index: index.toString()})
                                       setCurrentPage('parent')

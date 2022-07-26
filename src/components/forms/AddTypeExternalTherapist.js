@@ -1,7 +1,7 @@
 import {Button, ButtonGroup, Col, Container, Form, Row} from "react-bootstrap";
 import React, {useState} from "react";
 import {addExternal} from "../../firebase";
-
+/*is Extreme case*/
 export function AddTypeExternalTherapist({setAddExternal})  {
     const [license,setLicense]=useState("")
     const [message,setMessage]=useState('')

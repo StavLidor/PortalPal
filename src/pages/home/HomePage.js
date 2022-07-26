@@ -1,42 +1,55 @@
-import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Image, NavDropdown} from 'react-bootstrap'
+import {Button, Form, Row, Col, Container, ButtonGroup,NavDropdown} from 'react-bootstrap'
 import {Animated} from 'react-animated-css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useEffect, useState, useCallback, useContext, useRef} from "react";
-import firebaseApp, {signOutCurrentUser} from '../../firebase'
+import React, {useEffect, useState, useRef} from "react";
+import {signOutCurrentUser} from '../../firebase'
 import {Link, Route, Routes} from "react-router-dom";
+// component of children list
 import PatientList from "../../components/patientsSidebar/PatientList";
+// component of list of parent
 import PatientDetails from "../../components/patientsSidebar/PatientDetails";
+// component of tab of chosen up
 import TabsBanner from "../../components/topbar/TabsBanner";
 import FileSystem from "../../components/fileSystem/FileSystem";
+// component of therapist list of the child
 import TherapistsList from "../../components/listTherapists/TherapistsList";
+// component of list of meeting
 import SessionsList from "../../components/listMeetingSummries/SessionsList";
+// component of tab banner of all the thing therapist manage that parent can be share with it
 import TherapistTabsBanner from "../../components/topbar/TherapistTabsBanner";
+// component of exercise of the patient
 import PatientExercises from "../../components/exercises/PatientExercises";
-
+// chat component between current user to other person according chose
 import Chat from "../../components/chat/Chat";
+// aq smart model
 import AQ from "../../components/aq/AQ";
+// parent list of child
 import ParentList from "../../components/parentList/ParentList";
-
+// page of admin
 import SecretaryPage from "../secretary/SecretaryPage";
+// my profile mange component
 import MyProfile from "../../components/myProfile/MyProfile";
+//code of child to connect with external therapist
 import GetPersonalCode from "../../components/code/GetPersonalCode";
-import Logo from "../../images/Portapel.png";
+// api management with autido
 import CheckHasAPICode from "../../components/api/checkHasAPICode";
+// test list of child
+import TestsList from "../../components/tests/TestsList";
+// links to differnt test banner
+import ProgressTrendTabsBanner from "../../components/tests/ProgressTrendTabsBanner";
+import Logo from "../../images/Portapel.png";
 import ContactUs from "../../components/contactUs/ContactUs"
 import AboutUs from "../../components/aboutUs/AboutUs"
-import ReactToPrint, {useReactToPrint} from 'react-to-print'
-import TestsList from "../../components/tests/TestsList";
-import ProgressTrendTabsBanner from "../../components/tests/ProgressTrendTabsBanner";
+
+import {useReactToPrint} from 'react-to-print'
+
+
 import {isClick} from "../../useFunction";
-import {CSVLink} from "react-csv";
 
 
 
+/*home page after login with all the thing that offer */
 function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) {
-//     const PrintCell = styled(TableCell)`
-//     width: 100px;
-//     justify-content: flex-end;
-// `;
     const componentRef = useRef()
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
@@ -47,8 +60,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
     const [activeTherapistListData, setActiveTherapistListData] = useState([])
     const [notActiveTherapistListData, setNotActiveTherapistListData] = useState([])
     const [parentsListData, setParentsListData] = useState([])
-    const [showDialogCode, setShowDialogCode] = useState(false)
-    const [sideListComponent, setSideListComponent] = useState(<h3>משהו השתבש...</h3>)
     const [currentPerson, setCurrentPerson] = useState((() => {
         const pathSpilt = window.location.pathname.split("/")
 
@@ -57,10 +68,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
         if (localStorage.getItem("currentPerson") !== null && pathSpilt[1] === localStorage.getItem("currentPerson")) {
             return pathSpilt[1]
         }
-
-        // if (localStorage.getItem("currentPerson") === null)
-        //     return ""
-        // return localStorage.getItem("currentPerson")
         return ""
     })())
     const [currentPage, setCurrentPage] = useState((() => {
@@ -88,7 +95,7 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
         await signOutCurrentUser()
 
     }
-
+    /*management on change */
     useEffect(() => {
         localStorage.setItem("currentPerson", currentPerson)
     }, [currentPerson])
@@ -107,7 +114,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
 
             }
         }
-        //if(childrenList.length ===0)
         setChildren(childrenList)
     }, [userDetails.childrenIds])
 
@@ -121,26 +127,18 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
     }, [userDetails.institutes[institute]])
     useEffect(() => {
         const pathSpilt = window.location.pathname.split("/")
-        //if(pathSpilt.length === 0)
-
         if (pathSpilt.length > 1 && patientListData.length > 0 &&
             patientListData.findIndex((s) => s.id === pathSpilt[1]) !== -1) {
             setCurrentPerson(pathSpilt[1])
 
         }
     }, [patientListData])
-
-    const handleMyProfile = () => {
-        setCurrentPerson("")
-    }
-
+    // view home page
     const componentsTherapists = (list, isActive, data) => {
 
         return (list.map((therapist, index) => {
-            // let data = item.data()
             return (
                 <div>
-                    {/*{[]}*/}
                     <Routes>
                         <Route
                             path={data.id.toString() + '/' + 'therapist' + '/' + isActive.toString() + '/' + index.toString() + '/*'}
@@ -163,14 +161,12 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                     <Routes>
                         <Route
                             path={data.id.toString() + '/' + 'therapist' + '/' + isActive.toString() + '/' + index.toString() + '/sessions'}
-                            // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
                             element={<SessionsList patientId={currentPerson}
                                                    therapistId={currentTherapist.id}
                                                    type={type}/>}/>
 
                         <Route
                             path={data.id.toString() + '/' + 'therapist' + '/' + isActive.toString() + '/' + index.toString() + '/exercises'}
-                            // element={<SessionsList patientId={currentPerson} therapistId={currentTherapist.id} type={type}/>}/>)
                             element={<PatientExercises patient={currentPerson}
                                                        therapist={currentTherapist.id}
                                                        type={type}/>}/>
@@ -179,8 +175,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
             )
         }))
     }
-
-    const [patientIsClicked, setPatientIsClicked] = useState(false)
     return (
 
         <div>
@@ -197,7 +191,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                         <Form.Label>
                                             שלום, {userDetails.firstName} {userDetails.lastName}<br/>{dictTypes[type]}
                                         </Form.Label>
-                                        {/*<Link to="/myProfile">*/}
                                         {type !== 'admin' &&
                                         <Button as={Link} to="/myProfile" variant='secondary'
                                                 className="rounded-3"
@@ -215,16 +208,13 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                     </ButtonGroup>
                                 </Col>
                                 <Col style={{width: '100%'}}/>
-                                {/*<Col md='3' className="border align-self-center w-auto" id='floating-tabs-bar'>*/}
                                 <Col md='3' className=" align-self-center w-auto">
-                                    {/*<Container>*/}
 
                                     <TabsBanner type={type} currentPerson={currentPerson}
                                                 setCurrentPage={setCurrentPage}
                                                 currentPage={currentPage} handlePrint={handlePrint}
                                                 setCurrentPerson={setCurrentPerson}/>
                                 </Col>
-                                {/*</Container>*/}
                             </Row>
                         </Animated>
                     </Col>
@@ -241,7 +231,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                            currentPerson={currentPerson}
                                                            currentPage={currentPage}
                                                            institute={institute}
-                                                           setPatientIsClicked={setPatientIsClicked}
                                                            type={type}
                                                            setCurrentPage={setCurrentPage}/>}
 
@@ -252,11 +241,9 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                               currentPerson={currentPerson}
                                                               currentPage={currentPage}
                                                               institute={institute}
-                                                              setPatientIsClicked={setPatientIsClicked}
                                                               setCurrentPage={setCurrentPage}
                                                               type={type}/>}
 
-                        {/*{sideListComponent}*/}
                     </Col>
                     <Col md='2' style={{width: "13%", maxWidth: '350px'}}>
                         <Animated animationIn="fadeInRight" animationOut="fadeOutRight" animationInDuration={500}
@@ -267,7 +254,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                         let data = item.data()
                                         return (
                                             <Routes>
-                                                {/*<Route path={/#/ + data.id.toString() + '/*'}*/}
                                                 <Route path={data.id.toString() + '/*'}
                                                        element={<PatientDetails type={type} institute={institute}
                                                                                 details={data}/>}/>
@@ -291,13 +277,11 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                         let data = item.data()
                                         return (
                                             <Routes>
-                                                {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
                                                 <Route path={data.id.toString() + '/*'}
                                                        element={<TherapistsList details={data} currentPage={currentPage}
                                                                                 setCurrentTherapist={setCurrentTherapist}
                                                                                 setActiveTherapistListData={setActiveTherapistListData}
                                                                                 setNotActiveTherapistListData={setNotActiveTherapistListData}
-                                                                                currentPerson={currentPerson}
                                                                                 type={type} institute={institute}
                                                                                 setCurrentPage={setCurrentPage} dictInstitutes={dictInstitutes}
                                                        />}/>
@@ -310,7 +294,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                         let data = item.data()
                                         return (
                                             <Routes>
-                                                {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
                                                 <Route path={data.id.toString() + '/*'}
                                                        element={
                                                            <Col>
@@ -378,26 +361,17 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                             </Row>
 
                             <Row
-                                //     style={(() => {
-                                //     if (type === 'parent') {
-                                //         return {minHeight: 100}
-                                //     }
-                                //     return {minHeight: 300}
-                                //
-                                // })()}
                                 id='middle-floating-box'>
                                 {type === 'parent' && currentPerson !== '' &&
                                     <Col>
+                                        {institute === 'external' && <Row>
+                                            <Button as={Link} to={currentPerson + '/code'} onClick={() => {
+                                                setCurrentPage('code')
+                                            }} active={currentPage === 'code'}
+                                                    className="text-center"
+                                                    variant="outline-secondary"
+                                                    id='personal-code-button'>קבל קוד אישי</Button></Row>}
 
-                                        <Row>
-                                <Button as={Link} to={currentPerson + '/code'} onClick={() => {
-                                    setShowDialogCode(true)
-                                    setCurrentPage('code')
-                                }} active={currentPage === 'code'}
-                                        className="text-center"
-                                    // style={{width: 150, fontWeight: "bold", height: 50, fontSize: 10}}
-                                        variant="outline-secondary"
-                                        id='personal-code-button'>קבל קוד אישי</Button></Row>
                                         <Row>
                                             <NavDropdown drop='start' title={"אפליקציות צד שלישי"}
                                                          id='selected-patient-menu-bottom-button'
@@ -423,13 +397,11 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                         return (
                                             <>
                                                 <Routes>
-                                                    {/*<Route path={'/#/' + data.id.toString() + '/sessions/*'}*/}
                                                     <Route path={data.id.toString() + '/*'}
                                                            element={<TherapistsList details={data} currentPage={currentPage}
                                                                                     setCurrentTherapist={setCurrentTherapist}
                                                                                     setActiveTherapistListData={setActiveTherapistListData}
                                                                                     setNotActiveTherapistListData={setNotActiveTherapistListData}
-                                                                                    currentPerson={currentPerson}
                                                                                     type={type} institute={institute}
                                                                                     setCurrentPage={setCurrentPage}
                                                                                     dictInstitutes={dictInstitutes}
@@ -439,8 +411,7 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                 </Routes>
                                                 <Routes>
                                                     <Route path={data.id.toString() + '/*'}
-                                                           element={<ParentList currentPage={currentPage} details={data}
-                                                                                currentPerson={currentPerson}
+                                                           element={<ParentList  details={data}
                                                                                 setCurrentPage={setCurrentPage}
                                                                                 setParentsListData={setParentsListData}
                                                                                 setCurrentParent={setCurrentParent}/>}/>
@@ -453,22 +424,8 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                         </Animated>
                     </Col>
                     <Col md='8' className="border border-secondary rounded" id='display-window'>
-                        {/*<Chats/>*/}
 
                         <div>
-                            {/*{currentPage}*/}
-                            {/*{currentPage!==''&&currentPage!=='AboutUs' &&*/}
-                            {/*    currentPage!=='ContactUs'&&currentPage!=='myProfile'&&*/}
-                            {/*    (!(type==='parent'&& currentPage==='therapist')) &&*/}
-                            {/*    currentPage!=='ProgressTrend'*/}
-                            {/*    &&<Row><Col>*/}
-                            {/*    <Button id='print-button' variant='primary'*/}
-                            {/*            onClick={handlePrint} className="btn btn-secondary m-1">*/}
-                            {/*        <Printer/>*/}
-                            {/*    </Button>*/}
-                            {/*</Col>*/}
-                            {/*</Row>}*/}
-
                             {currentPerson.toString() !== '' && <Routes>
                                 <Route path={currentPerson.toString()}
                                        element={
@@ -495,9 +452,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                        החוט המקשר בין מטפלים והורים.
                                                    </Row>
                                                    <br/>
-                                                   {/*<Row  className='align-content-start p-5' style={{fontSize: 20, width: '70%'}}>*/}
-                                                   {/*ניתן ליצור תקשורת בין מטפלים למטפלים ובין הורים למטפלים.*/}
-                                                   {/*</Row>*/}
                                                    {type === 'parent' && <Row className='justify-content-center p-5'
                                                                               style={{fontSize: 20}}>
                                                        לחץ על אחת מהרשומות שמימין על מנת לצפות בפרטים על הילד שלך.
@@ -561,7 +515,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                     <Route path={currentPerson.toString() + '/AUTIDO'}
                                            element={(() => {
                                                if (currentPerson !== '') {
-                                                   // return <ReportsPage appKey={'AutiDo'}/>
                                                    const index = patientListData.findIndex((s) => s.id === currentPerson)
                                                    if (index === -1) {
                                                        return <div></div>
@@ -588,28 +541,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                         let data = item.data()
                                         return (
                                             <div>
-                                                {/*{activeTherapistListData.length > 0 && <Routes>*/}
-                                                {/*    <Route*/}
-                                                {/*        path={data.id.toString() + '/' + 'firstTherapist' + '/*'}*/}
-                                                {/*        element={<TherapistTabsBanner therapistInstitute={activeTherapistListData[0].institute}*/}
-                                                {/*                                      therapistId={activeTherapistListData[0].id}*/}
-                                                {/*                                      type={type}*/}
-                                                {/*                                      currentPerson={currentPerson}*/}
-                                                {/*                                      setCurrentPage={setCurrentPage}*/}
-                                                {/*                                      currentPage={currentPage}/>}*/}
-                                                {/*    />*/}
-                                                {/*</Routes>}*/}
-                                                {/*{activeTherapistListData.length === 0 && notActiveTherapistListData.length>0 && <Routes>*/}
-                                                {/*    <Route*/}
-                                                {/*        path={data.id.toString() + '/' + 'firstTherapist' + '/*'}*/}
-                                                {/*        element={<TherapistTabsBanner therapistInstitute={notActiveTherapistListData[0].institute}*/}
-                                                {/*                                      therapistId={notActiveTherapistListData[0].id}*/}
-                                                {/*                                      type={type}*/}
-                                                {/*                                      currentPerson={currentPerson}*/}
-                                                {/*                                      setCurrentPage={setCurrentPage}*/}
-                                                {/*                                      currentPage={currentPage}/>}*/}
-                                                {/*    />*/}
-                                                {/*</Routes>}*/}
                                                 {activeTherapistListData.length > 0 && componentsTherapists(activeTherapistListData, 'active', data)}
                                                 {notActiveTherapistListData.length > 0 && componentsTherapists(notActiveTherapistListData, 'notActive', data)}
 
@@ -691,7 +622,7 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                                              })()}
 
                                                               />}/>}
-                                                    {currentParent.id != '' && parentsListData.length > parseInt(currentParent.index) &&
+                                                    {currentParent.id !== '' && parentsListData.length > parseInt(currentParent.index) &&
                                                     <Route path={data.id.toString() + '/parent'}
                                                            element={<Chat patient={currentPerson}
                                                                           otherUser={parentsListData[parseInt(currentParent.index)]
@@ -708,9 +639,6 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                                                         currentPerson={currentPerson}
                                                                                         setCurrentPage={setCurrentPage}
                                                                                         currentPage={currentPage}/>
-                                                               /*<TestsList patientId={currentPerson}
-                                                                                         therapistId={userDetails.id}
-                                                                                         type={type} category={'קשר בין אישי'}/>*/
                                                            }/>
 
 
@@ -719,7 +647,7 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                     <Route path={data.id.toString() + '/ProgressTrend/groupDiscourse'}
                                                            element={
                                                                <TestsList patientId={currentPerson}
-                                                                          therapistId={userDetails.id}
+
                                                                           type={type} category={'שיח קבוצתי'}/>
                                                            }/>
                                                 </Routes>
@@ -728,7 +656,7 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                         path={data.id.toString() + '/ProgressTrend/interpersonalConnection'}
                                                         element={
                                                             <TestsList patientId={currentPerson}
-                                                                       therapistId={userDetails.id}
+
                                                                        type={type} category={'קשר בין אישי'}/>
                                                         }/>
                                                 </Routes>
@@ -737,7 +665,7 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                     <Route path={data.id.toString() + '/ProgressTrend/academic'}
                                                            element={
                                                                <TestsList patientId={currentPerson}
-                                                                          therapistId={userDetails.id}
+
                                                                           type={type} category={'אקדמי'}/>
                                                            }/>
                                                 </Routes>
@@ -745,7 +673,7 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                     <Route path={data.id.toString() + '/ProgressTrend/KeepingEyeContact'}
                                                            element={
                                                                <TestsList patientId={currentPerson}
-                                                                          therapistId={userDetails.id}
+
                                                                           type={type} category={'שמירת קשר עין'}/>
                                                            }/>
                                                 </Routes>
@@ -753,7 +681,7 @@ function HomePage({userDetails, type, institute, setConnectNow,dictInstitutes}) 
                                                     <Route path={data.id.toString() + '/ProgressTrend/plots'}
                                                            element={
                                                                <TestsList patientId={currentPerson}
-                                                                          therapistId={userDetails.id}
+
                                                                           type={type} category={null}/>
                                                            }/>/>
                                                 </Routes>

@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {CSVLink, CSVDownload} from 'react-csv'
+import {CSVLink} from 'react-csv'
 import {convertToNormalDate} from "../../useFunction";
-import {Button, Row} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 
 
-
+/*download table to csv*/
 export default function ToCsvFile({list ,col}){
     const [data,setData]= useState([])
     useEffect(() => {
@@ -42,7 +42,6 @@ export default function ToCsvFile({list ,col}){
         setData(dataToCsv)
     }
     return(
-        // <Button className="m-2 p-2" style={{fontWeight: "bold"}} variant="outline-primary" /*onClick={}*/>{"הוסף או הסר מקבץ"}</Button>
         <Button as={CSVLink}  className="m-2 p-2" variant="outline-primary" style={{fontWeight: "bold",fontStyle:"normal",textDecoration:'none',
            width:'100%'}} data={data} >
             הורד טבלה כקובץ csv

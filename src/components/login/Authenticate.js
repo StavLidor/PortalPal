@@ -5,7 +5,7 @@ import {Animated} from 'react-animated-css'
 import Login from "./Login";
 import SignUp from "./SignUp";
 import Logo from "../../images/Portapel.png";
-
+/*manage display between pages*/
 export default function Authenticate({login,setConnectNow,load,listInstitutes}) {
 
     const [displayLoginForm, setDisplayLoginForm] = useState(true);

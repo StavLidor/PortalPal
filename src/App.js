@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
-// import "./app.css"
 import './app.css'
-import {BrowserRouter as Router, Route,} from "react-router-dom";
+import {BrowserRouter as Router} from "react-router-dom";
 import {db, signOutCurrentUser} from "./firebase";
 import {auth} from './firebase'
 import Authenticate from "./components/login/Authenticate";
 import HomePage from "./pages/home/HomePage";
-import {collection, doc, getDoc, getDocs, onSnapshot, query} from "firebase/firestore";
+import {collection, doc, getDocs, onSnapshot} from "firebase/firestore";
 import {AddTypeExternalTherapist} from "./components/forms/AddTypeExternalTherapist"
+
 function App() {
     const [isSigneIn, setIsSigneIn] = useState(false);
     const [userDetails, setUserDetails] = useState(null);
@@ -26,6 +26,7 @@ function App() {
     useEffect(() => {
         let arrInstitutes=[]
         let institutesDict={}
+        //all the institute of the protopel
         getDocs(collection(db, "institutes")).then((d) => {
             d.forEach((doc) => {
                 arrInstitutes.push({key:doc.id,value:doc.data().name})
@@ -44,10 +45,8 @@ function App() {
 
                 try {
                     const docRef = doc(db, "users", auth.currentUser.uid);
+                    // when add change in the current therapist should know this
                     onSnapshot(docRef,(value)=>{
-                        // if(!(localStorage.getItem("refresh")!=null||localStorage.getItem("refresh")!=='')){
-                        //
-                        // }
                         setUserDetails(value)
                         if(localStorage.getItem('type') === 'parent' && (()=>{
                             for (const [k, v] of Object.entries(value.data().childrenIds)) {
@@ -61,13 +60,10 @@ function App() {
                         })()){
                             signOutCurrentUser()
                             setDisplayLoginError(true)
-                           // setConnectNow(false)
-                            // localStorage.setItem("type", "")
-                            // localStorage.setItem("institute", "")
                             return
                         }
 
-
+                        // need to check is entre with job exist to the current patient and institute
                         if(value.data().titles.includes(localStorage.getItem('type'))){
 
 
@@ -75,7 +71,6 @@ function App() {
                                 !(localStorage.getItem("institute") in   value.data().institutes)){
                                 signOutCurrentUser()
                                 setDisplayLoginError(true)
-                                //setConnectNow(false)
                                 localStorage.setItem("type", "")
                                 localStorage.setItem("institute", "")
                                 return
@@ -89,6 +84,7 @@ function App() {
 
                         }
                         else{
+                            //Extreme case
                             if(localStorage.getItem('type') === 'therapist' &&localStorage.getItem("institute")===
                                 'external'
                             ){
@@ -99,17 +95,10 @@ function App() {
                                 setDisplayLoginError(true)
                                 localStorage.setItem("type", "")
                                 localStorage.setItem("institute", "")
-                                // setConnectNow(false)
                             }
 
                         }
 
-                        // if(localStorage.getItem('type')  ==='admin' && value.data().institute===''){
-                        //     signOutCurrentUser()
-                        //     setDisplayLoginError(true)
-                        //     localStorage.setItem("type", "")
-                        //     localStorage.setItem("institute", "")
-                        // }
 
                     })
                 } catch (err) {
@@ -130,15 +119,13 @@ function App() {
         return unsubscribe
 
     }, [])
-
+    /*when login set what need*/
     const login = async (type, institute, isSuccessfulSignIn) => {
-        // setConnectNow(true)
         localStorage.setItem("type", type)
         localStorage.setItem("institute", institute)
         setDisplayLoginError(!isSuccessfulSignIn)
 
     }
-
 
     return (
 
@@ -151,12 +138,6 @@ function App() {
                                                       setConnectNow={setConnectNow} listInstitutes={listInstitutes}/>):(
                     checkUserConnection===false ||(isSigneIn && hasDetails===false)
                 )?(<div>טוען...</div>):(<></>) }
-                {/*{isSigneIn === false && checkUserConnection && <AQold/>}*/}
-                {/*{isSigneIn === false && checkUserConnection && <AQ10ChildrenForm/>}*/}
-                {/*{(checkUserConnection===false ||(isSigneIn && hasDetails===false) ) &&!connectNow&& <div>טוען...</div>}*/}
-                {/*{displayLoginError && isSigneIn === false && checkUserConnection && <h4>אחד מפרטי ההתחברות לא נכון :(</h4>}*/}
-                {/*// TODO: page for loading*/}
-
                 {isSigneIn && hasDetails && displayLoginError === false &&localStorage.getItem("institute") in dictInstitutes&&
                 <HomePage setConnectNow={setConnectNow} dictInstitutes={dictInstitutes} userDetails={{...userDetails.data(),id:userDetails.id}} type={localStorage.getItem("type")} institute={localStorage.getItem("institute")} />}
 

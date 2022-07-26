@@ -1,7 +1,8 @@
-import React, {useEffect, useState, useCallback, useContext} from "react";
+import React, {useState} from "react";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {addPatientToExternalTherapist} from "../../firebase";
 import {is_israeli_id_number} from "../../useFunction";
+/*add patient for external therapist*/
 function AddPatient({addPatient,setAddPatient,listPatient}){
     const [detailsNewPatient, setDetailsNewPatient] = useState({id: "", connection: "", code: ""})
     const [messages, setMessages] = useState({
@@ -9,6 +10,7 @@ function AddPatient({addPatient,setAddPatient,listPatient}){
     })
     const [click, setClick]=useState(false)
     const [fails,setFails]=useState(false)
+    /*check if details is good and add this patient*/
     const submitAdd = async () => {
         const messagesSubmit={ id: "", connection: "", code: ""}
         if(!detailsNewPatient.id.trim()|| !is_israeli_id_number(detailsNewPatient.id)){
@@ -45,14 +47,11 @@ function AddPatient({addPatient,setAddPatient,listPatient}){
 
             setClick(false)
         }
-        // e.preventDefault()
 
     }
     return(
         <Modal show={addPatient} onHide={() => {
             setAddPatient(false)
-            //setDetailsNewPatient({id: "", connection: "", code: ""})
-            //setMessages({id: "", connection: "", code: ""})
         }}>
             <Modal.Header>
                 <Modal.Title>הוסף מטופל</Modal.Title>
@@ -99,13 +98,11 @@ function AddPatient({addPatient,setAddPatient,listPatient}){
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={() => {setAddPatient(false)
-                    /*setDetailsNewPatient({id: "", connection: "", code: ""})
-                    setMessages({id: "", connection: "", code: ""})*/}}>
+                   }}>
                     סגור
                 </Button>
                 {(!click)?(
                     <Button variant="success" onClick={async () => {
-                        // setAddPatient(false)
                         setClick(true)
                          submitAdd().then(f=>{
                              if(f === true){

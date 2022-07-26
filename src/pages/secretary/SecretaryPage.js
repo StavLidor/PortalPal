@@ -1,27 +1,22 @@
 import React, {useEffect, useState} from "react";
-import {Button, ButtonGroup, Col, Container, Form, Row} from "react-bootstrap";
+import {Form, Row} from "react-bootstrap";
 import {
     addConnectionPatientToTherapist,
     addUserFromAdmin,
     db, deletePatientFromInstitute,
     deleteTherapistFromInstitute,
-    findUserByEmail, removeConnectionPatientToTherapist,
-    signOutCurrentUser, updateIDDoc,
+    findUserByEmail, removeConnectionPatientToTherapist, updateIDDoc,
     updatesUser
 } from "../../firebase";
-import {Link, Route, Routes} from "react-router-dom";
-import PatientDetails from "../../components/patientsSidebar/PatientDetails";
+import {Route, Routes} from "react-router-dom";
 import TableData from "../../components/tableEdit/TableData";
-import {collection, doc, getDoc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
+import {collection, doc,  onSnapshot, query, updateDoc, where} from "firebase/firestore";
 import firebase from "firebase/compat/app";
 import {newPatients} from "../../pepole/users/user";
-import se from "react-datepicker";
 import {is_israeli_id_number, validateEmail} from "../../useFunction";
 
 
-// import {details_users} from "../../firebase"
-
-
+/*page of management*/
 function SecretaryPage({data,dictInstitutes}) {
     const [students, setStudents] = useState([])
     const [employees, setEmployees] = useState([])
@@ -33,12 +28,10 @@ function SecretaryPage({data,dictInstitutes}) {
     const [listenerStudents, setListenerStudents] = useState(null)
     const [listenersTableStudents, setListenersTableStudents] = useState([])
     const [studentTable, setStudentTable] = useState(null)
-    const [reloadStudents,setReloadStudents]=useState(true)
-    const [reloadEmployees,setReloadEmployees]=useState(true)
     const [isEmptyEmployees,setIsEmptyEmployees]=useState(false)
     const [isEmptyStudents,setIsEmptyStudents]=useState(false)
     const [isEmptyTable,setIsEmptyTable]=useState(false)
-    // const [reloadTable,setReloadTable]=useState(true)
+    /*manage student table*/
     useEffect(() => {
         if(studentTable!==null){
             const index = studentsTable.findIndex((s) => s.id === studentTable.id)
@@ -67,6 +60,7 @@ function SecretaryPage({data,dictInstitutes}) {
 
         }
     },[studentTable])
+    /*workers management*/
     useEffect(() => {
         if (listenerEmployees !== null) {
             listenerEmployees()
@@ -74,8 +68,6 @@ function SecretaryPage({data,dictInstitutes}) {
         if (idEmployees.length > 0) {
             const unsubscribe = query(collection(db, "users"),
                 where(firebase.firestore.FieldPath.documentId(), 'in', idEmployees))
-            // setListenerEmployees(unsubscribe)
-            // TODO: needed the return?
             const resultEmployee =
                 onSnapshot(
                     unsubscribe,
@@ -85,12 +77,9 @@ function SecretaryPage({data,dictInstitutes}) {
                             data.push({...doc.data(), id: doc.id})
                         ))
                         setEmployees(data)
-                        setReloadEmployees(false)
-
 
                     },
                     (error) => {
-                        // TODO: Handle errors!
                     }
                 )
             setListenerEmployees(() => resultEmployee)
@@ -100,7 +89,7 @@ function SecretaryPage({data,dictInstitutes}) {
         }
 
     }, [idEmployees])
-
+    /*patients management*/
     useEffect(() => {
         if (listenerStudents !== null) {
             listenerStudents()
@@ -109,26 +98,14 @@ function SecretaryPage({data,dictInstitutes}) {
         if (idStudents.length > 0) {
             const unsubscribe1 = query(collection(db, "patients"),
                 where("id", 'in', idStudents))
-            // setStudents(d.data().students)
-            // setEmployees(d.data().employees)
-
-            // TODO: needed the return?
             const resultStudent =onSnapshot(
                 unsubscribe1,
                 (querySnapshot) => {
                     let data = []
                     querySnapshot.forEach((doc) => {
                         data.push({...doc.data(),information:doc.data().firstName +" "+doc.data().lastName})
-                        // if (typeof (doc.data().dateOfBirth) !== 'string')
-                        //     // data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
-                        //     data.push(doc.data())
-                        // else
-                        //     data.push(doc.data())
                     })
                     setStudents(data)
-                    setReloadStudents(false)
-                    //  const index = studentsTable.findIndex((s) => s.id === doc.id)
-                    // studentsTable[index]=doc.data()
                 },
                 (error) => {
                     // TODO: Handle errors!
@@ -141,7 +118,7 @@ function SecretaryPage({data,dictInstitutes}) {
 
 
     }, [idStudents])
-
+    /*on loading*/
     useEffect(async () => {
         let docRef = doc(db, "institutes", data.institute.toString())
 
@@ -216,32 +193,13 @@ function SecretaryPage({data,dictInstitutes}) {
             !messages.lastNameParent.trim() && !messages.firstNameParent.trim()
             && !messages.city.trim()&& !messages.street.trim()&& !messages.buildingNumber.trim()
         &&  !messages.dateOfBirth.trim()){
+
             return await newPatients({...details,institute: data.institute,dateOfBirth:firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
             })
         }
         return null
-        //id:"",firstName:"",lastName:"",dateOfBirth:new Date(),buildingNumber:"",firstNameParent:"",lastNameParent:""
-        //details.dateOfBirth =firebase.firestore.Timestamp.fromDate(new Date(details.dateOfBirth))
-
-        //
     }
-    // const addTherapist = async (details) => {
-    //     if (details.jobs !== undefined) {
-    //         details.jobs = details.jobs.split(",")
-    //     }
-    //     if (details.email !== undefined) {
-    //         const id = await addUserFromAdmin(details, data.institute)
-    //         return id
-    //         const p = Promise.resolve(id)
-    //
-    //         p.then(async id => {
-    //
-    //             return id
-    //         })
-    //     }
-    //     return null
-    //
-    // }
+
     const addTherapist = async(details, setMessages) => {
         const messages={email:"",firstName:"",lastName:"",jobs:""}
         if(!validateEmail(details.email)){
@@ -259,22 +217,16 @@ function SecretaryPage({data,dictInstitutes}) {
         if(!details.jobs.trim()){
             messages.jobs='הכנס את תפקדים שלו'
         }
-        // else {
-        //     details.jobs =details.jobs.split(",")
-        // }
         setMessages(messages)
 
         if(!messages.firstName.trim() && !messages.lastName.trim()&& !messages.jobs.trim()
         &&!messages.email.trim()){
-            // details.jobs =details.jobs.split(",")
             const id =await addUserFromAdmin({...details,jobs:details.jobs.split(",")},data.institute)
             return id
         }
         return null
     }
     const updatesPatients = async (id, data) => {
-        // if('dateOfBirth' in data)
-        //     data.dateOfBirth= firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
         let update={...data}
         if('information'in data){
             delete update.information
@@ -282,7 +234,6 @@ function SecretaryPage({data,dictInstitutes}) {
         if ('dateOfBirth' in data)
             if (await updateIDDoc(id, 'patients', {
                 ...update,
-                // dateOfBirth: firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
                 dateOfBirth: firebase.firestore.Timestamp.fromDate(new Date(data.dateOfBirth))
             }))
                 return true
@@ -313,6 +264,7 @@ function SecretaryPage({data,dictInstitutes}) {
         //
         return true
     }
+    /*details of therapist*/
     const columnsViewTherapist = [
 
         {
@@ -320,13 +272,11 @@ function SecretaryPage({data,dictInstitutes}) {
             placeholder: "הכנס שם פרטי..."
             , name: "firstName", label: "שם פרטי:",
             edit: true, add: true, view: true
-            /*,value:editFormData.firstName,*/
         }, {
             type: "text", required: "required",
             placeholder: "הכנס שם משפחה..."
             , name: "lastName", label: "שם משפחה:"
             , edit: true, add: true, view: true
-            /*,value:editFormData.lastName,*/
         },
 
         {
@@ -335,24 +285,20 @@ function SecretaryPage({data,dictInstitutes}) {
             , name: "jobs", label: "עבודות:"
             ,
             edit: true, add: true, view: true
-            /*,value:editFormData.city*/,
         },
         {
             type: "email", required: "required"
             , name: "email", label: "איימיל של מטפל:",
             edit: false, add: true, view: true
         },
-        /*{type:"tableEdit",name:"students",label:"תלמידים:",
-            edit:true
-        }*/
 
     ]
+    /*details of patient*/
     const columnsViewPatient = [{
         type: "text", required: "required",
         placeholder: "הכנס שם פרטי..."
         , name: "firstName", label: "שם פרטי:",
         edit: true, add: true, view: true
-        /*,value:editFormData.firstName,*/
     }, {
         type: "text", required: "required",
         placeholder: "הכנס שם משפחה..."
@@ -364,7 +310,6 @@ function SecretaryPage({data,dictInstitutes}) {
             placeholder: "הכנס תאריך לידה..."
             , name: "dateOfBirth", label: "תאריך לידה:",
             edit: true, add: true, view: true
-            /*,value:editFormData.dateOfBirth,*/
         },
         {
             type: "text", required: "required", options: ['זכר', 'נקבה',
@@ -376,7 +321,6 @@ function SecretaryPage({data,dictInstitutes}) {
             type: "text", required: "required",
             placeholder: "הכנס קוד אבחון..."
             , name: "diagnosticCode", label: "קוד אבחון:", edit: true, add: true, view: true
-            /*,value:editFormData.lastName,*/
         },
 
         {
@@ -388,14 +332,12 @@ function SecretaryPage({data,dictInstitutes}) {
         {
             type: "text", required: "required",
             placeholder: "הכנס עיר..."
-            , name: "street", label: "רחוב:", edit: true, add: true, view: true
-            /*,value:editFormData.street*/,
+            , name: "street", label: "רחוב:", edit: true, add: true, view: true,
         },
         {
             type: "text", required: "required",
             placeholder: "הכנס מספר רחוב..."
-            , name: "buildingNumber", label: "מספר רחוב:", edit: true, add: true, view: true
-            /*,value:editFormData.buildingNumber*/,
+            , name: "buildingNumber", label: "מספר רחוב:", edit: true, add: true, view: true,
         },
         {
             type: "text", required: "required"
@@ -415,6 +357,7 @@ function SecretaryPage({data,dictInstitutes}) {
 
 
     ]
+    /*find therapist by email*/
     const findTherapist = async (details) => {
         return await findUserByEmail(details.email)
 
@@ -422,7 +365,7 @@ function SecretaryPage({data,dictInstitutes}) {
     const HebrewNamesTableT = [
         "תעודת זהות של תלמיד","שם משפחה של תלמיד","שם של תלמיד","קשר"
     ]
-
+    /*get students that connected therapist*/
     async function getTable(details) {
 
         if (details === null) {
@@ -454,8 +397,6 @@ function SecretaryPage({data,dictInstitutes}) {
                 let resultSnap=onSnapshot(docRef, (d) => {
                     setStudentTable({...students[index],connection:d.data().connection,active:
                         d.data().active})
-                    // setStudentsTable([...studentsTable,{...students[index],connection:d.data().connection}])
-                    // arrStudents.push(students[index])
                 })
                 arrSnapshot.push(() => resultSnap)
             }
@@ -463,29 +404,10 @@ function SecretaryPage({data,dictInstitutes}) {
 
         })
         setListenersTableStudents(arrSnapshot)
-        // setStudentsTable(arrStudents)
-        // const unsubscribe = query(collection(db, "patients"),
-        //     where(firebase.firestore.FieldPath.documentId(), 'in', details.institutes[data.institute]))
-        // // setStudents(d.data().students)
-        // // setEmployees(d.data().employees)
-        // onSnapshot(
-        //     unsubscribe,
-        //     (querySnapshot) => {
-        //         let data = []
-        //         querySnapshot.forEach((doc) => (
-        //             data.push({...doc.data(), dateOfBirth: doc.data().dateOfBirth.toDate().toUTCString()})
-        //         ))
-        //         setStudentsTable(data)
-        //     },
-        //     (error) => {
-        //         // TODO: Handle errors!
-        //     })
-        // const dataStudents = await detailsPatient(details.institutes[data.institute])
-        // return dataStudents
-        //data.works.institutes
+
 
     }
-
+    /*connection(therapist&student) details */
     const inputsViewPOfT = [
 
         {
@@ -494,13 +416,11 @@ function SecretaryPage({data,dictInstitutes}) {
             , name: "firstName", label: "שם פרטי:",
             edit: false,view: true,
             add: false
-            /*,value:editFormData.firstName,*/
         }, {
             type: "text", required: "required",
             placeholder: "הכנס שם משפחה..."
             , name: "lastName", label: "שם משפחה:", edit: false,
             add: false,view: true
-            /*,value:editFormData.lastName,*/
         },
         {
             type: "text", required: "required",
@@ -508,7 +428,6 @@ function SecretaryPage({data,dictInstitutes}) {
             , name: "connection", label: "קשר:",
             edit: true,
             add: true,view: true
-            /*,value:editFormData.firstName,*/
         },
     ]
     const addConnectionToTherapist = async (details,setMessages) => {
@@ -522,8 +441,6 @@ function SecretaryPage({data,dictInstitutes}) {
         const i = userGetTable.institutes[data.institute].findIndex((id) => id === details.id)
         if(i!==-1){
             messages.id="יש קשר בין תלמיד לעובד"
-
-            //return false
         }
         setMessages(messages)
         if(messages.connection.trim()||messages.id.trim()){
@@ -535,14 +452,11 @@ function SecretaryPage({data,dictInstitutes}) {
         }
 
 
-        // TODO: add csv and to inputs of this connections part.
         if(await addConnectionPatientToTherapist(userGetTable.id, details.id, data.institute, details.connection)) {
             let docRef = doc(db, "patients/" + details.id + "/therapists",userGetTable.id)
             const resultSnap=onSnapshot(docRef, (d) => {
                 setStudentTable({...students[index],connection:d.data().connection,active:
                     d.data().active})
-                // setStudentsTable([...studentsTable,{...students[index],connection:d.data().connection}])
-                // arrStudents.push(students[index])
             })
             setListenersTableStudents([...listenersTableStudents,() => resultSnap])
             return true
@@ -551,7 +465,6 @@ function SecretaryPage({data,dictInstitutes}) {
     }
     const deleteConnectionToTherapist = async (contact/*id*/) => {
         if(await removeConnectionPatientToTherapist(userGetTable.id, contact.id, data.institute)) {
-            //TODO: if need to remove the snapshot?
             return true
         }
         return false
@@ -561,7 +474,7 @@ function SecretaryPage({data,dictInstitutes}) {
         const collection_query_patients = collection(db, "patients")
         try {
             await updateDoc(doc(collection_query_patients, id, "therapists",userGetTable.id
-            )/*collection(db, '/patients/001/therapists','Rahbt7jhvugjFSsnrcnBb5VMfUb2')*/, {
+            ), {
                 connection:data.connection
             })
             return true
@@ -601,7 +514,7 @@ function SecretaryPage({data,dictInstitutes}) {
                                                    firstName: "",
                                                    lastName: "",
                                                    jobs: "",
-                                                   email: "",/*table:[{id:"",firstName:"",lastName:""}]*/
+                                                   email: "",
                                                }}
                                                emptyEditDetails={{firstName: "", lastName: "", jobs: ""}}
                                                data={employees} HebrewNames={[
@@ -622,8 +535,7 @@ function SecretaryPage({data,dictInstitutes}) {
 
                                    getTable={getTable}
                                                table={studentsTable}
-                                               columnsInfoViewTable={inputsViewPOfT} addTable={addConnectionToTherapist
-                               /*(d)=>{}*/} /*deleteObj={deleteConnectionToTherapist}*/
+                                               columnsInfoViewTable={inputsViewPOfT} addTable={addConnectionToTherapist}
                                                deleteObjTable={deleteConnectionToTherapist}
                                                updateTable={updateConnectionToTherapist}
                                                tableOptionIds={students}
@@ -637,8 +549,6 @@ function SecretaryPage({data,dictInstitutes}) {
                            element={<>
                                <Row className='align-content-start'> <Form.Label className='fs-4' >
                                    {"תלמידים במוסד "+dictInstitutes[data.institute]+":"}</Form.Label> </Row>
-                               {/*{  reloadStudents&&!isEmptyStudents&&<Row className='p-2 align-content-start'> <Form.Label className='fs-4' >*/}
-                               {/*    טוען...</Form.Label> </Row>}*/}
                                {  isEmptyStudents&&<Row className='align-content-start'> <Form.Label className='fs-4' >
                                    אין תלמידים במוסד</Form.Label> </Row>}
                         <TableData type="תלמיד" add={addPatient} update={updatesPatients}
@@ -674,5 +584,4 @@ function SecretaryPage({data,dictInstitutes}) {
     )
 
 }
-
 export default SecretaryPage

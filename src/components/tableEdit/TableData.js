@@ -3,7 +3,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import ReadOnlyRow from "./ReadOnlyRow"
 import EditableRow from "./EditableRow"
 import "./tableData.css"
-import {Button, Form, Row, Col, Container, ButtonGroup, Table, Grid, Modal} from 'react-bootstrap'
+import {Button, Form, Row, Col, Table,  Modal} from 'react-bootstrap'
 import firebase from "firebase/compat/app";
 import AddThroughCsvFile from "./AddThroughCsvFile";
 import { Plus} from 'react-bootstrap-icons';
@@ -61,20 +61,8 @@ export default function TableData({
 
     },[])
 
-    const closeDialog = () => setAddSomeone(false)
-    const handleShow = () => setShow(true)
-
-
-    // const [detailsTherapist,setDetailsTherapist]=useState({firstName:"",lastName:"",email:"",jobs:"",institutes:[data.institutionNumber]})
     const [editContactId, setEditContactId] = useState(null);
-    const [editFormData, setEditFormData] = useState(emptyEditDetails
-        // function () {
-        //     if (toEdit) {
-        //         return emptyEditDetails
-        //     }
-        //     return null
-        // }()
-    )
+    const [editFormData, setEditFormData] = useState(emptyEditDetails)
     useEffect(() => {
         const p1 = Promise.resolve(data)
         p1.then(arr => {
@@ -84,10 +72,6 @@ export default function TableData({
 
 
     }, [data])
-    // useEffect(()=>{
-    //     setModifyContacts(contacts)
-    //
-    // },contacts)
 
     const handleEditFormChange = (event) => {
         event.preventDefault();
@@ -98,8 +82,6 @@ export default function TableData({
         if (event.target.type === 'date') {
             newFormData[fieldName] = firebase.firestore.Timestamp.fromDate(new Date(fieldValue))
         }
-        // const newFormData = {...editFormData}
-        // newFormData[fieldName] = fieldValue
         setEditFormData(newFormData)
     };
     const handleCancelClick = () => {
@@ -111,14 +93,11 @@ export default function TableData({
         setEditFormData(contact)
     };
     const handleDeleteClick = async (contactId) => {
-        const newContacts = [...contacts];
         const index = contacts.findIndex((contact) => contact.id === contactId)
-        if (await deleteObj(contacts[index]/*contactId*/)) {
-            // newContacts.splice(index, 1)
+        if (await deleteObj(contacts[index])) {
             if (contactTable && contactId === contactTable.id) {
                 setContactTable(null)
             }
-            // setContacts(newContacts)
         }
     };
 
@@ -127,10 +106,6 @@ export default function TableData({
         const editedContact = editFormData
 
         if (await update(editContactId, editedContact)) {
-            // const newContacts = [...contacts];
-            // const index = contacts.findIndex((contact) => contact.id === editContactId);
-            // newContacts[index] = editedContact
-            // setContacts(newContacts)
             setEditContactId(null)
         }
         setEditContactId(null)
@@ -139,11 +114,8 @@ export default function TableData({
 
         let i = 0
         let count = 0
-        // const newContacts = [...contacts]
         let errors=[]
         allDetails.map(async (details,index) => {
-
-                // const newContacts = [...contacts]
                 const promiseId = await add(details,((messages)=>{
                     let error=''
                     for (const [key, value] of Object.entries(messages)) {
@@ -155,24 +127,13 @@ export default function TableData({
                     if(error.trim()){
                         errors.push('בשורה '+(index+1).toString()+' '+ error)
                     }
-
-                    // errors[index+1]=error
-
                 }))
                 const p = Promise.resolve(promiseId)
                 let modifyContacts = ((flag) => {
                     count++
-                    // if (flag) {
-                    //     // if (typeof (promiseId) == "string") {
-                    //     //     newContacts[contacts.length + i] = {...details, id: promiseId}
-                    //     // } else {
-                    //     //     newContacts[contacts.length + i] = Object.assign({}, detailsNew, promiseId)
-                    //     // }
-                    // }
 
                     if (count === allDetails.length) {
                         setErrors(errors)
-                        // setContacts(newContacts)
                     }
                 })
 
@@ -180,8 +141,6 @@ export default function TableData({
 
                     if (id) {
                         modifyContacts(true)
-
-                        // addToContacts({...details,id:id})
 
                     } else {
                         modifyContacts(false)
@@ -193,29 +152,22 @@ export default function TableData({
 
             }
         )
-        //setContacts(newContacts)
     }
     const remove = (allDetails,setErrors) => {
-        const newContacts = [...contacts]
-
         let count = 0
         let errors=[]
         allDetails.map(async (details,indexMap) => {
                 let modifyContacts = ((flag) => {
                     count++
                     if (flag) {
-                        //const index = contacts.findIndex((contact) => contact.id === id)
                         if (contactTable!==null && id === contactTable.id) {
                             setContactTable(null)
                         }
-
-                        // newContacts.splice(index, 1)
                     }
                     else{
                         errors.push('בשורה '+(indexMap+1).toString()+' '+ 'לא נמצא לפי מזהה זה ולכן לא ניתן להסיר')
                     }
                     if (count === allDetails.length) {
-                        // setContacts(newContacts)
                         setErrors(errors)
                     }
                 })
@@ -230,11 +182,9 @@ export default function TableData({
                     const index = contacts.findIndex((contact) => contact.id === id)
                     if(index === -1){
                         modifyContacts(false)
-                            //console.log('HHHHHHHHHH')
                     }
                     else {
                         deleteObj(contacts[index]).then((flag) => {
-                            console.log(flag)
                             modifyContacts(flag)
 
                             if (flag) {
@@ -247,11 +197,6 @@ export default function TableData({
             }
         )
     }
-    const addToContacts = (details) => {
-        const newContacts = [...contacts]
-        newContacts[contacts.length] = details
-        // setContacts(newContacts)
-    }
     const submitAddDialog = () => {
         setLoad(true)
         const p = Promise.resolve(add(detailsNew, setMessages))
@@ -261,23 +206,6 @@ export default function TableData({
                 setDetailsNew(emptyDetails)
                 setMessages({...emptyDetails,id:''})
                 setAddSomeone(false)
-                // const index = contacts.findIndex((contact) => contact.id === detailsNew.id)
-                // if (index < 0) {
-                //     // if (typeof (id) == "string") {
-                //     //     addToContacts({...detailsNew, id: id})
-                //     // } else {
-                //     //     addToContacts(Object.assign({}, detailsNew, id))
-                //     // }
-                //     // setEditContactId(null);
-                //     setLoad(false)
-                //     setDetailsNew(emptyDetails)
-                //     setMessages(emptyDetails)
-                //     setAddSomeone(false)
-                //
-                // } else {
-                //     // mybe can not change the informtion need to think about
-                //     //newContacts[index] = detailsNew
-                // }
 
             } else {
                 setLoad(false)
@@ -314,7 +242,6 @@ export default function TableData({
                                             handleCancelClick={handleCancelClick}
                                             columnsInfo={columnsInfoView}
                                             requiredId={requiredId}
-                                            table={table}
 
                                         />
                                     ) : (contact !== undefined) ? (
@@ -421,9 +348,6 @@ export default function TableData({
                                             <Form.Control id='validationDefault01' required
                                                 autoFocus
                                                 type={i.type}
-                                                // required={i.required}
-                                                // placeholder={i.placeholder}
-                                                /*id={i.name}*/
                                                 name={i.name}
                                                 value={detailsNew[i.name]}
                                                 onChange={e => setDetailsNew({...detailsNew, [i.name]: e.target.value})}
@@ -450,7 +374,6 @@ export default function TableData({
                     {
                         (!load)?(
                             <Button variant="success" onClick={() => {
-                                // setAddSomeone(false)
                                 submitAddDialog()
                             }}>
                                 שמור

@@ -12,6 +12,7 @@ function AQ({ref}) {
     const [isFormValid, setIsFormValid] = useState(null);
     const optionsAdult = [];
     const optionsChildren = [];
+    // data to send to model
     const [details, setDetails] = useState({
         Who_completed_the_test: 'Parent',
         Family_mem_with_ASD: null,
@@ -31,14 +32,14 @@ function AQ({ref}) {
         A2: null,
         A1: null
     })
-
+    // ages
     for (let op = 4; op <= 11; op++) {
         optionsChildren.push(<option style={{fontSize: 18}} id={op} value={op}>{op}</option>);
     }
     for (let op = 18; op <= 99; op++) {
         optionsAdult.push(<option style={{fontSize: 18}} id={op} value={op}>{op}</option>);
     }
-
+    // check if the form is full
     const formValidation = () => {
         for (let key in details) {
             if (details[key] === null) {
@@ -50,7 +51,7 @@ function AQ({ref}) {
         setIsFormValid(true)
         return true
     }
-
+    // submit the form
     const submitHandler = async e => {
         e.preventDefault()
         if (formValidation() === false) {
@@ -60,20 +61,22 @@ function AQ({ref}) {
             details.A5 + details.A6 + details.A7 + details.A8 + details.A9 + details.A10
 
         setFormResult(details.result.toString())
-
+        // the api of the model need to send this way
         const finalToModel = details.A1 + ',' + details.A2 + ',' + details.A3 + ',' + details.A4 + ',' + details.A5 +
             ',' + details.A6 + ',' + details.A7 + ',' + details.A8 + ',' + details.A9 + ',' + details.A10 +
             ',' + details.Age + ',' + details.Gender + ',' + details.Ethnicity + ',' + details.Jaundice +
             ',' + details.Family_mem_with_ASD + ',' + 'unknown' + ',' + 'NO' + ',' + details.result + ',' + '18 and more' + ',' + details.Who_completed_the_test
-
+        // post to model
         const requestOptions = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({'data': finalToModel, 'type': modelType})
         }
+        // post to model
         fetch('https://lironhaim.pythonanywhere.com/predict', requestOptions)
             .then(response => response.json())
             .then(data => {
+                // check prediction according the answer set result and message
                 if (data['prediction'][0] === 0) {
                     setModelResultMessage('בהתאם לנתונים שיש לנו, ובשילוב עם תוצאות הטופס שלך, התוצאה היא: שלילית. לדעתנו, אין צורך ללכת כרגע לבדיקות נוספות.')
                     setModelResult('שלילית')
@@ -92,7 +95,6 @@ function AQ({ref}) {
 
                         <Form.Label className="text-center fs-1" style={{fontWeight: "bold",width: "100%"}}>טופס לאבחון
                             אוטיזם</Form.Label>
-                        {/*<Container className='align-self-center align-content-center p-4' style={{alignSelf: 'center'}}>*/}
 
                         <br/>
                         <br/>
@@ -142,7 +144,6 @@ function AQ({ref}) {
                         <Row className='justify-content-center' style={{fontSize: 20}}>
                             הטופס מנוסח בלשון זכר אך במיוחד לכלל המינים.
                         </Row>
-                        {/*</Container>*/}
                     </Form.Group>
                 </Form>
                 <Container className='border-4 border w-75'>

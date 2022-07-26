@@ -1,16 +1,14 @@
 import {Button, ButtonGroup, Col, Form, Modal, Row} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import Papa from "papaparse";
-
+/*add for csv to the DB*/
 export function AddThroughCsvFile({addBatch, setAddBatch, add, remove,filedAdd,filedRemove}) {
-    // const [addBatch, setAddBatch] = useState(true)
     const [file, setFile] = useState(null)
     const [type, setType] = useState("")
     const [showMsg, setShowMsg] = useState(false)
     const [submitted, setSubmitted] = useState(false)
     const [errors,setErrors]=useState([])
     const [loading,setLoading]=useState(false)
-    // const[filed,setFiled]=useState([])
     useEffect(()=>{
         if(loading){
             setLoading(false)
@@ -22,7 +20,6 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove,filedAdd,f
     },[errors])
     const submit = async () => {
         setLoading(true)
-        // event.preventDefault();
         if (file) {
             if (type === 'add') {
                 await parser(file, add,filedAdd)
@@ -32,19 +29,14 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove,filedAdd,f
 
         }
     }
-
+    /*parser from csv data to dict and add all the details*/
     function parser(file, f,filed) {
         let reader = new FileReader();
 
         reader.addEventListener('load', async function (e) {
             const allObj = []
-            //let csvdata = e.target.result;
             let arr = Papa.parse(e.target.result).data
-
-            // let arr= data.split("\n");
-
             let keys = arr[0]
-            console.log('length')
             if(!(keys.length === filed.length )||
                 !(keys.every(function (element) {
                     return filed.includes(element);
@@ -75,22 +67,18 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove,filedAdd,f
 
                     obj[header] = value
                 }
-                // if(i==1){
-                //     f(obj)
-                // }
                 allObj.push(obj)
 
 
             }
             if(!error){
+
                 await f(allObj, setErrors)
             }
             else{
                 setErrors(['חסר עמודות בקובץ'])
             }
 
-            //setFile(null)
-            // parseCsv.getParsecsvdata(csvdata); // calling function for parse csv data
         });
         reader.readAsText(file)
 
@@ -119,16 +107,7 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove,filedAdd,f
                                     }
                                 </ButtonGroup>
                             </Row>
-                            {/*<Row>*/}
 
-                            {/*    <input type="file" name="learnCSV" accept="text/csv" onChange={e => {*/}
-                            {/*        setFile(e.target.files[0])*/}
-                            {/*    }}/>*/}
-
-                            {/*    {submitted && file === null &&*/}
-                            {/*    <Form.Text className="text-center" style={{fontSize: 10, color: "red"}}>אנא בחר*/}
-                            {/*        קובץ</Form.Text>}*/}
-                            {/*</Row>*/}
                             <Row className="input-group mb-3">
                                 <input name="learnCSV" accept="text/csv" onChange={e => {
                                     if(e.target.files[0].type ==="text/csv"){
@@ -175,9 +154,6 @@ export function AddThroughCsvFile({addBatch, setAddBatch, add, remove,filedAdd,f
 
                             } else {
                                 await submit()
-                                // if (errors.length !== 0) {
-                                //     setAddBatch(false)
-                                // }
 
                             }
                         }

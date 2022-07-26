@@ -9,15 +9,13 @@ import firebase from "firebase/compat/app";
 
 function Chat({otherUser, patient, isActive}) {
     const [messages, setMessages] = useState([])
-    const [talkers, setTalkers] = useState([])
-    const [therapists, setTherapists] = useState([])
     const [newMessage, setNewMessage] = useState('')
 
     const handleOnChange = e => {
         setNewMessage(e.target.value)
 
     }
-
+    // add message to the firebase
     const sendMessage = async e => {
         e.preventDefault()
         const message=newMessage
@@ -33,8 +31,9 @@ function Chat({otherUser, patient, isActive}) {
         }
     }
 
-
+    // when open this component
     useEffect(() => {
+        // get all message of this user to otherUser 'about the current patient
         const unsubscribe = query(collection(db, "messages"),
             where('patient', '==', patient), where("senderAndReceiver", 'in',
                 [{receiver: auth.currentUser.uid, sender: otherUser.id},
@@ -55,7 +54,7 @@ function Chat({otherUser, patient, isActive}) {
 
             },
             (error) => {
-                // TODO: Handle errors!
+                //  Handle errors!
             })
     }, [])
 

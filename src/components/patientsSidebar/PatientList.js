@@ -1,20 +1,19 @@
-import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Modal} from 'react-bootstrap'
+import {Button, Form, Row, Col} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useEffect, useState, useCallback, useContext} from "react";
-import {Link, Route, Routes} from "react-router-dom";
-import {collection, doc, getDocs, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
-import {addPatientToExternalTherapist, db} from "../../firebase";
-import {Pencil, Plus, FilePerson, PersonCircle} from 'react-bootstrap-icons';
+import React, {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
+import {collection, onSnapshot,  query, where} from "firebase/firestore";
+import { db} from "../../firebase";
+import { Plus,PersonCircle} from 'react-bootstrap-icons';
 import AddPatient from "../forms/AddPatient";
 
 export let patientList = []
 
-function PatientList({institute, list, setPatientListData, listTitle, setCurrentPerson,currentPerson, currentPage,setPatientIsClicked,
+function PatientList({institute, list, setPatientListData, listTitle, setCurrentPerson,currentPerson, currentPage,
                          setCurrentPage,type}) {
 
     const [listData, setListData] = useState([])
     const [addPatient, setAddPatient] = useState(false)
-    const [detailsNewPatient, setDetailsNewPatient] = useState({id: "", connection: "", code: ""})
     const [listener, setListener] = useState(null)
     const [reload, setReload] = useState(true)
 
@@ -28,6 +27,7 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
         {
             setListData([])
             setPatientListData([])
+            setReload(false)
             return
         }
 
@@ -40,7 +40,6 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                 setReload(false)
             },
             (error) => {
-                // TODO: Handle errors!
 
             })
         setListener(() => result)
@@ -79,11 +78,9 @@ function PatientList({institute, list, setPatientListData, listTitle, setCurrent
                         } className="list-group-item list-group-item-action mb-1" onClick={(e) => {
                             // e.preventDefault()
                             if(currentPerson===data.id.toString()){
-                                setPatientIsClicked(false)
                                 setCurrentPerson('')
                             }
                             else {
-                                setPatientIsClicked(true)
                                 setCurrentPerson(data.id.toString())
                                 if(currentPage==='AboutUs'
                                     ||currentPage==='ContactUs'||currentPage==='myProfile'){

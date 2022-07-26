@@ -1,28 +1,20 @@
 import {
     Button,
-    Collapse,
     Form,
     Row,
     Col,
-    Container,
-    ButtonGroup,
-    Grid,
-    Nav,
-    ListGroup,
     Accordion, Modal
 } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useEffect, useState, useCallback, useContext} from "react";
-import {Link, Route, Routes} from "react-router-dom";
+import React, {useEffect, useState} from "react";
 import {auth, db} from "../../firebase";
 import {addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, updateDoc} from "firebase/firestore";
 import firebase from "firebase/compat/app";
 import {Pencil, Plus, Trash} from 'react-bootstrap-icons';
-
+/* session list of therapist about spastic patient*/
 function SessionsList({patientId, therapistId = null, type}) {
 
     const [sessionsData, setSessionsData] = useState([])
-    const [open, setOpen] = useState(false)
     const [empty, editEmpty] = useState(false)
 
     const [newSession, setNewSession] = useState({
@@ -30,19 +22,13 @@ function SessionsList({patientId, therapistId = null, type}) {
         summary: '',
         date: ''
     })
-    // function expand() {
-    //     $('.collapse').collapse('show');
-    // }
-    // function collapse() {
-    //     $('.collapse').collapse('hide');
-    // }
     const checkData = (setMessages, session) => {
         const messagesSubmit = {
             title: '',
             summary: '',
             date: ''
         }
-        // e.preventDefault()
+
         if (session.date === "") {
             messagesSubmit.date = 'הכנס תאריך מפגש'
         }
@@ -59,7 +45,6 @@ function SessionsList({patientId, therapistId = null, type}) {
         return false
     }
     useEffect(async () => {
-        // editEmpty(false)
         let q
         let therapistIDForSession = (() => {
             if (type === 'parent')
@@ -81,15 +66,9 @@ function SessionsList({patientId, therapistId = null, type}) {
                 }
                 querySnapshot.forEach((doc) => {
                     sessions.push({...doc.data(), id: doc.id})
-                    // if (doc.sessionsData().client === id){
-                    //
-                    // }
-
 
                 });
-
                 setSessionsData(sessions)
-
             })
 
         } else {
@@ -108,12 +87,9 @@ function SessionsList({patientId, therapistId = null, type}) {
 
                     ))
                     setSessionsData(sessions)
-                    // if(sessionsData.length === 0){
-                    //     editEmpty(true)
-                    // }
                 },
                 (error) => {
-                    // TODO: Handle errors!
+                    // Handle errors!
                 })
         }
 
@@ -122,39 +98,21 @@ function SessionsList({patientId, therapistId = null, type}) {
     const handleOnSubmit = async (setMessages) => {
         if (!checkData(setMessages, newSession))
             return false
-        // e.preventDefault()
-        // newSession.until = firebase.firestore.Timestamp.fromDate(new Date(newSession.until))
         await addDoc(collection(db, "patients/" + patientId + "/therapists/" + auth.currentUser.uid + '/sessions'), newSession
-            //     {
-            //     ...newSession,
-            //     // createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            //     // createdAt: firebase.firestore.Timestamp.fromDate(new Date(newSession.createdAt)),
-            //     // until: firebase.firestore.Timestamp.fromDate(new Date(newExercise.until))
-            // }
         )
-        // const docRef = await addDoc(collection(db, "exercises"),
-        //     { ...newExercise,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
         return true
 
     }
     const handleDelete = async docId => {
         await deleteDoc(doc(collection(db, "patients"), patientId, "therapists", auth.currentUser.uid, 'sessions',
             docId))
-        // await deleteDoc(doc(db, "exercises", docId))
     }
     const handleUpdate = async (docId, data, setMessages) => {
         if (!checkData(setMessages, data))
             return false
 
-        // await updateIDDoc(docId, "exercises", data)
         await updateDoc(doc(collection(db, "patients"), patientId, "therapists", auth.currentUser.uid, 'sessions',
             docId), data
-            //     {
-            //     ...data,
-            //     // createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            //     // until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
-            //     until: firebase.firestore.Timestamp.fromDate(new Date(data.until))
-            // }
         )
         return true
     }
@@ -169,13 +127,6 @@ function SessionsList({patientId, therapistId = null, type}) {
                 <div style={{width: 'auto', alignSelf: "center"}}>
                     <AddSessionDialog type={type} setNewSession={setNewSession} newSession={newSession}
                                       handleOnSubmit={handleOnSubmit}/>
-                    {/*<Button  variant="outline-dark"*/}
-                    {/*         onclick={expand}><Plus className= "m-1"/>*/}
-                    {/*    פתח את כל פגישות*/}
-                    {/*</Button>*/}
-                    {/*<Button  variant="outline-dark"  onclick={collapse}><Plus className= "m-1"/>*/}
-                    {/*    סגור את כל פגישות*/}
-                    {/*</Button>*/}
                 </div>
             </Row>
             {empty && sessionsData.length === 0 &&
@@ -184,20 +135,14 @@ function SessionsList({patientId, therapistId = null, type}) {
             {!empty && sessionsData.length === 0 &&
             <Row className='p-2 align-content-start'> <Form.Label className='fs-4'>טוען...</Form.Label> </Row>}
             <br/>
-
-            {/*// sessionsData.map((s)=>(*/}
-            <Accordion className='justify-content-center' style={{width: '70%'}} alwaysOpen={true}
-
-            >
+            <Accordion className='justify-content-center' style={{width: '70%'}} alwaysOpen={true}>
 
                 {
                     sessionsData.map((s, i) => (
-                            // <>
                             <Accordion.Item eventKey={s.id}>
                                 <Accordion.Header>
                                     {s.title + ', ' + new Date(s.date.seconds * 1000).toLocaleDateString()}
                                     &nbsp;&nbsp;
-                                    {/*{e.createdAt.toDate().toUTCString() + e.place}*/}
                                 </Accordion.Header>
                                 <Accordion.Body>
                                     <Col>
@@ -213,7 +158,6 @@ function SessionsList({patientId, therapistId = null, type}) {
                                             <Form.Label>
                                                 תאריך:
                                                 &nbsp;
-                                                {/*{s.date}*/}
                                                 {new Date(s.date.seconds * 1000).toLocaleDateString()}
                                             </Form.Label>
                                         </Row>
@@ -223,7 +167,6 @@ function SessionsList({patientId, therapistId = null, type}) {
                                                 תוכן:
                                                 &nbsp;
                                                 {s.summary}
-                                                {/*{new Date(e.createdAt.seconds * 1000).toLocaleDateString()}*/}
                                             </Form.Label>
                                         </Row>
 
@@ -459,9 +402,6 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                                 <Form.Label>תאריך</Form.Label>
                                 <Form.Control
                                     type="date"
-
-                                    // value={(exerciseData.until.toDate().getFullYear() + '-' + (exerciseData.until.toDate().getMonth() + 1) + '-' + exerciseData.until.toDate().getDate()).toString()}
-                                    // value={new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()}
                                     defaultValue={
                                         (() => {
                                             let year = new Date(newSessionData.date.seconds * 1000).getFullYear()
@@ -479,8 +419,6 @@ function EditSessionDialog({handleUpdate, sessionData}) {
                                             dateString += day.toString()
                                             return dateString
                                         })()}
-                                    // value={(new Date(exerciseData.createdAt.seconds * 1000).getFullYear().toString() + '-' + (new Date(exerciseData.createdAt.seconds * 1000).getMonth() + 1).toString() + '-' + new Date(exerciseData.createdAt.seconds * 1000).getDate().toString()).toString()}
-
                                     onChange={e => setNewSessionData({
                                         ...newSessionData,
                                         date: firebase.firestore.Timestamp.fromDate(new Date(e.target.value))

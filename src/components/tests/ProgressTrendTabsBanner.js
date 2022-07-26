@@ -1,8 +1,8 @@
-import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup} from 'react-bootstrap'
+import { Row, Container, Nav} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-import {InfoCircle} from "react-bootstrap-icons";
+// import {InfoCircle} from "react-bootstrap-icons";
 
 
 import {isClick} from "../../useFunction";
@@ -69,7 +69,7 @@ function ProgressTrendTabsBanner({type, currentPerson, setCurrentPage, currentPa
                                 </Nav.Item>
                             </Nav>
                         </Container>
-                        <InfoCircle id='info-button' style={{width:'5%',height: '5%'}}/>
+                        {/*<InfoCircle id='info-button' style={{width:'5%',height: '5%'}}/>*/}
                     </Row>
                 )
                 break

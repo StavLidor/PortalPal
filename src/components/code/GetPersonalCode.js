@@ -1,52 +1,35 @@
 import React, {useEffect, useState} from "react"
 import {makePassword} from "../../useFunction"
-import {addPatientToExternalTherapist, addToPatientArr} from "../../firebase";
+import {addToPatientArr} from "../../firebase";
 import hash from "hash.js";
-import {Button, Container, Form, Row} from 'react-bootstrap'
+import {Button, Form, Row} from 'react-bootstrap'
 import {FormGroup} from "@mui/material";
-import {Toast} from "bootstrap";
+
 
 export function GetPersonalCode({id = null, type,detailsChild}) {
-    //TODO:add a connection
     const [code, setCode] = useState("")
-    //const [getCodeAgain, setGetCodeAgain] = useState(false)
-
-    //const [detailsNewPatient, setDetailsNewPatient] = useState({id: "", connection: "", code: ""})
 
     useEffect(async () => {
 
         if(detailsChild.code.length>0){
+            // if it has code convert him
             setCode( hash.sha256().update(detailsChild.code[0]).digest("hex"))
         }
         else {
+            // create a new code
             await createACode()
         }
-        // const realCode = makePassword(10)
-        // const hashCode = hash.sha256().update(realCode).digest("hex")
-        // setCode(hashCode)
-        //
-        // await addToPatientArr(id, 'code', realCode)
 
     }, [id])
+    // create a code to connect between patient and external therapist
     const createACode=async () => {
         const realCode = makePassword(10)
         const hashCode = hash.sha256().update(realCode).digest("hex")
         setCode(hashCode)
-
+        // add to firebase of the child
         await addToPatientArr(id, 'code', realCode)
     }
-
-    // const submit=async  e =>{
-    //     e.preventDefault()
-    //     await submit()
-    //
-    // }
-
-    // const submitAdd = async e => {
-    //     e.preventDefault()
-    //     await addPatientToExternalTherapist(detailsNewPatient.id, detailsNewPatient.code, detailsNewPatient.connection)
-    // }
-
+    // show the code with timeout
     const copyToClipBoard =()=> {
         const copyText = document.getElementById("personal-code-text-box");
         navigator.clipboard.writeText(copyText.innerText)

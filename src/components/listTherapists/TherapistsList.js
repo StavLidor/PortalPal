@@ -15,7 +15,6 @@ function TherapistsList({
                             currentPage, setCurrentPage,
                             setActiveTherapistListData,
                             setNotActiveTherapistListData,
-                            currentPerson,
                             type,
                             institute, dictInstitutes
                         }) {
@@ -23,7 +22,6 @@ function TherapistsList({
     const [notActiveTherapistsList, setNotActiveTherapistList] = useState([])
     const [current, setCurrent] = useState({id: "", index: "", active: true})
     const [reload, setReload] = useState(true)
-    const [clickId, setClickId] = useState('')
     const componentRefActive = useRef()
     const componentRefNotActive = useRef()
 
@@ -33,6 +31,7 @@ function TherapistsList({
         let index = ''
         let active = true
         let isNotChose = false
+        // for remember the chose in refresh or move to someone else
         if (pathSpilt.length > 2 && pathSpilt[2] === 'therapist') {
             index = '0'
             if (type === 'therapist' && pathSpilt.length > 3) {
@@ -67,6 +66,7 @@ function TherapistsList({
             const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"),
                 where('institute', '==', institute))
             if (institute === 'external') {
+                // in live delete therapist
                 onSnapshot(
                     collectionRef,
                     (snapshot) => {
@@ -74,15 +74,14 @@ function TherapistsList({
 
                     })
             } else {
+                // need only to see therapist don't have way to change them
                 getDocs(collectionRef).then((d) => {
                     getData(d, {id: '', index: index, active: active, isNotChose: isNotChose})
                 })
             }
         } else {
             const collectionRef = query(collection(db, "patients/" + details.id + "/therapists"))
-
-            // const querySnapshot = await getDocs(docRef)
-
+            // need only to see therapist don't have way to change them
             getDocs(collectionRef).then((d) => {
                 getData(d, {id: '', index: index, active: active, isNotChose: isNotChose})
             })
@@ -121,23 +120,12 @@ function TherapistsList({
                             id: doc.id,
                             firstName: doc.data().firstName, lastName: doc.data().lastName,
                             institute: dict[doc.id].institute, connection: dict[doc.id].connection,
-
-                            // active: (() => {
-                            //     if (dict[doc.id].active)
-                            //         return 'פעיל'
-                            //     return 'לא פעיל'
-                            // })()
                         })
                     } else {
                         notActiveTherapists.push({
                             id: doc.id,
                             firstName: doc.data().firstName, lastName: doc.data().lastName,
                             institute: dict[doc.id].institute, connection: dict[doc.id].connection,
-                            // active: (() => {
-                            //     if (dict[doc.id].active)
-                            //         return 'פעיל'
-                            //     return 'לא פעיל'
-                            // })()
                         })
                     }
                 })
@@ -146,7 +134,6 @@ function TherapistsList({
                 setActiveTherapistListData(activeTherapists)
                 setNotActiveTherapistList(notActiveTherapists)
                 setNotActiveTherapistListData(notActiveTherapists)
-                //let flagID=''
                 if (mapCurrent.index !== '' && activeTherapists.length > parseInt(mapCurrent.index) && mapCurrent.active) {
                     const index = parseInt(mapCurrent.index)
                     setCurrent({
@@ -157,7 +144,6 @@ function TherapistsList({
                     if (mapCurrent.isNotChose) {
                         componentRefActive.current.click()
                     }
-                    //flagID=activeTherapists[index].id
 
                 } else if (mapCurrent.index !== '' && notActiveTherapists.length > parseInt(mapCurrent.index) && (!mapCurrent.active ||
                     parseInt(mapCurrent.index) === 0)) {
@@ -168,16 +154,10 @@ function TherapistsList({
                         active: false
                     })
                     setCurrentTherapist({index: mapCurrent.index, id: notActiveTherapists[index].id, active: false})
-                    //flagID=notActiveTherapists[index].id
                     if (mapCurrent.isNotChose) {
                         componentRefNotActive.current.click()
                     }
                 }
-                // if(type === 'parent'&& flagID!=='' && mapCurrent.isNotChose){
-                //
-                //
-                //     setClickId(flagID)
-                // }
 
             })
         } else {
@@ -219,7 +199,6 @@ function TherapistsList({
                             return null
                         })()}
                                 active={
-                                    /*isClick(path)*/
                                     current.id === data.id && isClick('therapist')
                                 }
                                 style={{backgroundColor: 'transparent', border: 'transparent'}}
@@ -239,16 +218,6 @@ function TherapistsList({
 
 
                         }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}</Button>
-                        {/*<Link to={path}*/}
-                        {/*      className="list-group-item list-group-item-action" style={{fontSize: 14}}*/}
-                        {/*      onClick={(e) => {*/}
-                        {/*          // e.preventDefault()*/}
-                        {/*          // setCurrentPerson(data.id.toString())*/}
-
-                        {/*          setCurrentTherapist({id: data.id, index: index.toString()})*/}
-
-                        {/*      }}>{data.firstName + " " + data.lastName + ','}<br/>{data.connection + showInstitute}*/}
-                        {/*</Link>*/}
                     </div>
                 )
             }))

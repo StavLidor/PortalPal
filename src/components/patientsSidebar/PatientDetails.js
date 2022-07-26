@@ -1,11 +1,9 @@
 import {Button, Form, Row, Col, Container, ButtonGroup, Grid, Nav, ListGroup, Modal} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useEffect, useState, useCallback, useContext} from "react";
-import {Link, Route, Routes} from "react-router-dom";
-import {getDate} from "date-fns";
+import React, {useState} from "react";
 import {Plus, Dash} from "react-bootstrap-icons";
 import {auth, removeConnectionPatientToTherapist} from "../../firebase";
-import TableData from "../tableEdit/TableData";
+
 
 function PatientDetails({details, type, institute}) {
     const [showRemovePatientDialog, setShowRemovePatientDialog] = useState(false)
@@ -16,7 +14,6 @@ function PatientDetails({details, type, institute}) {
                 {type === "therapist" && institute === "external" &&
                 <Button className="m-2 p-1 text-center rounded-3" id="deletePatientButton" onClick={() => {
                     setShowRemovePatientDialog(true)
-                    // await removeConnectionPatientToTherapist(auth.currentUser.uid, details.id, institute)
                 }
                 } style={{fontSize: 10, width: 80, height: 32}} variant="outline-primary"><Dash/> הסר מטופל</Button>}
             </ButtonGroup>
@@ -54,7 +51,6 @@ function PatientDetails({details, type, institute}) {
                         תאריך לידה:
                         &nbsp;
                         {new Date(details.dateOfBirth.seconds * 1000).toLocaleDateString()}
-                        {/*{details.dateOfBirth.toDate().toDateString()}*/}
                     </Form.Label>
                 </Row>
 
@@ -65,13 +61,6 @@ function PatientDetails({details, type, institute}) {
                         {details.gender}
                     </Form.Label>
                 </Row>
-                {/*<Row>*/}
-                {/*    <Form.Text>*/}
-                {/*        טלפון:*/}
-                {/*        &nbsp;*/}
-                {/*        {details.phone}*/}
-                {/*    </Form.Text>*/}
-                {/*</Row>*/}
                 <Row>
                     <Form.Label>
                         כתובת:

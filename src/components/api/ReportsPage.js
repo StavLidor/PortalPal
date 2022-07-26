@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {Bar} from 'react-chartjs-2';
 import {Chart, registerables} from 'chart.js';
 import MultiTypeGraph from "./plots/MultiTypeGraph";
-import {Button, Form, ButtonGroup, Row, Col} from 'react-bootstrap'
-import {addThirdPartyCodes, removeThirdPartyCodes} from "../../firebase";
-import CheckHasAPICode from "./checkHasAPICode";
+import {Button, Form, Row, Col} from 'react-bootstrap'
+import { removeThirdPartyCodes} from "../../firebase";
 
 Chart.register(...registerables);
 
@@ -18,7 +16,6 @@ function ReportsPage({appKey, patientDetails, setHasCode, setWasCodeRemoved, cod
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                // 'id': "gOCpJKs43uRr8Y7QHkHL"
                 'auth_code': code
             })
         };

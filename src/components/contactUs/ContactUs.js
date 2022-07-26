@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import {addExternal} from "../../firebase";
 import {Button, ButtonGroup, Col, Container, Form, Row} from "react-bootstrap";
 
 function ContactUs() {

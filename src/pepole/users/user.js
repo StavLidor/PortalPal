@@ -44,6 +44,7 @@ import {signInWithEmailAndPassword} from "firebase/auth";
 //     //     email: ""}*/
 // }
 export const newPatients= async details=>{
+
     if (await addPatient(details)){
         return details.id
     }

@@ -44,7 +44,6 @@ export function MyProfile({userDetails}) {
         }
         if (editDetails.newPassword1.length < 6) {
             setMessagesEdit({...messagesEdit,password: 'סיסמא צרכה להיות מעל 6 תווים '})
-            // TODO: show error message
             return false
         }
         let flag=false
@@ -101,7 +100,6 @@ export function MyProfile({userDetails}) {
             setMessagesEdit({...messagesEdit,email: 'אנא,הכנס מייל תקין'})
             return false
         }
-        // TODO: verify the validity of the email that was entered
         try {
             // ensure the new password
             const email = {email: editDetails.newEmail1}
@@ -311,7 +309,6 @@ export function MyProfile({userDetails}) {
                                 בטל
                             </Button>
                             <Button variant="success" onClick={async () => {
-                                // TODO: add the logic
                                 if (await changeEmailHandler())
                                     setShowChangeEmailDialog(false)
                             }
@@ -374,7 +371,6 @@ export function MyProfile({userDetails}) {
                                 בטל
                             </Button>
                             <Button variant="success" onClick={async () => {
-                                // TODO: add the logic
                                 if (await changePasswordHandler()) {
                                     setShowChangePasswordDialog(false)
                                 }

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Button, Form, Row, Col, Container, ButtonGroup} from 'react-bootstrap'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {resetPassword, signIn} from '../../firebase'
+import {signIn} from '../../firebase'
 import {validateEmail} from "../../useFunction"
 import ForgotPasswordDialog from "./forgotPasswordDialog";
 
@@ -11,7 +11,6 @@ import ForgotPasswordDialog from "./forgotPasswordDialog";
 
 function Login({login, setDisplayLoginForm,setConnectNow,load,listInstitutes}) {
     const [flagLogin,setFlagLogin]=useState(false)
-    //TODO: delete default values.
     const [userDetails, setUserDetails] = useState({
         email: "",
         password: "",
@@ -22,7 +21,7 @@ function Login({login, setDisplayLoginForm,setConnectNow,load,listInstitutes}) {
         email: "",
         password: "",
     })
-    const [msg, setMsg] = useState('')//TODO: make sure default values are correct
+    const [msg, setMsg] = useState('')
     const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false)
 
     const onLogin = async e => {

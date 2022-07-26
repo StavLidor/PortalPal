@@ -1,8 +1,6 @@
 import {Accordion, Button, ButtonGroup, Col, Container, Form, Modal, Row} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
-import {Bar, Scatter, Bubble, Line, Radar} from 'react-chartjs-2';
-import TableData from "../tableEdit/TableData";
-
+import {Bar} from 'react-chartjs-2';
 import firebase from "firebase/compat/app";
 import {Pencil, Plus, Trash} from "react-bootstrap-icons";
 import {auth, db} from "../../firebase";
@@ -11,7 +9,6 @@ import {
     collection,
     deleteDoc,
     doc,
-    getDocs,
     onSnapshot,
     orderBy,
     query,
@@ -19,8 +16,8 @@ import {
     where
 } from "firebase/firestore";
 
-
-function TestsList({patientId, therapistId = null, type, category = null}) {
+/*component of test according category or all test list and all in plot view*/
+function TestsList({patientId, type, category = null}) {
     const [testsList, setTestsList] = useState([])
     const [dates, setDates] = useState([])
     const [scores, setScores] = useState((() => {
@@ -340,7 +337,7 @@ function TestsList({patientId, therapistId = null, type, category = null}) {
 }
 
 export default TestsList
-
+/* dialog of add Test*/
 function AddTestDialog({category, handleOnSubmit})
 {
 
@@ -531,7 +528,7 @@ function AddTestDialog({category, handleOnSubmit})
         </div>
     )
 }
-
+/* dialog of delete Test*/
 function DeleteTestDialog(
 {
     handleDelete, testID

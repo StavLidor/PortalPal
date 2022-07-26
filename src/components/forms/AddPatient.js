@@ -13,8 +13,8 @@ function AddPatient({addPatient,setAddPatient,listPatient}){
     /*check if details is good and add this patient*/
     const submitAdd = async () => {
         const messagesSubmit={ id: "", connection: "", code: ""}
-        if(!detailsNewPatient.id.trim()|| !is_israeli_id_number(detailsNewPatient.id)){
-            messagesSubmit.id ='אנא אכנס ת"ז ישראלית תקנית'
+        if(!detailsNewPatient.id.trim()/*|| !is_israeli_id_number(detailsNewPatient.id*/){
+            messagesSubmit.id ='אנא הכנס ת"ז '
         }
         if(listPatient.includes(detailsNewPatient.id)){
             messagesSubmit.id ='מטופל בעל תז כזה קיים אצלך'

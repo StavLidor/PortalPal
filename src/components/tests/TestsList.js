@@ -29,7 +29,7 @@ function TestsList({patientId, type, category = null}) {
     })())
     const [empty, editEmpty] = useState(false)
 
-    useEffect(async () => {
+    useEffect(async () =>{
         let q
         let therapistIDForSession = auth.currentUser.uid
         if (category) {
@@ -42,7 +42,7 @@ function TestsList({patientId, type, category = null}) {
                 where('status', '==', 'done'), orderBy("executionDate", "asc"))
         }
 
-        return onSnapshot(
+         onSnapshot(
             q,
             (querySnapshot) => {
                 let tests = []
